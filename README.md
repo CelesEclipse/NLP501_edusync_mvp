@@ -11,6 +11,8 @@ pip install -r requirements.txt
 # Run this to download video
 yt-dlp "https://www.youtube.com/watch?v=knTc-NQSjKA&t=36s"
 
+# remember to rename the video to `lecture.mp4`
+
 python transcribe.py lecture.mp4 --device cuda        # -> transcript.json   (use --device cpu without a GPU)
 python parse_slides.py slides.pdf                     # -> slides.json
 python align.py --method bge-base --out alignment_bge_base.json --plot heatmap.png
@@ -26,6 +28,11 @@ python evaluate.py labels.json a_tfidf_dp.json a_bge_raw.json alignment_bge_base
 ```
 
 Then run the demo (`demo/`): copy `alignment_bge_base.json` there and run `python prepare.py slides.pdf`.
+```bash
+cd demo
+python prepare.py slides.pdf
+python -m RangeHTTPServer 8000
+```
 
 ## Files
 
