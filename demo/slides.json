@@ -1,0 +1,174 @@
+[
+  {
+    "slide": 1,
+    "text": "Contextual Word Representations with \nBERT and Other Pre-trained Language \nModels\nJacob Devlin\nGoogle AI Language"
+  },
+  {
+    "slide": 2,
+    "text": "History and Background"
+  },
+  {
+    "slide": 3,
+    "text": "Pre-training in NLP\n\u25cfWord embeddings are the basis of deep learning \nfor NLP\n\u25cfWord embeddings (word2vec, GloVe) are often \npre-trained on text corpus from co-occurrence \nstatistics\nking\n[-0.5, -0.9, 1.4, \u2026]\nqueen\n[-0.6, -0.8, -0.2, \u2026]\nthe king wore a crown\nInner Product\nthe queen wore a crown\nInner Product"
+  },
+  {
+    "slide": 4,
+    "text": "Contextual Representations\n\u25cfProblem: Word embeddings are applied in a \ncontext free manner\n\u25cfSolution: Train contextual representations on text \ncorpus\n[0.3, 0.2, -0.8, \u2026]\nopen a bank account\non the river bank\nopen a bank account\n[0.9, -0.2, 1.6, \u2026]\non the river bank\n[-1.9, -0.4, 0.1, \u2026]"
+  },
+  {
+    "slide": 5,
+    "text": "History of Contextual Representations\n\u25cfSemi-Supervised Sequence Learning, Google, 2015\nTrain LSTM\nLanguage Model\nLSTM\n<s>\nopen\nLSTM\nopen\na\nLSTM\na\nbank\nLSTM\nvery\nLSTM\nfunny\nLSTM\nmovie\nPOSITIVE\n...\nFine-tune on \nClassification Task"
+  },
+  {
+    "slide": 6,
+    "text": "History of Contextual Representations\n\u25cfELMo: Deep Contextual Word Embeddings, AI2 & \nUniversity of Washington, 2017\nTrain Separate Left-to-Right and \nRight-to-Left LMs\nLSTM\n<s>\nopen\nLSTM\nopen\na\nLSTM\na\nbank\nApply as \u201cPre-trained \nEmbeddings\u201d\nLSTM\nopen\n<s>\nLSTM\na\nopen\nLSTM\nbank\na\nopen\na\nbank\nExisting Model Architecture"
+  },
+  {
+    "slide": 7,
+    "text": "History of Contextual Representations\n\u25cfImproving Language Understanding by Generative \nPre-Training, OpenAI, 2018\nTransformer\n<s>\nopen\nopen\na\na\nbank\nTransformer\nTransformer\nPOSITIVE\nFine-tune on \nClassification Task\nTransformer\n<s>\nopen\na\nTransformer\nTransformer\nTrain Deep (12-layer) \nTransformer LM"
+  },
+  {
+    "slide": 8,
+    "text": "Model Architecture\n\u25cfMulti-headed self attention\n\u25cb\nModels context\n\u25cfFeed-forward layers\n\u25cb\nComputes non-linear hierarchical features\n\u25cfLayer norm and residuals\n\u25cb\nMakes training deep networks healthy\n\u25cfPositional embeddings\n\u25cb\nAllows model to learn relative positioning\nTransformer encoder"
+  },
+  {
+    "slide": 9,
+    "text": "Model Architecture\n\u25cfEmpirical advantages of Transformer vs. LSTM:\n1. Self-attention == no locality bias\n\u25cf\nLong-distance context has \u201cequal opportunity\u201d\n2. Single multiplication per layer == efficiency on TPU\n\u25cf\nEffective batch size is number of words, not sequences\nX_0_0\nX_0_1\nX_0_2\nX_0_3\nX_1_0\nX_1_1\nX_1_2\nX_1_3\n\u2715\nW\nX_0_0\nX_0_1\nX_0_2\nX_0_3\nX_1_0\nX_1_1\nX_1_2\nX_1_3\n\u2715\nW\nTransformer\nLSTM"
+  },
+  {
+    "slide": 10,
+    "text": "BERT"
+  },
+  {
+    "slide": 11,
+    "text": "Problem with Previous Methods\n\u25cfProblem: Language models only use left context or \nright context, but language understanding is \nbidirectional.\n\u25cfWhy are LMs unidirectional?\n\u25cfReason 1: Directionality is needed to generate a \nwell-formed probability distribution.\n\u25cb\nWe don\u2019t care about this.\n\u25cfReason 2: Words can \u201csee themselves\u201d in a \nbidirectional encoder."
+  },
+  {
+    "slide": 12,
+    "text": "Layer 2\n<s>\nLayer 2\nopen\nLayer 2\nopen\nLayer 2\na\nLayer 2\na\nLayer 2\nbank\nUnidirectional context\nBuild representation incrementally\nLayer 2\n<s>\nLayer 2\nopen\nLayer 2\nopen\nLayer 2\na\nLayer 2\na\nLayer 2\nbank\nBidirectional context\nWords can \u201csee themselves\u201d\nUnidirectional vs. Bidirectional Models"
+  },
+  {
+    "slide": 13,
+    "text": "Masked LM\n\u25cfSolution: Mask out k% of the input words, and \nthen predict the masked words\n\u25cb\nWe always use k = 15%\n\u25cfToo little masking: Too expensive to train\n\u25cfToo much masking: Not enough context\nthe man went to the [MASK] to buy a [MASK] of milk\nstore\ngallon"
+  },
+  {
+    "slide": 14,
+    "text": "Masked LM\n\u25cfProblem: Mask token never seen at fine-tuning\n\u25cfSolution: 15% of the words to predict, but don\u2019t \nreplace with [MASK] 100% of the time. Instead:\n\u25cf80% of the time, replace with [MASK]\nwent to the store \u2192 went to the [MASK]\n\u25cf10% of the time, replace random word\nwent to the store \u2192 went to the running\n\u25cf10% of the time, keep same\nwent to the store \u2192 went to the store"
+  },
+  {
+    "slide": 15,
+    "text": "Next Sentence Prediction\n\u25cfTo learn relationships between sentences, predict \nwhether Sentence B is actual sentence that \nproceeds Sentence A, or a random sentence"
+  },
+  {
+    "slide": 16,
+    "text": "Input Representation\n\u25cfUse 30,000 WordPiece vocabulary on input.\n\u25cfEach token is sum of three embeddings\n\u25cfSingle sequence is much more efficient."
+  },
+  {
+    "slide": 17,
+    "text": "Model Details\n\u25cfData: Wikipedia (2.5B words) + BookCorpus (800M \nwords)\n\u25cfBatch Size: 131,072 words (1024 sequences * 128 \nlength or 256 sequences * 512 length)\n\u25cfTraining Time: 1M steps (~40 epochs)\n\u25cfOptimizer: AdamW, 1e-4 learning rate, linear decay\n\u25cfBERT-Base: 12-layer, 768-hidden, 12-head\n\u25cfBERT-Large: 24-layer, 1024-hidden, 16-head\n\u25cfTrained on 4x4 or 8x8 TPU slice for 4 days"
+  },
+  {
+    "slide": 18,
+    "text": "Fine-Tuning Procedure"
+  },
+  {
+    "slide": 19,
+    "text": "Fine-Tuning Procedure"
+  },
+  {
+    "slide": 20,
+    "text": "GLUE Results\nMultiNLI\nPremise: Hills and mountains are especially \nsanctified in Jainism.\nHypothesis: Jainism hates nature.\nLabel: Contradiction\nCoLa\nSentence: The wagon rumbled down the road.\nLabel: Acceptable\nSentence: The car honked down the road.\nLabel: Unacceptable"
+  },
+  {
+    "slide": 21,
+    "text": "SQuAD 2.0\n\u25cfUse token 0 ([CLS]) to emit \nlogit for \u201cno answer\u201d. \n\u25cf\u201cNo answer\u201d directly \ncompetes with answer span.\n\u25cfThreshold is optimized on dev \nset."
+  },
+  {
+    "slide": 22,
+    "text": "Effect of Pre-training Task\n\u25cf\nMasked LM (compared to left-to-right LM) is very important on \nsome tasks, Next Sentence Prediction is important on other tasks.\n\u25cf\nLeft-to-right model does very poorly on word-level task (SQuAD), \nalthough this is mitigated by BiLSTM"
+  },
+  {
+    "slide": 23,
+    "text": "Effect of Directionality and Training Time\n\u25cfMasked LM takes slightly longer to converge because we \nonly predict 15% instead of 100%\n\u25cfBut absolute results are much better almost immediately"
+  },
+  {
+    "slide": 24,
+    "text": "Effect of Model Size\n\u25cfBig models help a lot\n\u25cfGoing from 110M -> 340M params helps even on \ndatasets with 3,600 labeled examples\n\u25cfImprovements have not asymptoted"
+  },
+  {
+    "slide": 25,
+    "text": "Open Source Release\n\u25cfOne reason for BERT\u2019s success was the open \nsource release\n\u25cb\nMinimal release (not part of a larger codebase)\n\u25cb\nNo dependencies but TensorFlow (or PyTorch)\n\u25cb\nAbstracted so people could including a single file to use model\n\u25cb\nEnd-to-end push-button examples to train SOTA models\n\u25cb\nThorough README\n\u25cb\nIdiomatic code\n\u25cb\nWell-documented code\n\u25cb\nGood support (for the first few months)"
+  },
+  {
+    "slide": 26,
+    "text": "Post-BERT Pre-training Advancements"
+  },
+  {
+    "slide": 27,
+    "text": "RoBERTA\n\u25cfRoBERTa: A Robustly Optimized BERT Pretraining \nApproach (Liu et al, University of Washington and \nFacebook, 2019)\n\u25cfTrained BERT for more epochs and/or on more data\n\u25cb\nShowed that more epochs alone helps, even on same data\n\u25cb\nMore data also helps\n\u25cfImproved masking and pre-training data slightly"
+  },
+  {
+    "slide": 28,
+    "text": "XLNet\n\u25cfXLNet: Generalized Autoregressive Pretraining for \nLanguage Understanding (Yang et al, CMU and \nGoogle, 2019)\n\u25cfInnovation #1: Relative position embeddings\n\u25cb\nSentence: John ate a hot dog\n\u25cb\nAbsolute attention: \u201cHow much should dog attend to hot(in any \nposition), and how much should dog in position 4 attend to the word \nin position 3? (Or 508 attend to 507, \u2026)\u201d\n\u25cb\nRelative attention: \u201cHow much should dog attend to hot (in any \nposition) and how much should dog attend to the previous word?\u201d"
+  },
+  {
+    "slide": 29,
+    "text": "XLNet\n\u25cfInnovation #2: Permutation Language Modeling\n\u25cb\nIn a left-to-right language model, every word is predicted based on \nall of the words to its left\n\u25cb\nInstead: Randomly permute the order for every training sentence\n\u25cb\nEquivalent to masking, but many more predictions per sentence\n\u25cb\nCan be done efficiently with Transformers"
+  },
+  {
+    "slide": 30,
+    "text": "XLNet\n\u25cfAlso used more data and bigger models, but \nshowed that innovations improved on BERT even \nwith same data and model size\n\u25cfXLNet results:"
+  },
+  {
+    "slide": 31,
+    "text": "ALBERT\n\u25cfALBERT: A Lite BERT for Self-supervised Learning \nof Language Representations (Lan et al, Google \nand TTI Chicago, 2019)\n\u25cfInnovation #1: Factorized embedding \nparameterization\n\u25cb\nUse small embedding size (e.g., 128) and then project it to \nTransformer hidden size (e.g., 1024) with parameter matrix\n128\nx\n100k\n1024\nx\n128\n1024\nx\n100k\nvs.\n\u2a09"
+  },
+  {
+    "slide": 32,
+    "text": "ALBERT\n\u25cfInnovation #2: Cross-layer parameter sharing\n\u25cb\nShare all parameters between Transformer layers\n\u25cfResults:\n\u25cfALBERT is light in terms of parameters, not speed"
+  },
+  {
+    "slide": 33,
+    "text": "T5\n\u25cfExploring the Limits of Transfer Learning with a \nUnified Text-to-Text Transformer (Raffel et al, \nGoogle, 2019)\n\u25cfAblated many aspects of pre-training:\n\u25cb\nModel size\n\u25cb\nAmount of training data\n\u25cb\nDomain/cleanness of training data\n\u25cb\nPre-training objective details (e.g., span length of masked text)\n\u25cb\nEnsembling\n\u25cb\nFinetuning recipe (e.g., only allowing certain layers to finetune)\n\u25cb\nMulti-task training"
+  },
+  {
+    "slide": 34,
+    "text": "T5\n\u25cfConclusions:\n\u25cb\nScaling up model size and amount of training data helps a lot\n\u25cb\nBest model is 11B parameters (BERT-Large is 330M), trained on 120B \nwords of cleaned common crawl text\n\u25cb\nExact masking/corruptions strategy doesn\u2019t matter that much\n\u25cb\nMostly negative results for better finetuning and multi-task strategies\n\u25cfT5 results:"
+  },
+  {
+    "slide": 35,
+    "text": "ELECTRA\n\u25cfELECTRA: Pre-training Text Encoders as \nDiscriminators Rather Than Generators (Clark et al, \n2020)\n\u25cfTrain model to discriminate locally plausible text \nfrom real text"
+  },
+  {
+    "slide": 36,
+    "text": "ELECTRA\n\u25cfDifficult to match SOTA results with less compute"
+  },
+  {
+    "slide": 37,
+    "text": "Distillation"
+  },
+  {
+    "slide": 38,
+    "text": "Applying Models to Production Services\n\u25cfBERT and other pre-trained language models are \nextremely large and expensive\n\u25cfHow are companies applying them to low-latency \nproduction services?"
+  },
+  {
+    "slide": 39,
+    "text": "Distillation\n\u25cfAnswer: Distillation (a.k.a., model compression)\n\u25cfIdea has been around for a long time:\n\u25cb\nModel Compression (Bucila et al, 2006)\n\u25cb\nDistilling the Knowledge in a Neural Network (Hinton et al, 2015)\n\u25cfSimple technique:\n\u25cb\nTrain \u201cTeacher\u201d: Use SOTA pre-training + fine-tuning technique to \ntrain model with maximum accuracy\n\u25cb\nLabel a large amount of unlabeled input examples with Teacher\n\u25cb\nTrain \u201cStudent\u201d: Much smaller model (e.g., 50x smaller) which is \ntrained to mimic Teacher output\n\u25cb\nStudent objective is typically Mean Square Error or Cross Entropy"
+  },
+  {
+    "slide": 40,
+    "text": "\u25cfExample distillation results\n\u25cb\n50k labeled examples, 8M unlabeled examples\n\u25cfDistillation works much better than pre-training + \nfine-tuning with smaller model \nDistillation\nWell-Read Students Learn \nBetter: On the Importance of \nPre-training Compact Models \n(Turc et al, 2020)"
+  },
+  {
+    "slide": 41,
+    "text": "Distillation\n\u25cfWhy does distillation work so well? A hypothesis:\n\u25cb\nLanguage modeling is the \u201cultimate\u201d NLP task in many ways\n\u25a0\nI.e., a perfect language model is also a perfect question \nanswering/entailment/sentiment analysis model\n\u25cb\nTraining a massive language model learns millions of latent features \nwhich are useful for these other NLP tasks\n\u25cb\nFinetuning mostly just picks up and tweaks these existing latent \nfeatures\n\u25cb\nThis requires an oversized model, because only a subset of the \nfeatures are useful for any given task\n\u25cb\nDistillation allows the model to only focus on those features\n\u25cb\nSupporting evidence: Simple self-distillation (distilling a smaller BERT \nmodel) doesn\u2019t work"
+  },
+  {
+    "slide": 42,
+    "text": "Conclusions"
+  },
+  {
+    "slide": 43,
+    "text": "Conclusions\n\u25cfPre-trained bidirectional language models work \nincredibly well\n\u25cfHowever, the models are extremely expensive\n\u25cfImprovements (unfortunately) seem to mostly \ncome from even more expensive models and more \ndata\n\u25cfThe inference/serving problem is mostly \u201csolved\u201d \nthrough distillation"
+  }
+]

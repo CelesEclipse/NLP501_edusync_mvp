@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>EduSync demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--card:#f3f3f3;--acc:#2563eb;--mut:#888}
+@media (prefers-color-scheme:dark){:root{--bg:#161616;--fg:#eee;--card:#262626;--acc:#60a5fa}}
+body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+header{padding:12px 20px;font-weight:600}
+main{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:0 20px 20px}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+video{width:100%;background:#000;border-radius:8px}
+#cur{background:var(--card);border-radius:8px;padding:10px;min-height:200px}
+#cur img{width:100%;border-radius:4px}#cur pre{display:none;white-space:pre-wrap;font:inherit}
+#list{max-height:300px;overflow-y:auto;margin-top:10px;display:grid;gap:4px}
+button{text-align:left;border:0;border-radius:6px;padding:6px 10px;background:var(--card);color:var(--fg);cursor:pointer}
+button.on{background:var(--acc);color:#fff}button:disabled{opacity:.4;cursor:default}
+small{color:var(--mut)}
+</style></head><body>
+<header>EduSync: click a slide to jump the video, play the video to follow the slides</header>
+<main>
+ <div><video id="v" src="lecture.mp4" controls></video><p><small id="info"></small></p></div>
+ <div><div id="cur"><small>Press play or pick a slide.</small></div><div id="list"></div></div>
+</main>
+<script>
+const v=document.getElementById('v'),cur=document.getElementById('cur'),list=document.getElementById('list');
+const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
+let segs=[],texts={},btns={},active=-1;
+function show(k){
+  if(k===active)return; active=k;
+  const t=(texts[k]||'Slide '+k).replace(/</g,'&lt;');
+  cur.innerHTML=`<img src="slides/slide_${String(k).padStart(2,'0')}.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><pre>${t}</pre>`;
+  Object.values(btns).forEach(b=>b.classList.remove('on'));
+  if(btns[k]){btns[k].classList.add('on');btns[k].scrollIntoView({block:'nearest'})}
+}
+async function init(){
+  segs=await (await fetch('alignment.json')).json();
+  try{(await (await fetch('slides.json')).json()).forEach(s=>texts[s.slide]=s.text)}catch(e){}
+  const n=Math.max(Object.keys(texts).length,...segs.map(s=>s.slide));
+  for(let k=1;k<=n;k++){
+    const s=segs.find(x=>x.slide===k),b=document.createElement('button');
+    b.textContent=s?`Slide ${k}  (${fmt(s.start)})`:`Slide ${k}  (not aligned)`;
+    b.disabled=!s;
+    if(s)b.onclick=()=>{v.currentTime=s.start;v.play();show(k)};
+    btns[k]=b;list.appendChild(b);
+  }
+  document.getElementById('info').textContent=segs.length+' of '+n+' slides aligned';
+}
+v.ontimeupdate=()=>{const t=v.currentTime,s=segs.find(x=>t>=x.start&&t<x.end);if(s)show(s.slide)};
+init();
+</script></body></html>
