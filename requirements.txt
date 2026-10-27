@@ -1,0 +1,7 @@
+faster-whisper
+pymupdf
+sentence-transformers
+scikit-learn
+numpy
+matplotlib
+yt-dlp
