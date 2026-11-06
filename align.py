@@ -1,9 +1,10 @@
 """Steps 3-5: transcript.json + slides.json [+ visual.npz] -> alignment file.
-Usage: python align.py --method bge-base --out alignment_bge_base.json                 (text only, ~30 s windows)
-       python align.py --method bge-base --visual visual.npz --out alignment_fused.json  (text + video frames, 2 s grid)
-       python align.py --method none --visual visual.npz --out alignment_visual.json     (video frames only)
+All paths are relative to --lesson (default: the current folder).
+Usage: python align.py --lesson L --method bge-base --visual visual.npz              (text + video frames, 2 s grid)
+       python align.py --lesson L --method bge-base --out results/text_bge_base.json (text only, ~30 s windows)
+       python align.py --lesson L --method none --visual visual.npz --out results/visual.json (video frames only)
 Methods: none | tfidf | bge-small | bge-base.  Decoders: dp (order-constrained) | argmax."""
-import argparse, json
+import argparse, json, os
 import numpy as np
 
 
@@ -67,6 +68,7 @@ def dp_align(scores, pen=0.15):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
+    ap.add_argument("--lesson", default=".", help="lesson folder; the other paths are relative to it")
     ap.add_argument("--transcript", default="transcript.json")
     ap.add_argument("--slides", default="slides.json")
     ap.add_argument("--method", default="bge-base", choices=["none", "tfidf", "bge-small", "bge-base"])
@@ -84,6 +86,9 @@ if __name__ == "__main__":
     ap.add_argument("--plot", help="optional PNG path for the heatmap with the path drawn on it")
     ap.add_argument("--out", default="alignment.json")
     a = ap.parse_args()
+    for k in ("transcript", "slides", "visual", "plot", "out"):
+        if getattr(a, k):
+            setattr(a, k, os.path.join(a.lesson, getattr(a, k)))
 
     sl = json.load(open(a.slides))
     if a.method != "none":

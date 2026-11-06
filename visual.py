@@ -1,7 +1,8 @@
 """Step 3b: lecture.mp4 + slides.pdf -> visual.npz  (frame x slide image similarity).
 Samples one frame every --step seconds and compares it with every rendered slide page.
-Usage: python visual.py lecture.mp4 slides.pdf [--step 2] [--out visual.npz]"""
-import argparse
+Usage: python visual.py --lesson lessons/<id> [--step 2]     (reads <lesson>/video.mp4 and slides.pdf)
+       python visual.py lecture.mp4 slides.pdf [--out visual.npz]  (paths relative to the current folder)"""
+import argparse, os
 import cv2
 import numpy as np
 import pymupdf
@@ -42,16 +43,18 @@ def frame_features(video, step):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("video")
-    ap.add_argument("pdf")
+    ap.add_argument("video", nargs="?", default="video.mp4")
+    ap.add_argument("pdf", nargs="?", default="slides.pdf")
+    ap.add_argument("--lesson", default=".", help="lesson folder; the other paths are relative to it")
     ap.add_argument("--step", type=float, default=2.0)
     ap.add_argument("--out", default="visual.npz")
     a = ap.parse_args()
+    out = os.path.join(a.lesson, a.out)
 
-    S = slide_features(a.pdf)
-    t, F = frame_features(a.video, a.step)
+    S = slide_features(os.path.join(a.lesson, a.pdf))
+    t, F = frame_features(os.path.join(a.lesson, a.video), a.step)
     sim = F @ S.T
-    np.savez_compressed(a.out, t=t, sim=sim, step=a.step)
+    np.savez_compressed(out, t=t, sim=sim, step=a.step)
     best = sim.max(1)
-    print(f"{len(t)} frames x {len(S)} slides -> {a.out}; "
+    print(f"{len(t)} frames x {len(S)} slides -> {out}; "
           f"best-match similarity median {np.median(best):.2f}, frames below 0.5: {(best < 0.5).sum()}")

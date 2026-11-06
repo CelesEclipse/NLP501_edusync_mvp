@@ -85,6 +85,10 @@ private/                       bảng đối chiếu tên thật (gitignore)
 - Viết `pipeline.py`: danh sách bước (đầu vào, đầu ra, lệnh), bỏ qua bước đã có đầu ra.
 - **Xong khi:** `python pipeline.py lessons/cs224n-bert` rồi `evaluate.py` cho lại đúng số v2
   (9/10 slide, sai số trung bình 0,6 s).
+- **Trạng thái: xong (06/11/2026).** Chạy lại `slides`, `visual`, `align`, `links` từ đầu cho `slides.json`,
+  `alignment.json`, `links.json`, nhãn tự động giống hệt v2 và `visual.npz` cùng dữ liệu; đánh giá: 9/10 slide,
+  trung bình 0,6 s, trung vị 1,0 s. Kết quả v1 (Colab) giữ ở `results/v1_bge_base_colab.json`.
+  Các file trong `demo/` giờ do `demo/prepare.py --lesson ...` sinh ra, không còn trong git.
 
 ### T2. `ingest.py` (1 ngày)
 - Kiểm tra thư mục buổi học, nhận diện file theo tên và đuôi.

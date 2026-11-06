@@ -5,13 +5,15 @@ one passage per ~150 words of each page, so the link can point at the right page
 A material is 'cited' when the slide names it (paper title on the slide, or an alias in the slide title);
 otherwise it is 'related' when its best passage is unusually close to this slide (bge-base cosine,
 z-scored per passage over all slides).
-Usage: python link_materials.py --alignment alignment_fused.json --out demo/links.json"""
+Usage: python link_materials.py --lesson lessons/<id>   (reads slides/transcript/alignment.json, writes links.json)
+--materials is the shared reading library (default: materials/ next to this script), not part of the lesson."""
 import argparse, json, os, re
 import numpy as np
 import pymupdf
 from sentence_transformers import SentenceTransformer
 
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "  # bge retrieval instruction
+MATERIALS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "materials")
 
 
 def norm(s):
@@ -52,15 +54,18 @@ def cited(m, slide_text):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
+    ap.add_argument("--lesson", default=".", help="lesson folder; slides/transcript/alignment/out are relative to it")
     ap.add_argument("--slides", default="slides.json")
     ap.add_argument("--transcript", default="transcript.json")
-    ap.add_argument("--alignment", default="alignment_fused.json", help="per-unit alignment from align.py")
-    ap.add_argument("--materials", default="materials")
+    ap.add_argument("--alignment", default="alignment.json", help="per-unit alignment from align.py")
+    ap.add_argument("--materials", default=MATERIALS)
     ap.add_argument("--k", type=int, default=3, help="max related (non-cited) materials per slide")
     ap.add_argument("--min-score", type=float, default=0.6, help="min cosine similarity for a related link")
     ap.add_argument("--min-z", type=float, default=1.0, help="min z-score (passage vs. all slides) for a related link")
     ap.add_argument("--out", default="links.json")
     a = ap.parse_args()
+    for k in ("slides", "transcript", "alignment", "out"):
+        setattr(a, k, os.path.join(a.lesson, getattr(a, k)))
 
     slides = json.load(open(a.slides))
     catalog = {m["id"]: m for m in json.load(open(os.path.join(a.materials, "catalog.json")))}

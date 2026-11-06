@@ -1,9 +1,16 @@
-# large media: download with yt-dlp (see README)
-lecture.mp4
-lecture.m4a
-demo/lecture.mp4
-demo/lecture.m4a
+# large media and raw recordings: never in git (see README)
+lessons/*/video.*
+lessons/*/audio.*
+lessons/*/audio/
+lessons/*/chat.txt
+private/
+# demo/ is filled from a lesson by demo/prepare.py
+demo/lecture.*
 demo/slides/
+demo/alignment.json
+demo/slides.json
+demo/transcript.json
+demo/links.json
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/

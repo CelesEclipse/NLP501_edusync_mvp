@@ -1,0 +1,7 @@
+{
+ "id": "cs224n-bert",
+ "title": "Stanford CS224N Winter 2020: BERT and Other Pre-trained Language Models (Jacob Devlin)",
+ "source": "https://www.youtube.com/watch?v=knTc-NQSjKA",
+ "language": {"instruction": "en", "target": "en"},
+ "files": {"video": "video.mp4", "slides": "slides.pdf"}
+}

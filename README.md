@@ -14,42 +14,53 @@ worked examples, attachments, chat). Roadmap: [docs/esl_roadmap.md](docs/esl_roa
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# download the lecture into demo/ (not in git: ~200 MB)
-yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" -o demo/lecture.mp4 "https://www.youtube.com/watch?v=knTc-NQSjKA"
+# download the CS224N lecture into its lesson folder (not in git: ~200 MB)
+yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" -o lessons/cs224n-bert/video.mp4 "https://www.youtube.com/watch?v=knTc-NQSjKA"
 ```
 
-`transcript.json`, `slides.json`, `visual.npz` and `materials/catalog.json` are committed, so steps 1, 2, 3b
-and 7a can be skipped.
+## Layout
+
+```
+lessons/<id>/            one folder per lesson
+  lesson.json            title, source, languages, input files
+  video.mp4  slides.pdf  inputs (videos and audio are never committed)
+  slides.json  visual.npz  transcript.json  alignment.json  links.json    step outputs
+  gold/                  hand labels (labels.json) and silver labels
+  results/               experiment outputs behind the report tables
+materials/               shared reading library (catalog.json; downloaded PDFs are not committed)
+demo/                    web demo, filled from one lesson by demo/prepare.py
+```
 
 ## Pipeline
 
 ```bash
-python transcribe.py demo/lecture.mp4 --device cpu          # 1  -> transcript.json  (--device cuda on a GPU)
-python parse_slides.py demo/slides.pdf                      # 2  -> slides.json
-python visual.py demo/lecture.mp4 demo/slides.pdf           # 3b -> visual.npz  (frame x slide image similarity, ~1 min)
-python align.py --method bge-base --visual visual.npz --out alignment_fused.json   # 3-5 text + video
-python evaluate.py labels.json alignment_fused.json         # 6
-python fetch_materials.py --pdf 1810.04805                  # 7a -> materials/catalog.json (+ BERT paper PDF)
-python link_materials.py --alignment alignment_fused.json --out links.json         # 7b -> links.json
+python pipeline.py lessons/cs224n-bert                       # runs only the steps whose outputs are missing
+python pipeline.py lessons/cs224n-bert --force align links   # rerun chosen steps (or --force all)
 ```
 
-Compare variants by running `align.py` several times and passing all outputs to `evaluate.py`:
+Steps: `slides` (parse_slides.py) → `visual` (visual.py, ~1 min) → `transcribe` (transcribe.py, ~9 min on CPU)
+→ `align` (align.py, video + transcript) → `links` (link_materials.py); then the alignment is scored against
+`gold/labels.json` when the lesson has one. Every script also runs on its own with `--lesson <folder>`; its file
+paths are then relative to that folder.
+
+Compare variants by writing them to `results/` and passing them all to `evaluate.py`:
 
 ```bash
-python align.py --method tfidf --out results/text_tfidf.json                       # text only (30 s windows)
-python align.py --method none --visual visual.npz --out results/visual.json        # video frames only
-python align.py --method bge-base --visual visual.npz --drop-visual 0.5 --seed 0 --out r.json  # robustness test
-python evaluate.py labels.json results/*.json
-python make_labels.py results/visual.json                    # silver labels for all 39 shown slides
-python evaluate.py labels_silver.json results/text_*.json
+L=lessons/cs224n-bert
+python align.py --lesson $L --method tfidf --out results/text_tfidf.json                       # text only
+python align.py --lesson $L --method none --visual visual.npz --out results/visual.json        # video only
+python align.py --lesson $L --method bge-base --visual visual.npz --drop-visual 0.5 --out results/r.json  # robustness
+python evaluate.py --lesson $L gold/labels.json results/text_tfidf.json results/visual.json alignment.json
+python make_labels.py --lesson $L results/visual.json --out gold/labels_silver.json           # silver labels
+python evaluate.py --lesson $L gold/labels_silver.json results/text_tfidf.json
+python fetch_materials.py --pdf 1810.04805      # rebuild materials/catalog.json (+ the BERT paper PDF)
 ```
 
 ## Demo
 
 ```bash
-cd demo
-python prepare.py slides.pdf --alignment ../alignment_fused.json --transcript ../transcript.json --links ../links.json
-python -m RangeHTTPServer 8000      # open http://localhost:8000
+python demo/prepare.py --lesson lessons/cs224n-bert
+cd demo && python -m RangeHTTPServer 8000       # open http://localhost:8000
 ```
 
 Click a slide to jump the video, play the video to follow the slides, read the linked papers for the current
@@ -59,6 +70,7 @@ slide (with page numbers for downloaded PDFs), and search the transcript to jump
 
 | File | Purpose |
 |---|---|
+| `pipeline.py` | run the steps for one lesson, skipping those whose outputs exist |
 | `transcribe.py` | faster-whisper speech-to-text with timestamps |
 | `parse_slides.py` | extract text per slide with PyMuPDF |
 | `visual.py` | sample a frame every 2 s, normalized cross-correlation against every rendered slide |
@@ -67,8 +79,7 @@ slide (with page numbers for downloaded PDFs), and search the transcript to jump
 | `make_labels.py` | silver labels (first on-screen time of each slide) from a visual alignment |
 | `fetch_materials.py` | reading list from the arXiv API plus a few hand-picked tutorials -> `materials/catalog.json` |
 | `link_materials.py` | link each slide (slide text + what was said on it) to cited and related materials |
-| `labels.json` | hand-labeled slide start times (`mm:ss`) for the CS224N BERT lecture |
-| `results/` | alignment outputs and heatmaps behind the report tables |
+| `lessons/cs224n-bert/gold/labels.json` | hand-labeled slide start times (`mm:ss`) for the CS224N BERT lecture |
 
 ## Notes
 - Lecture: Stanford CS224N Winter 2020, "BERT and Other Pre-trained Language Models" (Jacob Devlin).
