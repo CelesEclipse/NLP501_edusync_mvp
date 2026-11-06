@@ -1,0 +1,6487 @@
+[
+  {
+    "start": 5.01,
+    "end": 11.45,
+    "text": "Okay, so I'm going to talk about BERT and also some kind of precursor work and then some"
+  },
+  {
+    "start": 11.45,
+    "end": 16.13,
+    "text": "follow-up work that's happened in the last year now, well not follow-up, but more recent"
+  },
+  {
+    "start": 16.13,
+    "end": 19.61,
+    "text": "advancements that's happened since then."
+  },
+  {
+    "start": 19.61,
+    "end": 22.77,
+    "text": "So first we're going to talk about history and background."
+  },
+  {
+    "start": 22.77,
+    "end": 27.25,
+    "text": "So everyone knows and loves word embeddings in NLP, right?"
+  },
+  {
+    "start": 27.25,
+    "end": 33.49,
+    "text": "They're kind of the basis for why neural networks work for NLP."
+  },
+  {
+    "start": 34.45,
+    "end": 41.29,
+    "text": "Neural networks work in a continuous space, vectors and matrices, and obviously text is"
+  },
+  {
+    "start": 41.29,
+    "end": 46.09,
+    "text": "a discrete space and so there needed to be something to bridge the gap and it turns out"
+  },
+  {
+    "start": 46.09,
+    "end": 52.37,
+    "text": "that the thing to bridge the gap, it's actually pretty simple, it's just a lookup table from"
+  },
+  {
+    "start": 52.37,
+    "end": 57.53,
+    "text": "each set of discrete vocabulary to a vector that's learned discriminatively end to end."
+  },
+  {
+    "start": 57.53,
+    "end": 62.85,
+    "text": "So originally these were just learned like in the original Benjio 2003 Neural Language"
+  },
+  {
+    "start": 62.89,
+    "end": 67.53,
+    "text": "Model paper, these were just trained discriminatively end to end and these were actually, and so"
+  },
+  {
+    "start": 67.53,
+    "end": 72.49,
+    "text": "then people would train language models and then use these pre-trained, use the embedding"
+  },
+  {
+    "start": 72.49,
+    "end": 77.69,
+    "text": "layer as pre-trained representations for other tasks, but they wouldn't use the rest of"
+  },
+  {
+    "start": 77.69,
+    "end": 79.53,
+    "text": "the language model, they would just use the embedding layer."
+  },
+  {
+    "start": 79.53,
+    "end": 84.85,
+    "text": "And then Word2Vec and GLUV and stuff came along where then people found a much cheaper,"
+  },
+  {
+    "start": 84.85,
+    "end": 91.37,
+    "text": "much more scalable way to train it where you can just use the statistics of a corpus"
+  },
+  {
+    "start": 91.37,
+    "end": 94.41,
+    "text": "where it's just a linear model so you don't have to compute these expensive feedforward"
+  },
+  {
+    "start": 94.41,
+    "end": 97.73,
+    "text": "layers that you're going to throw out anyways and so you can scale up to like billions"
+  },
+  {
+    "start": 97.73,
+    "end": 101.13,
+    "text": "of tokens on a single CPU, right?"
+  },
+  {
+    "start": 101.13,
+    "end": 107.49,
+    "text": "So the problem though is that these word embeddings are applied in a context-free"
+  },
+  {
+    "start": 107.49,
+    "end": 108.49,
+    "text": "manner, right?"
+  },
+  {
+    "start": 108.49,
+    "end": 113.29,
+    "text": "So for like a kind of a simple toy example, the word bank if you say open a bank account"
+  },
+  {
+    "start": 113.29,
+    "end": 115.81,
+    "text": "and on a river bank, it's going to be the same embedding."
+  },
+  {
+    "start": 115.81,
+    "end": 120.01,
+    "text": "So people have tried to do stuff like word sense embeddings where it's not"
+  },
+  {
+    "start": 120.01,
+    "end": 124.65,
+    "text": "just a single word, it's a full word sense, but this kind of bank example, it's a little"
+  },
+  {
+    "start": 124.65,
+    "end": 126.69,
+    "text": "bit of a toy example, right?"
+  },
+  {
+    "start": 126.69,
+    "end": 130.73,
+    "text": "Almost any word has a different meaning depending on the context."
+  },
+  {
+    "start": 130.73,
+    "end": 135.65,
+    "text": "It's very, so even like open the bank account and I went to the bank, those are still"
+  },
+  {
+    "start": 135.65,
+    "end": 141.09,
+    "text": "in a semi-different senses of the word bank, one of them is a, I mean they have different"
+  },
+  {
+    "start": 141.09,
+    "end": 144.93,
+    "text": "part of speech tags kind of, well I guess not really, but like they're kind of"
+  },
+  {
+    "start": 144.93,
+    "end": 146.25,
+    "text": "using different senses, right?"
+  },
+  {
+    "start": 146.25,
+    "end": 150.01,
+    "text": "And so yeah, so we really need a contextual representation, right?"
+  },
+  {
+    "start": 150.01,
+    "end": 156.85,
+    "text": "So we want something where it's a representation of a word after it's been put into the context"
+  },
+  {
+    "start": 156.85,
+    "end": 157.97,
+    "text": "of the sense that we've seen it in, right?"
+  },
+  {
+    "start": 157.97,
+    "end": 159.57,
+    "text": "Which would be like at the bottom here."
+  },
+  {
+    "start": 159.57,
+    "end": 165.77,
+    "text": "So kind of for history of contextual representations, the first big paper for this type of contextual"
+  },
+  {
+    "start": 165.77,
+    "end": 170.65,
+    "text": "representations was a paper from Google in 2015 called semi-supervised sequence learning"
+  },
+  {
+    "start": 170.65,
+    "end": 172.85,
+    "text": "from Andrew Dye and Kwakle."
+  },
+  {
+    "start": 172.85,
+    "end": 178.01,
+    "text": "And so in this one, it was actually very similar to papers that came after it."
+  },
+  {
+    "start": 178.01,
+    "end": 182.77,
+    "text": "It didn't get as much attention for various reasons, but basically they had some classification"
+  },
+  {
+    "start": 182.77,
+    "end": 186.85,
+    "text": "task like sentiment classification on movie reviews, and they had a big corpus of movie"
+  },
+  {
+    "start": 186.85,
+    "end": 191.21,
+    "text": "reviews, and so then they said, what happened to, we just take our existing LSTM model"
+  },
+  {
+    "start": 191.21,
+    "end": 193.85,
+    "text": "and instead of just using pre-trained embeddings, which everyone has already been doing since"
+  },
+  {
+    "start": 193.85,
+    "end": 199.05,
+    "text": "like at least for the, like actually probably since 2003, people had been using pre-trained"
+  },
+  {
+    "start": 199.05,
+    "end": 203.49,
+    "text": "embeddings, but they said, let's actually pre-train the entire model as a language model"
+  },
+  {
+    "start": 203.49,
+    "end": 206.33,
+    "text": "and then let's fine tune it for our classification task."
+  },
+  {
+    "start": 206.33,
+    "end": 211.61,
+    "text": "And they got pretty good results, but not like stellar results."
+  },
+  {
+    "start": 211.61,
+    "end": 213.85,
+    "text": "And so now we know that the reason why they didn't get stellar results is they didn't"
+  },
+  {
+    "start": 213.85,
+    "end": 216.29,
+    "text": "train it on enough data and they, because they basically trained on the same corpus"
+  },
+  {
+    "start": 216.29,
+    "end": 219.29,
+    "text": "that they were training on, and they trained the same size model that they were training"
+  },
+  {
+    "start": 219.29,
+    "end": 221.69,
+    "text": "on, which we now know needs to be bigger."
+  },
+  {
+    "start": 221.69,
+    "end": 226.89,
+    "text": "But that's kind of, this was already kind of a little bit ahead of its time partially"
+  },
+  {
+    "start": 226.93,
+    "end": 230.17,
+    "text": "because like, you know, stuff wasn't, like, we didn't have it just compute back then,"
+  },
+  {
+    "start": 230.17,
+    "end": 234.09,
+    "text": "even though it was only five years ago, and it would have been, you know, more expensive."
+  },
+  {
+    "start": 234.09,
+    "end": 241.65,
+    "text": "So, and then in 2017, ELMO came out, which was from the University of Washington"
+  },
+  {
+    "start": 241.65,
+    "end": 248.45,
+    "text": "and AI2, and so this one, they did something pretty clever where they took,"
+  },
+  {
+    "start": 248.45,
+    "end": 251.65,
+    "text": "you train a language model on a big corpus, so they trained it on a billion word corpus,"
+  },
+  {
+    "start": 251.65,
+    "end": 255.77,
+    "text": "and they trained a big model, LSTM with 4,000 hidden dimensions,"
+  },
+  {
+    "start": 255.81,
+    "end": 259.17,
+    "text": "which is quite expensive, and they trained a bi-directional model,"
+  },
+  {
+    "start": 259.17,
+    "end": 264.01,
+    "text": "but it was kind of weakly bi-directional where they trained a left to right model,"
+  },
+  {
+    "start": 264.01,
+    "end": 268.25,
+    "text": "and then a left to right model, and then they concatenated the two,"
+  },
+  {
+    "start": 268.25,
+    "end": 270.53,
+    "text": "and they called these contextual pre-trained embeddings."
+  },
+  {
+    "start": 270.53,
+    "end": 276.01,
+    "text": "And so the idea behind ELMO is that this doesn't actually change your existing model architecture."
+  },
+  {
+    "start": 276.01,
+    "end": 280.33,
+    "text": "You kind of take whatever task specific model architecture that you have,"
+  },
+  {
+    "start": 280.33,
+    "end": 284.13,
+    "text": "which could be, you know, for question answering, it might be some sort of fancy model"
+  },
+  {
+    "start": 284.17,
+    "end": 288.41,
+    "text": "where you do an LSTM over the source or over the question and over the answer,"
+  },
+  {
+    "start": 288.41,
+    "end": 291.97,
+    "text": "then you tend to one another, and whatever kind of architecture you have,"
+  },
+  {
+    "start": 291.97,
+    "end": 294.85,
+    "text": "and just wherever you would have put in glove embeddings before,"
+  },
+  {
+    "start": 294.85,
+    "end": 300.97,
+    "text": "now you put in ELMO embeddings, and so this got state-of-the-art on, you know,"
+  },
+  {
+    "start": 300.97,
+    "end": 305.25,
+    "text": "everything at the time, question answering, semantic parsing, synthetic parsing,"
+  },
+  {
+    "start": 305.25,
+    "end": 309.25,
+    "text": "because it was, and so if you just took any existing kind of state-of-the-art model,"
+  },
+  {
+    "start": 309.25,
+    "end": 312.53,
+    "text": "you could fit in, put in ELMO embeddings and get state-of-the-art, right?"
+  },
+  {
+    "start": 312.53,
+    "end": 317.21,
+    "text": "But they weren't, but these were kind of, the models were kind of fixed."
+  },
+  {
+    "start": 317.21,
+    "end": 324.17,
+    "text": "And so then after that, OpenAI published Improving Language Understanding"
+  },
+  {
+    "start": 324.17,
+    "end": 327.37,
+    "text": "with Generative Pre-Training, which is something called GPT-1."
+  },
+  {
+    "start": 327.37,
+    "end": 335.85,
+    "text": "And so in this, they took a, just like a similar large corpus, about a billion words,"
+  },
+  {
+    "start": 335.85,
+    "end": 339.61,
+    "text": "and they trained a very large language model, so a 12-layer language model,"
+  },
+  {
+    "start": 339.65,
+    "end": 342.61,
+    "text": "which at the time was, maybe, I don't know whether it was actually"
+  },
+  {
+    "start": 342.61,
+    "end": 343.81,
+    "text": "the largest language model that I've been trained at the time,"
+  },
+  {
+    "start": 343.81,
+    "end": 346.13,
+    "text": "certainly it was the largest language model that had been trained on that much data"
+  },
+  {
+    "start": 346.13,
+    "end": 349.57,
+    "text": "for a kind of open-source model."
+  },
+  {
+    "start": 349.57,
+    "end": 352.45,
+    "text": "And when I first read it, I actually thought that it was like too big,"
+  },
+  {
+    "start": 352.45,
+    "end": 355.25,
+    "text": "like, not that it was worse, but that they were kind of just showing off"
+  },
+  {
+    "start": 355.25,
+    "end": 356.77,
+    "text": "by showing how big of a model they could train."
+  },
+  {
+    "start": 356.77,
+    "end": 359.93,
+    "text": "But now we know that actually this depth that they had was actually"
+  },
+  {
+    "start": 359.93,
+    "end": 361.93,
+    "text": "kind of the crucial, the crucial element."
+  },
+  {
+    "start": 361.93,
+    "end": 363.97,
+    "text": "So they did something that was like fairly simple, right?"
+  },
+  {
+    "start": 363.97,
+    "end": 366.09,
+    "text": "They just trained a language model, a very large one,"
+  },
+  {
+    "start": 366.09,
+    "end": 368.53,
+    "text": "and then they just fine-tuned it by taking the last token"
+  },
+  {
+    "start": 368.53,
+    "end": 371.37,
+    "text": "and then fine-tuning it for a classification task, right?"
+  },
+  {
+    "start": 371.37,
+    "end": 373.73,
+    "text": "So is this positive or negative?"
+  },
+  {
+    "start": 373.73,
+    "end": 375.37,
+    "text": "And they got basically state-of-the-art"
+  },
+  {
+    "start": 375.37,
+    "end": 378.41,
+    "text": "on lots of different classification tasks."
+  },
+  {
+    "start": 378.41,
+    "end": 383.61,
+    "text": "But so I'm going to actually take a kind of a side here"
+  },
+  {
+    "start": 383.61,
+    "end": 386.29,
+    "text": "before I go into BERT, which is about Transformer,"
+  },
+  {
+    "start": 386.29,
+    "end": 388.45,
+    "text": "since that was the other kind of big thing,"
+  },
+  {
+    "start": 388.45,
+    "end": 393.21,
+    "text": "like the big precursor that allowed BERT and GPT to work well, right?"
+  },
+  {
+    "start": 393.21,
+    "end": 397.29,
+    "text": "So BERT and GPT both used to Transformer,"
+  },
+  {
+    "start": 397.29,
+    "end": 398.45,
+    "text": "which I'm sure you guys have learned about,"
+  },
+  {
+    "start": 398.45,
+    "end": 402.41,
+    "text": "and so I don't need to necessarily go into all the details about it."
+  },
+  {
+    "start": 402.41,
+    "end": 408.45,
+    "text": "But so it has multi-headed attention, feedforward layers,"
+  },
+  {
+    "start": 408.45,
+    "end": 410.09,
+    "text": "layer norm, I won't go into all the details"
+  },
+  {
+    "start": 410.09,
+    "end": 412.17,
+    "text": "because I think you guys already learned about it."
+  },
+  {
+    "start": 412.17,
+    "end": 415.73,
+    "text": "But the big thing about why this kind of took over"
+  },
+  {
+    "start": 415.73,
+    "end": 418.61,
+    "text": "is there's really two advantages versus the LSTM."
+  },
+  {
+    "start": 418.61,
+    "end": 420.77,
+    "text": "One is that there's no locality bias."
+  },
+  {
+    "start": 420.77,
+    "end": 424.65,
+    "text": "And so long-distance context has"
+  },
+  {
+    "start": 424.65,
+    "end": 427.13,
+    "text": "a equal opportunity to short-distance context, which"
+  },
+  {
+    "start": 427.13,
+    "end": 429.05,
+    "text": "is important."
+  },
+  {
+    "start": 429.05,
+    "end": 430.93,
+    "text": "So for normal language understanding,"
+  },
+  {
+    "start": 430.93,
+    "end": 434.73,
+    "text": "the locality bias of LSTMs is generally"
+  },
+  {
+    "start": 434.73,
+    "end": 440.77,
+    "text": "considered to be a good thing, because local context is more"
+  },
+  {
+    "start": 440.77,
+    "end": 442.49,
+    "text": "relevant than long-distance context."
+  },
+  {
+    "start": 442.49,
+    "end": 445.01,
+    "text": "But the way that GPT and BERT and other models work"
+  },
+  {
+    "start": 445.01,
+    "end": 448.49,
+    "text": "is that they actually concatenate context."
+  },
+  {
+    "start": 448.49,
+    "end": 453.09,
+    "text": "And so if you have a model that says, does sentence 1"
+  },
+  {
+    "start": 453.09,
+    "end": 456.29,
+    "text": "entail sentence 2, the way that it was done historically,"
+  },
+  {
+    "start": 456.29,
+    "end": 459.65,
+    "text": "meaning before GPT, was that you would encode them both,"
+  },
+  {
+    "start": 459.65,
+    "end": 461.65,
+    "text": "let's say, with an LSTM, then you would do attention"
+  },
+  {
+    "start": 461.65,
+    "end": 463.29,
+    "text": "from one to the other."
+  },
+  {
+    "start": 463.29,
+    "end": 466.21,
+    "text": "With a transformer, you can just put them"
+  },
+  {
+    "start": 466.21,
+    "end": 469.13,
+    "text": "into the same sequence and give them"
+  },
+  {
+    "start": 469.13,
+    "end": 471.37,
+    "text": "separate sequence vettings at a separated token."
+  },
+  {
+    "start": 471.37,
+    "end": 474.85,
+    "text": "And it will learn how to, and then things"
+  },
+  {
+    "start": 474.85,
+    "end": 476.65,
+    "text": "can attend to its own sentence locally."
+  },
+  {
+    "start": 476.65,
+    "end": 479.69,
+    "text": "But it can also attend all the way to the other sentence"
+  },
+  {
+    "start": 479.69,
+    "end": 483.33,
+    "text": "for almost no, it's just as easy for it"
+  },
+  {
+    "start": 483.33,
+    "end": 484.93,
+    "text": "to attend all the way to the other sentence."
+  },
+  {
+    "start": 484.93,
+    "end": 486.41,
+    "text": "And so when you do this, you can just"
+  },
+  {
+    "start": 486.41,
+    "end": 487.77,
+    "text": "pack everything into a single sequence,"
+  },
+  {
+    "start": 487.77,
+    "end": 489.53,
+    "text": "and then everything will be learned"
+  },
+  {
+    "start": 489.53,
+    "end": 492.69,
+    "text": "rather than having to do this as part of the model architecture,"
+  },
+  {
+    "start": 492.69,
+    "end": 495.33,
+    "text": "which ends up being a pretty important thing"
+  },
+  {
+    "start": 495.33,
+    "end": 497.57,
+    "text": "about simplifying these models."
+  },
+  {
+    "start": 497.57,
+    "end": 505.17,
+    "text": "So the other thing is that having a, with LSTMs,"
+  },
+  {
+    "start": 505.17,
+    "end": 506.57,
+    "text": "let's say this is a batch, and these"
+  },
+  {
+    "start": 506.57,
+    "end": 508.57,
+    "text": "are the words in the batch, you have two sentences"
+  },
+  {
+    "start": 508.57,
+    "end": 509.93,
+    "text": "and four words per sentence."
+  },
+  {
+    "start": 509.93,
+    "end": 512.77,
+    "text": "Every step has to be computed one at a time."
+  },
+  {
+    "start": 512.77,
+    "end": 515.69,
+    "text": "So you only get a batch size of two effectively."
+  },
+  {
+    "start": 515.69,
+    "end": 519.21,
+    "text": "And so on modern hardware, which is TPUs and GPUs,"
+  },
+  {
+    "start": 519.21,
+    "end": 521.25,
+    "text": "the bigger the matrix multiplication, the better it is."
+  },
+  {
+    "start": 521.25,
+    "end": 523.73,
+    "text": "And you want all three dimensions to be big."
+  },
+  {
+    "start": 523.73,
+    "end": 525.93,
+    "text": "So even if you have big hidden layers,"
+  },
+  {
+    "start": 525.93,
+    "end": 527.97,
+    "text": "your batch size dimension will still be small,"
+  },
+  {
+    "start": 527.97,
+    "end": 530.29,
+    "text": "unless you have a huge batch, but then that's too expensive"
+  },
+  {
+    "start": 530.29,
+    "end": 531.33,
+    "text": "for long sequences."
+  },
+  {
+    "start": 531.33,
+    "end": 536.85,
+    "text": "But with transformers, because it's layer-wise attention,"
+  },
+  {
+    "start": 536.85,
+    "end": 539.01,
+    "text": "the batch size is the total number of words."
+  },
+  {
+    "start": 539.01,
+    "end": 542.75,
+    "text": "So if you have 500 words and then 32 sentences,"
+  },
+  {
+    "start": 542.75,
+    "end": 545.15,
+    "text": "it's actually 32 times 512 is the total batch size."
+  },
+  {
+    "start": 545.15,
+    "end": 546.95,
+    "text": "So you get these huge dimensions of 12 applications,"
+  },
+  {
+    "start": 546.95,
+    "end": 550.23,
+    "text": "and you can take advantage of modern hardware."
+  },
+  {
+    "start": 550.23,
+    "end": 551.95,
+    "text": "And so that's kind of why the transformer"
+  },
+  {
+    "start": 551.95,
+    "end": 553.99,
+    "text": "has taken over because of these two things."
+  },
+  {
+    "start": 553.99,
+    "end": 556.67,
+    "text": "And that's why it was used in GPT and why it's used in BERT."
+  },
+  {
+    "start": 556.67,
+    "end": 559.95,
+    "text": "So now I'm going to talk about BERT."
+  },
+  {
+    "start": 559.95,
+    "end": 565.8,
+    "text": "So the problem with the previous model being"
+  },
+  {
+    "start": 565.8,
+    "end": 569.04,
+    "text": "Elmo and GPT, and let's say for it,"
+  },
+  {
+    "start": 569.04,
+    "end": 570.72,
+    "text": "is that the language models only"
+  },
+  {
+    "start": 570.72,
+    "end": 573.64,
+    "text": "used left context or right context"
+  },
+  {
+    "start": 573.64,
+    "end": 575.04,
+    "text": "or a concatenation of both."
+  },
+  {
+    "start": 575.04,
+    "end": 579.2,
+    "text": "But language understanding is bi-directional."
+  },
+  {
+    "start": 579.2,
+    "end": 582.44,
+    "text": "So there's this clear kind of mismatch"
+  },
+  {
+    "start": 582.44,
+    "end": 585.76,
+    "text": "between why did everyone train on unidirectional models,"
+  },
+  {
+    "start": 585.76,
+    "end": 587.36,
+    "text": "where you could only see to the left or only"
+  },
+  {
+    "start": 587.36,
+    "end": 590.44,
+    "text": "see to the right, when we know that in order"
+  },
+  {
+    "start": 590.44,
+    "end": 591.6,
+    "text": "to understand language, you need"
+  },
+  {
+    "start": 591.6,
+    "end": 593.04,
+    "text": "to look in both directions."
+  },
+  {
+    "start": 593.04,
+    "end": 595.6,
+    "text": "So there's two reasons."
+  },
+  {
+    "start": 595.6,
+    "end": 597.56,
+    "text": "So one is that language models historically"
+  },
+  {
+    "start": 597.56,
+    "end": 601.8,
+    "text": "had been used for typically as features in other systems."
+  },
+  {
+    "start": 601.8,
+    "end": 603.96,
+    "text": "So the most direct application of language modeling"
+  },
+  {
+    "start": 603.96,
+    "end": 606.12,
+    "text": "would be predictive text, which is directly just"
+  },
+  {
+    "start": 606.12,
+    "end": 607.96,
+    "text": "saying predict the next word."
+  },
+  {
+    "start": 607.96,
+    "end": 609.92,
+    "text": "But the other applications that are actually more common"
+  },
+  {
+    "start": 609.92,
+    "end": 611.88,
+    "text": "are to use them in a machine translation system"
+  },
+  {
+    "start": 611.88,
+    "end": 614.52,
+    "text": "or a speech recognition system, where you have these features"
+  },
+  {
+    "start": 614.52,
+    "end": 617.36,
+    "text": "like translation features or acoustic features,"
+  },
+  {
+    "start": 617.36,
+    "end": 619.16,
+    "text": "and then you add a language model that says,"
+  },
+  {
+    "start": 619.16,
+    "end": 620.68,
+    "text": "what's the probability of the sentence?"
+  },
+  {
+    "start": 620.68,
+    "end": 621.48,
+    "text": "And so for this, you want it"
+  },
+  {
+    "start": 621.48,
+    "end": 622.92,
+    "text": "to be a well-formed distribution."
+  },
+  {
+    "start": 622.92,
+    "end": 624.2,
+    "text": "For these pre-trained models,"
+  },
+  {
+    "start": 624.2,
+    "end": 625.44,
+    "text": "we actually don't care about this."
+  },
+  {
+    "start": 625.48,
+    "end": 628.24,
+    "text": "But this was kind of something that was kind of people"
+  },
+  {
+    "start": 628.24,
+    "end": 631.8,
+    "text": "had just been kind of, I guess, fixed on this idea"
+  },
+  {
+    "start": 631.8,
+    "end": 633.92,
+    "text": "that language models have to have a distribution,"
+  },
+  {
+    "start": 633.92,
+    "end": 635.12,
+    "text": "probably a distribution, even though we actually"
+  },
+  {
+    "start": 635.12,
+    "end": 636.44,
+    "text": "don't care about that."
+  },
+  {
+    "start": 636.44,
+    "end": 638.08,
+    "text": "But the other kind of bigger reason"
+  },
+  {
+    "start": 638.08,
+    "end": 639.56,
+    "text": "is that words can see themselves"
+  },
+  {
+    "start": 639.56,
+    "end": 640.92,
+    "text": "in a bi-directional encoder."
+  },
+  {
+    "start": 641.96,
+    "end": 643.72,
+    "text": "And so what this means is,"
+  },
+  {
+    "start": 643.72,
+    "end": 647.24,
+    "text": "when you build a representation incrementally,"
+  },
+  {
+    "start": 648.76,
+    "end": 651.16,
+    "text": "so you have your input and then you have your output"
+  },
+  {
+    "start": 651.16,
+    "end": 652.88,
+    "text": "and it's always offset by one."
+  },
+  {
+    "start": 652.88,
+    "end": 656.8,
+    "text": "So we have the startup sentence token."
+  },
+  {
+    "start": 656.8,
+    "end": 657.92,
+    "text": "We predict the first word."
+  },
+  {
+    "start": 657.92,
+    "end": 659.32,
+    "text": "Then we feed in the second word."
+  },
+  {
+    "start": 659.32,
+    "end": 660.92,
+    "text": "We feed in the first word and predict the second word."
+  },
+  {
+    "start": 660.92,
+    "end": 663.16,
+    "text": "And so we can encode the sentence once"
+  },
+  {
+    "start": 663.16,
+    "end": 664.68,
+    "text": "and predict all the words in the sentence"
+  },
+  {
+    "start": 664.68,
+    "end": 665.68,
+    "text": "with the unidirectional model."
+  },
+  {
+    "start": 665.68,
+    "end": 667.64,
+    "text": "And so this gives us good sample efficiency, right?"
+  },
+  {
+    "start": 667.64,
+    "end": 669.52,
+    "text": "Because if we have a 512 dimension,"
+  },
+  {
+    "start": 669.52,
+    "end": 671.56,
+    "text": "like a sequence of 500 words,"
+  },
+  {
+    "start": 671.56,
+    "end": 674.12,
+    "text": "we don't want to have to only predict one word"
+  },
+  {
+    "start": 674.12,
+    "end": 677.88,
+    "text": "because it's gonna be 500 times as much compute"
+  },
+  {
+    "start": 677.88,
+    "end": 680.52,
+    "text": "to get the same amount of predictions."
+  },
+  {
+    "start": 680.52,
+    "end": 681.84,
+    "text": "But if we were to just trivially do"
+  },
+  {
+    "start": 681.84,
+    "end": 684.08,
+    "text": "a bi-directional LSTM or transformer,"
+  },
+  {
+    "start": 684.08,
+    "end": 686.88,
+    "text": "we would have a situation where you encode your sentence,"
+  },
+  {
+    "start": 686.88,
+    "end": 688.72,
+    "text": "everything is bi-directional."
+  },
+  {
+    "start": 688.72,
+    "end": 691.84,
+    "text": "And so after the first layer, everything can see itself."
+  },
+  {
+    "start": 691.84,
+    "end": 695.12,
+    "text": "So this word open, there's a path back down to open."
+  },
+  {
+    "start": 695.12,
+    "end": 696.76,
+    "text": "And so it's trivial to predict a word"
+  },
+  {
+    "start": 696.76,
+    "end": 699.2,
+    "text": "that can, where it's in the input also, right?"
+  },
+  {
+    "start": 699.2,
+    "end": 701.92,
+    "text": "There's no actual prediction going on there."
+  },
+  {
+    "start": 701.92,
+    "end": 704.6,
+    "text": "So the simple solution,"
+  },
+  {
+    "start": 704.6,
+    "end": 706.04,
+    "text": "which is basically the whole crux of BERT,"
+  },
+  {
+    "start": 706.04,
+    "end": 708.28,
+    "text": "is that let's instead of"
+  },
+  {
+    "start": 709.28,
+    "end": 711.72,
+    "text": "training a normal language model,"
+  },
+  {
+    "start": 711.72,
+    "end": 715.04,
+    "text": "let's just predict, mask out K% of the words."
+  },
+  {
+    "start": 715.04,
+    "end": 719.48,
+    "text": "So the man went to the mask to buy a mask of milk."
+  },
+  {
+    "start": 719.48,
+    "end": 723.2,
+    "text": "And so now you can run a bi-directional model on that,"
+  },
+  {
+    "start": 723.2,
+    "end": 724.56,
+    "text": "and because the words aren't in the input,"
+  },
+  {
+    "start": 724.56,
+    "end": 725.96,
+    "text": "you can't cheat, right?"
+  },
+  {
+    "start": 725.96,
+    "end": 730.24,
+    "text": "The downside of this is that"
+  },
+  {
+    "start": 730.24,
+    "end": 733.44,
+    "text": "you're not getting as many predictions per sentence, right?"
+  },
+  {
+    "start": 733.44,
+    "end": 735.08,
+    "text": "You're only getting, predicting 15% of words"
+  },
+  {
+    "start": 735.08,
+    "end": 736.88,
+    "text": "instead of 100% of words."
+  },
+  {
+    "start": 737.0,
+    "end": 739.08,
+    "text": "But the upside is that you're getting a much more rich model"
+  },
+  {
+    "start": 739.08,
+    "end": 741.08,
+    "text": "because you're seeing in both directions, right?"
+  },
+  {
+    "start": 741.08,
+    "end": 743.04,
+    "text": "So this value of K is a hyperparameter"
+  },
+  {
+    "start": 743.04,
+    "end": 746.2,
+    "text": "that we have to just decide on empirically."
+  },
+  {
+    "start": 746.2,
+    "end": 747.64,
+    "text": "So we use 15%."
+  },
+  {
+    "start": 747.64,
+    "end": 748.84,
+    "text": "It turns out that that's actually kind of"
+  },
+  {
+    "start": 748.84,
+    "end": 749.96,
+    "text": "an optimal value people have,"
+  },
+  {
+    "start": 749.96,
+    "end": 751.2,
+    "text": "so we and also people have since then"
+  },
+  {
+    "start": 751.2,
+    "end": 754.48,
+    "text": "have done more thorough ablation experiments"
+  },
+  {
+    "start": 754.48,
+    "end": 756.48,
+    "text": "and found that this 15% is good."
+  },
+  {
+    "start": 756.48,
+    "end": 759.24,
+    "text": "So the reason for doing a certain percent over another"
+  },
+  {
+    "start": 759.24,
+    "end": 761.8,
+    "text": "is that if you were to do, let's say, 50% masking,"
+  },
+  {
+    "start": 761.8,
+    "end": 763.12,
+    "text": "you would get way more predictions,"
+  },
+  {
+    "start": 763.12,
+    "end": 766.0,
+    "text": "but you would also mask out all of your context."
+  },
+  {
+    "start": 766.04,
+    "end": 771.04,
+    "text": "And so you can, if you mask out all of your context"
+  },
+  {
+    "start": 771.12,
+    "end": 771.96,
+    "text": "and you're not getting any,"
+  },
+  {
+    "start": 771.96,
+    "end": 773.16,
+    "text": "you can't learn contextual models."
+  },
+  {
+    "start": 773.16,
+    "end": 776.16,
+    "text": "And if you only do, let's say you can mask out one word,"
+  },
+  {
+    "start": 776.16,
+    "end": 778.84,
+    "text": "that might be optimal, maybe,"
+  },
+  {
+    "start": 778.84,
+    "end": 780.88,
+    "text": "but you would have to do way more data processing,"
+  },
+  {
+    "start": 780.88,
+    "end": 782.12,
+    "text": "so it would be way more sensitive to train,"
+  },
+  {
+    "start": 782.12,
+    "end": 783.6,
+    "text": "and we know that these models are basically"
+  },
+  {
+    "start": 783.6,
+    "end": 785.36,
+    "text": "just compute bound."
+  },
+  {
+    "start": 785.36,
+    "end": 786.32,
+    "text": "So if you just have enough data,"
+  },
+  {
+    "start": 786.32,
+    "end": 788.6,
+    "text": "you can just kind of train them infinitely,"
+  },
+  {
+    "start": 788.6,
+    "end": 790.0,
+    "text": "and it'll always do better."
+  },
+  {
+    "start": 790.0,
+    "end": 790.96,
+    "text": "So it's really just a trade off"
+  },
+  {
+    "start": 790.96,
+    "end": 792.36,
+    "text": "between these two things."
+  },
+  {
+    "start": 794.24,
+    "end": 795.76,
+    "text": "So one other little detail in Bert,"
+  },
+  {
+    "start": 795.8,
+    "end": 799.32,
+    "text": "which turned out to be super important,"
+  },
+  {
+    "start": 799.32,
+    "end": 800.44,
+    "text": "is that because the mask token"
+  },
+  {
+    "start": 800.44,
+    "end": 802.48,
+    "text": "is never seen at fine tuning time,"
+  },
+  {
+    "start": 802.48,
+    "end": 806.64,
+    "text": "instead of always replacing a word with the mask token,"
+  },
+  {
+    "start": 806.64,
+    "end": 810.52,
+    "text": "as in this case, we would randomly sometimes predict it"
+  },
+  {
+    "start": 810.52,
+    "end": 812.52,
+    "text": "with a random word and sometimes keep the same word."
+  },
+  {
+    "start": 812.52,
+    "end": 814.4,
+    "text": "So like, so 10% of the time would say,"
+  },
+  {
+    "start": 814.4,
+    "end": 816.2,
+    "text": "we went to the store and went to the running, right?"
+  },
+  {
+    "start": 816.2,
+    "end": 821.2,
+    "text": "And so we wouldn't tell the model which case was which."
+  },
+  {
+    "start": 822.76,
+    "end": 824.56,
+    "text": "We would just have it,"
+  },
+  {
+    "start": 825.56,
+    "end": 828.8,
+    "text": "we would just say, what should this word be, right?"
+  },
+  {
+    "start": 828.8,
+    "end": 829.92,
+    "text": "And didn't know whether it's right or not."
+  },
+  {
+    "start": 829.92,
+    "end": 831.24,
+    "text": "And so it could be the same word,"
+  },
+  {
+    "start": 831.24,
+    "end": 832.72,
+    "text": "so 10% of the time it's the same word,"
+  },
+  {
+    "start": 832.72,
+    "end": 833.72,
+    "text": "and it could be a random word."
+  },
+  {
+    "start": 833.72,
+    "end": 835.76,
+    "text": "And so it has to basically be able"
+  },
+  {
+    "start": 835.76,
+    "end": 838.6,
+    "text": "to maintain a good representation of every word,"
+  },
+  {
+    "start": 838.6,
+    "end": 840.36,
+    "text": "because it doesn't know whether it's really"
+  },
+  {
+    "start": 840.36,
+    "end": 841.2,
+    "text": "the right word."
+  },
+  {
+    "start": 841.2,
+    "end": 842.04,
+    "text": "So that's to actually look at every word"
+  },
+  {
+    "start": 842.04,
+    "end": 843.16,
+    "text": "and figure out whether this is the right word."
+  },
+  {
+    "start": 843.16,
+    "end": 844.36,
+    "text": "So we could potentially even just get away"
+  },
+  {
+    "start": 844.36,
+    "end": 845.68,
+    "text": "with not using the mask token at all,"
+  },
+  {
+    "start": 845.68,
+    "end": 847.32,
+    "text": "and just doing like this 50% of the time,"
+  },
+  {
+    "start": 847.32,
+    "end": 848.76,
+    "text": "and this 50% of the time."
+  },
+  {
+    "start": 848.76,
+    "end": 851.4,
+    "text": "But the reason for not doing that is that,"
+  },
+  {
+    "start": 851.4,
+    "end": 852.84,
+    "text": "then we'd be corrupting a lot of our data,"
+  },
+  {
+    "start": 852.92,
+    "end": 854.8,
+    "text": "and we don't want it to necessarily corrupt the data,"
+  },
+  {
+    "start": 854.8,
+    "end": 857.16,
+    "text": "because the fact that this is the wrong word,"
+  },
+  {
+    "start": 857.16,
+    "end": 858.16,
+    "text": "might mess up our prediction"
+  },
+  {
+    "start": 858.16,
+    "end": 859.4,
+    "text": "for some other word over here, right?"
+  },
+  {
+    "start": 859.4,
+    "end": 861.24,
+    "text": "So, whereas the mask token,"
+  },
+  {
+    "start": 861.24,
+    "end": 862.52,
+    "text": "at least it knows that it's not the right word,"
+  },
+  {
+    "start": 862.52,
+    "end": 864.92,
+    "text": "so it doesn't use that as part of its context."
+  },
+  {
+    "start": 866.8,
+    "end": 870.84,
+    "text": "So the other kind of detail of BERT,"
+  },
+  {
+    "start": 870.84,
+    "end": 873.72,
+    "text": "which also now and subsequently may not be,"
+  },
+  {
+    "start": 873.72,
+    "end": 874.72,
+    "text": "have been that important,"
+  },
+  {
+    "start": 874.72,
+    "end": 877.76,
+    "text": "is that a lot of these tasks that we're doing,"
+  },
+  {
+    "start": 877.76,
+    "end": 879.36,
+    "text": "we're not just learning words,"
+  },
+  {
+    "start": 879.36,
+    "end": 882.72,
+    "text": "we want to predict the relationship between sentences."
+  },
+  {
+    "start": 883.12,
+    "end": 884.44,
+    "text": "So question answering in particular,"
+  },
+  {
+    "start": 884.44,
+    "end": 887.44,
+    "text": "we have a query, which is generally a sentence,"
+  },
+  {
+    "start": 887.44,
+    "end": 889.44,
+    "text": "and then we have a answer,"
+  },
+  {
+    "start": 889.44,
+    "end": 892.16,
+    "text": "which is a paragraph or a sentence or a document,"
+  },
+  {
+    "start": 892.16,
+    "end": 896.68,
+    "text": "and we want to say, does this answer the question?"
+  },
+  {
+    "start": 896.68,
+    "end": 898.6,
+    "text": "So, by doing that we,"
+  },
+  {
+    "start": 899.8,
+    "end": 901.6,
+    "text": "so we want to have some pre-changing task"
+  },
+  {
+    "start": 901.6,
+    "end": 905.32,
+    "text": "that actually does a sentence level prediction"
+  },
+  {
+    "start": 905.32,
+    "end": 906.36,
+    "text": "rather than just a word level prediction."
+  },
+  {
+    "start": 906.36,
+    "end": 908.04,
+    "text": "So the way that we did this,"
+  },
+  {
+    "start": 908.04,
+    "end": 909.76,
+    "text": "and we need this to have an infinite amount of data,"
+  },
+  {
+    "start": 909.76,
+    "end": 911.6,
+    "text": "where we can just generate an infinite amount of data,"
+  },
+  {
+    "start": 911.6,
+    "end": 914.8,
+    "text": "so we don't want this to be an annotated task."
+  },
+  {
+    "start": 914.8,
+    "end": 918.36,
+    "text": "So the way that we did this is we just did"
+  },
+  {
+    "start": 918.36,
+    "end": 920.56,
+    "text": "a next sentence prediction task,"
+  },
+  {
+    "start": 920.56,
+    "end": 924.48,
+    "text": "where we just took two sentences from the same corpus,"
+  },
+  {
+    "start": 924.48,
+    "end": 925.32,
+    "text": "from the same document,"
+  },
+  {
+    "start": 925.32,
+    "end": 927.4,
+    "text": "and 50% of the time they were from the same document,"
+  },
+  {
+    "start": 927.4,
+    "end": 929.36,
+    "text": "50% of the time they were from a random document,"
+  },
+  {
+    "start": 929.36,
+    "end": 930.96,
+    "text": "and then we just said,"
+  },
+  {
+    "start": 930.96,
+    "end": 933.32,
+    "text": "was this the real next sentence or not?"
+  },
+  {
+    "start": 933.32,
+    "end": 935.64,
+    "text": "And so if you say the man went to the store,"
+  },
+  {
+    "start": 935.64,
+    "end": 936.48,
+    "text": "he bought a gallon of milk,"
+  },
+  {
+    "start": 936.48,
+    "end": 937.6,
+    "text": "that is the next sentence."
+  },
+  {
+    "start": 937.6,
+    "end": 938.84,
+    "text": "If you say the man went to the store,"
+  },
+  {
+    "start": 938.84,
+    "end": 940.0,
+    "text": "penguins are flightless,"
+  },
+  {
+    "start": 940.0,
+    "end": 941.0,
+    "text": "that's not the next sentence."
+  },
+  {
+    "start": 941.04,
+    "end": 943.16,
+    "text": "So basically, now we're forcing the model"
+  },
+  {
+    "start": 943.16,
+    "end": 944.84,
+    "text": "at pre-taining time to actually make,"
+  },
+  {
+    "start": 944.84,
+    "end": 946.44,
+    "text": "to look at the full sentences,"
+  },
+  {
+    "start": 946.44,
+    "end": 948.64,
+    "text": "and then make some sort of sentence level prediction,"
+  },
+  {
+    "start": 948.64,
+    "end": 953.08,
+    "text": "and we hope that this is kind of generalized,"
+  },
+  {
+    "start": 953.08,
+    "end": 954.64,
+    "text": "which is something like question answering,"
+  },
+  {
+    "start": 954.64,
+    "end": 956.24,
+    "text": "where you have a question and answer"
+  },
+  {
+    "start": 956.24,
+    "end": 957.6,
+    "text": "as sentence A and sentence B."
+  },
+  {
+    "start": 960.0,
+    "end": 964.35,
+    "text": "So in terms of our input representation,"
+  },
+  {
+    "start": 964.35,
+    "end": 967.19,
+    "text": "it looks pretty similar to a normal transformer,"
+  },
+  {
+    "start": 967.19,
+    "end": 969.59,
+    "text": "but we have these additional embeddings,"
+  },
+  {
+    "start": 969.59,
+    "end": 972.03,
+    "text": "which are called segment embeddings."
+  },
+  {
+    "start": 972.03,
+    "end": 973.39,
+    "text": "So a normal transformer,"
+  },
+  {
+    "start": 973.39,
+    "end": 975.63,
+    "text": "you would have your input,"
+  },
+  {
+    "start": 975.63,
+    "end": 977.47,
+    "text": "and then you would do word piece segmentation,"
+  },
+  {
+    "start": 977.47,
+    "end": 982.15,
+    "text": "where you apply this unsupervised splitting of words"
+  },
+  {
+    "start": 982.15,
+    "end": 986.27,
+    "text": "into kind of morphological splits,"
+  },
+  {
+    "start": 986.27,
+    "end": 988.23,
+    "text": "but they're usually often not morphological,"
+  },
+  {
+    "start": 988.23,
+    "end": 989.43,
+    "text": "so it's unsupervised,"
+  },
+  {
+    "start": 989.43,
+    "end": 990.27,
+    "text": "but you end up with something"
+  },
+  {
+    "start": 990.27,
+    "end": 991.95,
+    "text": "that's roughly morphological, right?"
+  },
+  {
+    "start": 991.95,
+    "end": 995.19,
+    "text": "And so now you have no out of vocabulary tokens,"
+  },
+  {
+    "start": 995.19,
+    "end": 996.19,
+    "text": "everything is represented,"
+  },
+  {
+    "start": 996.19,
+    "end": 999.31,
+    "text": "at the very least you'll always split into characters."
+  },
+  {
+    "start": 999.31,
+    "end": 1001.83,
+    "text": "So we use a 30,000 word vocabulary,"
+  },
+  {
+    "start": 1001.83,
+    "end": 1004.15,
+    "text": "and then we have our token embeddings,"
+  },
+  {
+    "start": 1005.23,
+    "end": 1006.83,
+    "text": "then we have our normal position embeddings,"
+  },
+  {
+    "start": 1006.83,
+    "end": 1007.67,
+    "text": "which is at the bottom,"
+  },
+  {
+    "start": 1007.67,
+    "end": 1009.35,
+    "text": "and so these are part of the transformer,"
+  },
+  {
+    "start": 1009.35,
+    "end": 1010.35,
+    "text": "where because transformers,"
+  },
+  {
+    "start": 1010.35,
+    "end": 1015.35,
+    "text": "unlike LSTMs don't have any sort of locational awareness,"
+  },
+  {
+    "start": 1015.59,
+    "end": 1017.11,
+    "text": "so the only way to encode that"
+  },
+  {
+    "start": 1017.11,
+    "end": 1021.03,
+    "text": "is that you encode a actual embedding for every position,"
+  },
+  {
+    "start": 1021.03,
+    "end": 1022.39,
+    "text": "so this is called absolute position embeddings,"
+  },
+  {
+    "start": 1022.39,
+    "end": 1024.39,
+    "text": "there's other kind of techniques nowadays,"
+  },
+  {
+    "start": 1025.67,
+    "end": 1028.15,
+    "text": "and then you have the segment embedding,"
+  },
+  {
+    "start": 1028.15,
+    "end": 1030.47,
+    "text": "which is this is sentence A or sentence B,"
+  },
+  {
+    "start": 1030.47,
+    "end": 1034.35,
+    "text": "and so this kind of generalizes in more general context,"
+  },
+  {
+    "start": 1034.35,
+    "end": 1035.67,
+    "text": "so you can imagine if you're saying,"
+  },
+  {
+    "start": 1035.67,
+    "end": 1037.55,
+    "text": "if you're trying to do like web search,"
+  },
+  {
+    "start": 1037.55,
+    "end": 1039.35,
+    "text": "you might say, here's my query,"
+  },
+  {
+    "start": 1039.35,
+    "end": 1041.39,
+    "text": "here's the title, here's the URL,"
+  },
+  {
+    "start": 1041.39,
+    "end": 1043.23,
+    "text": "here's the document content,"
+  },
+  {
+    "start": 1044.67,
+    "end": 1045.99,
+    "text": "and so you can kind of just pack these"
+  },
+  {
+    "start": 1045.99,
+    "end": 1046.87,
+    "text": "all into a single sequence,"
+  },
+  {
+    "start": 1046.87,
+    "end": 1049.75,
+    "text": "and then just give them different segment embeddings,"
+  },
+  {
+    "start": 1049.75,
+    "end": 1050.83,
+    "text": "or type embeddings,"
+  },
+  {
+    "start": 1050.83,
+    "end": 1055.83,
+    "text": "so that now you are able to have a much stronger,"
+  },
+  {
+    "start": 1057.47,
+    "end": 1059.79,
+    "text": "you're able to kind of just represent everything"
+  },
+  {
+    "start": 1059.79,
+    "end": 1061.95,
+    "text": "in this kind of same single sequence,"
+  },
+  {
+    "start": 1061.95,
+    "end": 1063.15,
+    "text": "where you kind of just differentiate"
+  },
+  {
+    "start": 1063.15,
+    "end": 1064.55,
+    "text": "by just the single embedding that's different,"
+  },
+  {
+    "start": 1064.55,
+    "end": 1067.03,
+    "text": "and this is all, of course, learned,"
+  },
+  {
+    "start": 1067.03,
+    "end": 1069.67,
+    "text": "and so this is in contrast to kind of the older style,"
+  },
+  {
+    "start": 1069.67,
+    "end": 1070.99,
+    "text": "where you would typically have a different encoder"
+  },
+  {
+    "start": 1070.99,
+    "end": 1071.83,
+    "text": "for every part,"
+  },
+  {
+    "start": 1071.83,
+    "end": 1073.19,
+    "text": "so you would have a different encoder for the query,"
+  },
+  {
+    "start": 1073.19,
+    "end": 1074.03,
+    "text": "and then maybe for the title,"
+  },
+  {
+    "start": 1074.03,
+    "end": 1075.27,
+    "text": "and maybe for the URL,"
+  },
+  {
+    "start": 1075.27,
+    "end": 1078.11,
+    "text": "but in this case it's all just a single sequence,"
+  },
+  {
+    "start": 1078.11,
+    "end": 1081.11,
+    "text": "so we trained on about a three billion word corpus,"
+  },
+  {
+    "start": 1081.11,
+    "end": 1082.75,
+    "text": "which was at the time large now,"
+  },
+  {
+    "start": 1082.75,
+    "end": 1084.19,
+    "text": "it's not actually even that big"
+  },
+  {
+    "start": 1084.19,
+    "end": 1087.62,
+    "text": "compared to what people are training on,"
+  },
+  {
+    "start": 1087.62,
+    "end": 1091.26,
+    "text": "we used a batch size, which was also large,"
+  },
+  {
+    "start": 1092.86,
+    "end": 1094.74,
+    "text": "we trained for about 40 epochs over the data,"
+  },
+  {
+    "start": 1094.74,
+    "end": 1095.62,
+    "text": "we trained these two models,"
+  },
+  {
+    "start": 1095.62,
+    "end": 1097.26,
+    "text": "which are still relatively large,"
+  },
+  {
+    "start": 1098.7,
+    "end": 1101.06,
+    "text": "so one of them is 12 layer, 768,"
+  },
+  {
+    "start": 1101.06,
+    "end": 1102.66,
+    "text": "and then the other one's 24 layer, 10, 24,"
+  },
+  {
+    "start": 1102.66,
+    "end": 1104.78,
+    "text": "so at the time this was basically like"
+  },
+  {
+    "start": 1104.78,
+    "end": 1106.38,
+    "text": "one of the largest models that had been trained,"
+  },
+  {
+    "start": 1106.38,
+    "end": 1108.02,
+    "text": "although now people are training models"
+  },
+  {
+    "start": 1108.02,
+    "end": 1111.42,
+    "text": "that I think are 30 times or more bigger than this"
+  },
+  {
+    "start": 1112.3,
+    "end": 1113.54,
+    "text": "in the more recent papers,"
+  },
+  {
+    "start": 1113.54,
+    "end": 1114.62,
+    "text": "so things have kind of exploded"
+  },
+  {
+    "start": 1114.62,
+    "end": 1117.34,
+    "text": "in terms of compute in the last,"
+  },
+  {
+    "start": 1117.54,
+    "end": 1119.3,
+    "text": "I don't know, three years,"
+  },
+  {
+    "start": 1119.3,
+    "end": 1124.3,
+    "text": "but yeah, so the fine tuning procedure is,"
+  },
+  {
+    "start": 1126.58,
+    "end": 1127.9,
+    "text": "it's pretty straightforward, right?"
+  },
+  {
+    "start": 1127.9,
+    "end": 1130.82,
+    "text": "So we pre-trained this model for these two tasks,"
+  },
+  {
+    "start": 1130.82,
+    "end": 1133.38,
+    "text": "and so now we have an input sequence,"
+  },
+  {
+    "start": 1133.38,
+    "end": 1135.58,
+    "text": "which is multiple sentences with different type embeddings,"
+  },
+  {
+    "start": 1135.58,
+    "end": 1140.14,
+    "text": "we feed them through our transformer model,"
+  },
+  {
+    "start": 1140.14,
+    "end": 1142.06,
+    "text": "and now we have the special embedding,"
+  },
+  {
+    "start": 1142.06,
+    "end": 1143.74,
+    "text": "which I think I didn't mention,"
+  },
+  {
+    "start": 1143.74,
+    "end": 1145.02,
+    "text": "so this is the special embedding,"
+  },
+  {
+    "start": 1145.02,
+    "end": 1147.3,
+    "text": "this is basically,"
+  },
+  {
+    "start": 1147.3,
+    "end": 1150.18,
+    "text": "it's learned to predict the next sentence prediction task,"
+  },
+  {
+    "start": 1150.18,
+    "end": 1154.3,
+    "text": "and then this is used also for classification tasks,"
+  },
+  {
+    "start": 1154.3,
+    "end": 1156.46,
+    "text": "but it's not just that we're using the embedding, right?"
+  },
+  {
+    "start": 1156.46,
+    "end": 1159.02,
+    "text": "We're fine tuning the entire model, right?"
+  },
+  {
+    "start": 1159.02,
+    "end": 1161.18,
+    "text": "So it's really not that this embedding"
+  },
+  {
+    "start": 1161.18,
+    "end": 1162.02,
+    "text": "is intrinsically useful"
+  },
+  {
+    "start": 1162.02,
+    "end": 1163.78,
+    "text": "or that the word embeddings are intrinsically useful,"
+  },
+  {
+    "start": 1163.78,
+    "end": 1166.86,
+    "text": "it's that the weights inside the entire"
+  },
+  {
+    "start": 1166.86,
+    "end": 1169.38,
+    "text": "12 or 24 layer model are useful,"
+  },
+  {
+    "start": 1169.38,
+    "end": 1171.82,
+    "text": "and so by fine tuning the entire model,"
+  },
+  {
+    "start": 1171.82,
+    "end": 1173.62,
+    "text": "you can kind of pick out the salient parts"
+  },
+  {
+    "start": 1173.9,
+    "end": 1176.02,
+    "text": "that are important for some downstream task,"
+  },
+  {
+    "start": 1177.34,
+    "end": 1182.34,
+    "text": "and so this is the kind of the class-specific fine tuning,"
+  },
+  {
+    "start": 1182.58,
+    "end": 1184.78,
+    "text": "so if we have a single classification task,"
+  },
+  {
+    "start": 1185.86,
+    "end": 1188.42,
+    "text": "like let's say sentiment analysis,"
+  },
+  {
+    "start": 1189.3,
+    "end": 1191.7,
+    "text": "where we say is this a positive or negative review?"
+  },
+  {
+    "start": 1191.7,
+    "end": 1195.1,
+    "text": "We encode our sentence with the BERT model,"
+  },
+  {
+    "start": 1195.1,
+    "end": 1196.34,
+    "text": "then the only parameters that we add"
+  },
+  {
+    "start": 1196.34,
+    "end": 1198.42,
+    "text": "are this final output matrix, right?"
+  },
+  {
+    "start": 1198.42,
+    "end": 1199.62,
+    "text": "So maybe if we have three,"
+  },
+  {
+    "start": 1199.62,
+    "end": 1201.86,
+    "text": "let's say positive, negative, or neutral,"
+  },
+  {
+    "start": 1201.86,
+    "end": 1204.02,
+    "text": "this might be 1,000 times three, right?"
+  },
+  {
+    "start": 1204.02,
+    "end": 1207.5,
+    "text": "So it's just 3,000 parameters and 300 million,"
+  },
+  {
+    "start": 1207.5,
+    "end": 1211.62,
+    "text": "so 3,000 new parameters and 300 million old parameters,"
+  },
+  {
+    "start": 1211.62,
+    "end": 1215.42,
+    "text": "and we jointly train all 300 million plus 3,000"
+  },
+  {
+    "start": 1216.38,
+    "end": 1217.94,
+    "text": "for this downstream task,"
+  },
+  {
+    "start": 1217.94,
+    "end": 1219.9,
+    "text": "but because the vast majority of them are pretrained,"
+  },
+  {
+    "start": 1219.9,
+    "end": 1221.46,
+    "text": "we can kind of adapt to it"
+  },
+  {
+    "start": 1221.46,
+    "end": 1224.3,
+    "text": "in only like a few thousand labeled examples,"
+  },
+  {
+    "start": 1224.3,
+    "end": 1226.58,
+    "text": "and similarly for a sentence pair class,"
+  },
+  {
+    "start": 1226.58,
+    "end": 1229.1,
+    "text": "we do, we just concatenate the two sentences"
+  },
+  {
+    "start": 1229.1,
+    "end": 1230.14,
+    "text": "with different type embeddings,"
+  },
+  {
+    "start": 1230.14,
+    "end": 1231.18,
+    "text": "so we have, if you want to say,"
+  },
+  {
+    "start": 1231.18,
+    "end": 1233.02,
+    "text": "does the sentence entail this other sentence,"
+  },
+  {
+    "start": 1233.02,
+    "end": 1237.18,
+    "text": "you say sentence A, you put it, concatenate sentence B,"
+  },
+  {
+    "start": 1237.18,
+    "end": 1239.46,
+    "text": "and then also predicts from this token"
+  },
+  {
+    "start": 1239.46,
+    "end": 1240.42,
+    "text": "and fine tune the entire thing."
+  },
+  {
+    "start": 1240.42,
+    "end": 1243.26,
+    "text": "So similarly, very few additional parameters."
+  },
+  {
+    "start": 1243.26,
+    "end": 1244.86,
+    "text": "For span prediction tasks,"
+  },
+  {
+    "start": 1244.86,
+    "end": 1248.74,
+    "text": "you just have kind of a start of span,"
+  },
+  {
+    "start": 1248.74,
+    "end": 1249.74,
+    "text": "end of span, so you're only adding"
+  },
+  {
+    "start": 1249.74,
+    "end": 1251.9,
+    "text": "a few thousand new parameters,"
+  },
+  {
+    "start": 1251.9,
+    "end": 1253.7,
+    "text": "and then for tagging tasks,"
+  },
+  {
+    "start": 1253.7,
+    "end": 1254.9,
+    "text": "like part of speech tagging,"
+  },
+  {
+    "start": 1254.94,
+    "end": 1259.94,
+    "text": "you just have a single sentence,"
+  },
+  {
+    "start": 1260.5,
+    "end": 1263.22,
+    "text": "you add every single token,"
+  },
+  {
+    "start": 1263.22,
+    "end": 1265.22,
+    "text": "or maybe every token except for the word pieces,"
+  },
+  {
+    "start": 1265.22,
+    "end": 1267.94,
+    "text": "but like either it's kind of preprocessing,"
+  },
+  {
+    "start": 1267.94,
+    "end": 1270.86,
+    "text": "you predict what's the part of speech of this,"
+  },
+  {
+    "start": 1270.86,
+    "end": 1273.18,
+    "text": "and so this is really why,"
+  },
+  {
+    "start": 1275.64,
+    "end": 1278.04,
+    "text": "so like word itself is really a kind of,"
+  },
+  {
+    "start": 1278.04,
+    "end": 1279.8,
+    "text": "I would say an incremental improvement"
+  },
+  {
+    "start": 1279.8,
+    "end": 1280.72,
+    "text": "over what already exists,"
+  },
+  {
+    "start": 1280.72,
+    "end": 1284.6,
+    "text": "so it kind of took transformers,"
+  },
+  {
+    "start": 1284.6,
+    "end": 1288.28,
+    "text": "ELMO, GPT, really these three ideas,"
+  },
+  {
+    "start": 1288.28,
+    "end": 1292.76,
+    "text": "and kind of made a pretty simple change on top of them,"
+  },
+  {
+    "start": 1292.76,
+    "end": 1296.8,
+    "text": "and but the reason why it had such big impact"
+  },
+  {
+    "start": 1296.8,
+    "end": 1298.6,
+    "text": "is not just the numbers that I'll show in a few slides,"
+  },
+  {
+    "start": 1298.6,
+    "end": 1300.56,
+    "text": "it's really this thing,"
+  },
+  {
+    "start": 1300.56,
+    "end": 1305.56,
+    "text": "because with ELMO,"
+  },
+  {
+    "start": 1305.7,
+    "end": 1307.76,
+    "text": "there was really no fundamental difference between,"
+  },
+  {
+    "start": 1307.76,
+    "end": 1308.88,
+    "text": "it was just contextual embedding, right?"
+  },
+  {
+    "start": 1308.88,
+    "end": 1309.84,
+    "text": "So you still had,"
+  },
+  {
+    "start": 1309.84,
+    "end": 1311.64,
+    "text": "because like a lot of deep learning,"
+  },
+  {
+    "start": 1311.68,
+    "end": 1315.44,
+    "text": "historically has been fun in building new models, right?"
+  },
+  {
+    "start": 1315.44,
+    "end": 1316.8,
+    "text": "So you have all of these components"
+  },
+  {
+    "start": 1316.8,
+    "end": 1318.28,
+    "text": "to kind of like Lego blocks, right?"
+  },
+  {
+    "start": 1318.28,
+    "end": 1320.88,
+    "text": "You have attention layers, feed forward layers,"
+  },
+  {
+    "start": 1320.88,
+    "end": 1324.84,
+    "text": "layer normalization, LSTMs, et cetera,"
+  },
+  {
+    "start": 1324.84,
+    "end": 1327.64,
+    "text": "and you can just kind of like figure out,"
+  },
+  {
+    "start": 1327.64,
+    "end": 1329.84,
+    "text": "say okay, for this new task,"
+  },
+  {
+    "start": 1329.84,
+    "end": 1332.8,
+    "text": "how do I glue these together in a way that's best, right?"
+  },
+  {
+    "start": 1332.8,
+    "end": 1336.16,
+    "text": "And so with ELMO,"
+  },
+  {
+    "start": 1336.16,
+    "end": 1337.52,
+    "text": "it wasn't really,"
+  },
+  {
+    "start": 1337.52,
+    "end": 1339.4,
+    "text": "it didn't really change anything fundamentally,"
+  },
+  {
+    "start": 1339.4,
+    "end": 1340.48,
+    "text": "it was just,"
+  },
+  {
+    "start": 1340.48,
+    "end": 1342.44,
+    "text": "because you just fed it into your existing model"
+  },
+  {
+    "start": 1342.44,
+    "end": 1343.4,
+    "text": "and you got state of the art."
+  },
+  {
+    "start": 1343.4,
+    "end": 1346.52,
+    "text": "For GPT-1, it wasn't,"
+  },
+  {
+    "start": 1348.08,
+    "end": 1349.88,
+    "text": "like these things didn't really work, right?"
+  },
+  {
+    "start": 1349.88,
+    "end": 1351.56,
+    "text": "Because it was a left to right language model."
+  },
+  {
+    "start": 1351.56,
+    "end": 1353.68,
+    "text": "And so you could just kind of take the last token"
+  },
+  {
+    "start": 1353.68,
+    "end": 1355.72,
+    "text": "and then predict a classification task,"
+  },
+  {
+    "start": 1355.72,
+    "end": 1358.28,
+    "text": "but it didn't really make any sense to predict"
+  },
+  {
+    "start": 1358.28,
+    "end": 1359.2,
+    "text": "like part of speech tags,"
+  },
+  {
+    "start": 1359.2,
+    "end": 1361.4,
+    "text": "because for the first word, there's no context."
+  },
+  {
+    "start": 1361.4,
+    "end": 1365.08,
+    "text": "So it makes no sense to predict a word with no context."
+  },
+  {
+    "start": 1365.08,
+    "end": 1368.48,
+    "text": "With BERT, the reason why it had such high impact"
+  },
+  {
+    "start": 1369.48,
+    "end": 1371.4,
+    "text": "was because it kind of simplified things."
+  },
+  {
+    "start": 1371.4,
+    "end": 1372.24,
+    "text": "And so that's not,"
+  },
+  {
+    "start": 1372.24,
+    "end": 1374.08,
+    "text": "I'm not saying that's necessarily a good thing,"
+  },
+  {
+    "start": 1374.08,
+    "end": 1377.76,
+    "text": "because as a researcher, or a bad thing."
+  },
+  {
+    "start": 1377.76,
+    "end": 1380.36,
+    "text": "So as a researcher kind of, ironically,"
+  },
+  {
+    "start": 1380.36,
+    "end": 1381.52,
+    "text": "the ultimate goal of research is often"
+  },
+  {
+    "start": 1381.52,
+    "end": 1382.92,
+    "text": "like research yourself out of a job, right?"
+  },
+  {
+    "start": 1382.92,
+    "end": 1385.48,
+    "text": "Like it's like, you know, if a physicist,"
+  },
+  {
+    "start": 1385.48,
+    "end": 1387.84,
+    "text": "I'm not saying BERT had anywhere near this impact,"
+  },
+  {
+    "start": 1387.84,
+    "end": 1389.56,
+    "text": "like a physicist that came up with like a grand theory"
+  },
+  {
+    "start": 1389.56,
+    "end": 1391.52,
+    "text": "of physics, that would kind of like,"
+  },
+  {
+    "start": 1391.52,
+    "end": 1393.24,
+    "text": "that would be like the greatest moment in physics,"
+  },
+  {
+    "start": 1393.24,
+    "end": 1395.96,
+    "text": "but also that would kind of eliminate a lot of research,"
+  },
+  {
+    "start": 1395.96,
+    "end": 1396.8,
+    "text": "right?"
+  },
+  {
+    "start": 1396.8,
+    "end": 1398.16,
+    "text": "And so that's kind of like the end goal"
+  },
+  {
+    "start": 1398.2,
+    "end": 1400.36,
+    "text": "of research is kind of solve the problem, right?"
+  },
+  {
+    "start": 1400.36,
+    "end": 1405.36,
+    "text": "So BERT kind of is a step where now,"
+  },
+  {
+    "start": 1408.4,
+    "end": 1410.36,
+    "text": "like all of these different classes of problems,"
+  },
+  {
+    "start": 1410.36,
+    "end": 1412.28,
+    "text": "there's really, it kind of killed"
+  },
+  {
+    "start": 1412.28,
+    "end": 1416.04,
+    "text": "like a lot of the need to do model architecture design,"
+  },
+  {
+    "start": 1416.04,
+    "end": 1417.24,
+    "text": "which is kind of unfortunate"
+  },
+  {
+    "start": 1417.24,
+    "end": 1419.28,
+    "text": "because that's like really fun."
+  },
+  {
+    "start": 1419.28,
+    "end": 1422.0,
+    "text": "And so that's kind of the impact."
+  },
+  {
+    "start": 1422.0,
+    "end": 1423.52,
+    "text": "And I'm not gonna say whether that's like"
+  },
+  {
+    "start": 1423.52,
+    "end": 1424.36,
+    "text": "a good or a bad impact."
+  },
+  {
+    "start": 1424.36,
+    "end": 1425.88,
+    "text": "It's kind of like the objective impact."
+  },
+  {
+    "start": 1425.88,
+    "end": 1427.24,
+    "text": "And that's why it's had so much impact"
+  },
+  {
+    "start": 1427.28,
+    "end": 1430.52,
+    "text": "is because it has kind of had this effect"
+  },
+  {
+    "start": 1430.52,
+    "end": 1433.56,
+    "text": "on now so many things that used to be"
+  },
+  {
+    "start": 1433.56,
+    "end": 1435.32,
+    "text": "like designing fun, you know, models,"
+  },
+  {
+    "start": 1435.32,
+    "end": 1438.44,
+    "text": "it's just feed it in and use one of these four recipes"
+  },
+  {
+    "start": 1438.44,
+    "end": 1441.8,
+    "text": "and it kind of just works for all of these different tasks."
+  },
+  {
+    "start": 1441.8,
+    "end": 1443.88,
+    "text": "So in terms of actual empirical results,"
+  },
+  {
+    "start": 1443.88,
+    "end": 1445.44,
+    "text": "so these are at the time that Hickworth published,"
+  },
+  {
+    "start": 1445.44,
+    "end": 1449.16,
+    "text": "of course, things have gotten better since then."
+  },
+  {
+    "start": 1449.16,
+    "end": 1452.84,
+    "text": "So this glue task is a set of,"
+  },
+  {
+    "start": 1452.84,
+    "end": 1454.2,
+    "text": "they're all kind of similar in that"
+  },
+  {
+    "start": 1454.2,
+    "end": 1456.48,
+    "text": "they're all sentence pair or sentence classification tasks."
+  },
+  {
+    "start": 1456.52,
+    "end": 1460.12,
+    "text": "So like multi-NLI would be something like"
+  },
+  {
+    "start": 1460.12,
+    "end": 1462.48,
+    "text": "hills and mountains are especially sanctified in Jainism."
+  },
+  {
+    "start": 1462.48,
+    "end": 1465.12,
+    "text": "And then hypothesis is Jainism hates nature,"
+  },
+  {
+    "start": 1465.12,
+    "end": 1465.96,
+    "text": "that's a contradiction, right?"
+  },
+  {
+    "start": 1465.96,
+    "end": 1469.44,
+    "text": "So in order for an NLP model to be able to understand this"
+  },
+  {
+    "start": 1469.44,
+    "end": 1470.84,
+    "text": "or to be able to answer this correctly"
+  },
+  {
+    "start": 1470.84,
+    "end": 1472.6,
+    "text": "and give this the label of contradiction,"
+  },
+  {
+    "start": 1472.6,
+    "end": 1475.96,
+    "text": "it needs to know that hills and mountains"
+  },
+  {
+    "start": 1475.96,
+    "end": 1478.4,
+    "text": "are part of nature."
+  },
+  {
+    "start": 1478.4,
+    "end": 1479.92,
+    "text": "Sanctified is a good thing"
+  },
+  {
+    "start": 1479.92,
+    "end": 1481.28,
+    "text": "and that hating something is a bad thing"
+  },
+  {
+    "start": 1481.28,
+    "end": 1482.96,
+    "text": "and be able to do all of this reasoning, right?"
+  },
+  {
+    "start": 1482.96,
+    "end": 1484.92,
+    "text": "So it's a pretty complicated reasoning."
+  },
+  {
+    "start": 1484.96,
+    "end": 1486.4,
+    "text": "Similarly for COLA, you have to be able to say"
+  },
+  {
+    "start": 1486.4,
+    "end": 1488.56,
+    "text": "like the wagon rumbled down the road"
+  },
+  {
+    "start": 1488.56,
+    "end": 1490.68,
+    "text": "versus the car honked down the road."
+  },
+  {
+    "start": 1490.68,
+    "end": 1494.36,
+    "text": "And so these things are,"
+  },
+  {
+    "start": 1495.52,
+    "end": 1497.4,
+    "text": "one of them to a native English speaker"
+  },
+  {
+    "start": 1497.4,
+    "end": 1499.16,
+    "text": "sounds totally fine, the other one sounds weird."
+  },
+  {
+    "start": 1499.16,
+    "end": 1501.04,
+    "text": "And so it's similar, and neither of these"
+  },
+  {
+    "start": 1501.04,
+    "end": 1501.88,
+    "text": "have very much data, right?"
+  },
+  {
+    "start": 1501.88,
+    "end": 1502.92,
+    "text": "So you have to be able to generalize"
+  },
+  {
+    "start": 1502.92,
+    "end": 1505.56,
+    "text": "on only like a few thousand examples."
+  },
+  {
+    "start": 1507.28,
+    "end": 1511.36,
+    "text": "So BERT base, which was the same size as OpenAI,"
+  },
+  {
+    "start": 1511.36,
+    "end": 1514.04,
+    "text": "it significantly beat OpenAI,"
+  },
+  {
+    "start": 1514.04,
+    "end": 1516.36,
+    "text": "which was the previous state of the art."
+  },
+  {
+    "start": 1516.36,
+    "end": 1520.96,
+    "text": "And then the BERT large, which was bigger,"
+  },
+  {
+    "start": 1520.96,
+    "end": 1522.24,
+    "text": "of course got better results,"
+  },
+  {
+    "start": 1522.24,
+    "end": 1524.56,
+    "text": "which is only surprising that it got better results"
+  },
+  {
+    "start": 1524.56,
+    "end": 1527.28,
+    "text": "across the board, including on the very, very tiny data set,"
+  },
+  {
+    "start": 1527.28,
+    "end": 1528.64,
+    "text": "only a few thousand examples."
+  },
+  {
+    "start": 1528.64,
+    "end": 1530.2,
+    "text": "That was kind of the more interesting result"
+  },
+  {
+    "start": 1530.2,
+    "end": 1532.72,
+    "text": "rather than just the fact that it got better results"
+  },
+  {
+    "start": 1532.72,
+    "end": 1535.98,
+    "text": "because historically when there was rules of thumb"
+  },
+  {
+    "start": 1535.98,
+    "end": 1539.68,
+    "text": "about if you have some number of examples,"
+  },
+  {
+    "start": 1539.68,
+    "end": 1541.44,
+    "text": "how do you design the model size"
+  },
+  {
+    "start": 1541.44,
+    "end": 1542.44,
+    "text": "that's optimal for that?"
+  },
+  {
+    "start": 1542.44,
+    "end": 1544.4,
+    "text": "And so if you don't do pre-training,"
+  },
+  {
+    "start": 1544.4,
+    "end": 1545.82,
+    "text": "like if you keep making the model bigger"
+  },
+  {
+    "start": 1545.82,
+    "end": 1548.76,
+    "text": "without pre-training, eventually you'll get worse results"
+  },
+  {
+    "start": 1548.76,
+    "end": 1551.24,
+    "text": "because your model will overfit your training data."
+  },
+  {
+    "start": 1551.24,
+    "end": 1552.52,
+    "text": "With pre-training, you basically only ever do"
+  },
+  {
+    "start": 1552.52,
+    "end": 1554.4,
+    "text": "like one pass of the day anyways."
+  },
+  {
+    "start": 1554.4,
+    "end": 1556.0,
+    "text": "So there seems to be almost no limit"
+  },
+  {
+    "start": 1556.0,
+    "end": 1558.88,
+    "text": "to how big you can make it and still get good results"
+  },
+  {
+    "start": 1558.88,
+    "end": 1560.64,
+    "text": "even with a tiny amount of fine tuning data."
+  },
+  {
+    "start": 1560.64,
+    "end": 1563.16,
+    "text": "And that's really like one of the big takeaways."
+  },
+  {
+    "start": 1563.16,
+    "end": 1569.7,
+    "text": "So I'm not gonna, yeah, so squad 2.0."
+  },
+  {
+    "start": 1570.3,
+    "end": 1572.34,
+    "text": "So the reason why these numbers are,"
+  },
+  {
+    "start": 1572.38,
+    "end": 1575.3,
+    "text": "these range are lower is because I took the screenshot"
+  },
+  {
+    "start": 1575.3,
+    "end": 1578.38,
+    "text": "after, like this, you know, significantly after"
+  },
+  {
+    "start": 1579.42,
+    "end": 1581.78,
+    "text": "when a bunch of other people had submitted systems."
+  },
+  {
+    "start": 1581.78,
+    "end": 1586.14,
+    "text": "But so this is a question and answer data set."
+  },
+  {
+    "start": 1586.14,
+    "end": 1587.58,
+    "text": "So it'd be like what action did the US take"
+  },
+  {
+    "start": 1587.58,
+    "end": 1588.82,
+    "text": "that started the second oil shock?"
+  },
+  {
+    "start": 1588.82,
+    "end": 1590.98,
+    "text": "So in this case, there's no answer, right?"
+  },
+  {
+    "start": 1590.98,
+    "end": 1591.82,
+    "text": "So it's like you have to be able to predict"
+  },
+  {
+    "start": 1591.82,
+    "end": 1593.9,
+    "text": "is that there's no answer in this phase."
+  },
+  {
+    "start": 1593.9,
+    "end": 1595.02,
+    "text": "So you have to be able to predict the answer"
+  },
+  {
+    "start": 1595.02,
+    "end": 1596.12,
+    "text": "or say that there's no answer."
+  },
+  {
+    "start": 1596.12,
+    "end": 1600.82,
+    "text": "So Bert beat the previous state of the art"
+  },
+  {
+    "start": 1600.82,
+    "end": 1602.12,
+    "text": "at the time that it was submitted"
+  },
+  {
+    "start": 1602.12,
+    "end": 1604.48,
+    "text": "by about six points, which is, you know, pretty big gain."
+  },
+  {
+    "start": 1604.48,
+    "end": 1606.72,
+    "text": "Now there's a kind of gone past human level,"
+  },
+  {
+    "start": 1607.72,
+    "end": 1610.48,
+    "text": "but at the time, yeah, it was large."
+  },
+  {
+    "start": 1610.48,
+    "end": 1612.68,
+    "text": "So I'll kind of do some ablation experiments"
+  },
+  {
+    "start": 1612.68,
+    "end": 1614.2,
+    "text": "or go through some of the ablation experiments."
+  },
+  {
+    "start": 1614.2,
+    "end": 1617.76,
+    "text": "So this one, there's four things that I'm comparing here."
+  },
+  {
+    "start": 1617.76,
+    "end": 1620.34,
+    "text": "So this is all of Bert-based-sized models."
+  },
+  {
+    "start": 1621.36,
+    "end": 1624.48,
+    "text": "So the blue line is kind of the Bert-based model."
+  },
+  {
+    "start": 1625.88,
+    "end": 1628.28,
+    "text": "The red line is if we take out"
+  },
+  {
+    "start": 1628.28,
+    "end": 1629.12,
+    "text": "the next sentence prediction."
+  },
+  {
+    "start": 1629.12,
+    "end": 1630.96,
+    "text": "So in our case, even though people have subsequently"
+  },
+  {
+    "start": 1630.96,
+    "end": 1632.64,
+    "text": "said that they don't think it's important,"
+  },
+  {
+    "start": 1632.64,
+    "end": 1633.84,
+    "text": "in our case, we actually did measure it"
+  },
+  {
+    "start": 1633.84,
+    "end": 1635.92,
+    "text": "and it turns out it seemed like it was important"
+  },
+  {
+    "start": 1635.92,
+    "end": 1637.92,
+    "text": "to have this next sentence prediction task,"
+  },
+  {
+    "start": 1639.4,
+    "end": 1643.84,
+    "text": "especially for kind of question answering task,"
+  },
+  {
+    "start": 1643.84,
+    "end": 1645.4,
+    "text": "which is this one."
+  },
+  {
+    "start": 1645.4,
+    "end": 1646.44,
+    "text": "But it seems to help a little bit,"
+  },
+  {
+    "start": 1646.44,
+    "end": 1648.68,
+    "text": "at least in all four of them, to have it."
+  },
+  {
+    "start": 1648.68,
+    "end": 1649.64,
+    "text": "So this kind of doesn't case,"
+  },
+  {
+    "start": 1649.64,
+    "end": 1652.2,
+    "text": "there's something like learning some model"
+  },
+  {
+    "start": 1652.2,
+    "end": 1657.2,
+    "text": "that learns a relationship between sentences."
+  },
+  {
+    "start": 1657.48,
+    "end": 1660.32,
+    "text": "So then this one is the one"
+  },
+  {
+    "start": 1660.32,
+    "end": 1662.04,
+    "text": "that makes an apples-to-apples comparison"
+  },
+  {
+    "start": 1662.04,
+    "end": 1667.04,
+    "text": "between open AI and open AI's GPT-1 and Bert."
+  },
+  {
+    "start": 1667.8,
+    "end": 1670.92,
+    "text": "Because I also, I made the model bigger, but not Bert-based."
+  },
+  {
+    "start": 1670.92,
+    "end": 1672.12,
+    "text": "So Bert-based was the exact same size,"
+  },
+  {
+    "start": 1672.12,
+    "end": 1673.4,
+    "text": "but it was turned out more data."
+  },
+  {
+    "start": 1673.4,
+    "end": 1674.96,
+    "text": "So to make it a fair comparison,"
+  },
+  {
+    "start": 1674.96,
+    "end": 1677.28,
+    "text": "I basically retrained my own implementation"
+  },
+  {
+    "start": 1677.28,
+    "end": 1682.28,
+    "text": "of open AI's GPT-1 and which is its yellow line."
+  },
+  {
+    "start": 1684.2,
+    "end": 1686.16,
+    "text": "And we can see that on some of the tests,"
+  },
+  {
+    "start": 1686.16,
+    "end": 1688.04,
+    "text": "it's not that far, although this is actually"
+  },
+  {
+    "start": 1688.04,
+    "end": 1688.88,
+    "text": "a pretty big gap."
+  },
+  {
+    "start": 1689.16,
+    "end": 1692.56,
+    "text": "This drop is like four points, which is a lot."
+  },
+  {
+    "start": 1692.56,
+    "end": 1694.92,
+    "text": "But on some tests like Squad and Emma Proceed,"
+  },
+  {
+    "start": 1694.92,
+    "end": 1696.12,
+    "text": "it was way worse."
+  },
+  {
+    "start": 1696.12,
+    "end": 1701.12,
+    "text": "And so for Squad, it makes sense"
+  },
+  {
+    "start": 1701.2,
+    "end": 1704.4,
+    "text": "because Squad is a labeling, is a span labeling task."
+  },
+  {
+    "start": 1704.4,
+    "end": 1707.2,
+    "text": "And so if you only have left context,"
+  },
+  {
+    "start": 1707.2,
+    "end": 1709.48,
+    "text": "then words at the beginning have basically no context."
+  },
+  {
+    "start": 1709.48,
+    "end": 1711.24,
+    "text": "And so you're asking it to do span labeling"
+  },
+  {
+    "start": 1711.24,
+    "end": 1713.56,
+    "text": "on words with almost no context."
+  },
+  {
+    "start": 1713.56,
+    "end": 1715.08,
+    "text": "So it really doesn't make any sense."
+  },
+  {
+    "start": 1715.08,
+    "end": 1716.68,
+    "text": "And so of course it's gonna do much worse."
+  },
+  {
+    "start": 1716.68,
+    "end": 1718.52,
+    "text": "So then we also added a, to make it fair,"
+  },
+  {
+    "start": 1718.52,
+    "end": 1720.64,
+    "text": "we also added an LSTM on top of it,"
+  },
+  {
+    "start": 1720.64,
+    "end": 1721.96,
+    "text": "which is trained from scratch."
+  },
+  {
+    "start": 1721.96,
+    "end": 1724.32,
+    "text": "And this does help a little bit on some of the tasks,"
+  },
+  {
+    "start": 1724.32,
+    "end": 1725.8,
+    "text": "but on other ones it doesn't help."
+  },
+  {
+    "start": 1725.8,
+    "end": 1727.64,
+    "text": "So on Squad, it helps because now you have"
+  },
+  {
+    "start": 1727.64,
+    "end": 1728.76,
+    "text": "bi-directional context."
+  },
+  {
+    "start": 1728.76,
+    "end": 1730.64,
+    "text": "But on Emma Proceed, because it's a very small task,"
+  },
+  {
+    "start": 1730.64,
+    "end": 1732.44,
+    "text": "it's only got 3,000 labeled examples,"
+  },
+  {
+    "start": 1732.44,
+    "end": 1734.36,
+    "text": "it doesn't help at all."
+  },
+  {
+    "start": 1734.36,
+    "end": 1737.56,
+    "text": "So this does show that kind of the mass language model"
+  },
+  {
+    "start": 1737.56,
+    "end": 1740.16,
+    "text": "and the next sense prediction are both important,"
+  },
+  {
+    "start": 1740.16,
+    "end": 1744.05,
+    "text": "especially the mass language model."
+  },
+  {
+    "start": 1744.05,
+    "end": 1748.29,
+    "text": "So the other thing, one of the other ablations is"
+  },
+  {
+    "start": 1748.29,
+    "end": 1751.41,
+    "text": "that when we apply the mass language model,"
+  },
+  {
+    "start": 1751.41,
+    "end": 1755.13,
+    "text": "we're only predicting 15% of words in the sentence."
+  },
+  {
+    "start": 1755.13,
+    "end": 1756.57,
+    "text": "But when you do a left to right language model,"
+  },
+  {
+    "start": 1756.57,
+    "end": 1758.09,
+    "text": "you're predicting every single word, condition,"
+  },
+  {
+    "start": 1758.09,
+    "end": 1759.97,
+    "text": "all the words to the left."
+  },
+  {
+    "start": 1759.97,
+    "end": 1762.13,
+    "text": "So one question might be how much,"
+  },
+  {
+    "start": 1762.13,
+    "end": 1764.05,
+    "text": "does this make it take longer to converge,"
+  },
+  {
+    "start": 1764.05,
+    "end": 1765.45,
+    "text": "even though eventually we know that it converges"
+  },
+  {
+    "start": 1765.45,
+    "end": 1766.77,
+    "text": "at a much better point."
+  },
+  {
+    "start": 1766.77,
+    "end": 1768.37,
+    "text": "If you have a limited training budget,"
+  },
+  {
+    "start": 1768.37,
+    "end": 1770.25,
+    "text": "is it better to do a left to right model?"
+  },
+  {
+    "start": 1770.25,
+    "end": 1775.09,
+    "text": "And so we see that when you do this mass language model,"
+  },
+  {
+    "start": 1775.09,
+    "end": 1777.09,
+    "text": "the bi-directionality starts to improve,"
+  },
+  {
+    "start": 1777.09,
+    "end": 1778.05,
+    "text": "like at the very, very beginning,"
+  },
+  {
+    "start": 1778.05,
+    "end": 1779.65,
+    "text": "because you're doing so many more predictions,"
+  },
+  {
+    "start": 1779.65,
+    "end": 1783.09,
+    "text": "it's true that the left-right model does do better"
+  },
+  {
+    "start": 1783.09,
+    "end": 1785.97,
+    "text": "at the very, at like for like epoch one,"
+  },
+  {
+    "start": 1785.97,
+    "end": 1787.17,
+    "text": "but then very soon after,"
+  },
+  {
+    "start": 1787.17,
+    "end": 1789.49,
+    "text": "because the bi-directionality is so important,"
+  },
+  {
+    "start": 1789.49,
+    "end": 1790.33,
+    "text": "it starts to take over."
+  },
+  {
+    "start": 1790.33,
+    "end": 1792.97,
+    "text": "And so it's basically better from almost the start"
+  },
+  {
+    "start": 1792.97,
+    "end": 1793.97,
+    "text": "to do bi-directionality."
+  },
+  {
+    "start": 1793.97,
+    "end": 1795.97,
+    "text": "And then it takes longer to converge,"
+  },
+  {
+    "start": 1795.97,
+    "end": 1800.14,
+    "text": "but the overall convergence is of course much higher."
+  },
+  {
+    "start": 1801.34,
+    "end": 1806.34,
+    "text": "And then finally for this ablations,"
+  },
+  {
+    "start": 1806.98,
+    "end": 1810.5,
+    "text": "we can see that going from a smaller model,"
+  },
+  {
+    "start": 1810.5,
+    "end": 1813.3,
+    "text": "which was 100 million to 300 million parameters helps a lot,"
+  },
+  {
+    "start": 1813.3,
+    "end": 1814.46,
+    "text": "which isn't surprising."
+  },
+  {
+    "start": 1814.46,
+    "end": 1816.86,
+    "text": "But the more surprising thing is that one of these curves,"
+  },
+  {
+    "start": 1816.86,
+    "end": 1818.42,
+    "text": "these aren't comparable,"
+  },
+  {
+    "start": 1820.9,
+    "end": 1822.22,
+    "text": "you shouldn't compare the curves to each other."
+  },
+  {
+    "start": 1822.22,
+    "end": 1823.82,
+    "text": "The point is to look at the curves"
+  },
+  {
+    "start": 1823.82,
+    "end": 1826.66,
+    "text": "as a function of the number of parameters"
+  },
+  {
+    "start": 1827.9,
+    "end": 1830.14,
+    "text": "and see that this one is,"
+  },
+  {
+    "start": 1831.1,
+    "end": 1833.34,
+    "text": "this one only has 3,000 labeled examples"
+  },
+  {
+    "start": 1833.34,
+    "end": 1835.74,
+    "text": "and this one has 400,000 labeled examples."
+  },
+  {
+    "start": 1835.74,
+    "end": 1838.66,
+    "text": "So in both cases, the curves look very similar,"
+  },
+  {
+    "start": 1838.66,
+    "end": 1842.06,
+    "text": "which is surprising because the rule of thumb"
+  },
+  {
+    "start": 1842.06,
+    "end": 1843.38,
+    "text": "that you're gonna overfit your data"
+  },
+  {
+    "start": 1843.38,
+    "end": 1846.54,
+    "text": "if you only have a few labeled examples"
+  },
+  {
+    "start": 1846.54,
+    "end": 1848.18,
+    "text": "turns out not to really be true anymore."
+  },
+  {
+    "start": 1848.18,
+    "end": 1851.86,
+    "text": "And there's, and these curves keep going up, right?"
+  },
+  {
+    "start": 1851.86,
+    "end": 1854.58,
+    "text": "So now with subsequent papers, which we'll talk about,"
+  },
+  {
+    "start": 1854.58,
+    "end": 1856.7,
+    "text": "like this big one was 300 million parameters,"
+  },
+  {
+    "start": 1856.7,
+    "end": 1858.46,
+    "text": "people have gone up to 11 billion parameters"
+  },
+  {
+    "start": 1858.46,
+    "end": 1860.02,
+    "text": "and still seen similar behaviors,"
+  },
+  {
+    "start": 1860.02,
+    "end": 1861.62,
+    "text": "still seen the curves go way up"
+  },
+  {
+    "start": 1861.62,
+    "end": 1862.54,
+    "text": "and gotten to their results,"
+  },
+  {
+    "start": 1862.54,
+    "end": 1865.54,
+    "text": "which is kind of crazy because now we know that,"
+  },
+  {
+    "start": 1866.26,
+    "end": 1867.94,
+    "text": "basically, there's almost no limit."
+  },
+  {
+    "start": 1868.94,
+    "end": 1870.26,
+    "text": "So another thing I wanna talk about"
+  },
+  {
+    "start": 1870.26,
+    "end": 1873.62,
+    "text": "before I talk about stuff that's happened since Burt"
+  },
+  {
+    "start": 1874.62,
+    "end": 1875.46,
+    "text": "is the kind of,"
+  },
+  {
+    "start": 1877.06,
+    "end": 1881.74,
+    "text": "even though Burt itself was in some ways very simple,"
+  },
+  {
+    "start": 1881.74,
+    "end": 1884.34,
+    "text": "which is not a bad thing,"
+  },
+  {
+    "start": 1884.34,
+    "end": 1886.22,
+    "text": "it was very successful immediately."
+  },
+  {
+    "start": 1886.22,
+    "end": 1888.14,
+    "text": "And part of that is the Google brand"
+  },
+  {
+    "start": 1888.14,
+    "end": 1889.78,
+    "text": "and like got a cute name and stuff like that,"
+  },
+  {
+    "start": 1889.78,
+    "end": 1891.3,
+    "text": "but I think that I spent a lot of time"
+  },
+  {
+    "start": 1891.3,
+    "end": 1892.06,
+    "text": "with the open source release,"
+  },
+  {
+    "start": 1892.06,
+    "end": 1894.5,
+    "text": "in particular looking at other open source releases"
+  },
+  {
+    "start": 1894.54,
+    "end": 1897.1,
+    "text": "and figuring out what people didn't like about those."
+  },
+  {
+    "start": 1898.62,
+    "end": 1899.46,
+    "text": "And so I think this is important"
+  },
+  {
+    "start": 1899.46,
+    "end": 1901.06,
+    "text": "like when you're,"
+  },
+  {
+    "start": 1901.06,
+    "end": 1903.42,
+    "text": "when you're a PC user or even working industry"
+  },
+  {
+    "start": 1903.42,
+    "end": 1905.18,
+    "text": "as a, and trying to release something."
+  },
+  {
+    "start": 1905.18,
+    "end": 1908.02,
+    "text": "So I kind of just listed the things here"
+  },
+  {
+    "start": 1908.02,
+    "end": 1911.1,
+    "text": "that I thought were important for like why,"
+  },
+  {
+    "start": 1911.1,
+    "end": 1914.28,
+    "text": "why it was successful compared to other things."
+  },
+  {
+    "start": 1915.58,
+    "end": 1917.38,
+    "text": "So like, I'm not trying to call them out just to be mean,"
+  },
+  {
+    "start": 1917.38,
+    "end": 1920.58,
+    "text": "because, but like the OpenAI GPT-1 release was really,"
+  },
+  {
+    "start": 1920.58,
+    "end": 1921.42,
+    "text": "was not very good."
+  },
+  {
+    "start": 1921.42,
+    "end": 1922.9,
+    "text": "And then like I'm sure that there were this"
+  },
+  {
+    "start": 1922.9,
+    "end": 1925.54,
+    "text": "because the OpenAI GPT-2 release was very good."
+  },
+  {
+    "start": 1925.54,
+    "end": 1929.18,
+    "text": "And so, yeah, because it was very hard to run"
+  },
+  {
+    "start": 1929.18,
+    "end": 1931.06,
+    "text": "and there was not commented,"
+  },
+  {
+    "start": 1931.06,
+    "end": 1932.58,
+    "text": "the TensorFlow code was very,"
+  },
+  {
+    "start": 1932.58,
+    "end": 1934.46,
+    "text": "like it worked fine, like I replicated it,"
+  },
+  {
+    "start": 1934.46,
+    "end": 1937.98,
+    "text": "but like the TensorFlow code was very non-idiomatic."
+  },
+  {
+    "start": 1937.98,
+    "end": 1939.02,
+    "text": "It used all sorts of weird stuff."
+  },
+  {
+    "start": 1939.02,
+    "end": 1939.86,
+    "text": "The Python code was weird."
+  },
+  {
+    "start": 1939.86,
+    "end": 1940.7,
+    "text": "There was no comments."
+  },
+  {
+    "start": 1940.7,
+    "end": 1941.82,
+    "text": "There was basically no instructions."
+  },
+  {
+    "start": 1941.82,
+    "end": 1944.42,
+    "text": "So like, and then other code bases"
+  },
+  {
+    "start": 1944.42,
+    "end": 1946.34,
+    "text": "also are kind of too big."
+  },
+  {
+    "start": 1946.34,
+    "end": 1948.22,
+    "text": "It's like people just want to like say like,"
+  },
+  {
+    "start": 1948.22,
+    "end": 1949.62,
+    "text": "we want to have one unified code base"
+  },
+  {
+    "start": 1949.62,
+    "end": 1952.3,
+    "text": "for our entire, you know, language team."
+  },
+  {
+    "start": 1952.42,
+    "end": 1953.54,
+    "text": "And so they just put stuff as part of that"
+  },
+  {
+    "start": 1953.54,
+    "end": 1954.58,
+    "text": "and people don't really like that either."
+  },
+  {
+    "start": 1954.58,
+    "end": 1957.3,
+    "text": "So I was very insistent that we do a minimal release."
+  },
+  {
+    "start": 1957.3,
+    "end": 1959.02,
+    "text": "So like this, we're just going to release BERT."
+  },
+  {
+    "start": 1959.02,
+    "end": 1960.06,
+    "text": "It's not going to be part of anything."
+  },
+  {
+    "start": 1960.06,
+    "end": 1962.62,
+    "text": "There's going to be external dependencies"
+  },
+  {
+    "start": 1962.62,
+    "end": 1964.3,
+    "text": "and it's going to be like very well commented."
+  },
+  {
+    "start": 1964.3,
+    "end": 1965.22,
+    "text": "I think that people,"
+  },
+  {
+    "start": 1965.22,
+    "end": 1967.22,
+    "text": "and it was kind of also easy to drop in"
+  },
+  {
+    "start": 1967.22,
+    "end": 1969.26,
+    "text": "just the modeling part and just the tokenization part"
+  },
+  {
+    "start": 1969.26,
+    "end": 1973.06,
+    "text": "and just the front end which runs like the training loop"
+  },
+  {
+    "start": 1973.06,
+    "end": 1975.5,
+    "text": "and kind of separate all these out because that way."
+  },
+  {
+    "start": 1975.5,
+    "end": 1977.78,
+    "text": "And so I think because of that"
+  },
+  {
+    "start": 1977.78,
+    "end": 1980.42,
+    "text": "people kind of started using it much quicker."
+  },
+  {
+    "start": 1980.82,
+    "end": 1982.42,
+    "text": "And of course like all the publicity help"
+  },
+  {
+    "start": 1982.42,
+    "end": 1986.22,
+    "text": "but I think that it could have easily been"
+  },
+  {
+    "start": 1986.22,
+    "end": 1989.1,
+    "text": "not as successful if it had been done in a different way."
+  },
+  {
+    "start": 1989.1,
+    "end": 1992.34,
+    "text": "So it's just kind of advice."
+  },
+  {
+    "start": 1992.34,
+    "end": 1997.34,
+    "text": "So yeah, so now I'm going to talk about"
+  },
+  {
+    "start": 1997.38,
+    "end": 1999.94,
+    "text": "five models that have come out since BERT"
+  },
+  {
+    "start": 1999.94,
+    "end": 2002.1,
+    "text": "that have all improved on top of BERT in various ways."
+  },
+  {
+    "start": 2002.1,
+    "end": 2003.3,
+    "text": "There's been more than five"
+  },
+  {
+    "start": 2003.3,
+    "end": 2004.62,
+    "text": "but I'm going to highlight these five"
+  },
+  {
+    "start": 2004.62,
+    "end": 2007.1,
+    "text": "because I think that they're interesting."
+  },
+  {
+    "start": 2007.1,
+    "end": 2008.06,
+    "text": "A lot of them did come from Google"
+  },
+  {
+    "start": 2008.06,
+    "end": 2012.74,
+    "text": "but it's not because, well a lot of them involved Google."
+  },
+  {
+    "start": 2012.74,
+    "end": 2014.5,
+    "text": "I would say many of them actually were not,"
+  },
+  {
+    "start": 2014.5,
+    "end": 2018.5,
+    "text": "they were interns at Google from various universities"
+  },
+  {
+    "start": 2018.5,
+    "end": 2020.7,
+    "text": "who were supervised by Google researchers"
+  },
+  {
+    "start": 2020.7,
+    "end": 2021.9,
+    "text": "and also use Google compute."
+  },
+  {
+    "start": 2021.9,
+    "end": 2023.26,
+    "text": "I mean the reason why a lot of them came from Google"
+  },
+  {
+    "start": 2023.26,
+    "end": 2026.26,
+    "text": "is because like frankly like other than Facebook,"
+  },
+  {
+    "start": 2026.26,
+    "end": 2029.1,
+    "text": "Google and Microsoft there's not really many"
+  },
+  {
+    "start": 2029.1,
+    "end": 2030.94,
+    "text": "like people that can,"
+  },
+  {
+    "start": 2030.94,
+    "end": 2032.46,
+    "text": "the companies that have the resources"
+  },
+  {
+    "start": 2032.46,
+    "end": 2034.1,
+    "text": "to train these huge data art models."
+  },
+  {
+    "start": 2034.1,
+    "end": 2037.5,
+    "text": "And so almost by necessity"
+  },
+  {
+    "start": 2037.98,
+    "end": 2041.26,
+    "text": "it's going to come from one of these labs."
+  },
+  {
+    "start": 2041.26,
+    "end": 2044.74,
+    "text": "So the first one was Roberta."
+  },
+  {
+    "start": 2044.74,
+    "end": 2045.98,
+    "text": "And so this is probably the one that had"
+  },
+  {
+    "start": 2045.98,
+    "end": 2047.82,
+    "text": "like the least kind of new stuff."
+  },
+  {
+    "start": 2047.82,
+    "end": 2050.86,
+    "text": "It was really just, and so this was University"
+  },
+  {
+    "start": 2050.86,
+    "end": 2051.98,
+    "text": "of Washington Facebook."
+  },
+  {
+    "start": 2051.98,
+    "end": 2053.9,
+    "text": "It came out not that long after BERT."
+  },
+  {
+    "start": 2053.9,
+    "end": 2056.18,
+    "text": "And so what they showed was that BERT"
+  },
+  {
+    "start": 2056.18,
+    "end": 2057.62,
+    "text": "was really under trained."
+  },
+  {
+    "start": 2057.62,
+    "end": 2060.1,
+    "text": "And so basically they took,"
+  },
+  {
+    "start": 2060.1,
+    "end": 2062.62,
+    "text": "even on the same amount of data which was,"
+  },
+  {
+    "start": 2062.62,
+    "end": 2064.46,
+    "text": "even though I did 40 epochs on the data,"
+  },
+  {
+    "start": 2064.46,
+    "end": 2066.26,
+    "text": "if you do it for like 200 epochs"
+  },
+  {
+    "start": 2066.26,
+    "end": 2068.5,
+    "text": "you get even better results like significantly."
+  },
+  {
+    "start": 2069.46,
+    "end": 2073.7,
+    "text": "So they basically trained more epochs on the same data"
+  },
+  {
+    "start": 2073.7,
+    "end": 2074.78,
+    "text": "and they also showed that more data helps"
+  },
+  {
+    "start": 2074.78,
+    "end": 2076.34,
+    "text": "which is also not super surprising."
+  },
+  {
+    "start": 2076.34,
+    "end": 2078.54,
+    "text": "And they did improve masking and pre-training"
+  },
+  {
+    "start": 2078.54,
+    "end": 2080.34,
+    "text": "using a couple of tweaks to that."
+  },
+  {
+    "start": 2080.34,
+    "end": 2083.54,
+    "text": "And they were able to get state of the art results"
+  },
+  {
+    "start": 2083.54,
+    "end": 2084.7,
+    "text": "which is cool."
+  },
+  {
+    "start": 2084.7,
+    "end": 2087.86,
+    "text": "And so yeah, but that was a pretty straightforward paper."
+  },
+  {
+    "start": 2089.5,
+    "end": 2091.66,
+    "text": "So the next one is ExcelNet"
+  },
+  {
+    "start": 2091.66,
+    "end": 2094.42,
+    "text": "which is done by some interns in CMU"
+  },
+  {
+    "start": 2094.42,
+    "end": 2095.9,
+    "text": "when they were at Google Brain."
+  },
+  {
+    "start": 2095.9,
+    "end": 2099.26,
+    "text": "And so this actually had some really cool changes."
+  },
+  {
+    "start": 2099.26,
+    "end": 2103.5,
+    "text": "So one of them was they used this Transformer Excel"
+  },
+  {
+    "start": 2103.5,
+    "end": 2105.98,
+    "text": "which was actually the precursor done by the same people"
+  },
+  {
+    "start": 2105.98,
+    "end": 2109.18,
+    "text": "that where they were just doing language knowledge tasks"
+  },
+  {
+    "start": 2109.18,
+    "end": 2110.78,
+    "text": "that are pre-training."
+  },
+  {
+    "start": 2110.78,
+    "end": 2114.54,
+    "text": "But one of the big innovations of Transformer Excel"
+  },
+  {
+    "start": 2114.54,
+    "end": 2116.66,
+    "text": "is this idea of relative position embeddings."
+  },
+  {
+    "start": 2116.66,
+    "end": 2119.78,
+    "text": "And so with absolute position embeddings"
+  },
+  {
+    "start": 2119.78,
+    "end": 2123.62,
+    "text": "the problem is that every word gets like"
+  },
+  {
+    "start": 2123.62,
+    "end": 2125.26,
+    "text": "this is word four, this is word five,"
+  },
+  {
+    "start": 2125.26,
+    "end": 2126.1,
+    "text": "this is word six."
+  },
+  {
+    "start": 2126.1,
+    "end": 2127.94,
+    "text": "And so they are embeddings so they do generalize"
+  },
+  {
+    "start": 2127.94,
+    "end": 2130.78,
+    "text": "but in practice there's a quadratic number of relationships."
+  },
+  {
+    "start": 2130.78,
+    "end": 2133.38,
+    "text": "Like how does word 83 relate to word 76, right?"
+  },
+  {
+    "start": 2133.38,
+    "end": 2137.58,
+    "text": "That's like, and once you get bigger like 500 to 1,000"
+  },
+  {
+    "start": 2137.58,
+    "end": 2139.46,
+    "text": "now you have 1,000 squared total relationships."
+  },
+  {
+    "start": 2139.46,
+    "end": 2142.06,
+    "text": "Like you have to say how does word 997 relate to whatever."
+  },
+  {
+    "start": 2142.06,
+    "end": 2143.66,
+    "text": "And so that's obviously not optimal"
+  },
+  {
+    "start": 2143.66,
+    "end": 2145.26,
+    "text": "once you get to a large size."
+  },
+  {
+    "start": 2146.42,
+    "end": 2150.94,
+    "text": "And so with relative position embeddings"
+  },
+  {
+    "start": 2150.94,
+    "end": 2155.94,
+    "text": "you basically can say how much does dog attend to hot"
+  },
+  {
+    "start": 2157.78,
+    "end": 2160.66,
+    "text": "and how much should the word dog attend to the previous word."
+  },
+  {
+    "start": 2160.66,
+    "end": 2162.74,
+    "text": "And then you get, and these are non-linear at first,"
+  },
+  {
+    "start": 2162.74,
+    "end": 2164.9,
+    "text": "these are linear at first but then you combine them"
+  },
+  {
+    "start": 2164.9,
+    "end": 2167.82,
+    "text": "and then you get a non-linear contextual representation"
+  },
+  {
+    "start": 2167.82,
+    "end": 2169.38,
+    "text": "and then you do this in many layers"
+  },
+  {
+    "start": 2169.38,
+    "end": 2170.86,
+    "text": "and this ends up being, so then you say"
+  },
+  {
+    "start": 2170.86,
+    "end": 2172.86,
+    "text": "how does this contextual representation of dogs"
+  },
+  {
+    "start": 2172.86,
+    "end": 2174.5,
+    "text": "how much does that attend to the previous word"
+  },
+  {
+    "start": 2174.5,
+    "end": 2176.18,
+    "text": "and then you kind of get, can build up."
+  },
+  {
+    "start": 2176.18,
+    "end": 2178.34,
+    "text": "And so this generalizes much better for long sequences."
+  },
+  {
+    "start": 2178.34,
+    "end": 2180.82,
+    "text": "So that's a cool innovation."
+  },
+  {
+    "start": 2180.82,
+    "end": 2183.58,
+    "text": "And then the other one which is specific to pre-training"
+  },
+  {
+    "start": 2183.58,
+    "end": 2185.38,
+    "text": "and not just the model itself"
+  },
+  {
+    "start": 2185.38,
+    "end": 2187.1,
+    "text": "is this idea of permutation language modeling."
+  },
+  {
+    "start": 2187.1,
+    "end": 2191.11,
+    "text": "So this is a little bit hard to explain."
+  },
+  {
+    "start": 2191.11,
+    "end": 2194.59,
+    "text": "I think the paper explained it very formally, I guess."
+  },
+  {
+    "start": 2194.59,
+    "end": 2198.79,
+    "text": "And so, but basically there's a trick where,"
+  },
+  {
+    "start": 2198.79,
+    "end": 2200.67,
+    "text": "so in the left to right language model"
+  },
+  {
+    "start": 2200.67,
+    "end": 2202.95,
+    "text": "every word's done predicting is based"
+  },
+  {
+    "start": 2202.95,
+    "end": 2204.43,
+    "text": "on the word to the left, right?"
+  },
+  {
+    "start": 2204.43,
+    "end": 2205.67,
+    "text": "But imagine that instead of,"
+  },
+  {
+    "start": 2205.67,
+    "end": 2207.31,
+    "text": "instead of predicting every word,"
+  },
+  {
+    "start": 2207.31,
+    "end": 2208.75,
+    "text": "you can basically take any permutation."
+  },
+  {
+    "start": 2208.75,
+    "end": 2211.15,
+    "text": "So it's like, I'm gonna predict the first word,"
+  },
+  {
+    "start": 2211.15,
+    "end": 2212.75,
+    "text": "then I'm gonna predict the third word,"
+  },
+  {
+    "start": 2212.75,
+    "end": 2214.99,
+    "text": "then the second word, then the fourth word."
+  },
+  {
+    "start": 2214.99,
+    "end": 2218.07,
+    "text": "And so that's a totally valid way"
+  },
+  {
+    "start": 2218.07,
+    "end": 2219.83,
+    "text": "and you still get the well-formed probability distribution"
+  },
+  {
+    "start": 2219.83,
+    "end": 2221.59,
+    "text": "because it's still predicting one word at a time"
+  },
+  {
+    "start": 2221.59,
+    "end": 2224.11,
+    "text": "given some permutation of the input."
+  },
+  {
+    "start": 2224.11,
+    "end": 2225.51,
+    "text": "And with transformers and with attention"
+  },
+  {
+    "start": 2225.51,
+    "end": 2226.99,
+    "text": "you can actually do this very efficiently"
+  },
+  {
+    "start": 2226.99,
+    "end": 2229.47,
+    "text": "just by masking out your attention probabilities."
+  },
+  {
+    "start": 2229.47,
+    "end": 2231.83,
+    "text": "And so every single sentence you have"
+  },
+  {
+    "start": 2231.83,
+    "end": 2235.95,
+    "text": "you can kind of sample a single permutation of this"
+  },
+  {
+    "start": 2235.95,
+    "end": 2239.39,
+    "text": "and you can, now you can effectively train"
+  },
+  {
+    "start": 2239.39,
+    "end": 2241.91,
+    "text": "a bi-directional model because this word,"
+  },
+  {
+    "start": 2241.91,
+    "end": 2243.15,
+    "text": "it won't be conditioned on every,"
+  },
+  {
+    "start": 2243.15,
+    "end": 2244.87,
+    "text": "still on average every word will only be conditioned"
+  },
+  {
+    "start": 2244.87,
+    "end": 2246.91,
+    "text": "on half the words, but this word will be conditioned"
+  },
+  {
+    "start": 2246.91,
+    "end": 2250.07,
+    "text": "on all these words to the left and all these words"
+  },
+  {
+    "start": 2250.07,
+    "end": 2251.67,
+    "text": "to the right and maybe it'll be missing these words."
+  },
+  {
+    "start": 2251.67,
+    "end": 2252.51,
+    "text": "But that's fine."
+  },
+  {
+    "start": 2252.51,
+    "end": 2255.35,
+    "text": "And so you get much better sample efficiency."
+  },
+  {
+    "start": 2255.35,
+    "end": 2258.07,
+    "text": "So I thought this was a really clever idea."
+  },
+  {
+    "start": 2258.07,
+    "end": 2259.47,
+    "text": "And so, and this was kind of like"
+  },
+  {
+    "start": 2259.47,
+    "end": 2261.03,
+    "text": "the main innovation of ExcelNet."
+  },
+  {
+    "start": 2261.03,
+    "end": 2264.51,
+    "text": "And so yeah, they basically get better sample efficiency"
+  },
+  {
+    "start": 2264.51,
+    "end": 2268.83,
+    "text": "because they're able to do this random permutation"
+  },
+  {
+    "start": 2268.87,
+    "end": 2270.11,
+    "text": "and kind of take advantage of this."
+  },
+  {
+    "start": 2270.11,
+    "end": 2274.59,
+    "text": "So this wouldn't work with LFTMs because of this ordering"
+  },
+  {
+    "start": 2274.59,
+    "end": 2276.99,
+    "text": "but because the way that masking is done in transformers"
+  },
+  {
+    "start": 2276.99,
+    "end": 2281.87,
+    "text": "it's just a mask on the attention."
+  },
+  {
+    "start": 2281.87,
+    "end": 2283.59,
+    "text": "So it actually ends up working very well."
+  },
+  {
+    "start": 2283.59,
+    "end": 2287.79,
+    "text": "And so they also got, so yeah,"
+  },
+  {
+    "start": 2287.79,
+    "end": 2289.39,
+    "text": "the numbers compared to Roberta,"
+  },
+  {
+    "start": 2289.39,
+    "end": 2292.23,
+    "text": "they actually ended up being pretty similar,"
+  },
+  {
+    "start": 2292.23,
+    "end": 2295.35,
+    "text": "but a lot of these things are hard to compare"
+  },
+  {
+    "start": 2295.35,
+    "end": 2296.27,
+    "text": "because people change the dataset"
+  },
+  {
+    "start": 2296.27,
+    "end": 2298.91,
+    "text": "and change the size of the model."
+  },
+  {
+    "start": 2298.91,
+    "end": 2300.47,
+    "text": "So it's hard to compare apples to apples,"
+  },
+  {
+    "start": 2300.47,
+    "end": 2302.43,
+    "text": "but these two techniques ended up being pretty similar."
+  },
+  {
+    "start": 2302.43,
+    "end": 2304.75,
+    "text": "But I think ExcelNet had more innovations"
+  },
+  {
+    "start": 2304.75,
+    "end": 2306.55,
+    "text": "in terms of technique."
+  },
+  {
+    "start": 2308.15,
+    "end": 2310.87,
+    "text": "So Albert, it's called a light BERT"
+  },
+  {
+    "start": 2310.87,
+    "end": 2313.43,
+    "text": "for self-supervised learning."
+  },
+  {
+    "start": 2313.43,
+    "end": 2317.27,
+    "text": "And so this also had a couple of cool innovations."
+  },
+  {
+    "start": 2317.27,
+    "end": 2320.71,
+    "text": "And so the idea here is really massive parameter sharing"
+  },
+  {
+    "start": 2320.71,
+    "end": 2322.75,
+    "text": "with the idea being that if you share parameters"
+  },
+  {
+    "start": 2322.75,
+    "end": 2324.23,
+    "text": "you're not gonna get a better language model"
+  },
+  {
+    "start": 2324.23,
+    "end": 2326.31,
+    "text": "but you're gonna get better sample efficiency,"
+  },
+  {
+    "start": 2326.31,
+    "end": 2328.39,
+    "text": "you're gonna get less overfitting when you fine-tune."
+  },
+  {
+    "start": 2328.39,
+    "end": 2330.43,
+    "text": "Because if you have a billion parameters"
+  },
+  {
+    "start": 2330.43,
+    "end": 2332.55,
+    "text": "and you fine-tune them on a dataset"
+  },
+  {
+    "start": 2332.55,
+    "end": 2334.23,
+    "text": "with like a thousand labeled examples"
+  },
+  {
+    "start": 2334.23,
+    "end": 2335.87,
+    "text": "you're still gonna overfit very quickly."
+  },
+  {
+    "start": 2335.87,
+    "end": 2338.63,
+    "text": "But if you have a much smaller number of parameters"
+  },
+  {
+    "start": 2338.63,
+    "end": 2339.47,
+    "text": "you're gonna get less overfitting."
+  },
+  {
+    "start": 2339.47,
+    "end": 2340.59,
+    "text": "So if you get a similarly powerful model"
+  },
+  {
+    "start": 2340.59,
+    "end": 2341.55,
+    "text": "with fewer parameters"
+  },
+  {
+    "start": 2341.55,
+    "end": 2343.67,
+    "text": "you're gonna get less overfitting."
+  },
+  {
+    "start": 2343.67,
+    "end": 2347.07,
+    "text": "And so the two major innovations were,"
+  },
+  {
+    "start": 2347.07,
+    "end": 2348.39,
+    "text": "so instead of using a word,"
+  },
+  {
+    "start": 2348.39,
+    "end": 2349.75,
+    "text": "because the word emitting table is big"
+  },
+  {
+    "start": 2349.75,
+    "end": 2352.15,
+    "text": "because it's the size of your vocabulary,"
+  },
+  {
+    "start": 2352.15,
+    "end": 2355.59,
+    "text": "the number of word pieces times the hidden size."
+  },
+  {
+    "start": 2355.59,
+    "end": 2358.83,
+    "text": "And so it's gonna be much bigger than the hidden layer."
+  },
+  {
+    "start": 2358.83,
+    "end": 2361.35,
+    "text": "So first thing is that they used a factorized embedding table."
+  },
+  {
+    "start": 2361.35,
+    "end": 2363.71,
+    "text": "So if they had a hidden size of a thousand"
+  },
+  {
+    "start": 2363.71,
+    "end": 2368.71,
+    "text": "they only use like 128 dimensional input embedding"
+  },
+  {
+    "start": 2368.91,
+    "end": 2373.51,
+    "text": "and then they projected that to a thousand using a matrix."
+  },
+  {
+    "start": 2373.51,
+    "end": 2377.39,
+    "text": "And so instead of having 1024 by 100,000"
+  },
+  {
+    "start": 2377.39,
+    "end": 2379.99,
+    "text": "they would have 128 by 100,000 plus 1024"
+  },
+  {
+    "start": 2380.03,
+    "end": 2382.43,
+    "text": "times 128 and you multiply these together"
+  },
+  {
+    "start": 2382.43,
+    "end": 2383.75,
+    "text": "and multiply the geometric together"
+  },
+  {
+    "start": 2383.75,
+    "end": 2387.11,
+    "text": "and then effectively you have a 1024 by 100,000"
+  },
+  {
+    "start": 2387.11,
+    "end": 2390.19,
+    "text": "embedding matrix but you have much fewer parameters."
+  },
+  {
+    "start": 2390.19,
+    "end": 2391.91,
+    "text": "So you're doing parameter tying."
+  },
+  {
+    "start": 2391.91,
+    "end": 2393.19,
+    "text": "Well not, this isn't parameter tying"
+  },
+  {
+    "start": 2393.19,
+    "end": 2396.63,
+    "text": "but you're doing parameter reduction in a clever way."
+  },
+  {
+    "start": 2396.63,
+    "end": 2398.63,
+    "text": "The other one is cross-layer parameter sharing."
+  },
+  {
+    "start": 2398.63,
+    "end": 2400.83,
+    "text": "So this is similar, this is simple"
+  },
+  {
+    "start": 2400.83,
+    "end": 2403.87,
+    "text": "and it was done in previous papers"
+  },
+  {
+    "start": 2403.87,
+    "end": 2406.79,
+    "text": "especially Universal Transformer."
+  },
+  {
+    "start": 2406.79,
+    "end": 2409.71,
+    "text": "And the idea is that you run a bunch of transformer layers"
+  },
+  {
+    "start": 2410.35,
+    "end": 2411.39,
+    "text": "let's say if you have 12 layers,"
+  },
+  {
+    "start": 2411.39,
+    "end": 2413.47,
+    "text": "all 12 layers just share the same parameters."
+  },
+  {
+    "start": 2413.47,
+    "end": 2418.47,
+    "text": "And so now you can have a much bigger model"
+  },
+  {
+    "start": 2419.79,
+    "end": 2422.39,
+    "text": "that has fewer parameters than BERT has"
+  },
+  {
+    "start": 2422.39,
+    "end": 2424.27,
+    "text": "and so you get less overfitting."
+  },
+  {
+    "start": 2424.27,
+    "end": 2426.87,
+    "text": "And so they got state of the art"
+  },
+  {
+    "start": 2426.87,
+    "end": 2428.71,
+    "text": "compared to X on that and Roberta."
+  },
+  {
+    "start": 2430.19,
+    "end": 2431.83,
+    "text": "But one important thing to keep in mind"
+  },
+  {
+    "start": 2431.83,
+    "end": 2433.99,
+    "text": "is that Albert is light in terms of parameters"
+  },
+  {
+    "start": 2433.99,
+    "end": 2435.11,
+    "text": "not in terms of speed."
+  },
+  {
+    "start": 2435.11,
+    "end": 2440.11,
+    "text": "So for the model that's actually comparable to BERT,"
+  },
+  {
+    "start": 2447.19,
+    "end": 2451.19,
+    "text": "they actually did slightly like this model"
+  },
+  {
+    "start": 2451.19,
+    "end": 2453.67,
+    "text": "and this model were about the same"
+  },
+  {
+    "start": 2453.67,
+    "end": 2455.03,
+    "text": "but this one was actually slower."
+  },
+  {
+    "start": 2455.03,
+    "end": 2458.03,
+    "text": "So it's only when they started making models"
+  },
+  {
+    "start": 2458.03,
+    "end": 2462.07,
+    "text": "that were much bigger in terms of compute than BERT"
+  },
+  {
+    "start": 2462.07,
+    "end": 2463.91,
+    "text": "but doing more parameter tying"
+  },
+  {
+    "start": 2463.91,
+    "end": 2465.51,
+    "text": "then they started getting good results."
+  },
+  {
+    "start": 2465.51,
+    "end": 2468.91,
+    "text": "And so the implication of this is that"
+  },
+  {
+    "start": 2468.91,
+    "end": 2471.39,
+    "text": "like you can reduce the number of parameters"
+  },
+  {
+    "start": 2471.39,
+    "end": 2475.43,
+    "text": "but still nobody's figured out how to reduce"
+  },
+  {
+    "start": 2475.43,
+    "end": 2477.31,
+    "text": "the amount of pre-training compute that was required"
+  },
+  {
+    "start": 2477.31,
+    "end": 2479.11,
+    "text": "which is kind of unfortunate."
+  },
+  {
+    "start": 2479.11,
+    "end": 2484.11,
+    "text": "So the next one is T5 which is exploring the limits"
+  },
+  {
+    "start": 2484.59,
+    "end": 2486.79,
+    "text": "of transfer learning with unified text detection firmware."
+  },
+  {
+    "start": 2486.79,
+    "end": 2490.51,
+    "text": "So this was a paper by Google Brain"
+  },
+  {
+    "start": 2490.51,
+    "end": 2492.51,
+    "text": "and other groups in Google"
+  },
+  {
+    "start": 2492.51,
+    "end": 2494.47,
+    "text": "where they used a lot of compute"
+  },
+  {
+    "start": 2494.47,
+    "end": 2498.19,
+    "text": "and they did tons of ablation on pre-training."
+  },
+  {
+    "start": 2498.19,
+    "end": 2501.67,
+    "text": "Their goal wasn't to come with some super clever"
+  },
+  {
+    "start": 2501.67,
+    "end": 2503.15,
+    "text": "new pre-training technique, right?"
+  },
+  {
+    "start": 2503.15,
+    "end": 2505.83,
+    "text": "It was really just to carefully ablate every aspect."
+  },
+  {
+    "start": 2505.83,
+    "end": 2506.83,
+    "text": "How much does model size matter?"
+  },
+  {
+    "start": 2506.83,
+    "end": 2507.71,
+    "text": "How much does training data matter?"
+  },
+  {
+    "start": 2507.71,
+    "end": 2509.39,
+    "text": "How much does cleverness of data matter?"
+  },
+  {
+    "start": 2509.39,
+    "end": 2510.59,
+    "text": "Like how much does the exact way"
+  },
+  {
+    "start": 2510.59,
+    "end": 2511.83,
+    "text": "that you do the pre-training objective matter?"
+  },
+  {
+    "start": 2511.83,
+    "end": 2514.61,
+    "text": "Like doing the masking, like how many spans do you mask?"
+  },
+  {
+    "start": 2514.61,
+    "end": 2518.99,
+    "text": "And so they wanted to kind of very clearly do that"
+  },
+  {
+    "start": 2518.99,
+    "end": 2520.71,
+    "text": "and they also wanted to like push the limits of size"
+  },
+  {
+    "start": 2520.71,
+    "end": 2522.67,
+    "text": "and say what happens if we have 300 million,"
+  },
+  {
+    "start": 2522.67,
+    "end": 2525.27,
+    "text": "a billion, 10 billion parameters, right?"
+  },
+  {
+    "start": 2526.27,
+    "end": 2529.67,
+    "text": "And then so they did tons and tons of ablation"
+  },
+  {
+    "start": 2531.03,
+    "end": 2532.23,
+    "text": "and they got state of the art in everything"
+  },
+  {
+    "start": 2532.23,
+    "end": 2534.03,
+    "text": "and they're still state of the art in everything"
+  },
+  {
+    "start": 2534.03,
+    "end": 2538.11,
+    "text": "and the results though are a little bit bleak"
+  },
+  {
+    "start": 2538.11,
+    "end": 2542.27,
+    "text": "in the sense that nothing really mattered"
+  },
+  {
+    "start": 2542.27,
+    "end": 2545.35,
+    "text": "except making the data, like all of the ablations,"
+  },
+  {
+    "start": 2545.35,
+    "end": 2547.71,
+    "text": "it wasn't like, oh, you know,"
+  },
+  {
+    "start": 2547.71,
+    "end": 2549.55,
+    "text": "Bert did everything perfectly, it was that,"
+  },
+  {
+    "start": 2549.55,
+    "end": 2550.39,
+    "text": "it doesn't matter."
+  },
+  {
+    "start": 2550.39,
+    "end": 2554.03,
+    "text": "You could do 20%, 25%, you can do this fine-tuning recipe,"
+  },
+  {
+    "start": 2554.03,
+    "end": 2556.35,
+    "text": "this fine-tuning recipe, it's like all that really matters"
+  },
+  {
+    "start": 2556.35,
+    "end": 2557.51,
+    "text": "is making the model bigger"
+  },
+  {
+    "start": 2557.51,
+    "end": 2560.23,
+    "text": "and training it in more data and clean data."
+  },
+  {
+    "start": 2560.23,
+    "end": 2564.95,
+    "text": "And so, yeah, it's a little bit of a bleak paper"
+  },
+  {
+    "start": 2564.95,
+    "end": 2568.39,
+    "text": "if you are hoping that there is,"
+  },
+  {
+    "start": 2568.39,
+    "end": 2570.79,
+    "text": "exists some pre-training technique"
+  },
+  {
+    "start": 2570.79,
+    "end": 2572.19,
+    "text": "which is super computationally efficient"
+  },
+  {
+    "start": 2572.19,
+    "end": 2574.35,
+    "text": "and also can get very impressive results,"
+  },
+  {
+    "start": 2574.35,
+    "end": 2575.47,
+    "text": "which I'm not saying there isn't,"
+  },
+  {
+    "start": 2575.47,
+    "end": 2578.87,
+    "text": "but like most of this evidence points are not."
+  },
+  {
+    "start": 2578.87,
+    "end": 2581.15,
+    "text": "So the one kind of newest paper"
+  },
+  {
+    "start": 2581.15,
+    "end": 2583.43,
+    "text": "that is maybe the most positive in this direction"
+  },
+  {
+    "start": 2583.43,
+    "end": 2585.27,
+    "text": "is this paper called Elektra."
+  },
+  {
+    "start": 2589.43,
+    "end": 2592.27,
+    "text": "And so this is done by Kevin Clark from here"
+  },
+  {
+    "start": 2592.27,
+    "end": 2593.99,
+    "text": "and Google Brain."
+  },
+  {
+    "start": 2593.99,
+    "end": 2597.03,
+    "text": "And so, yeah, in this one it's a pretty clever idea."
+  },
+  {
+    "start": 2597.03,
+    "end": 2601.83,
+    "text": "So basically their idea is instead of training,"
+  },
+  {
+    "start": 2601.83,
+    "end": 2603.57,
+    "text": "instead of training to generate the output,"
+  },
+  {
+    "start": 2603.57,
+    "end": 2605.51,
+    "text": "you just train it as a discriminator."
+  },
+  {
+    "start": 2605.51,
+    "end": 2608.95,
+    "text": "And so you have a local language model,"
+  },
+  {
+    "start": 2608.95,
+    "end": 2610.11,
+    "text": "yeah, you do some masking,"
+  },
+  {
+    "start": 2610.11,
+    "end": 2612.59,
+    "text": "you have a local language model which replaces it"
+  },
+  {
+    "start": 2612.59,
+    "end": 2613.55,
+    "text": "and then you train it to discriminate"
+  },
+  {
+    "start": 2613.55,
+    "end": 2614.59,
+    "text": "whether it's the original one or not."
+  },
+  {
+    "start": 2614.59,
+    "end": 2619.43,
+    "text": "And so the idea here is that you are doing a much,"
+  },
+  {
+    "start": 2619.43,
+    "end": 2622.63,
+    "text": "you get better sample efficiency for pre-training"
+  },
+  {
+    "start": 2622.63,
+    "end": 2626.43,
+    "text": "because you're predicting every word,"
+  },
+  {
+    "start": 2626.43,
+    "end": 2627.79,
+    "text": "which is actually, I mean,"
+  },
+  {
+    "start": 2627.79,
+    "end": 2629.39,
+    "text": "I don't know exactly why it would be that different"
+  },
+  {
+    "start": 2629.39,
+    "end": 2633.55,
+    "text": "from Bert's still, in terms of,"
+  },
+  {
+    "start": 2633.55,
+    "end": 2635.35,
+    "text": "because you don't replace with the mask with every word,"
+  },
+  {
+    "start": 2635.35,
+    "end": 2636.59,
+    "text": "you also randomly corrupt it."
+  },
+  {
+    "start": 2636.59,
+    "end": 2638.79,
+    "text": "But the biggest difference is that"
+  },
+  {
+    "start": 2640.87,
+    "end": 2642.23,
+    "text": "these are kind of contextually replaced."
+  },
+  {
+    "start": 2642.23,
+    "end": 2645.15,
+    "text": "So it's like in Bert, when I did random masking"
+  },
+  {
+    "start": 2645.15,
+    "end": 2645.99,
+    "text": "and replaced with a random word,"
+  },
+  {
+    "start": 2645.99,
+    "end": 2646.83,
+    "text": "it was truly a random word."
+  },
+  {
+    "start": 2646.83,
+    "end": 2648.07,
+    "text": "So most of the time it was completely trivial"
+  },
+  {
+    "start": 2648.07,
+    "end": 2649.59,
+    "text": "to tell that this was not the right word."
+  },
+  {
+    "start": 2649.59,
+    "end": 2651.79,
+    "text": "You didn't necessarily know which word should be replaced,"
+  },
+  {
+    "start": 2651.79,
+    "end": 2654.71,
+    "text": "but in this case they actually used a intentionally weak"
+  },
+  {
+    "start": 2654.71,
+    "end": 2656.23,
+    "text": "but still non-trivial language model"
+  },
+  {
+    "start": 2656.23,
+    "end": 2657.19,
+    "text": "to predict which word."
+  },
+  {
+    "start": 2657.19,
+    "end": 2658.59,
+    "text": "So like this locally makes sense,"
+  },
+  {
+    "start": 2658.59,
+    "end": 2659.67,
+    "text": "the chef ate the meal,"
+  },
+  {
+    "start": 2659.67,
+    "end": 2660.99,
+    "text": "but it doesn't make any sense,"
+  },
+  {
+    "start": 2660.99,
+    "end": 2663.11,
+    "text": "like a very strong model would not predict this, right?"
+  },
+  {
+    "start": 2663.23,
+    "end": 2664.07,
+    "text": "So that's the idea,"
+  },
+  {
+    "start": 2664.07,
+    "end": 2667.07,
+    "text": "that you use a weak model to do the substitution"
+  },
+  {
+    "start": 2667.07,
+    "end": 2669.79,
+    "text": "then you train a strong model to do this."
+  },
+  {
+    "start": 2669.79,
+    "end": 2674.31,
+    "text": "So these results are, I know this is a big table,"
+  },
+  {
+    "start": 2674.31,
+    "end": 2675.71,
+    "text": "but these results are,"
+  },
+  {
+    "start": 2675.71,
+    "end": 2679.35,
+    "text": "they're certainly positive with regard to"
+  },
+  {
+    "start": 2679.35,
+    "end": 2681.55,
+    "text": "previous results in terms of compute versus,"
+  },
+  {
+    "start": 2683.19,
+    "end": 2686.03,
+    "text": "so like for, if we compare this row,"
+  },
+  {
+    "start": 2686.03,
+    "end": 2691.19,
+    "text": "so which is one-tenth the compute of Bert large"
+  },
+  {
+    "start": 2691.19,
+    "end": 2692.03,
+    "text": "to Bert base,"
+  },
+  {
+    "start": 2692.03,
+    "end": 2693.59,
+    "text": "which is also one-tenth the compute of Bert large,"
+  },
+  {
+    "start": 2693.59,
+    "end": 2695.83,
+    "text": "it certainly does a lot better than Bert base."
+  },
+  {
+    "start": 2697.27,
+    "end": 2699.07,
+    "text": "But when they,"
+  },
+  {
+    "start": 2701.31,
+    "end": 2703.67,
+    "text": "but in terms of state of the art models,"
+  },
+  {
+    "start": 2705.15,
+    "end": 2708.43,
+    "text": "when they do the same amount of compute"
+  },
+  {
+    "start": 2708.43,
+    "end": 2710.07,
+    "text": "as their Bert large,"
+  },
+  {
+    "start": 2710.07,
+    "end": 2711.23,
+    "text": "which is this one,"
+  },
+  {
+    "start": 2711.23,
+    "end": 2712.75,
+    "text": "or compared to other state of the art models,"
+  },
+  {
+    "start": 2712.75,
+    "end": 2714.35,
+    "text": "they're not, in order to get state of the art"
+  },
+  {
+    "start": 2714.35,
+    "end": 2715.35,
+    "text": "or to get similar to state of the art,"
+  },
+  {
+    "start": 2715.35,
+    "end": 2716.87,
+    "text": "they basically need to do as much compute"
+  },
+  {
+    "start": 2716.87,
+    "end": 2717.71,
+    "text": "as state of the art."
+  },
+  {
+    "start": 2717.71,
+    "end": 2719.71,
+    "text": "So like 404X, 5.4X."
+  },
+  {
+    "start": 2719.71,
+    "end": 2722.75,
+    "text": "So I mean, at scale down values, they were able to do better,"
+  },
+  {
+    "start": 2722.75,
+    "end": 2725.91,
+    "text": "but this is still a pretty big gap, like four points."
+  },
+  {
+    "start": 2725.91,
+    "end": 2727.83,
+    "text": "So it's positive, but it's not,"
+  },
+  {
+    "start": 2727.83,
+    "end": 2730.35,
+    "text": "it's certainly not like the silver bullet in terms of"
+  },
+  {
+    "start": 2731.67,
+    "end": 2736.35,
+    "text": "showing that we can pre-train models"
+  },
+  {
+    "start": 2737.55,
+    "end": 2739.75,
+    "text": "much better for cheaper."
+  },
+  {
+    "start": 2739.75,
+    "end": 2741.83,
+    "text": "So the last thing I wanna talk about"
+  },
+  {
+    "start": 2741.83,
+    "end": 2744.59,
+    "text": "is how we actually serve these models, right?"
+  },
+  {
+    "start": 2744.59,
+    "end": 2746.83,
+    "text": "Because I've said that like,"
+  },
+  {
+    "start": 2746.83,
+    "end": 2748.75,
+    "text": "they're incredibly expensive to train"
+  },
+  {
+    "start": 2748.75,
+    "end": 2752.51,
+    "text": "and nobody has been able to figure out how to make that faster,"
+  },
+  {
+    "start": 2752.51,
+    "end": 2755.43,
+    "text": "but they're being used all over the place, right?"
+  },
+  {
+    "start": 2755.43,
+    "end": 2757.71,
+    "text": "So like, there's news stories,"
+  },
+  {
+    "start": 2757.71,
+    "end": 2760.23,
+    "text": "Google has improved 10% of searches"
+  },
+  {
+    "start": 2760.23,
+    "end": 2761.95,
+    "text": "by language resigning, say hello to Bert,"
+  },
+  {
+    "start": 2761.95,
+    "end": 2763.83,
+    "text": "and then Bing says it's been applying to Bert since April."
+  },
+  {
+    "start": 2763.83,
+    "end": 2765.99,
+    "text": "So, and so this is live in Google search"
+  },
+  {
+    "start": 2765.99,
+    "end": 2766.83,
+    "text": "and Bing search,"
+  },
+  {
+    "start": 2766.83,
+    "end": 2768.51,
+    "text": "and so these are like really low latency services, right?"
+  },
+  {
+    "start": 2768.51,
+    "end": 2771.59,
+    "text": "That have like a few milliseconds of latency"
+  },
+  {
+    "start": 2771.59,
+    "end": 2775.03,
+    "text": "and they serve billions of queries a day."
+  },
+  {
+    "start": 2775.91,
+    "end": 2778.07,
+    "text": "So how are they doing this?"
+  },
+  {
+    "start": 2778.11,
+    "end": 2781.87,
+    "text": "Is it just like that Google and Microsoft"
+  },
+  {
+    "start": 2781.87,
+    "end": 2783.63,
+    "text": "are spending billions of dollars on hardware?"
+  },
+  {
+    "start": 2783.63,
+    "end": 2785.31,
+    "text": "Well, they are, but not just for this, right?"
+  },
+  {
+    "start": 2785.31,
+    "end": 2790.15,
+    "text": "And so like, it would cost billions of dollars"
+  },
+  {
+    "start": 2790.15,
+    "end": 2792.11,
+    "text": "just to serve this if you would actually be serving Bert."
+  },
+  {
+    "start": 2792.11,
+    "end": 2793.79,
+    "text": "But we're serving, no,"
+  },
+  {
+    "start": 2793.79,
+    "end": 2796.15,
+    "text": "instead of we're using model distillation, right?"
+  },
+  {
+    "start": 2796.15,
+    "end": 2798.55,
+    "text": "So this has been around for a while."
+  },
+  {
+    "start": 2798.55,
+    "end": 2802.55,
+    "text": "So it's either called distillation or model compression."
+  },
+  {
+    "start": 2802.55,
+    "end": 2805.31,
+    "text": "One of the first papers was this model compression paper"
+  },
+  {
+    "start": 2806.27,
+    "end": 2811.03,
+    "text": "that was done for, I forget exactly what task,"
+  },
+  {
+    "start": 2811.03,
+    "end": 2812.35,
+    "text": "but then Hinton's paper,"
+  },
+  {
+    "start": 2812.35,
+    "end": 2813.35,
+    "text": "Distilling Knowledge and Neural Networks"
+  },
+  {
+    "start": 2813.35,
+    "end": 2814.67,
+    "text": "is a more well-known version,"
+  },
+  {
+    "start": 2814.67,
+    "end": 2819.47,
+    "text": "or not version, but a more well-known paper on distillation."
+  },
+  {
+    "start": 2819.47,
+    "end": 2822.51,
+    "text": "But in reality, the version that we use at Google"
+  },
+  {
+    "start": 2822.51,
+    "end": 2823.79,
+    "text": "and the version that most people use when they say"
+  },
+  {
+    "start": 2823.79,
+    "end": 2827.35,
+    "text": "model distillation for pre-trained language models,"
+  },
+  {
+    "start": 2827.35,
+    "end": 2829.95,
+    "text": "it's a very simple technique,"
+  },
+  {
+    "start": 2829.95,
+    "end": 2832.51,
+    "text": "but it's easy to misinterpret what we mean."
+  },
+  {
+    "start": 2832.55,
+    "end": 2835.83,
+    "text": "So what we do is we pre-train,"
+  },
+  {
+    "start": 2835.83,
+    "end": 2836.99,
+    "text": "we train a state of the art model,"
+  },
+  {
+    "start": 2836.99,
+    "end": 2839.87,
+    "text": "whichever is the one we can most afford to train, right?"
+  },
+  {
+    "start": 2839.87,
+    "end": 2840.99,
+    "text": "Because of course we can just make it bigger,"
+  },
+  {
+    "start": 2840.99,
+    "end": 2842.67,
+    "text": "but we set some budget of, you know,"
+  },
+  {
+    "start": 2842.67,
+    "end": 2845.71,
+    "text": "we want to train it for a day on some number of TPUs."
+  },
+  {
+    "start": 2845.71,
+    "end": 2847.31,
+    "text": "And then we fine-tune it, right?"
+  },
+  {
+    "start": 2847.31,
+    "end": 2848.87,
+    "text": "So we get a model that's the maximum accuracy,"
+  },
+  {
+    "start": 2848.87,
+    "end": 2850.71,
+    "text": "and that's our teacher model, and this is expensive."
+  },
+  {
+    "start": 2850.71,
+    "end": 2852.67,
+    "text": "Then we have a large amount of unlabeled input,"
+  },
+  {
+    "start": 2852.67,
+    "end": 2855.31,
+    "text": "which is typically for most industry applications,"
+  },
+  {
+    "start": 2855.31,
+    "end": 2856.75,
+    "text": "you have unlabeled input,"
+  },
+  {
+    "start": 2856.75,
+    "end": 2858.55,
+    "text": "because you have, you know, in search you have,"
+  },
+  {
+    "start": 2858.55,
+    "end": 2859.75,
+    "text": "this is what they use the search for,"
+  },
+  {
+    "start": 2859.75,
+    "end": 2860.59,
+    "text": "this is what they click on,"
+  },
+  {
+    "start": 2860.59,
+    "end": 2862.55,
+    "text": "this is how the search ends to be trained."
+  },
+  {
+    "start": 2862.55,
+    "end": 2864.79,
+    "text": "And so you can then just take these"
+  },
+  {
+    "start": 2864.79,
+    "end": 2869.43,
+    "text": "and then you just label your examples with them."
+  },
+  {
+    "start": 2869.43,
+    "end": 2870.83,
+    "text": "So you can get billions of these"
+  },
+  {
+    "start": 2870.83,
+    "end": 2872.83,
+    "text": "if you actually want a real service."
+  },
+  {
+    "start": 2872.83,
+    "end": 2876.23,
+    "text": "And then you, so then you run these, you know,"
+  },
+  {
+    "start": 2876.23,
+    "end": 2879.47,
+    "text": "query answer pairs through your teacher"
+  },
+  {
+    "start": 2879.47,
+    "end": 2881.31,
+    "text": "and you get a pseudo-label,"
+  },
+  {
+    "start": 2881.31,
+    "end": 2883.15,
+    "text": "and you just train a much smaller model,"
+  },
+  {
+    "start": 2883.15,
+    "end": 2885.39,
+    "text": "much meaning like 50 times, 100 times smaller"
+  },
+  {
+    "start": 2885.39,
+    "end": 2888.87,
+    "text": "to predict your student, your teacher outputs."
+  },
+  {
+    "start": 2888.87,
+    "end": 2890.03,
+    "text": "And so, and you can generally do this"
+  },
+  {
+    "start": 2890.03,
+    "end": 2892.15,
+    "text": "for most techniques."
+  },
+  {
+    "start": 2892.15,
+    "end": 2894.83,
+    "text": "I mean, for most tasks you can do this pretty easily"
+  },
+  {
+    "start": 2894.83,
+    "end": 2899.83,
+    "text": "and get a huge 50 to 100x compression with no degradation."
+  },
+  {
+    "start": 2899.91,
+    "end": 2901.03,
+    "text": "But the important thing to realize"
+  },
+  {
+    "start": 2901.03,
+    "end": 2903.47,
+    "text": "that we're not compressing the pre-trained model itself."
+  },
+  {
+    "start": 2903.47,
+    "end": 2905.31,
+    "text": "We haven't really had any luck doing that."
+  },
+  {
+    "start": 2905.31,
+    "end": 2907.23,
+    "text": "So like you can't actually just take BERT"
+  },
+  {
+    "start": 2907.23,
+    "end": 2908.99,
+    "text": "and then compress it to a smaller model,"
+  },
+  {
+    "start": 2908.99,
+    "end": 2910.59,
+    "text": "which you can then fine tune for all these other tasks."
+  },
+  {
+    "start": 2910.59,
+    "end": 2912.47,
+    "text": "It's only after you've chosen the task"
+  },
+  {
+    "start": 2912.47,
+    "end": 2914.43,
+    "text": "and after you find it, tune it for the task"
+  },
+  {
+    "start": 2914.43,
+    "end": 2916.23,
+    "text": "that you, that we're able to do it."
+  },
+  {
+    "start": 2917.23,
+    "end": 2921.11,
+    "text": "So, to show some specific results,"
+  },
+  {
+    "start": 2921.11,
+    "end": 2923.27,
+    "text": "so let's say we have, let's say we have a BERT large teacher."
+  },
+  {
+    "start": 2923.27,
+    "end": 2924.71,
+    "text": "So this is an Amazon book review script."
+  },
+  {
+    "start": 2924.71,
+    "end": 2926.67,
+    "text": "So this is a paper that, I forgot to cite it,"
+  },
+  {
+    "start": 2926.67,
+    "end": 2929.35,
+    "text": "but this is a paper that my group published,"
+  },
+  {
+    "start": 2929.35,
+    "end": 2931.47,
+    "text": "Yulia Turk wrote."
+  },
+  {
+    "start": 2931.47,
+    "end": 2936.47,
+    "text": "And so, this has 50,000 labeled examples"
+  },
+  {
+    "start": 2936.67,
+    "end": 2939.59,
+    "text": "and 8 million unlabeled examples."
+  },
+  {
+    "start": 2939.59,
+    "end": 2942.51,
+    "text": "So you fine tune on, you pre-train BERT large,"
+  },
+  {
+    "start": 2942.51,
+    "end": 2944.11,
+    "text": "normally, you take the pre-train BERT large,"
+  },
+  {
+    "start": 2944.31,
+    "end": 2947.39,
+    "text": "you fine tune it on these 50,000 examples,"
+  },
+  {
+    "start": 2947.39,
+    "end": 2949.75,
+    "text": "you get this 88% accuracy, right?"
+  },
+  {
+    "start": 2949.75,
+    "end": 2954.75,
+    "text": "Then, and so, but then now let's say instead of using BERT large,"
+  },
+  {
+    "start": 2954.99,
+    "end": 2955.87,
+    "text": "you use the much smaller version."
+  },
+  {
+    "start": 2955.87,
+    "end": 2957.63,
+    "text": "So this one's a quarter of the size,"
+  },
+  {
+    "start": 2957.63,
+    "end": 2960.59,
+    "text": "this one's, you know, a sixteenth of the size,"
+  },
+  {
+    "start": 2960.59,
+    "end": 2962.67,
+    "text": "whatever, this one's about a hundredth of the size, right?"
+  },
+  {
+    "start": 2962.67,
+    "end": 2964.79,
+    "text": "So this row that's a hundredth of the size,"
+  },
+  {
+    "start": 2964.79,
+    "end": 2965.87,
+    "text": "if you were to just train it,"
+  },
+  {
+    "start": 2965.87,
+    "end": 2966.79,
+    "text": "if you were to pre-train this"
+  },
+  {
+    "start": 2966.79,
+    "end": 2970.23,
+    "text": "on the same Wikipedia book corporate just like BERT"
+  },
+  {
+    "start": 2970.27,
+    "end": 2971.99,
+    "text": "and then fine tune it,"
+  },
+  {
+    "start": 2971.99,
+    "end": 2974.43,
+    "text": "you would get 82% accuracy,"
+  },
+  {
+    "start": 2974.43,
+    "end": 2975.71,
+    "text": "which is, you know, a lot worse,"
+  },
+  {
+    "start": 2975.71,
+    "end": 2977.99,
+    "text": "60%, like 6 absolute worth,"
+  },
+  {
+    "start": 2977.99,
+    "end": 2979.27,
+    "text": "which is quite a big drop, right?"
+  },
+  {
+    "start": 2979.27,
+    "end": 2983.07,
+    "text": "But then if you were to take this 88% teacher,"
+  },
+  {
+    "start": 2983.07,
+    "end": 2985.55,
+    "text": "label the 8 million examples,"
+  },
+  {
+    "start": 2985.55,
+    "end": 2986.47,
+    "text": "which are of course held out,"
+  },
+  {
+    "start": 2986.47,
+    "end": 2988.39,
+    "text": "this is test accuracy."
+  },
+  {
+    "start": 2989.55,
+    "end": 2994.39,
+    "text": "And then train this classification model,"
+  },
+  {
+    "start": 2994.39,
+    "end": 2995.99,
+    "text": "which says this is a good about review,"
+  },
+  {
+    "start": 2995.99,
+    "end": 2997.51,
+    "text": "on these 8 million examples,"
+  },
+  {
+    "start": 2997.51,
+    "end": 2999.07,
+    "text": "you can take this model that's a hundred times smaller"
+  },
+  {
+    "start": 2999.07,
+    "end": 3000.59,
+    "text": "and get the same accuracy as the teacher, right?"
+  },
+  {
+    "start": 3000.59,
+    "end": 3002.23,
+    "text": "You get the same accuracy."
+  },
+  {
+    "start": 3002.23,
+    "end": 3005.71,
+    "text": "So that's really the cool thing with distillation"
+  },
+  {
+    "start": 3005.71,
+    "end": 3007.35,
+    "text": "is that you can get models that are much smaller,"
+  },
+  {
+    "start": 3007.35,
+    "end": 3009.15,
+    "text": "but you still need to train the big model in the first place."
+  },
+  {
+    "start": 3009.15,
+    "end": 3010.59,
+    "text": "So it doesn't help the training cost, it just helps."
+  },
+  {
+    "start": 3010.59,
+    "end": 3011.43,
+    "text": "It's actually more expensive"
+  },
+  {
+    "start": 3011.43,
+    "end": 3012.47,
+    "text": "because then you need to use this big model"
+  },
+  {
+    "start": 3012.47,
+    "end": 3014.99,
+    "text": "to label millions or billions of examples."
+  },
+  {
+    "start": 3014.99,
+    "end": 3016.75,
+    "text": "So it ends up being more expensive than just training BERT,"
+  },
+  {
+    "start": 3016.75,
+    "end": 3019.07,
+    "text": "but you can actually serve this model"
+  },
+  {
+    "start": 3019.07,
+    "end": 3021.67,
+    "text": "at inference time for a tiny cost."
+  },
+  {
+    "start": 3021.67,
+    "end": 3025.35,
+    "text": "So the question is why does distillation work so well?"
+  },
+  {
+    "start": 3026.19,
+    "end": 3029.07,
+    "text": "So the big hypothesis is that"
+  },
+  {
+    "start": 3029.07,
+    "end": 3032.07,
+    "text": "language modeling is kind of the ultimate NLP task, right?"
+  },
+  {
+    "start": 3032.07,
+    "end": 3033.31,
+    "text": "A perfect language model"
+  },
+  {
+    "start": 3033.31,
+    "end": 3035.47,
+    "text": "is also a perfect question answering system,"
+  },
+  {
+    "start": 3035.47,
+    "end": 3037.39,
+    "text": "a perfect entailment system,"
+  },
+  {
+    "start": 3037.39,
+    "end": 3039.55,
+    "text": "sentiment analysis, co-reference, et cetera, right?"
+  },
+  {
+    "start": 3039.55,
+    "end": 3041.15,
+    "text": "Because in order to be able to do these things,"
+  },
+  {
+    "start": 3041.15,
+    "end": 3041.99,
+    "text": "you kind of have to be able,"
+  },
+  {
+    "start": 3041.99,
+    "end": 3044.67,
+    "text": "you could construct it as a language model."
+  },
+  {
+    "start": 3044.67,
+    "end": 3047.39,
+    "text": "So when you're training a massive language model,"
+  },
+  {
+    "start": 3047.39,
+    "end": 3049.99,
+    "text": "you are learning many millions of latent features,"
+  },
+  {
+    "start": 3049.99,
+    "end": 3051.79,
+    "text": "which are effectively the same features"
+  },
+  {
+    "start": 3051.79,
+    "end": 3053.67,
+    "text": "that you need for any other task."
+  },
+  {
+    "start": 3053.67,
+    "end": 3055.07,
+    "text": "And so when you're doing a simpler,"
+  },
+  {
+    "start": 3055.07,
+    "end": 3057.27,
+    "text": "a fine-tuning of a more specific task,"
+  },
+  {
+    "start": 3057.27,
+    "end": 3058.55,
+    "text": "what's the fine-tuning is basically"
+  },
+  {
+    "start": 3058.55,
+    "end": 3059.95,
+    "text": "taking these latent features,"
+  },
+  {
+    "start": 3059.95,
+    "end": 3061.27,
+    "text": "which your system happened to learn,"
+  },
+  {
+    "start": 3061.27,
+    "end": 3063.07,
+    "text": "encoded somewhere in your weights,"
+  },
+  {
+    "start": 3063.07,
+    "end": 3064.87,
+    "text": "and you are, it's kind of just tweaking these,"
+  },
+  {
+    "start": 3064.87,
+    "end": 3065.71,
+    "text": "which is why I could do it"
+  },
+  {
+    "start": 3065.71,
+    "end": 3067.75,
+    "text": "with a single pass over the fine-tuning data."
+  },
+  {
+    "start": 3068.95,
+    "end": 3070.11,
+    "text": "And so, but once you figured out"
+  },
+  {
+    "start": 3070.11,
+    "end": 3071.71,
+    "text": "which parts are important,"
+  },
+  {
+    "start": 3071.71,
+    "end": 3073.35,
+    "text": "then there exists a hypothetically"
+  },
+  {
+    "start": 3073.35,
+    "end": 3074.79,
+    "text": "much smaller model size,"
+  },
+  {
+    "start": 3074.79,
+    "end": 3076.99,
+    "text": "which can still get the same representation"
+  },
+  {
+    "start": 3076.99,
+    "end": 3077.83,
+    "text": "and same generalization, right?"
+  },
+  {
+    "start": 3077.83,
+    "end": 3080.03,
+    "text": "So then you label a bunch of examples"
+  },
+  {
+    "start": 3080.03,
+    "end": 3081.19,
+    "text": "with this fine-tuned model,"
+  },
+  {
+    "start": 3081.19,
+    "end": 3082.11,
+    "text": "and now you can learn a model"
+  },
+  {
+    "start": 3082.11,
+    "end": 3083.47,
+    "text": "that can really hone in on just these features"
+  },
+  {
+    "start": 3083.47,
+    "end": 3084.31,
+    "text": "that are important."
+  },
+  {
+    "start": 3084.31,
+    "end": 3089.31,
+    "text": "And so it can train a model that's 100th the size,"
+  },
+  {
+    "start": 3089.47,
+    "end": 3093.31,
+    "text": "and just hone in on these features"
+  },
+  {
+    "start": 3093.31,
+    "end": 3096.23,
+    "text": "if you have a lot of pseudo-labeled data,"
+  },
+  {
+    "start": 3096.23,
+    "end": 3097.43,
+    "text": "and that's why it works."
+  },
+  {
+    "start": 3097.43,
+    "end": 3099.83,
+    "text": "And so the evidence really is that"
+  },
+  {
+    "start": 3099.83,
+    "end": 3101.71,
+    "text": "it just doesn't work to do self-disolation, right?"
+  },
+  {
+    "start": 3101.71,
+    "end": 3104.31,
+    "text": "And so it must be that it's really"
+  },
+  {
+    "start": 3104.31,
+    "end": 3105.87,
+    "text": "just learning a subset of the features"
+  },
+  {
+    "start": 3105.87,
+    "end": 3107.27,
+    "text": "for most of these tasks."
+  },
+  {
+    "start": 3108.19,
+    "end": 3112.07,
+    "text": "And so basically every task about language modeling,"
+  },
+  {
+    "start": 3112.07,
+    "end": 3113.87,
+    "text": "we've been able to get distillation to work for."
+  },
+  {
+    "start": 3113.87,
+    "end": 3115.51,
+    "text": "So this includes tasks that seem really hard,"
+  },
+  {
+    "start": 3115.51,
+    "end": 3118.63,
+    "text": "like question answering and search."
+  },
+  {
+    "start": 3118.63,
+    "end": 3121.39,
+    "text": "So that does imply that language modeling itself,"
+  },
+  {
+    "start": 3121.39,
+    "end": 3124.35,
+    "text": "and predicting, which is basically language generation also,"
+  },
+  {
+    "start": 3124.35,
+    "end": 3126.63,
+    "text": "because that's just a form of language modeling,"
+  },
+  {
+    "start": 3126.63,
+    "end": 3129.43,
+    "text": "is fundamentally harder than language understanding,"
+  },
+  {
+    "start": 3129.43,
+    "end": 3132.91,
+    "text": "which is not super hard to buy,"
+  },
+  {
+    "start": 3132.91,
+    "end": 3134.35,
+    "text": "or at least maybe it's not fundamentally harder,"
+  },
+  {
+    "start": 3134.35,
+    "end": 3135.75,
+    "text": "but given the state of the art,"
+  },
+  {
+    "start": 3135.75,
+    "end": 3137.95,
+    "text": "state of the art models for language understanding"
+  },
+  {
+    "start": 3137.95,
+    "end": 3140.83,
+    "text": "are fundamentally simpler than what they do,"
+  },
+  {
+    "start": 3140.83,
+    "end": 3143.51,
+    "text": "like presumably just doing pattern recognition,"
+  },
+  {
+    "start": 3143.51,
+    "end": 3146.79,
+    "text": "than models that are generating language."
+  },
+  {
+    "start": 3146.79,
+    "end": 3149.71,
+    "text": "And so that's why all of these classification models"
+  },
+  {
+    "start": 3149.71,
+    "end": 3151.35,
+    "text": "can be distilled so well."
+  },
+  {
+    "start": 3153.27,
+    "end": 3154.59,
+    "text": "So basically in conclusion,"
+  },
+  {
+    "start": 3155.67,
+    "end": 3157.99,
+    "text": "the pre-trained models work really well."
+  },
+  {
+    "start": 3157.99,
+    "end": 3159.07,
+    "text": "They're very expensive."
+  },
+  {
+    "start": 3159.07,
+    "end": 3163.15,
+    "text": "We know how to solve this for inference time,"
+  },
+  {
+    "start": 3163.15,
+    "end": 3164.47,
+    "text": "and we can do fast inference,"
+  },
+  {
+    "start": 3164.47,
+    "end": 3166.23,
+    "text": "but it is still unsolved"
+  },
+  {
+    "start": 3168.63,
+    "end": 3172.63,
+    "text": "how to make these fast at training time."
+  },
+  {
+    "start": 3172.63,
+    "end": 3177.63,
+    "text": "And moreover, it seems like a lot of the details"
+  },
+  {
+    "start": 3177.75,
+    "end": 3179.11,
+    "text": "about algorithmic improvements"
+  },
+  {
+    "start": 3179.11,
+    "end": 3181.35,
+    "text": "for making the training more efficient"
+  },
+  {
+    "start": 3181.35,
+    "end": 3184.07,
+    "text": "don't seem to have a ton of benefit"
+  },
+  {
+    "start": 3184.07,
+    "end": 3185.95,
+    "text": "in terms of at least getting state of the art results."
+  },
+  {
+    "start": 3185.95,
+    "end": 3187.99,
+    "text": "And it seems like a lot of choices"
+  },
+  {
+    "start": 3187.99,
+    "end": 3188.99,
+    "text": "don't really matter that much,"
+  },
+  {
+    "start": 3188.99,
+    "end": 3192.19,
+    "text": "and it's really just about, you know, a couple of,"
+  },
+  {
+    "start": 3192.23,
+    "end": 3194.19,
+    "text": "like compared to just the kind of the simple"
+  },
+  {
+    "start": 3194.19,
+    "end": 3196.55,
+    "text": "masculine baseline, it's pretty hard to beat that"
+  },
+  {
+    "start": 3196.55,
+    "end": 3199.19,
+    "text": "in an apples to apples comparison."
+  },
+  {
+    "start": 3199.19,
+    "end": 3201.99,
+    "text": "So yeah, it's a little bit,"
+  },
+  {
+    "start": 3201.99,
+    "end": 3203.71,
+    "text": "I mean it's a little bit unfortunate"
+  },
+  {
+    "start": 3203.71,
+    "end": 3205.11,
+    "text": "from a research perspective, it's definitely good"
+  },
+  {
+    "start": 3205.11,
+    "end": 3208.87,
+    "text": "from people who want to build NLP systems"
+  },
+  {
+    "start": 3208.87,
+    "end": 3211.59,
+    "text": "and who want to especially domain specific NLP systems,"
+  },
+  {
+    "start": 3211.59,
+    "end": 3214.27,
+    "text": "like people who wanna adapt to a medical domain,"
+  },
+  {
+    "start": 3214.27,
+    "end": 3216.31,
+    "text": "or people where you only have a tiny amount of data,"
+  },
+  {
+    "start": 3216.31,
+    "end": 3217.55,
+    "text": "or people who wanna do startups"
+  },
+  {
+    "start": 3217.55,
+    "end": 3219.23,
+    "text": "or they wanna build an actual product"
+  },
+  {
+    "start": 3219.23,
+    "end": 3220.27,
+    "text": "and they only have a tiny amount of data."
+  },
+  {
+    "start": 3220.27,
+    "end": 3221.31,
+    "text": "So it's definitely good from that perspective,"
+  },
+  {
+    "start": 3221.31,
+    "end": 3225.07,
+    "text": "but certainly I think from the perspective"
+  },
+  {
+    "start": 3225.07,
+    "end": 3228.19,
+    "text": "of sometimes, you know, research,"
+  },
+  {
+    "start": 3228.19,
+    "end": 3229.71,
+    "text": "like I was saying the goal of research"
+  },
+  {
+    "start": 3229.71,
+    "end": 3231.31,
+    "text": "is to kind of like research yourself out of a job,"
+  },
+  {
+    "start": 3231.31,
+    "end": 3233.75,
+    "text": "then it is kind of, you know,"
+  },
+  {
+    "start": 3233.75,
+    "end": 3236.79,
+    "text": "it's a little unfortunate from that perspective,"
+  },
+  {
+    "start": 3236.79,
+    "end": 3239.19,
+    "text": "but you know, I still think that there's a possibility"
+  },
+  {
+    "start": 3239.19,
+    "end": 3240.27,
+    "text": "that there's gonna be a breakthrough"
+  },
+  {
+    "start": 3240.27,
+    "end": 3244.15,
+    "text": "that kind of shows how to do computational efficiency"
+  },
+  {
+    "start": 3244.15,
+    "end": 3247.27,
+    "text": "without, and can kind of show compelling results"
+  },
+  {
+    "start": 3247.27,
+    "end": 3248.67,
+    "text": "that you don't need, you know,"
+  },
+  {
+    "start": 3248.67,
+    "end": 3250.15,
+    "text": "such an absurdly large model,"
+  },
+  {
+    "start": 3250.15,
+    "end": 3251.81,
+    "text": "or actually, besides a model as a matter,"
+  },
+  {
+    "start": 3251.81,
+    "end": 3255.79,
+    "text": "you don't need such an extremely expensive model to do well."
+  },
+  {
+    "start": 3255.79,
+    "end": 3257.15,
+    "text": "Maybe look on from Sparsity, right,"
+  },
+  {
+    "start": 3257.15,
+    "end": 3257.99,
+    "text": "or something like that,"
+  },
+  {
+    "start": 3257.99,
+    "end": 3259.59,
+    "text": "where you actually do have a really large model,"
+  },
+  {
+    "start": 3259.59,
+    "end": 3261.39,
+    "text": "it's just sparsely activated"
+  },
+  {
+    "start": 3261.39,
+    "end": 3263.79,
+    "text": "in some, using some efficiency tricks or whatever."
+  }
+]

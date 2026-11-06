@@ -1,8 +1,10 @@
 faster-whisper
+av<16  # faster-whisper 1.2 passes an argument that av 16 removed
 pymupdf
 sentence-transformers
 scikit-learn
 numpy
 matplotlib
+opencv-python-headless
 yt-dlp
 rangehttpserver

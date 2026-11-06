@@ -1,0 +1,293 @@
+[
+ {
+  "id": "1910.01108",
+  "kind": "paper",
+  "aliases": [
+   "DistilBERT"
+  ],
+  "year": 2019,
+  "title": "DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter",
+  "authors": "Victor Sanh, Lysandre Debut, Julien Chaumond et al.",
+  "url": "https://arxiv.org/abs/1910.01108",
+  "pdf": "https://arxiv.org/pdf/1910.01108",
+  "text": "As Transfer Learning from large-scale pre-trained models becomes more prevalent in Natural Language Processing (NLP), operating these large models in on-the-edge and/or under constrained computational training or inference budgets remains challenging. In this work, we propose a method to pre-train a smaller general-purpose language representation model, called DistilBERT, which can then be fine-tuned with good performances on a wide range of tasks like its larger counterparts. While most prior work investigated the use of distillation for building task-specific models, we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by 40%, while retaining 97% of its language understanding capabilities and being 60% faster. To leverage the inductive biases learned by larger models during pre-training, we introduce a triple loss combining language modeling, distillation and cosine-distance losses. Our smaller, faster and lighter model is cheaper to pre-train and we demonstrate its capabilities for on-device computations in a proof-of-concept experiment and a comparative on-device study."
+ },
+ {
+  "id": "1906.08237",
+  "kind": "paper",
+  "aliases": [
+   "XLNet"
+  ],
+  "year": 2019,
+  "title": "XLNet: Generalized Autoregressive Pretraining for Language Understanding",
+  "authors": "Zhilin Yang, Zihang Dai, Yiming Yang et al.",
+  "url": "https://arxiv.org/abs/1906.08237",
+  "pdf": "https://arxiv.org/pdf/1906.08237",
+  "text": "With the capability of modeling bidirectional contexts, denoising autoencoding based pretraining like BERT achieves better performance than pretraining approaches based on autoregressive language modeling. However, relying on corrupting the input with masks, BERT neglects dependency between the masked positions and suffers from a pretrain-finetune discrepancy. In light of these pros and cons, we propose XLNet, a generalized autoregressive pretraining method that (1) enables learning bidirectional contexts by maximizing the expected likelihood over all permutations of the factorization order and (2) overcomes the limitations of BERT thanks to its autoregressive formulation. Furthermore, XLNet integrates ideas from Transformer-XL, the state-of-the-art autoregressive model, into pretraining. Empirically, under comparable experiment settings, XLNet outperforms BERT on 20 tasks, often by a large margin, including question answering, natural language inference, sentiment analysis, and document ranking."
+ },
+ {
+  "id": "1908.08962",
+  "kind": "paper",
+  "aliases": [],
+  "year": 2019,
+  "title": "Well-Read Students Learn Better: On the Importance of Pre-training Compact Models",
+  "authors": "Iulia Turc, Ming-Wei Chang, Kenton Lee et al.",
+  "url": "https://arxiv.org/abs/1908.08962",
+  "pdf": "https://arxiv.org/pdf/1908.08962",
+  "text": "Recent developments in natural language representations have been accompanied by large and expensive models that leverage vast amounts of general-domain text through self-supervised pre-training. Due to the cost of applying such models to down-stream tasks, several model compression techniques on pre-trained language representations have been proposed (Sun et al., 2019; Sanh, 2019). However, surprisingly, the simple baseline of just pre-training and fine-tuning compact models has been overlooked. In this paper, we first show that pre-training remains important in the context of smaller architectures, and fine-tuning pre-trained compact models can be competitive to more elaborate methods proposed in concurrent work. Starting with pre-trained compact models, we then explore transferring task knowledge from large fine-tuned models through standard knowledge distillation. The resulting simple, yet effective and general algorithm, Pre-trained Distillation, brings further improvements. Through extensive experiments, we more generally explore the interaction between pre-training and distillation under two variables that have been under-studied: model size and properties of unlabeled task data. One surprising observation is that they have a compound effect even when sequentially applied on the same data. To accelerate future research, we will make our 24 pre-trained miniature BERT models publicly available."
+ },
+ {
+  "id": "1706.03762",
+  "kind": "paper",
+  "aliases": [
+   "Transformer"
+  ],
+  "year": 2017,
+  "title": "Attention Is All You Need",
+  "authors": "Ashish Vaswani, Noam Shazeer, Niki Parmar et al.",
+  "url": "https://arxiv.org/abs/1706.03762",
+  "pdf": "https://arxiv.org/pdf/1706.03762",
+  "text": "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing both with large and limited training data."
+ },
+ {
+  "id": "1810.04805",
+  "kind": "paper",
+  "aliases": [
+   "BERT"
+  ],
+  "year": 2018,
+  "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+  "authors": "Jacob Devlin, Ming-Wei Chang, Kenton Lee et al.",
+  "url": "https://arxiv.org/abs/1810.04805",
+  "pdf": "https://arxiv.org/pdf/1810.04805",
+  "text": "We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task-specific architecture modifications. BERT is conceptually simple and empirically powerful. It obtains new state-of-the-art results on eleven natural language processing tasks, including pushing the GLUE score to 80.5% (7.7% point absolute improvement), MultiNLI accuracy to 86.7% (4.6% absolute improvement), SQuAD v1.1 question answering Test F1 to 93.2 (1.5 point absolute improvement) and SQuAD v2.0 Test F1 to 83.1 (5.1 point absolute improvement)."
+ },
+ {
+  "id": "1802.05365",
+  "kind": "paper",
+  "aliases": [
+   "ELMo"
+  ],
+  "year": 2018,
+  "title": "Deep contextualized word representations",
+  "authors": "Matthew E. Peters, Mark Neumann, Mohit Iyyer et al.",
+  "url": "https://arxiv.org/abs/1802.05365",
+  "pdf": "https://arxiv.org/pdf/1802.05365",
+  "text": "We introduce a new type of deep contextualized word representation that models both (1) complex characteristics of word use (e.g., syntax and semantics), and (2) how these uses vary across linguistic contexts (i.e., to model polysemy). Our word vectors are learned functions of the internal states of a deep bidirectional language model (biLM), which is pre-trained on a large text corpus. We show that these representations can be easily added to existing models and significantly improve the state of the art across six challenging NLP problems, including question answering, textual entailment and sentiment analysis. We also present an analysis showing that exposing the deep internals of the pre-trained network is crucial, allowing downstream models to mix different types of semi-supervision signals."
+ },
+ {
+  "id": "1804.07461",
+  "kind": "paper",
+  "aliases": [
+   "GLUE"
+  ],
+  "year": 2018,
+  "title": "GLUE: A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding",
+  "authors": "Alex Wang, Amanpreet Singh, Julian Michael et al.",
+  "url": "https://arxiv.org/abs/1804.07461",
+  "pdf": "https://arxiv.org/pdf/1804.07461",
+  "text": "For natural language understanding (NLU) technology to be maximally useful, both practically and as a scientific object of study, it must be general: it must be able to process language in a way that is not exclusively tailored to any one specific task or dataset. In pursuit of this objective, we introduce the General Language Understanding Evaluation benchmark (GLUE), a tool for evaluating and analyzing the performance of models across a diverse range of existing NLU tasks. GLUE is model-agnostic, but it incentivizes sharing knowledge across tasks because certain tasks have very limited training data. We further provide a hand-crafted diagnostic test suite that enables detailed linguistic analysis of NLU models. We evaluate baselines based on current methods for multi-task and transfer learning and find that they do not immediately give substantial improvements over the aggregate performance of training a separate model per task, indicating room for improvement in developing general and robust NLU systems."
+ },
+ {
+  "id": "1909.11942",
+  "kind": "paper",
+  "aliases": [
+   "ALBERT"
+  ],
+  "year": 2019,
+  "title": "ALBERT: A Lite BERT for Self-supervised Learning of Language Representations",
+  "authors": "Zhenzhong Lan, Mingda Chen, Sebastian Goodman et al.",
+  "url": "https://arxiv.org/abs/1909.11942",
+  "pdf": "https://arxiv.org/pdf/1909.11942",
+  "text": "Increasing model size when pretraining natural language representations often results in improved performance on downstream tasks. However, at some point further model increases become harder due to GPU/TPU memory limitations and longer training times. To address these problems, we present two parameter-reduction techniques to lower memory consumption and increase the training speed of BERT. Comprehensive empirical evidence shows that our proposed methods lead to models that scale much better compared to the original BERT. We also use a self-supervised loss that focuses on modeling inter-sentence coherence, and show it consistently helps downstream tasks with multi-sentence inputs. As a result, our best model establishes new state-of-the-art results on the GLUE, RACE, and \\squad benchmarks while having fewer parameters compared to BERT-large. The code and the pretrained models are available at https://github.com/google-research/ALBERT."
+ },
+ {
+  "id": "2003.10555",
+  "kind": "paper",
+  "aliases": [
+   "ELECTRA"
+  ],
+  "year": 2020,
+  "title": "ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators",
+  "authors": "Kevin Clark, Minh-Thang Luong, Quoc V. Le et al.",
+  "url": "https://arxiv.org/abs/2003.10555",
+  "pdf": "https://arxiv.org/pdf/2003.10555",
+  "text": "Masked language modeling (MLM) pre-training methods such as BERT corrupt the input by replacing some tokens with [MASK] and then train a model to reconstruct the original tokens. While they produce good results when transferred to downstream NLP tasks, they generally require large amounts of compute to be effective. As an alternative, we propose a more sample-efficient pre-training task called replaced token detection. Instead of masking the input, our approach corrupts it by replacing some tokens with plausible alternatives sampled from a small generator network. Then, instead of training a model that predicts the original identities of the corrupted tokens, we train a discriminative model that predicts whether each token in the corrupted input was replaced by a generator sample or not. Thorough experiments demonstrate this new pre-training task is more efficient than MLM because the task is defined over all input tokens rather than just the small subset that was masked out. As a result, the contextual representations learned by our approach substantially outperform the ones learned by BERT given the same model size, data, and compute. The gains are particularly strong for small models; for example, we train a model on one GPU for 4 days that outperforms GPT (trained using 30x more compute) on the GLUE natural language understanding benchmark. Our approach also works well at scale, where it performs comparably to RoBERTa and XLNet while using less than 1/4 of their compute and outperforms them when using the same amount of compute."
+ },
+ {
+  "id": "1910.10683",
+  "kind": "paper",
+  "aliases": [
+   "T5"
+  ],
+  "year": 2019,
+  "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+  "authors": "Colin Raffel, Noam Shazeer, Adam Roberts et al.",
+  "url": "https://arxiv.org/abs/1910.10683",
+  "pdf": "https://arxiv.org/pdf/1910.10683",
+  "text": "Transfer learning, where a model is first pre-trained on a data-rich task before being fine-tuned on a downstream task, has emerged as a powerful technique in natural language processing (NLP). The effectiveness of transfer learning has given rise to a diversity of approaches, methodology, and practice. In this paper, we explore the landscape of transfer learning techniques for NLP by introducing a unified framework that converts all text-based language problems into a text-to-text format. Our systematic study compares pre-training objectives, architectures, unlabeled data sets, transfer approaches, and other factors on dozens of language understanding tasks. By combining the insights from our exploration with scale and our new ``Colossal Clean Crawled Corpus'', we achieve state-of-the-art results on many benchmarks covering summarization, question answering, text classification, and more. To facilitate future work on transfer learning for NLP, we release our data set, pre-trained models, and code."
+ },
+ {
+  "id": "1907.11692",
+  "kind": "paper",
+  "aliases": [
+   "RoBERTa"
+  ],
+  "year": 2019,
+  "title": "RoBERTa: A Robustly Optimized BERT Pretraining Approach",
+  "authors": "Yinhan Liu, Myle Ott, Naman Goyal et al.",
+  "url": "https://arxiv.org/abs/1907.11692",
+  "pdf": "https://arxiv.org/pdf/1907.11692",
+  "text": "Language model pretraining has led to significant performance gains but careful comparison between different approaches is challenging. Training is computationally expensive, often done on private datasets of different sizes, and, as we will show, hyperparameter choices have significant impact on the final results. We present a replication study of BERT pretraining (Devlin et al., 2019) that carefully measures the impact of many key hyperparameters and training data size. We find that BERT was significantly undertrained, and can match or exceed the performance of every model published after it. Our best model achieves state-of-the-art results on GLUE, RACE and SQuAD. These results highlight the importance of previously overlooked design choices, and raise questions about the source of recently reported improvements. We release our models and code."
+ },
+ {
+  "id": "1503.02531",
+  "kind": "paper",
+  "aliases": [
+   "Distillation"
+  ],
+  "year": 2015,
+  "title": "Distilling the Knowledge in a Neural Network",
+  "authors": "Geoffrey Hinton, Oriol Vinyals, Jeff Dean",
+  "url": "https://arxiv.org/abs/1503.02531",
+  "pdf": "https://arxiv.org/pdf/1503.02531",
+  "text": "A very simple way to improve the performance of almost any machine learning algorithm is to train many different models on the same data and then to average their predictions. Unfortunately, making predictions using a whole ensemble of models is cumbersome and may be too computationally expensive to allow deployment to a large number of users, especially if the individual models are large neural nets. Caruana and his collaborators have shown that it is possible to compress the knowledge in an ensemble into a single model which is much easier to deploy and we develop this approach further using a different compression technique. We achieve some surprising results on MNIST and we show that we can significantly improve the acoustic model of a heavily used commercial system by distilling the knowledge in an ensemble of models into a single model. We also introduce a new type of ensemble composed of one or more full models and many specialist models which learn to distinguish fine-grained classes that the full models confuse. Unlike a mixture of experts, these specialist models can be trained rapidly and in parallel."
+ },
+ {
+  "id": "1511.01432",
+  "kind": "paper",
+  "aliases": [],
+  "year": 2015,
+  "title": "Semi-supervised Sequence Learning",
+  "authors": "Andrew M. Dai, Quoc V. Le",
+  "url": "https://arxiv.org/abs/1511.01432",
+  "pdf": "https://arxiv.org/pdf/1511.01432",
+  "text": "We present two approaches that use unlabeled data to improve sequence learning with recurrent networks. The first approach is to predict what comes next in a sequence, which is a conventional language model in natural language processing. The second approach is to use a sequence autoencoder, which reads the input sequence into a vector and predicts the input sequence again. These two algorithms can be used as a \"pretraining\" step for a later supervised sequence learning algorithm. In other words, the parameters obtained from the unsupervised step can be used as a starting point for other supervised training models. In our experiments, we find that long short term memory recurrent networks after being pretrained with the two approaches are more stable and generalize better. With pretraining, we are able to train long short term memory recurrent networks up to a few hundred timesteps, thereby achieving strong performance in many text classification tasks, such as IMDB, DBpedia and 20 Newsgroups."
+ },
+ {
+  "id": "1901.02860",
+  "kind": "paper",
+  "aliases": [
+   "Transformer-XL"
+  ],
+  "year": 2019,
+  "title": "Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context",
+  "authors": "Zihang Dai, Zhilin Yang, Yiming Yang et al.",
+  "url": "https://arxiv.org/abs/1901.02860",
+  "pdf": "https://arxiv.org/pdf/1901.02860",
+  "text": "Transformers have a potential of learning longer-term dependency, but are limited by a fixed-length context in the setting of language modeling. We propose a novel neural architecture Transformer-XL that enables learning dependency beyond a fixed length without disrupting temporal coherence. It consists of a segment-level recurrence mechanism and a novel positional encoding scheme. Our method not only enables capturing longer-term dependency, but also resolves the context fragmentation problem. As a result, Transformer-XL learns dependency that is 80% longer than RNNs and 450% longer than vanilla Transformers, achieves better performance on both short and long sequences, and is up to 1,800+ times faster than vanilla Transformers during evaluation. Notably, we improve the state-of-the-art results of bpc/perplexity to 0.99 on enwiki8, 1.08 on text8, 18.3 on WikiText-103, 21.8 on One Billion Word, and 54.5 on Penn Treebank (without finetuning). When trained only on WikiText-103, Transformer-XL manages to generate reasonably coherent, novel text articles with thousands of tokens. Our code, pretrained models, and hyperparameters are available in both Tensorflow and PyTorch."
+ },
+ {
+  "id": "1609.08144",
+  "kind": "paper",
+  "aliases": [
+   "WordPiece"
+  ],
+  "year": 2016,
+  "title": "Google's Neural Machine Translation System: Bridging the Gap between Human and Machine Translation",
+  "authors": "Yonghui Wu, Mike Schuster, Zhifeng Chen et al.",
+  "url": "https://arxiv.org/abs/1609.08144",
+  "pdf": "https://arxiv.org/pdf/1609.08144",
+  "text": "Neural Machine Translation (NMT) is an end-to-end learning approach for automated translation, with the potential to overcome many of the weaknesses of conventional phrase-based translation systems. Unfortunately, NMT systems are known to be computationally expensive both in training and in translation inference. Also, most NMT systems have difficulty with rare words. These issues have hindered NMT's use in practical deployments and services, where both accuracy and speed are essential. In this work, we present GNMT, Google's Neural Machine Translation system, which attempts to address many of these issues. Our model consists of a deep LSTM network with 8 encoder and 8 decoder layers using attention and residual connections. To improve parallelism and therefore decrease training time, our attention mechanism connects the bottom layer of the decoder to the top layer of the encoder. To accelerate the final translation speed, we employ low-precision arithmetic during inference computations. To improve handling of rare words, we divide words into a limited set of common sub-word units (\"wordpieces\") for both input and output. This method provides a good balance between the flexibility of \"character\"-delimited models and the efficiency of \"word\"-delimited models, naturally handles translation of rare words, and ultimately improves the overall accuracy of the system. Our beam search technique employs a length-normalization procedure and uses a coverage penalty, which encourages generation of an output sentence that is most likely to cover all the words in the source sentence. On the WMT'14 English-to-French and English-to-German benchmarks, GNMT achieves competitive results to state-of-the-art. Using a human side-by-side evaluation on a set of isolated simple sentences, it reduces translation errors by an average of 60% compared to Google's phrase-based production system."
+ },
+ {
+  "id": "1301.3781",
+  "kind": "paper",
+  "aliases": [
+   "word2vec"
+  ],
+  "year": 2013,
+  "title": "Efficient Estimation of Word Representations in Vector Space",
+  "authors": "Tomas Mikolov, Kai Chen, Greg Corrado et al.",
+  "url": "https://arxiv.org/abs/1301.3781",
+  "pdf": "https://arxiv.org/pdf/1301.3781",
+  "text": "We propose two novel model architectures for computing continuous vector representations of words from very large data sets. The quality of these representations is measured in a word similarity task, and the results are compared to the previously best performing techniques based on different types of neural networks. We observe large improvements in accuracy at much lower computational cost, i.e. it takes less than a day to learn high quality word vectors from a 1.6 billion words data set. Furthermore, we show that these vectors provide state-of-the-art performance on our test set for measuring syntactic and semantic word similarities."
+ },
+ {
+  "id": "1806.03822",
+  "kind": "paper",
+  "aliases": [
+   "SQuAD"
+  ],
+  "year": 2018,
+  "title": "Know What You Don't Know: Unanswerable Questions for SQuAD",
+  "authors": "Pranav Rajpurkar, Robin Jia, Percy Liang",
+  "url": "https://arxiv.org/abs/1806.03822",
+  "pdf": "https://arxiv.org/pdf/1806.03822",
+  "text": "Extractive reading comprehension systems can often locate the correct answer to a question in a context document, but they also tend to make unreliable guesses on questions for which the correct answer is not stated in the context. Existing datasets either focus exclusively on answerable questions, or use automatically generated unanswerable questions that are easy to identify. To address these weaknesses, we present SQuAD 2.0, the latest version of the Stanford Question Answering Dataset (SQuAD). SQuAD 2.0 combines existing SQuAD data with over 50,000 unanswerable questions written adversarially by crowdworkers to look similar to answerable ones. To do well on SQuAD 2.0, systems must not only answer questions when possible, but also determine when no answer is supported by the paragraph and abstain from answering. SQuAD 2.0 is a challenging natural language understanding task for existing models: a strong neural system that gets 86% F1 on SQuAD 1.1 achieves only 66% F1 on SQuAD 2.0."
+ },
+ {
+  "id": "glove",
+  "kind": "paper",
+  "aliases": [
+   "GloVe"
+  ],
+  "year": 2014,
+  "title": "GloVe: Global Vectors for Word Representation",
+  "authors": "Pennington, Socher, Manning",
+  "url": "https://aclanthology.org/D14-1162/",
+  "text": "Word vectors trained on global word-word co-occurrence statistics from a corpus."
+ },
+ {
+  "id": "gpt1",
+  "kind": "paper",
+  "aliases": [
+   "GPT"
+  ],
+  "year": 2018,
+  "title": "Improving Language Understanding by Generative Pre-Training",
+  "authors": "Radford et al.",
+  "url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+  "text": "OpenAI GPT: pre-train a 12-layer left-to-right Transformer language model, then fine-tune it on classification and other tasks."
+ },
+ {
+  "id": "bucila2006",
+  "kind": "paper",
+  "aliases": [],
+  "year": 2006,
+  "title": "Model Compression",
+  "authors": "Bucila, Caruana, Niculescu-Mizil",
+  "url": "https://www.cs.cornell.edu/~caruana/compression.kdd06.pdf",
+  "text": "Compress a large ensemble into a small fast model by training it on pseudo-labeled data from the ensemble."
+ },
+ {
+  "id": "slp3",
+  "kind": "textbook",
+  "aliases": [],
+  "year": null,
+  "title": "Speech and Language Processing (3rd ed. draft)",
+  "authors": "Jurafsky, Martin",
+  "url": "https://web.stanford.edu/~jurafsky/slp3/",
+  "text": "Textbook chapters on word embeddings, neural language models, the Transformer, large language models, masked language models and BERT, fine-tuning, and question answering."
+ },
+ {
+  "id": "illustrated-bert",
+  "kind": "tutorial",
+  "aliases": [],
+  "year": 2018,
+  "title": "The Illustrated BERT, ELMo, and co.",
+  "authors": "Jay Alammar",
+  "url": "https://jalammar.github.io/illustrated-bert/",
+  "text": "Visual explanation of contextual embeddings: ELMo, ULMFiT, OpenAI Transformer, BERT masked language model, next sentence prediction, fine-tuning BERT for classification, feature extraction."
+ },
+ {
+  "id": "illustrated-transformer",
+  "kind": "tutorial",
+  "aliases": [],
+  "year": 2018,
+  "title": "The Illustrated Transformer",
+  "authors": "Jay Alammar",
+  "url": "https://jalammar.github.io/illustrated-transformer/",
+  "text": "Visual walkthrough of the Transformer: multi-headed self-attention, feed-forward layers, positional encoding, residual connections and layer normalization, encoder and decoder."
+ },
+ {
+  "id": "hf-course",
+  "kind": "tutorial",
+  "aliases": [],
+  "year": null,
+  "title": "Hugging Face LLM Course",
+  "authors": "Hugging Face",
+  "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+  "text": "Hands-on course: using pre-trained Transformer models, tokenizers, fine-tuning a pretrained model on a dataset, sharing models, question answering and text classification pipelines."
+ }
+]

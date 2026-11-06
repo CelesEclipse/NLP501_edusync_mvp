@@ -1,6 +1,6 @@
 # EduSync MVP Report: Slide-Video Alignment
 
-**Status:** MVP core pipeline working on one lecture. Results are preliminary (1 lecture, 10 hand-labeled slides).
+**Status:** MVP core pipeline working on one lecture. Results are preliminary (1 lecture, 10 hand-labeled slides). Sections 1-9 describe v1 (text only); section 10 adds video fusion and links to learning materials (v2).
 
 ## 1. Goal
 
@@ -94,3 +94,114 @@ Predicted times in this table come from output rounded to 0.1 min, so treat them
 ## 9. Reproducing
 
 Inputs: `transcript.json` (start, end, text per segment), `slides.json` (slide number, text). Output: per-window slide assignment (`alignment_bge_base.json`). The scoring function compares the first window assigned to each labeled slide with the labeled start time.
+
+## 10. v2: video fusion and learning-material links
+
+### 10.1 What changed
+
+| Component | v1 | v2 |
+|---|---|---|
+| Evidence | transcript text only | text + video frames (`visual.py`) |
+| Time grid | about 30 s windows | 2 s frames (text score of the enclosing window is copied to each frame) |
+| Score | z-scored text similarity | `1.0 x z(visual) + 0.5 x z(text)`; frames that match no slide (camera on the speaker, 12% of frames) get 0 visual score |
+| Evaluation | 10 hand labels, found slides only | + `all` column that scores missed slides; + 39 silver labels |
+| Learning materials | none | 24-item reading list (17 arXiv papers via the arXiv API, 7 papers/tutorials/textbook); every slide linked to cited and related items, with page numbers for downloaded PDFs |
+| Demo | slide list + video | + readings panel for the current slide, + transcript search that jumps to the moment a term is said |
+
+**Visual score.** The lecture video shows the slides full screen for most of its length. Each sampled frame and each
+rendered PDF page are reduced to a blurred 96x54 grayscale thumbnail; their normalized cross-correlation is the
+visual similarity. No model and no GPU are needed (about 35 s for the 54 min video on an M1 Pro). The best
+match is 1.00 on a typical slide frame; 199 of 1635 frames match nothing (below 0.5) and are camera shots.
+
+**Transcript.** `transcript.json` was regenerated locally (faster-whisper 1.2.1, `small`, CPU int8): 1297 segments,
+against 721 in the v1 Colab run. The text-only rows below therefore differ from section 4; the v1 file is kept as a
+reference row.
+
+### 10.2 Results on the 10 hand labels
+
+`all` = mean absolute error over all 10 labels, with a missed slide predicted at the start of the next found slide.
+
+| Method | Found | Mean | Median | All | <=5 s | <=30 s | <=60 s | Missed |
+|---|---|---|---|---|---|---|---|---|
+| v1: bge-base + DP (Colab transcript) | 9/10 | 21.7 s | 16.2 s | 23.1 s | 2/10 | 7/10 | 9/10 | 31 |
+| Text: TF-IDF + DP | 8/10 | 18.0 s | 18.7 s | 20.4 s | 0/10 | 8/10 | 8/10 | 30, 42 |
+| Text: bge-small + DP | 8/10 | 32.4 s | 26.9 s | 40.3 s | 0/10 | 5/10 | 7/10 | 31, 38 |
+| Text: bge-base + DP | 7/10 | 25.1 s | 14.7 s | 34.7 s | 0/10 | 5/10 | 6/10 | 31, 33, 38 |
+| Video only + DP | 9/10 | **0.6 s** | 1.0 s | **0.7 s** | 9/10 | 9/10 | 9/10 | 42 |
+| Video + TF-IDF + DP | 9/10 | 1.2 s | 1.0 s | 6.5 s | 8/10 | 9/10 | 9/10 | 42 |
+| **Video + bge-base + DP** | 9/10 | **0.6 s** | 1.0 s | 2.7 s | 9/10 | 9/10 | 9/10 | 42 |
+
+Video alone and video + argmax give the same numbers; with this video the DP is not needed when frames are clean.
+
+**Slide 42 is probably a labeling ambiguity, not a miss.** Slide 42 is a title-only "Conclusions" divider and never
+appears on screen: the video cuts from a camera shot straight to slide 43 (also titled "Conclusions") at 52:34, two
+seconds before the 52:36 label. The label most likely marks slide 43. `labels.json` is left unchanged. The fused
+run starts slide 43 at 52:14, during the camera shot, because the speaker starts concluding before the slide changes;
+this is why its `all` is 2.7 s against 0.7 s for video only.
+
+### 10.3 Silver labels: text methods on 39 slides
+
+Video-only alignment matches every hand label it finds to within 1 s, so the first on-screen time of each slide
+(`make_labels.py`, slides on screen for at least 6 s) is used as a silver label for 39 of the 43 slides
+(dividers 2, 10, 26 and 42 are skipped). These labels come from the video, so they are only used to compare
+**text** methods with each other; they cannot judge video or fused methods fairly.
+
+| Method | Found | Mean | Median | All | <=30 s | <=60 s |
+|---|---|---|---|---|---|---|
+| v1: bge-base + DP (Colab transcript) | 31/39 | 27.0 s | 17.8 s | 27.7 s | 25/39 | 29/39 |
+| Text: TF-IDF + DP | 31/39 | 28.1 s | 19.8 s | 28.2 s | 24/39 | 30/39 |
+| Text: bge-small + DP | 28/39 | 32.7 s | 19.4 s | 47.7 s | 20/39 | 23/39 |
+| Text: bge-base + DP | 28/39 | 37.9 s | 18.9 s | 50.6 s | 19/39 | 23/39 |
+
+With 39 slides the v1 conclusion holds: TF-IDF is at least as good as bge on this lecture, and a text-only system
+misses 8-11 slides (title, divider, and diagram slides such as 1, 8, 12, 19).
+
+### 10.4 Robustness: what if the camera leaves the slides?
+
+Many lecture recordings show the speaker or a wide room shot for long stretches. To simulate this, `--drop-visual p`
+hides a random fraction p of 60 s blocks of frames (mean of 3 seeds). Errors are `all` errors, in seconds.
+
+| Hidden | Video only (10 hand / 39 silver) | Video + bge-base (10 hand / 39 silver) |
+|---|---|---|
+| 0% | 0.7 / 0.0 | 2.7 / 0.9 |
+| 25% | 3.3 / 10.4 | 4.6 / **6.0** |
+| 50% | 29.5 / 32.3 | **11.7 / 18.3** |
+| 75% | 107.6 / 138.5 | **24.2 / 31.6** |
+| 90% | 468.2 / 449.4 | **33.4 / 48.5** |
+
+Video alone collapses once half of the frames are hidden (the DP has no evidence and stays on the last seen
+slide). With text added, the error degrades smoothly towards the text-only level (about 35-50 s). The text branch is
+therefore what makes the system usable on recordings that do not show the slides all the time.
+
+### 10.5 Links to learning materials
+
+`fetch_materials.py` builds the reading list from the arXiv API (titles, authors, years and abstracts are not typed
+by hand) and adds GloVe, GPT-1, Bucila et al. 2006, Jurafsky & Martin SLP3, two Illustrated tutorials, and the
+Hugging Face course. `link_materials.py` then links each slide:
+
+- **Query** = slide text + everything said while the slide was on screen (from the fused alignment).
+- **Cited**: the slide names the material (paper title on the slide, or an alias such as "XLNet" in the slide title).
+  22 cited links, e.g. RoBERTa, XLNet, ALBERT, T5 and ELECTRA slides to their papers, slide 39 to Bucila 2006 and
+  Hinton 2015, slide 40 to Turc et al. 2020, GLUE and SQuAD 2.0 slides to their dataset papers.
+- **Related**: bge-base cosine between the query and each passage (abstract, or 150-word chunk of a downloaded PDF
+  page), z-scored per passage over all slides, kept when z >= 1.0 and cosine >= 0.6, at most 3 per slide.
+
+The z-score matters for the same reason as in the alignment: before it, the BERT paper (100 page chunks) was the
+top related item on 36 of the 38 slides that got related links, because one of its many chunks is always close. After it, related links become
+specific: slide 3 (word embeddings) links GloVe, word2vec and ELMo; slide 8 (Transformer) links "Attention Is All
+You Need" and The Illustrated Transformer; slide 13 (Masked LM) links page 4 of the BERT paper, which is its
+"Masked LM" section; the fine-tuning slides 18-19 link page 5.
+
+Remaining noise (not yet measured): a few loose related links such as GloVe on an XLNet slide or Hinton 2015 on a
+Masked LM slide. Link quality has not been evaluated with labels; precision@3 against a small hand-made set of
+slide-to-reading pairs is the next step.
+
+### 10.6 Next steps
+
+| Priority | Task |
+|---|---|
+| 1 | Test on 2-4 more lectures, including at least one where the camera often leaves the slides (where fusion matters) |
+| 2 | Label 3-5 relevant readings per slide for 10-15 slides and report precision@3 for the links |
+| 3 | Learn the fusion weight per lecture (e.g. weight video by the share of frames that match a slide) instead of the fixed 1.0 / 0.5 |
+| 4 | OCR or CLIP features for videos where the slide is small or filmed at an angle (thumbnail correlation needs a full-screen slide) |
+| 5 | Use the aligned slide-transcript pairs as training data: fine-tune the text embedding, and slide-aware Q&A that cites timestamps and readings |

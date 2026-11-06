@@ -1,0 +1,11 @@
+# large media: download with yt-dlp (see README)
+lecture.mp4
+lecture.m4a
+demo/lecture.mp4
+demo/lecture.m4a
+demo/slides/
+# downloaded PDFs (python fetch_materials.py --pdf ...)
+materials/*.pdf
+.venv/
+__pycache__/
+.DS_Store
