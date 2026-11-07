@@ -1,0 +1,77 @@
+{
+  "source": "single",
+  "roles": {
+    "T": "teacher"
+  },
+  "talk_time": {
+    "T": 3243.39
+  },
+  "turns": [
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 5.01,
+      "end": 560.82
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 562.35,
+      "end": 797.52
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 798.96,
+      "end": 962.1
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 963.92,
+      "end": 1085.55
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 1087.02,
+      "end": 1274.0
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 1275.34,
+      "end": 1565.04
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 1566.58,
+      "end": 1741.97
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 1743.7,
+      "end": 1798.42
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 1799.82,
+      "end": 2034.9
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 2036.3,
+      "end": 2189.3
+    },
+    {
+      "speaker": "T",
+      "raw_speaker": "T",
+      "start": 2190.7,
+      "end": 3263.47
+    }
+  ]
+}

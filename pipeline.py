@@ -13,6 +13,7 @@ STEPS = [
     ("visual", ["video.mp4", "slides.pdf"], ["visual.npz"], ["visual.py"], "pdf"),
     ("screens", ["video.mp4"], ["screens.json"], ["extract_screens.py"], "no-pdf"),
     ("transcribe", [AUDIO], ["transcript.json"], ["transcribe.py"], "any"),
+    ("diarize", ["transcript.json"], ["speakers.json"], ["diarize.py"], "any"),
     ("align", ["transcript.json", "slides.json", "visual.npz"], ["alignment.json"],
      ["align.py", "--method", "bge-base", "--visual", "visual.npz"], "pdf"),
     ("links", ["slides.json", "transcript.json", "alignment.json"], ["links.json"], ["link_materials.py"], "pdf"),

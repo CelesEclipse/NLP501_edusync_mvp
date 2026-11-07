@@ -38,18 +38,7 @@ def align(ref, hyp):
     return D[n][m], ok
 
 
-ap = argparse.ArgumentParser()
-ap.add_argument("transcripts", nargs="+")
-ap.add_argument("--lesson", default=".", help="lesson folder; the other paths are relative to it")
-a = ap.parse_args()
-L = lambda f: os.path.join(a.lesson, f)
-meta = json.load(open(L("gold/asr/clips.json")))
-if not meta.get("corrected"):
-    print("warning: clips.json says the references are not corrected yet; these numbers only compare to the draft")
-screens = json.load(open(L("screens.json"))) if os.path.exists(L("screens.json")) else []
-
-
-def screen_words(t0, t1):
+def screen_words(screens, t0, t1):
     """English content words of every screen on view during [t0, t1)."""
     out = set()
     for k, s in enumerate(screens):
@@ -59,15 +48,26 @@ def screen_words(t0, t1):
     return out
 
 
-print(f"{'transcript':28s} {'ref words':>9s} {'WER':>7s} {'on-screen words':>16s}")
-for path in a.transcripts:
-    tr = json.load(open(L(path)))
-    err = n = hit = tot = 0
-    for c in meta["clips"]:
-        ref = words(open(L(c["ref"])).read())
-        hyp = words(" ".join(s["text"] for s in tr if c["start"] <= (s["start"] + s["end"]) / 2 < c["end"]))
-        e, ok = align(ref, hyp)
-        target = screen_words(c["start"], c["end"])
-        idx = [i for i, w in enumerate(ref) if w in target]
-        err, n, hit, tot = err + e, n + len(ref), hit + sum(i in ok for i in idx), tot + len(idx)
-    print(f"{path:28s} {n:9d} {err / max(n, 1):7.1%} {hit:>9d}/{tot} = {hit / max(tot, 1):.0%}")
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("transcripts", nargs="+")
+    ap.add_argument("--lesson", default=".", help="lesson folder; the other paths are relative to it")
+    a = ap.parse_args()
+    L = lambda f: os.path.join(a.lesson, f)
+    meta = json.load(open(L("gold/asr/clips.json")))
+    if not meta.get("corrected"):
+        print("warning: clips.json says the references are not corrected yet; these numbers only compare to the draft")
+    screens = json.load(open(L("screens.json"))) if os.path.exists(L("screens.json")) else []
+
+    print(f"{'transcript':28s} {'ref words':>9s} {'WER':>7s} {'on-screen words':>16s}")
+    for path in a.transcripts:
+        tr = json.load(open(L(path)))
+        err = n = hit = tot = 0
+        for c in meta["clips"]:
+            ref = words(open(L(c["ref"])).read())
+            hyp = words(" ".join(s["text"] for s in tr if c["start"] <= (s["start"] + s["end"]) / 2 < c["end"]))
+            e, ok = align(ref, hyp)
+            target = screen_words(screens, c["start"], c["end"])
+            idx = [i for i, w in enumerate(ref) if w in target]
+            err, n, hit, tot = err + e, n + len(ref), hit + sum(i in ok for i in idx), tot + len(idx)
+        print(f"{path:28s} {n:9d} {err / max(n, 1):7.1%} {hit:>9d}/{tot} = {hit / max(tot, 1):.0%}")
