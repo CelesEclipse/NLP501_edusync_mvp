@@ -116,3 +116,4 @@ if __name__ == "__main__":
     out_path = L(a.out)
     json.dump(aligned, open(out_path, "w"), ensure_ascii=False, indent=2)
     print(f"[exercise_align] Successfully aligned {len(aligned)}/{len(exercises)} questions to speech -> {out_path}")
+

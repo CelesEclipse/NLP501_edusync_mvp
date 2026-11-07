@@ -48,3 +48,4 @@ def test_match_speakers_to_transcript():
     assert updated[0]["speaker"] == "T"
     assert updated[1]["speaker"] == "S1"
     assert updated[2]["speaker"] == "T"
+

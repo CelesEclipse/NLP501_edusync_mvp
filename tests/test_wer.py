@@ -39,3 +39,4 @@ def test_wer_insertion():
 def test_words_normalizes_case_and_punctuation():
     w = words("Hello, World! This is TOEIC...")
     assert w == ["hello", "world", "this", "is", "toeic"]
+

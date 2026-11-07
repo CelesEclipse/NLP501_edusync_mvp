@@ -7,10 +7,17 @@ private/
 # demo/ is filled from a lesson by demo/prepare.py
 demo/lecture.*
 demo/slides/
+demo/screens/
+demo/screens
 demo/alignment.json
 demo/slides.json
 demo/transcript.json
 demo/links.json
+demo/exercises.json
+demo/exercise_alignment.json
+demo/screens.json
+demo/speakers.json
+demo/lesson.json
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/

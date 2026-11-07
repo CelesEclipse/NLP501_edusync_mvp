@@ -43,3 +43,4 @@ def test_screen_hints_lines_cleans_options():
     assert "(B)" not in hints
     assert "Question" in hints
     assert "application" in hints
+

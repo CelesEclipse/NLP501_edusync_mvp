@@ -21,3 +21,4 @@ def test_text_lang_mixed():
     # "Chúng ta học present perfect tense."
     res = text_lang("Học sinh chọn past continuous.")
     assert res in ["vi", "mixed"]
+

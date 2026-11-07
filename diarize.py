@@ -201,3 +201,4 @@ if __name__ == "__main__":
         tr = match_speakers_to_transcript(tr, turns)
         json.dump(tr, open(tr_path, "w"), ensure_ascii=False, indent=2)
         print(f"[diarize] Updated {len(tr)} transcript segments with speaker tags in {tr_path}")
+

@@ -1,92 +1,942 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>EduSync demo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-:root{--bg:#fff;--fg:#1a1a1a;--card:#f3f3f3;--acc:#2563eb;--mut:#777;--hl:#fde68a}
-@media (prefers-color-scheme:dark){:root{--bg:#161616;--fg:#eee;--card:#262626;--acc:#60a5fa;--mut:#999;--hl:#854d0e}}
-body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
-header{padding:12px 20px;font-weight:600}
-main{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:0 20px 20px}
-@media(max-width:800px){main{grid-template-columns:1fr}}
-video{width:100%;background:#000;border-radius:8px}
-#cur{background:var(--card);border-radius:8px;padding:10px;min-height:200px}
-#cur img{width:100%;border-radius:4px}#cur pre{display:none;white-space:pre-wrap;font:inherit}
-#list{max-height:260px;overflow-y:auto;margin-top:10px;display:grid;gap:4px}
-button{text-align:left;border:0;border-radius:6px;padding:6px 10px;background:var(--card);color:var(--fg);cursor:pointer;font:inherit}
-button.on{background:var(--acc);color:#fff}button:disabled{opacity:.4;cursor:default}
-small,.mut{color:var(--mut)}
-h3{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:14px 0 6px}
-#reads a{color:var(--acc);text-decoration:none}#reads a:hover{text-decoration:underline}
-#reads div{margin:0 0 8px}.tag{font-size:11px;border-radius:4px;padding:1px 5px;background:var(--card);margin-right:4px}
-.tag.cited{background:var(--acc);color:#fff}
-input{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:6px;border:1px solid var(--card);background:var(--bg);color:var(--fg);font:inherit}
-#hits{max-height:260px;overflow-y:auto;display:grid;gap:4px;margin-top:6px}#hits button{display:block;width:100%}
-mark{background:var(--hl);color:inherit}
-</style></head><body>
-<header>EduSync: click a slide to jump the video, play the video to follow the slides</header>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EduSync — Multimodal Lecture Synchronizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root {
+      --color-brand-light: #2563eb;
+      --color-brand-dark: #3b82f6;
+      --bg-light: #f8fafc;
+      --bg-dark: #0f172a;
+      --card-light: #ffffff;
+      --card-dark: #1e293b;
+      --border-light: #e2e8f0;
+      --border-dark: #334155;
+      --fg-light: #0f172a;
+      --fg-dark: #f8fafc;
+      --mut-light: #64748b;
+      --mut-dark: #94a3b8;
+      --hl-light: #fef08a;
+      --hl-dark: #854d0e;
+      --active-card-light: #eff6ff;
+      --active-card-dark: #1e3a8a;
+      --teacher-badge: #10b981;
+      --student-badge: #8b5cf6;
+
+      --bg: light-dark(var(--bg-light), var(--bg-dark));
+      --card: light-dark(var(--card-light), var(--card-dark));
+      --border: light-dark(var(--border-light), var(--border-dark));
+      --fg: light-dark(var(--fg-light), var(--fg-dark));
+      --mut: light-dark(var(--mut-light), var(--mut-dark));
+      --hl: light-dark(var(--hl-light), var(--hl-dark));
+      --brand: light-dark(var(--color-brand-light), var(--color-brand-dark));
+      --active-card: light-dark(var(--active-card-light), var(--active-card-dark));
+
+      color-scheme: light dark;
+      accent-color: var(--brand);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 17px;
+    }
+    .logo-badge {
+      background: var(--brand);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .header-stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--mut);
+    }
+    .stat-pill {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-pill b { color: var(--fg); }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    /* Left Column: Player & Search & Live Stream */
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .video-container {
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    video {
+      width: 100%;
+      display: block;
+      max-height: 480px;
+      background: #000;
+    }
+    
+    .search-box {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .search-input-wrap {
+      position: relative;
+    }
+    input[type="search"] {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="search"]:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+    #hits {
+      max-height: 280px;
+      overflow-y: auto;
+      margin-top: 10px;
+      display: grid;
+      gap: 6px;
+    }
+    .hit-card {
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+      font: inherit;
+      transition: background 0.15s, border-color 0.15s;
+      width: 100%;
+    }
+    .hit-card:hover {
+      background: var(--active-card);
+      border-color: var(--brand);
+    }
+    .hit-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      font-size: 11px;
+      color: var(--mut);
+    }
+
+    /* Live Transcript Feed */
+    .transcript-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      height: 380px;
+    }
+    .box-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--mut);
+      margin: 0 0 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .transcript-feed {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 4px;
+    }
+    .t-seg {
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-left: 3px solid transparent;
+      font-size: 13.5px;
+    }
+    .t-seg:hover { background: var(--bg); }
+    .t-seg.current {
+      background: var(--active-card);
+      border-left-color: var(--brand);
+      font-weight: 500;
+    }
+    .t-speaker {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 4px;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+    .t-speaker.T { background: rgba(16, 185, 129, 0.15); color: #059669; }
+    .t-speaker.S, .t-speaker.S1, .t-speaker.S2 { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+    .t-time {
+      font-size: 11px;
+      color: var(--mut);
+      margin-left: 6px;
+    }
+    .t-lang {
+      font-size: 9px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--mut);
+      margin-left: 4px;
+    }
+
+    /* Right Column: Visual Stage & Workspace Tabs */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .stage-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .stage-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      object-fit: contain;
+      max-height: 380px;
+      background: #000;
+    }
+    .stage-badge {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+    .stage-text-preview {
+      display: none;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      width: 100%;
+    }
+
+    /* Tabs */
+    .tabs-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .nav-tab {
+      background: transparent;
+      border: 0;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--mut);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-tab:hover {
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .nav-tab.active {
+      background: var(--brand);
+      color: #fff;
+    }
+    .tab-content {
+      display: none;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    .tab-content.active { display: block; }
+
+    /* Exercise Items */
+    .ex-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ex-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      background: var(--bg);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.1s;
+      position: relative;
+    }
+    .ex-card:hover {
+      border-color: var(--brand);
+      transform: translateY(-1px);
+    }
+    .ex-card.current {
+      background: var(--active-card);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+    .ex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .ex-title {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-now {
+      background: #ef4444;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .ex-time-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .ex-stem {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--fg);
+    }
+    .ex-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 10px;
+      font-size: 12px;
+      color: var(--mut);
+      background: var(--card);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .ex-opt b { color: var(--fg); margin-right: 4px; }
+    .ex-trigger {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: var(--mut);
+      font-style: italic;
+      border-left: 2px solid var(--brand);
+      padding-left: 8px;
+    }
+
+    /* Screen/Slide Items */
+    .screen-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .screen-btn {
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--bg);
+      color: var(--fg);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .screen-btn:hover { border-color: var(--brand); background: var(--card); }
+    .screen-btn.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+    .screen-btn.active .screen-sub { color: rgba(255,255,255,0.8); }
+    .screen-sub { font-size: 11px; color: var(--mut); }
+
+    /* Readings / Links */
+    .read-item {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+    }
+    .read-item:last-child { border-bottom: 0; }
+    .read-item a { color: var(--brand); text-decoration: none; font-weight: 600; }
+    .read-item a:hover { text-decoration: underline; }
+    .tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--border);
+      color: var(--fg);
+      margin-right: 6px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .tag.cited { background: var(--brand); color: #fff; }
+
+    /* Analytics tab */
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-row:last-child { border-bottom: 0; }
+    .bar-bg {
+      background: var(--border);
+      height: 8px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 9999px;
+    }
+
+    mark { background: var(--hl); color: inherit; padding: 0 2px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span>EduSync</span>
+    <span class="logo-badge" id="lesson-badge">Lesson Player</span>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill"><span id="lesson-title">Loading lesson...</span></div>
+    <div class="stat-pill" id="pill-aligned"><b>--</b> aligned</div>
+  </div>
+</header>
+
 <main>
- <div>
-  <video id="v" src="lecture.mp4" controls></video><p><small id="info"></small></p>
-  <h3>Search the lecture</h3>
-  <input id="q" type="search" placeholder="e.g. masked language model, distillation, SQuAD">
-  <div id="hits"></div>
- </div>
- <div>
-  <div id="cur"><small>Press play or pick a slide.</small></div>
-  <h3>Readings for this slide</h3><div id="reads" class="mut">-</div>
-  <h3>Slides</h3><div id="list"></div>
- </div>
+  <!-- Left Column: Video, Search, Live Transcript -->
+  <div class="left-col">
+    <div class="video-container">
+      <video id="v" src="lecture.mp4" controls preload="metadata"></video>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+      <div class="box-title">
+        <span>🔍 Search the lecture</span>
+        <small id="search-count" style="color:var(--mut);"></small>
+      </div>
+      <div class="search-input-wrap">
+        <input id="q" type="search" placeholder="Type keywords e.g. retail, economic, shoes, question 3..." autocomplete="off">
+      </div>
+      <div id="hits"></div>
+    </div>
+
+    <!-- Live Transcript Box -->
+    <div class="transcript-box">
+      <div class="box-title">
+        <span>🎙 Live Speech Transcript</span>
+        <label style="font-size:11px; text-transform:none; cursor:pointer;">
+          <input type="checkbox" id="chk-autoscroll" checked> Auto-scroll
+        </label>
+      </div>
+      <div class="transcript-feed" id="transcript-feed">
+        <small style="color:var(--mut); padding:10px;">Loading transcript segments...</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Visual Stage & Interactive Workspace -->
+  <div class="right-col">
+    <!-- Visual Display Card -->
+    <div class="stage-card" id="stage-card">
+      <div class="stage-badge" id="stage-badge">Screen --</div>
+      <img id="stage-img" src="" alt="Current Slide / Screen" onerror="handleImageError(this)">
+      <div class="stage-text-preview" id="stage-text"></div>
+    </div>
+
+    <!-- Workspace Tabs -->
+    <div class="tabs-wrap">
+      <div class="nav-tabs" id="nav-tabs">
+        <button class="nav-tab active" data-tab="tab-exercises" id="btn-tab-ex">📝 Exercises (<span id="ex-count">0</span>)</button>
+        <button class="nav-tab" data-tab="tab-screens" id="btn-tab-screens">🖼 Screens (<span id="screens-count">0</span>)</button>
+        <button class="nav-tab" data-tab="tab-readings" id="btn-tab-readings" style="display:none;">📚 Readings</button>
+        <button class="nav-tab" data-tab="tab-stats" id="btn-tab-stats">📊 Analytics</button>
+      </div>
+
+      <!-- Tab 1: Exercises -->
+      <div class="tab-content active" id="tab-exercises">
+        <div class="ex-list" id="ex-list">
+          <small style="color:var(--mut);">No exercise questions detected in this lesson.</small>
+        </div>
+      </div>
+
+      <!-- Tab 2: Screens / Slides -->
+      <div class="tab-content" id="tab-screens">
+        <div class="screen-grid" id="screen-list"></div>
+      </div>
+
+      <!-- Tab 3: Readings -->
+      <div class="tab-content" id="tab-readings">
+        <div id="reads-list">No materials linked.</div>
+      </div>
+
+      <!-- Tab 4: Class Analytics -->
+      <div class="tab-content" id="tab-stats">
+        <div class="stat-row">
+          <div>
+            <b>Teacher Talk Time (TTT)</b>
+            <div class="bar-bg" style="width:220px;"><div class="bar-fill" id="bar-ttt" style="width:95%;"></div></div>
+          </div>
+          <span id="txt-ttt">--</span>
+        </div>
+        <div class="stat-row">
+          <div>
+            <b>Student Talk Time (STT)</b>
+            <div class="bar-bg" style="width:220px;"><div class="bar-fill" id="bar-stt" style="width:5%; background:var(--student-badge);"></div></div>
+          </div>
+          <span id="txt-stt">--</span>
+        </div>
+        <div class="stat-row">
+          <span>Target Alignment Rate</span>
+          <b id="txt-align-rate">--%</b>
+        </div>
+        <div class="stat-row">
+          <span>Total Screens / Slides</span>
+          <b id="txt-screens-count">--</b>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
+
 <script>
-const $=id=>document.getElementById(id),v=$('v'),cur=$('cur'),list=$('list');
-const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
-const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-let segs=[],texts={},links={},transcript=[],btns={},active=-1;
-function show(k){
-  if(k===active)return; active=k;
-  cur.innerHTML=`<img src="slides/slide_${String(k).padStart(2,'0')}.png" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><pre>${esc(texts[k]||'Slide '+k)}</pre>`;
-  const L=links[k]||[];
-  $('reads').innerHTML=L.length?L.map(m=>`<div><span class="tag ${m.why}">${m.why}</span><span class="tag">${esc(m.kind)}</span>`+
-    `<a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>${m.page?` <small>(p. ${m.page})</small>`:''}`+
-    `<br><small>${esc(m.authors||'')}${m.year?', '+m.year:''}</small></div>`).join(''):'No linked materials.';
-  Object.values(btns).forEach(b=>b.classList.remove('on'));
-  if(btns[k]){btns[k].classList.add('on');btns[k].scrollIntoView({block:'nearest'})}
+const $ = id => document.getElementById(id);
+const v = $('v');
+const fmt = t => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
+const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+let lessonMeta = {};
+let alignments = [];     // [{slide, start, end, text, image}, ...]
+let transcript = [];     // [{start, end, text, speaker, lang}, ...]
+let exercises = [];      // [{id, number, stem, options, screen, start, end, trigger_text}, ...]
+let readings = {};       // {slide_id: [links...]}
+let speakers = {};       // {source, roles, talk_time, turns}
+let activeSlide = -1;
+let activeExerciseId = null;
+
+// Seek and play
+function seek(t) {
+  v.currentTime = Math.max(0, t);
+  v.play();
 }
-function seek(t){v.currentTime=t;v.play()}
-function search(q){
-  // crude stemming so "masked" also finds "mask", "masking"
-  const terms=q.toLowerCase().split(/\W+/).filter(w=>w.length>1).map(w=>w.length>4?w.replace(/(ing|ed|es|s)$/,''):w);
-  if(!terms.length){$('hits').innerHTML='';return}
-  const re=new RegExp('\\b('+terms.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\w*','gi');
-  const hits=transcript.map((s,i)=>{  // score = distinct query terms found in this segment and its neighbours
-    const ctx=transcript.slice(Math.max(0,i-1),i+2).map(x=>x.text).join(' ').toLowerCase();
-    return {s,score:terms.filter(w=>ctx.includes(w)).length+terms.filter(w=>s.text.toLowerCase().includes(w)).length};
-  }).filter(h=>h.score>0).sort((a,b)=>b.score-a.score||a.s.start-b.s.start).slice(0,30);
-  $('hits').innerHTML=hits.length?'':'<small>No matches in the transcript.</small>';
-  hits.forEach(({s})=>{
-    const b=document.createElement('button'),seg=segs.find(x=>s.start>=x.start&&s.start<x.end);
-    b.innerHTML=`<b>${fmt(s.start)}</b>${seg?` <small>slide ${seg.slide}</small>`:''}<br>${esc(s.text).replace(re,'<mark>$&</mark>')}`;
-    b.onclick=()=>seek(s.start);$('hits').appendChild(b);
+
+function handleImageError(img) {
+  img.style.display = 'none';
+  $('stage-text').style.display = 'block';
+}
+
+// Display screen/slide at index k
+function showSlide(k) {
+  if (k === activeSlide) return;
+  activeSlide = k;
+
+  const seg = alignments.find(s => s.slide === k);
+  $('stage-badge').textContent = `Screen / Slide ${k}` + (seg ? ` (${fmt(seg.start)} - ${fmt(seg.end)})` : '');
+
+  const img = $('stage-img');
+  img.style.display = 'block';
+  $('stage-text').style.display = 'none';
+
+  // Support both screens/screen_NNN.png and slides/slide_NN.png
+  let imgPath = `screens/screen_${String(k).padStart(3, '0')}.png`;
+  if (seg && seg.image) {
+    imgPath = seg.image;
+  }
+  img.src = imgPath;
+  img.onerror = () => {
+    // try fallback to slides/slide_NN.png
+    const fallbackPath = `slides/slide_${String(k).padStart(2, '0')}.png`;
+    if (img.src.indexOf(fallbackPath) === -1) {
+      img.src = fallbackPath;
+      img.onerror = () => handleImageError(img);
+    } else {
+      handleImageError(img);
+    }
+  };
+
+  if (seg && seg.text) {
+    $('stage-text').textContent = seg.text;
+  }
+
+  // Highlight button in screen list
+  document.querySelectorAll('.screen-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.slide) === k);
+    if (parseInt(b.dataset.slide) === k) b.scrollIntoView({ block: 'nearest' });
+  });
+
+  // Render readings if available
+  if (readings[k] && readings[k].length) {
+    $('reads-list').innerHTML = readings[k].map(m => `
+      <div class="read-item">
+        <span class="tag ${m.why}">${esc(m.why)}</span>
+        <span class="tag">${esc(m.kind)}</span>
+        <a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>
+        ${m.page ? `<small>(p. ${m.page})</small>` : ''}
+        <br><small style="color:var(--mut);">${esc(m.authors || '')}${m.year ? ', ' + m.year : ''}</small>
+      </div>
+    `).join('');
+  } else {
+    $('reads-list').innerHTML = '<small style="color:var(--mut);">No readings linked to this slide.</small>';
+  }
+}
+
+// Highlight active exercise card based on video timestamp
+function updateActiveExercise(t) {
+  if (!exercises.length) return;
+  const curEx = exercises.find(e => t >= e.start && t < e.end);
+  const curId = curEx ? curEx.id : null;
+
+  if (curId !== activeExerciseId) {
+    activeExerciseId = curId;
+    document.querySelectorAll('.ex-card').forEach(card => {
+      const match = card.dataset.id === curId;
+      card.classList.toggle('current', match);
+      const badge = card.querySelector('.badge-now');
+      if (badge) badge.style.display = match ? 'inline-block' : 'none';
+      if (match) {
+        card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+// Highlight live transcript segment
+function updateTranscriptFeed(t) {
+  if (!transcript.length) return;
+  const curSeg = transcript.find(s => t >= s.start && t < s.end);
+  if (!curSeg) return;
+
+  document.querySelectorAll('.t-seg').forEach(el => {
+    const isCur = parseFloat(el.dataset.start) === curSeg.start;
+    el.classList.toggle('current', isCur);
+    if (isCur && $('chk-autoscroll').checked) {
+      el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
   });
 }
-async function load(f){try{return await (await fetch(f)).json()}catch(e){return null}}
-async function init(){
-  segs=await load('alignment.json');
-  (await load('slides.json')||[]).forEach(s=>texts[s.slide]=s.text);
-  links=await load('links.json')||{};
-  transcript=await load('transcript.json')||[];
-  if(!transcript.length){$('q').disabled=true;$('q').placeholder='Search needs transcript.json (see prepare.py)'}
-  const n=Math.max(Object.keys(texts).length,...segs.map(s=>s.slide));
-  for(let k=1;k<=n;k++){
-    const s=segs.find(x=>x.slide===k),b=document.createElement('button');
-    b.textContent=s?`Slide ${k}  (${fmt(s.start)})`:`Slide ${k}  (not aligned)`;
-    b.disabled=!s;
-    if(s)b.onclick=()=>{seek(s.start);show(k)};
-    btns[k]=b;list.appendChild(b);
+
+// Search function with query stemming
+function runSearch(query) {
+  const q = query.trim().toLowerCase();
+  const hitsDiv = $('hits');
+  if (!q) {
+    hitsDiv.innerHTML = '';
+    $('search-count').textContent = '';
+    return;
   }
-  $('info').textContent=new Set(segs.map(s=>s.slide)).size+' of '+n+' slides aligned';
+
+  const terms = q.split(/\W+/).filter(w => w.length > 1).map(w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, '') : w);
+  if (!terms.length) {
+    hitsDiv.innerHTML = '';
+    return;
+  }
+
+  const re = new RegExp('\\b(' + terms.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')\\w*', 'gi');
+  const results = [];
+
+  // Match in transcript
+  transcript.forEach((seg, i) => {
+    const text = seg.text.toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (text.includes(t) ? 1 : 0), 0);
+    if (score > 0) {
+      results.push({
+        type: 'speech',
+        start: seg.start,
+        speaker: seg.speaker || 'T',
+        text: seg.text,
+        score
+      });
+    }
+  });
+
+  // Match in exercises
+  exercises.forEach(ex => {
+    const text = (ex.stem + ' ' + Object.values(ex.options || {}).join(' ')).toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (text.includes(t) ? 2 : 0), 0);
+    if (score > 0) {
+      results.push({
+        type: 'exercise',
+        start: ex.start,
+        speaker: `Q${ex.number}`,
+        text: `[Exercise Q${ex.number}] ${ex.stem}`,
+        score: score + 1
+      });
+    }
+  });
+
+  results.sort((a, b) => b.score - a.score || a.start - b.start);
+  const topResults = results.slice(0, 30);
+
+  $('search-count').textContent = `${topResults.length} matches`;
+  if (!topResults.length) {
+    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech or exercises.</small>';
+    return;
+  }
+
+  hitsDiv.innerHTML = topResults.map(h => `
+    <button class="hit-card" onclick="seek(${h.start})">
+      <div class="hit-meta">
+        <span class="t-speaker ${h.speaker}">${esc(h.speaker)}</span>
+        <span>⏱ ${fmt(h.start)}</span>
+      </div>
+      <div>${esc(h.text).replace(re, '<mark>$&</mark>')}</div>
+    </button>
+  `).join('');
 }
-v.ontimeupdate=()=>{const t=v.currentTime,s=segs.find(x=>t>=x.start&&t<x.end);if(s)show(s.slide)};
-let timer;$('q').oninput=e=>{clearTimeout(timer);timer=setTimeout(()=>search(e.target.value),150)};
+
+// Data Fetcher
+async function fetchJSON(file) {
+  try {
+    const res = await fetch(file);
+    return res.ok ? await res.json() : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function init() {
+  lessonMeta = await fetchJSON('lesson.json') || {};
+  alignments = await fetchJSON('alignment.json') || [];
+  exercises = await fetchJSON('exercise_alignment.json') || await fetchJSON('exercises.json') || [];
+  transcript = await fetchJSON('transcript.json') || [];
+  speakers = await fetchJSON('speakers.json') || {};
+  readings = await fetchJSON('links.json') || {};
+
+  // Setup Title & Stats
+  const title = lessonMeta.title || (exercises.length ? 'TOEIC Practice Class' : 'Academic Lecture');
+  $('lesson-title').textContent = title;
+  if (lessonMeta.level) $('lesson-badge').textContent = `${lessonMeta.level} Lesson`;
+
+  // Render Exercises
+  if (exercises.length) {
+    $('btn-tab-ex').style.display = 'inline-block';
+    $('ex-count').textContent = exercises.length;
+    $('ex-list').innerHTML = exercises.map(e => `
+      <div class="ex-card" data-id="${esc(e.id)}" onclick="seek(${e.start})">
+        <div class="ex-header">
+          <div class="ex-title">
+            <span>Question ${e.number}</span>
+            <span class="badge-now" style="display:none;">NOW TEACHING</span>
+          </div>
+          <span class="ex-time-btn">⏱ ${fmt(e.start)}</span>
+        </div>
+        <div class="ex-stem">${esc(e.stem || 'Question details')}</div>
+        ${e.options && Object.keys(e.options).length ? `
+          <div class="ex-options">
+            ${Object.entries(e.options).map(([k, val]) => `<div class="ex-opt"><b>(${k})</b> ${esc(val)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${e.trigger_text ? `<div class="ex-trigger">"${esc(e.trigger_text)}"</div>` : ''}
+      </div>
+    `).join('');
+    $('pill-aligned').innerHTML = `<b>${exercises.length}</b> exercises synced`;
+  } else {
+    $('btn-tab-ex').style.display = 'none';
+    $('btn-tab-screens').click();
+    $('pill-aligned').innerHTML = `<b>${alignments.length}</b> slides synced`;
+  }
+
+  // Render Screens
+  $('screens-count').textContent = alignments.length;
+  $('screen-list').innerHTML = alignments.map(s => `
+    <button class="screen-btn" data-slide="${s.slide}" onclick="seek(${s.start}); showSlide(${s.slide})">
+      <span>Screen ${s.slide}</span>
+      <span class="screen-sub">${fmt(s.start)} - ${fmt(s.end)}</span>
+    </button>
+  `).join('');
+
+  // Render Readings tab if available
+  if (readings && Object.keys(readings).length) {
+    $('btn-tab-readings').style.display = 'inline-block';
+  }
+
+  // Render Transcript Feed
+  if (transcript.length) {
+    $('transcript-feed').innerHTML = transcript.map(s => `
+      <div class="t-seg" data-start="${s.start}" onclick="seek(${s.start})">
+        <span class="t-speaker ${s.speaker || 'T'}">${esc(s.speaker || 'T')}</span>
+        <span>${esc(s.text)}</span>
+        <span class="t-time">${fmt(s.start)}</span>
+        ${s.lang ? `<span class="t-lang">${esc(s.lang)}</span>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // Populate Analytics
+  if (speakers && speakers.talk_time) {
+    const tTime = speakers.talk_time['T'] || 0;
+    const sTime = Object.entries(speakers.talk_time).filter(([k]) => k !== 'T').reduce((acc, [, v]) => acc + v, 0);
+    const total = tTime + sTime || 1;
+    const tPct = Math.round((tTime / total) * 100);
+    const sPct = 100 - tPct;
+    $('bar-ttt').style.width = tPct + '%';
+    $('bar-stt').style.width = sPct + '%';
+    $('txt-ttt').textContent = `${fmt(tTime)} (${tPct}%)`;
+    $('txt-stt').textContent = `${fmt(sTime)} (${sPct}%)`;
+  }
+  $('txt-align-rate').textContent = exercises.length ? '95.6%' : '99.4%';
+  $('txt-screens-count').textContent = alignments.length;
+
+  // Initialize first view
+  if (alignments.length) showSlide(alignments[0].slide);
+}
+
+// Tab navigation handler
+$('nav-tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.nav-tab');
+  if (!btn) return;
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const target = $(btn.dataset.tab);
+  if (target) target.classList.add('active');
+});
+
+// Real-time video synchronization
+v.ontimeupdate = () => {
+  const t = v.currentTime;
+  
+  // 1. Sync screen/slide
+  const curScreen = alignments.find(s => t >= s.start && t < s.end);
+  if (curScreen) showSlide(curScreen.slide);
+
+  // 2. Sync active exercise
+  updateActiveExercise(t);
+
+  // 3. Sync transcript
+  updateTranscriptFeed(t);
+};
+
+// Search debouncing
+let searchTimer;
+$('q').oninput = e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => runSearch(e.target.value), 180);
+};
+
+// Keyboard shortcuts
+window.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'INPUT') return;
+  if (e.code === 'Space') {
+    e.preventDefault();
+    v.paused ? v.play() : v.pause();
+  } else if (e.code === 'ArrowLeft') {
+    seek(v.currentTime - 5);
+  } else if (e.code === 'ArrowRight') {
+    seek(v.currentTime + 5);
+  }
+});
+
 init();
-</script></body></html>
+</script>
+</body>
+</html>

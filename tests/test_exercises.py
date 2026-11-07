@@ -56,3 +56,4 @@ def test_align_exercises_monotonic():
     assert aligned[0]["start"] == 10.0
     assert aligned[1]["number"] == 2
     assert aligned[1]["start"] == 25.0
+
