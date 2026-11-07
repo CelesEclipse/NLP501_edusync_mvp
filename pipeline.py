@@ -1,18 +1,22 @@
 """Run the EduSync steps for one lesson folder, skipping steps whose outputs already exist.
 Usage: python pipeline.py lessons/<id> [--force align links | --force all] [--dry-run]
-A lesson folder holds the inputs (video.mp4, slides.pdf) and every step's output under a fixed name.
-When gold/labels.json exists, the final alignment is scored against it at the end."""
+A lesson folder holds the inputs and every step's output under a fixed name. With slides.pdf the lesson is
+aligned to its slides (when gold/labels.json exists, the alignment is scored at the end); without one,
+the screens are extracted from the video and combined with the transcript into content.md."""
 import argparse, os, subprocess, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-# name, inputs, outputs, script + arguments (paths inside the lesson)
+AUDIO = ("audio.m4a", "video.mp4")  # either one will do
+# name, inputs, outputs, script + arguments (paths inside the lesson), when: "pdf" | "no-pdf" | "any"
 STEPS = [
-    ("slides", ["slides.pdf"], ["slides.json"], ["parse_slides.py"]),
-    ("visual", ["video.mp4", "slides.pdf"], ["visual.npz"], ["visual.py"]),
-    ("transcribe", ["video.mp4"], ["transcript.json"], ["transcribe.py"]),
+    ("slides", ["slides.pdf"], ["slides.json"], ["parse_slides.py"], "pdf"),
+    ("visual", ["video.mp4", "slides.pdf"], ["visual.npz"], ["visual.py"], "pdf"),
+    ("screens", ["video.mp4"], ["screens.json"], ["extract_screens.py"], "no-pdf"),
+    ("transcribe", [AUDIO], ["transcript.json"], ["transcribe.py"], "any"),
     ("align", ["transcript.json", "slides.json", "visual.npz"], ["alignment.json"],
-     ["align.py", "--method", "bge-base", "--visual", "visual.npz"]),
-    ("links", ["slides.json", "transcript.json", "alignment.json"], ["links.json"], ["link_materials.py"]),
+     ["align.py", "--method", "bge-base", "--visual", "visual.npz"], "pdf"),
+    ("links", ["slides.json", "transcript.json", "alignment.json"], ["links.json"], ["link_materials.py"], "pdf"),
+    ("content", ["screens.json", "transcript.json"], ["content.md"], ["lesson_content.py"], "no-pdf"),
 ]
 
 ap = argparse.ArgumentParser()
@@ -23,7 +27,8 @@ ap.add_argument("--dry-run", action="store_true", help="only print what would ru
 a = ap.parse_args()
 if not os.path.isdir(a.lesson):
     sys.exit(f"no lesson folder {a.lesson}")
-has = lambda f: os.path.exists(os.path.join(a.lesson, f))
+has = lambda f: any(map(has, f)) if isinstance(f, tuple) else os.path.exists(os.path.join(a.lesson, f))
+profile = "pdf" if has("slides.pdf") else "no-pdf"
 
 
 def run(script, *args):
@@ -32,12 +37,17 @@ def run(script, *args):
         sys.exit(f"step failed: {' '.join(cmd)}")
 
 
-for name, inputs, outputs, cmd in STEPS:
+planned = set()  # outputs of the steps run in this pass, so later steps may rely on them
+ready = lambda f: has(f) or (any(x in planned for x in f) if isinstance(f, tuple) else f in planned)
+for name, inputs, outputs, cmd, when in STEPS:
+    if when not in ("any", profile):
+        continue
     forced = name in a.force or "all" in a.force
     if all(map(has, outputs)) and not forced:
         print(f"[{name}] skip, have {', '.join(outputs)}", flush=True)
         continue
-    missing = [f for f in inputs if not has(f)]
+    planned.update(outputs)
+    missing = [" or ".join(f) if isinstance(f, tuple) else f for f in inputs if not ready(f)]
     if missing:
         sys.exit(f"[{name}] missing {', '.join(missing)} in {a.lesson} "
                  f"(videos are not in git; see README)")

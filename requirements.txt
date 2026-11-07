@@ -8,3 +8,4 @@ matplotlib
 opencv-python-headless
 yt-dlp
 rangehttpserver
+ocrmac  # macOS only: OCR for extract_screens.py

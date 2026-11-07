@@ -2,6 +2,26 @@
 
 Thời gian: tuần 0–1 (khoảng 8 ngày làm việc). Thuộc lộ trình [esl_roadmap.md](esl_roadmap.md): hạ tầng + WP1.
 
+## Cập nhật 07/11/2026: dữ liệu bài học tiếng Anh và trích xuất nội dung
+
+- **Nguồn dữ liệu:** 3 buổi TOEIC Starter (Unit 1, 4, 5) của kênh ECE English Online, giấy phép CC BY, giảng bằng
+  tiếng Việt, đề bài trên màn hình (`lessons/ece-toeic-starter-u1|u4|u5/`, tổng khoảng 3 giờ). Không có slide PDF
+  gốc; buổi đóng vai vẫn cần cho dữ liệu có đáp án chuẩn.
+- **Đã làm** (chưa làm tua video theo slide, theo yêu cầu):
+  - `fetch_lesson.py`: tải video + âm thanh tách riêng (không cần ffmpeg), chỉ nhận video CC, ghi `lesson.json` có
+    ghi nguồn và cấu hình ASR.
+  - `extract_screens.py`: tách màn hình (đề bài, slide) từ video, giữ ảnh cuối (có phần giáo viên tô đáp án),
+    OCR tiếng Việt + Anh bằng Apple Vision, lọc logo, đánh dấu màn hình lặp theo chữ.
+  - `transcribe.py`: đọc model/prompt/chế độ nhiều ngôn ngữ từ `lesson.json`; gán `lang` (vi/en/mixed) theo chữ.
+  - `lesson_content.py`: `content.md` cho mỗi buổi (màn hình + chữ OCR + lời giảng theo đoạn văn).
+  - `pipeline.py`: buổi không có `slides.pdf` chạy `screens → transcribe → content`.
+- **Kết quả:** 46 / 32 / 32 màn hình, 1690 / 2606 / 1201 đoạn lời giảng (khoảng 74% đoạn tiếng Việt, 26% tiếng Anh, dưới 1% lẫn cả hai).
+- **Chọn model ASR (thử 2 phút Unit 4):** `small` sai nhiều từ tiếng Việt ("đáp án" → "đã bán", "tiếng ồn" →
+  "tiếng hồn"); `large-v3-turbo` đúng hơn rõ với tốc độ tương đương (35 s so với 28 s cho 120 s âm thanh), nên
+  dùng cho bài tiếng Anh. Còn lỗi ở câu tiếng Anh đọc nhanh ("his shoes" → "his sue", "shined" → "signed") và
+  từ chen ("Verb thêm ED" → "Vớp thêm ED"): đây là mục tiêu của T3 (hotwords từ chữ OCR của màn hình đang chiếu).
+- **Nội dung trích xuất không đưa lên git** (repo công khai, đề bài lấy từ sách của nhà xuất bản).
+
 ## Mục tiêu
 
 1. Pipeline chạy theo từng buổi học (`lessons/<id>/`) thay cho các file cố định ở thư mục gốc.

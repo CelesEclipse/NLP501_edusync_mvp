@@ -16,3 +16,10 @@ materials/*.pdf
 .venv/
 __pycache__/
 .DS_Store
+# screen images extracted from videos, and raw YouTube metadata
+lessons/*/screens/
+lessons/*/.source.json
+# content extracted from third-party lesson videos (the repo is public): keep local until the team decides
+lessons/ece-*/screens.json
+lessons/ece-*/transcript.json
+lessons/ece-*/content.*

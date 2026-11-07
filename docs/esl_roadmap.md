@@ -64,6 +64,8 @@ chỉ còn tỉ lệ nói.
 
 ## Dữ liệu
 
+- **Đang dùng (07/11/2026):** 3 buổi TOEIC Starter (Unit 1, 4, 5) của ECE English Online, CC BY, giảng bằng tiếng
+  Việt; nội dung màn hình được trích lại từ video vì không có slide gốc (xem [phase1_plan.md](phase1_plan.md)).
 - 3–5 buổi học 45–90 phút. Làm ngay một **buổi đóng vai** của nhóm (không vướng quyền riêng tư), song song xin
   buổi học thật có phiếu đồng ý của giáo viên và học viên.
 - Khi ghi: chia sẻ màn hình với slide toàn khung hình, bật lưu chat, bật âm thanh riêng từng người nếu Zoom cho

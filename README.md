@@ -22,14 +22,20 @@ yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" -o lessons/cs224n-bert/video.mp4
 
 ```
 lessons/<id>/            one folder per lesson
-  lesson.json            title, source, languages, input files
-  video.mp4  slides.pdf  inputs (videos and audio are never committed)
-  slides.json  visual.npz  transcript.json  alignment.json  links.json    step outputs
+  lesson.json            title, source, licence/attribution, languages, ASR settings
+  video.mp4  audio.m4a  slides.pdf    inputs (video and audio are never committed)
+  slides.json  visual.npz  transcript.json  alignment.json  links.json    outputs, lessons with a slides PDF
+  screens/  screens.json  transcript.json  content.md                     outputs, lessons without one
   gold/                  hand labels (labels.json) and silver labels
   results/               experiment outputs behind the report tables
 materials/               shared reading library (catalog.json; downloaded PDFs are not committed)
 demo/                    web demo, filled from one lesson by demo/prepare.py
 ```
+
+Lessons: `cs224n-bert` (English lecture with its slides PDF, the alignment benchmark) and
+`ece-toeic-starter-u1/u4/u5` (TOEIC Starter lessons taught in Vietnamese by ECE English Online, CC BY; no
+slides PDF, so their content is extracted from the screen). Content extracted from these videos stays local
+(see `.gitignore`), because it includes exercises from the textbook shown on screen.
 
 ## Pipeline
 
@@ -38,10 +44,21 @@ python pipeline.py lessons/cs224n-bert                       # runs only the ste
 python pipeline.py lessons/cs224n-bert --force align links   # rerun chosen steps (or --force all)
 ```
 
-Steps: `slides` (parse_slides.py) → `visual` (visual.py, ~1 min) → `transcribe` (transcribe.py, ~9 min on CPU)
-→ `align` (align.py, video + transcript) → `links` (link_materials.py); then the alignment is scored against
-`gold/labels.json` when the lesson has one. Every script also runs on its own with `--lesson <folder>`; its file
-paths are then relative to that folder.
+Steps for a lesson **with** `slides.pdf`: `slides` (parse_slides.py) → `visual` (visual.py, ~1 min) →
+`transcribe` (transcribe.py, ~9 min on CPU with `small`) → `align` (align.py, video + transcript) → `links`
+(link_materials.py); then the alignment is scored against `gold/labels.json` when the lesson has one.
+Steps for a lesson **without** one: `screens` (extract_screens.py: one image per screen + OCR, ~1–2 min) →
+`transcribe` (Whisper model and prompt from `lesson.json`; `large-v3-turbo` takes ~1 min of CPU per minute of
+audio) → `content` (lesson_content.py: `content.md`, each screen with its text and what the teacher said).
+Every script also runs on its own with `--lesson <folder>`; its file paths are then relative to that folder.
+
+Adding a YouTube lesson (only Creative Commons videos are downloaded unless you pass `--allow-standard`):
+
+```bash
+python fetch_lesson.py thu4-KGapkA lessons/ece-toeic-starter-u1 --language vi --multilingual \
+    --prompt "Luyện thi TOEIC Starter. Thầy giảng bằng tiếng Việt và đọc câu tiếng Anh: Part 5, Part 6, ..."
+python pipeline.py lessons/ece-toeic-starter-u1
+```
 
 Compare variants by writing them to `results/` and passing them all to `evaluate.py`:
 
@@ -71,7 +88,10 @@ slide (with page numbers for downloaded PDFs), and search the transcript to jump
 | File | Purpose |
 |---|---|
 | `pipeline.py` | run the steps for one lesson, skipping those whose outputs exist |
-| `transcribe.py` | faster-whisper speech-to-text with timestamps |
+| `fetch_lesson.py` | download a Creative Commons YouTube lesson (video + audio) and write its `lesson.json` |
+| `extract_screens.py` | split a screen recording into screens (new page/slide), keep each one's last image, OCR it (vi + en) |
+| `lesson_content.py` | `content.md` / `content.json`: every screen with its OCR text and the teacher's speech |
+| `transcribe.py` | faster-whisper speech-to-text with timestamps; tags each segment vi / en / mixed |
 | `parse_slides.py` | extract text per slide with PyMuPDF |
 | `visual.py` | sample a frame every 2 s, normalized cross-correlation against every rendered slide |
 | `align.py` | windowing, similarity (TF-IDF / bge), normalization, optional fusion with video scores, order-constrained DP |

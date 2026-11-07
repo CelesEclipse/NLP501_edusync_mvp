@@ -1,0 +1,24 @@
+{
+ "id": "ece-toeic-starter-u1",
+ "title": "Luyện thi toeic - Starter - unit 1",
+ "source": "https://www.youtube.com/watch?v=thu4-KGapkA",
+ "channel": "ECE English Online",
+ "channel_url": "https://www.youtube.com/channel/UC-WlJJvz-SvAAZdnnbA9y7Q",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Luyện thi toeic - Starter - unit 1\" by ECE English Online (https://www.youtube.com/watch?v=thu4-KGapkA), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20140517",
+ "duration": 3916,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Luyện thi TOEIC Starter. Thầy giảng bằng tiếng Việt và đọc câu tiếng Anh: Part 5, Part 6, Incomplete Sentences, Reading Comprehension, noun, verb, adjective, participle."
+ }
+}
