@@ -91,7 +91,10 @@ slide (with page numbers for downloaded PDFs), and search the transcript to jump
 | `fetch_lesson.py` | download a Creative Commons YouTube lesson (video + audio) and write its `lesson.json` |
 | `extract_screens.py` | split a screen recording into screens (new page/slide), keep each one's last image, OCR it (vi + en) |
 | `lesson_content.py` | `content.md` / `content.json`: every screen with its OCR text and the teacher's speech |
-| `transcribe.py` | faster-whisper speech-to-text with timestamps; tags each segment vi / en / mixed |
+| `transcribe.py` | faster-whisper speech-to-text with timestamps; tags each segment vi / en / mixed; `--screen-hints` feeds the English OCR text of the screen on view to Whisper |
+| `eval/asr_clips.py` | cut 2-min audio clips with a draft transcript, for the team to correct by ear (reference for WER) |
+| `eval/wer.py` | WER against the corrected clips, and accuracy on the English words shown on screen |
+| `eval/asr_screen_terms.py` | proxy without references: share of on-screen English words found in the speech of that screen |
 | `parse_slides.py` | extract text per slide with PyMuPDF |
 | `visual.py` | sample a frame every 2 s, normalized cross-correlation against every rendered slide |
 | `align.py` | windowing, similarity (TF-IDF / bge), normalization, optional fusion with video scores, order-constrained DP |
