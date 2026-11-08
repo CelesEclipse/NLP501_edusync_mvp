@@ -23,9 +23,13 @@ demo/vocab_audio
 demo/vocab_audio/
 demo/chat.json
 demo/chat_feedback.json
+demo/grammar_points.json
+demo/vocab_deep.json
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/
+.env
+.env.*
 __pycache__/
 .DS_Store
 # screen images extracted from videos, audio slices, and raw YouTube metadata

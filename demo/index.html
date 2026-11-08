@@ -782,6 +782,117 @@
       font-style: italic;
     }
 
+    /* Grammar Points Tab */
+    .grammar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .grammar-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.15s;
+      border-left: 4px solid var(--brand);
+      cursor: pointer;
+    }
+    .grammar-card:hover {
+      background: var(--card);
+      border-color: var(--brand);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .gp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gp-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gp-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--brand);
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .gp-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--fg);
+    }
+    .gp-formula {
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #6d28d9;
+      font-weight: 600;
+    }
+    .gp-exp {
+      font-size: 12.5px;
+      color: var(--fg);
+      line-height: 1.45;
+    }
+    .gp-examples-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 12px;
+    }
+    .gp-section-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mut);
+    }
+    .gp-example-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .gp-ex-en {
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .gp-ex-vi {
+      color: var(--mut);
+      font-style: italic;
+      font-size: 11px;
+    }
+    .gp-tip-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11.5px;
+      color: #065f46;
+      line-height: 1.4;
+      display: flex;
+      gap: 6px;
+    }
+    .gp-tip-icon {
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
     /* Readings / Links */
     .read-item {
       border-bottom: 1px solid var(--border);
@@ -885,6 +996,7 @@
     <div class="tabs-wrap">
       <div class="nav-tabs" id="nav-tabs">
         <button class="nav-tab active" data-tab="tab-exercises" id="btn-tab-ex">📝 Exercises (<span id="ex-count">0</span>)</button>
+        <button class="nav-tab" data-tab="tab-grammar" id="btn-tab-grammar">📖 Grammar (<span id="grammar-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-vocab" id="btn-tab-vocab">📚 Vocab (<span id="vocab-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-chat" id="btn-tab-chat">💬 Chat & GEC (<span id="chat-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-screens" id="btn-tab-screens">🖼 Screens (<span id="screens-count">0</span>)</button>
@@ -896,6 +1008,13 @@
       <div class="tab-content active" id="tab-exercises">
         <div class="ex-list" id="ex-list">
           <small style="color:var(--mut);">No exercise questions detected in this lesson.</small>
+        </div>
+      </div>
+
+      <!-- Tab Grammar (Neural IE) -->
+      <div class="tab-content" id="tab-grammar">
+        <div class="grammar-list" id="grammar-list">
+          <small style="color:var(--mut);">Loading grammar points...</small>
         </div>
       </div>
 
@@ -980,6 +1099,8 @@ let transcript = [];     // [{start, end, text, speaker, lang}, ...]
 let exercises = [];      // [{id, number, stem, options, screen, start, end, trigger_text}, ...]
 let vocab = [];          // [{id, word, lemma, level, pos, meaning_vi, score, occurrences, timestamp, audio}, ...]
 let chat = [];           // [{chat_id, timestamp, time_str, speaker_id, speaker_name, original_message, has_error, ...}, ...]
+let grammarPoints = [];  // [{id, title, formula, explanation_vi, examples, timestamp, toeic_tips}, ...]
+let vocabDeep = [];      // [{word, pos, level, meaning_vi, collocations, example, timestamp}, ...]
 let readings = {};       // {slide_id: [links...]}
 let speakers = {};       // {source, roles, talk_time, turns}
 let activeSlide = -1;
@@ -1181,12 +1302,27 @@ function runSearch(query) {
     }
   });
 
+  // Match in grammar points (Neural IE)
+  grammarPoints.forEach(gp => {
+    const text = (gp.title + ' ' + (gp.formula || '') + ' ' + (gp.explanation_vi || '') + ' ' + (gp.toeic_tips || '')).toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (text.includes(t) ? 3 : 0), 0);
+    if (score > 0 && gp.timestamp !== null) {
+      results.push({
+        type: 'grammar',
+        start: gp.timestamp,
+        speaker: 'GRAMMAR',
+        text: `[Grammar] ${gp.title}: ${gp.formula || gp.explanation_vi.slice(0, 80)}`,
+        score: score + 3
+      });
+    }
+  });
+
   results.sort((a, b) => b.score - a.score || a.start - b.start);
   const topResults = results.slice(0, 30);
 
   $('search-count').textContent = `${topResults.length} matches`;
   if (!topResults.length) {
-    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech, exercises, vocabulary or chat.</small>';
+    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech, exercises, vocabulary, chat or grammar.</small>';
     return;
   }
 
@@ -1274,6 +1410,62 @@ function renderVocab() {
           <span>🖥️ ${esc(screensText)}</span>
           <span>${esc(speechText)}</span>
         </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Render Grammar Points (Neural IE)
+function renderGrammar() {
+  const listEl = $('grammar-list');
+  if (!grammarPoints.length) {
+    listEl.innerHTML = '<small style="color:var(--mut);">No grammar points extracted for this lesson.</small>';
+    return;
+  }
+
+  listEl.innerHTML = grammarPoints.map(gp => {
+    let examplesHtml = '';
+    if (gp.examples && gp.examples.length) {
+      examplesHtml = `
+        <div class="gp-examples-box">
+          <div class="gp-section-lbl">📝 Ví dụ trong bài giảng:</div>
+          ${gp.examples.map(ex => `
+            <div class="gp-example-item">
+              <div class="gp-ex-en">• ${esc(ex.en || ex)}</div>
+              ${ex.vi ? `<div class="gp-ex-vi">➔ ${esc(ex.vi)}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    let tipHtml = '';
+    if (gp.toeic_tips) {
+      tipHtml = `
+        <div class="gp-tip-box">
+          <span class="gp-tip-icon">💡 Mẹo thi TOEIC:</span>
+          <span>${esc(gp.toeic_tips)}</span>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="grammar-card" onclick="seek(${gp.timestamp})">
+        <div class="gp-header">
+          <div class="gp-title-wrap">
+            <span class="gp-badge">GRAMMAR FOCUS</span>
+            <span class="gp-title">${esc(gp.title)}</span>
+          </div>
+          <span class="chat-time-btn">⏱ ${esc(gp.time_str || fmt(gp.timestamp))}</span>
+        </div>
+        ${gp.formula ? `
+          <div class="gp-formula">
+            <code>${esc(gp.formula)}</code>
+          </div>
+        ` : ''}
+        <div class="gp-exp">${esc(gp.explanation_vi)}</div>
+        ${examplesHtml}
+        ${tipHtml}
       </div>
     `;
   }).join('');
@@ -1433,6 +1625,16 @@ async function init() {
     renderVocab();
   } else {
     $('btn-tab-vocab').style.display = 'none';
+  }
+
+  // Render Grammar Points (Neural IE)
+  grammarPoints = await fetchJSON('grammar_points.json') || [];
+  if (grammarPoints.length) {
+    $('btn-tab-grammar').style.display = 'inline-block';
+    $('grammar-count').textContent = grammarPoints.length;
+    renderGrammar();
+  } else {
+    $('btn-tab-grammar').style.display = 'none';
   }
 
   // Render Chat & GEC Feedback Tab
