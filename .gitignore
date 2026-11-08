@@ -21,6 +21,8 @@ demo/lesson.json
 demo/vocab.json
 demo/vocab_audio
 demo/vocab_audio/
+demo/chat.json
+demo/chat_feedback.json
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/
@@ -34,3 +36,4 @@ lessons/*/.source.json
 # experiment transcripts and labels stay local until the team decides
 lessons/ece-*/*
 !lessons/ece-*/lesson.json
+!lessons/ece-toeic-starter-u4/chat.txt

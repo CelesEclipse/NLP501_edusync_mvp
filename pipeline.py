@@ -20,6 +20,8 @@ STEPS = [
     ("exercises", ["screens.json"], ["exercises.json"], ["exercises.py"], "no-pdf"),
     ("exercise_align", ["exercises.json", "transcript.json"], ["exercise_alignment.json"], ["exercise_align.py"], "no-pdf"),
     ("vocab", ["screens.json", "transcript.json"], ["vocab.json"], ["vocab.py"], "no-pdf"),
+    ("chat", ["chat.txt"], ["chat.json"], ["chat_parser.py"], "no-pdf"),
+    ("feedback", ["chat.json"], ["chat_feedback.json"], ["feedback.py"], "no-pdf"),
     ("content", ["screens.json", "transcript.json"], ["content.md"], ["lesson_content.py"], "no-pdf"),
 ]
 
@@ -45,6 +47,8 @@ planned = set()  # outputs of the steps run in this pass, so later steps may rel
 ready = lambda f: has(f) or (any(x in planned for x in f) if isinstance(f, tuple) else f in planned)
 for name, inputs, outputs, cmd, when in STEPS:
     if when not in ("any", profile):
+        continue
+    if name in ("chat", "feedback") and not (has("chat.txt") or has("chat.json")):
         continue
     forced = name in a.force or "all" in a.force
     if all(map(has, outputs)) and not forced:

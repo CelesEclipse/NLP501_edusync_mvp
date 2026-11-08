@@ -610,11 +610,177 @@
       font-size: 11px;
       color: var(--mut);
     }
+
+    /* Chat & GEC Feedback Tab */
+    .chat-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .c-filter {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .c-filter:hover { border-color: var(--brand); }
+    .c-filter.active {
+      background: var(--brand);
       color: #fff;
       border-color: var(--brand);
     }
-    .screen-btn.active .screen-sub { color: rgba(255,255,255,0.8); }
-    .screen-sub { font-size: 11px; color: var(--mut); }
+    .chat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .chat-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: all 0.15s;
+      border-left: 4px solid var(--border);
+      cursor: pointer;
+    }
+    .chat-card:hover {
+      background: var(--card);
+      border-color: var(--brand);
+    }
+    .chat-card.current {
+      background: var(--active-card);
+      border-left-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+    .chat-card.has-error {
+      border-left-color: #f59e0b;
+    }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-author-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-badge-spk {
+      background: rgba(139, 92, 246, 0.15);
+      color: #7c3aed;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .chat-author-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .chat-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .chat-q-tag {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--brand);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .chat-time-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 10.5px;
+      cursor: pointer;
+      color: var(--mut);
+    }
+    .chat-time-btn:hover { color: var(--brand); }
+    .chat-msg-body {
+      font-size: 13px;
+      color: var(--fg);
+    }
+    .gec-box {
+      margin-top: 4px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 6px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .gec-box-title {
+      font-weight: 700;
+      color: #d97706;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .gec-correction {
+      color: #059669;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+    .gec-edit-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(245, 158, 11, 0.2);
+    }
+    .gec-edit-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .gec-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      background: #d97706;
+      color: #fff;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .gec-diff {
+      font-size: 11.5px;
+    }
+    .gec-diff del {
+      color: #ef4444;
+      text-decoration: line-through;
+      margin-right: 4px;
+    }
+    .gec-diff ins {
+      color: #059669;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .gec-exp {
+      font-size: 11px;
+      color: var(--mut);
+      font-style: italic;
+    }
 
     /* Readings / Links */
     .read-item {
@@ -720,6 +886,7 @@
       <div class="nav-tabs" id="nav-tabs">
         <button class="nav-tab active" data-tab="tab-exercises" id="btn-tab-ex">📝 Exercises (<span id="ex-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-vocab" id="btn-tab-vocab">📚 Vocab (<span id="vocab-count">0</span>)</button>
+        <button class="nav-tab" data-tab="tab-chat" id="btn-tab-chat">💬 Chat & GEC (<span id="chat-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-screens" id="btn-tab-screens">🖼 Screens (<span id="screens-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-readings" id="btn-tab-readings" style="display:none;">📖 Readings</button>
         <button class="nav-tab" data-tab="tab-stats" id="btn-tab-stats">📊 Analytics</button>
@@ -750,7 +917,19 @@
         </div>
       </div>
 
-      <!-- Tab 3: Screens / Slides -->
+      <!-- Tab 3: Chat & GEC Feedback -->
+      <div class="tab-content" id="tab-chat">
+        <div class="chat-filters" id="chat-filters">
+          <button class="c-filter active" data-filter="ALL">All Messages (<span id="cf-all">0</span>)</button>
+          <button class="c-filter" data-filter="ERRORS">⚠️ GEC Feedback (<span id="cf-errors">0</span>)</button>
+          <button class="c-filter" data-filter="QUESTIONS">📝 Exercise Answers (<span id="cf-questions">0</span>)</button>
+        </div>
+        <div class="chat-list" id="chat-list">
+          <small style="color:var(--mut);">Loading class chat and feedback...</small>
+        </div>
+      </div>
+
+      <!-- Tab 4: Screens / Slides -->
       <div class="tab-content" id="tab-screens">
         <div class="screen-grid" id="screen-list"></div>
       </div>
@@ -800,12 +979,15 @@ let alignments = [];     // [{slide, start, end, text, image}, ...]
 let transcript = [];     // [{start, end, text, speaker, lang}, ...]
 let exercises = [];      // [{id, number, stem, options, screen, start, end, trigger_text}, ...]
 let vocab = [];          // [{id, word, lemma, level, pos, meaning_vi, score, occurrences, timestamp, audio}, ...]
+let chat = [];           // [{chat_id, timestamp, time_str, speaker_id, speaker_name, original_message, has_error, ...}, ...]
 let readings = {};       // {slide_id: [links...]}
 let speakers = {};       // {source, roles, talk_time, turns}
 let activeSlide = -1;
 let activeExerciseId = null;
 let activeVocabLevel = 'ALL';
 let vocabSearchQuery = '';
+let activeChatFilter = 'ALL';
+let activeChatId = null;
 
 const vocabAudioPlayer = new Audio();
 function playVocabAudio(src, btn) {
@@ -984,12 +1166,27 @@ function runSearch(query) {
     }
   });
 
+  // Match in chat messages & GEC feedback
+  chat.forEach(c => {
+    const text = (c.original_message + ' ' + (c.corrected_message || '')).toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (text.includes(t) ? 2 : 0), 0);
+    if (score > 0 && c.timestamp !== null) {
+      results.push({
+        type: 'chat',
+        start: c.timestamp,
+        speaker: c.speaker_name || c.speaker_id,
+        text: `[Chat ${c.speaker_name}] ${c.original_message}${c.has_error ? ' (⚠️ GEC Feedback)' : ''}`,
+        score: score + (c.has_error ? 2 : 1)
+      });
+    }
+  });
+
   results.sort((a, b) => b.score - a.score || a.start - b.start);
   const topResults = results.slice(0, 30);
 
   $('search-count').textContent = `${topResults.length} matches`;
   if (!topResults.length) {
-    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech, exercises or vocabulary.</small>';
+    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech, exercises, vocabulary or chat.</small>';
     return;
   }
 
@@ -1082,6 +1279,89 @@ function renderVocab() {
   }).join('');
 }
 
+// Render Chat and GEC Feedback
+function renderChat() {
+  const listEl = $('chat-list');
+  if (!chat.length) {
+    listEl.innerHTML = '<small style="color:var(--mut);">No student chat messages recorded for this lesson.</small>';
+    return;
+  }
+
+  const filtered = chat.filter(c => {
+    if (activeChatFilter === 'ERRORS') return c.has_error;
+    if (activeChatFilter === 'QUESTIONS') return c.question_number !== null;
+    return true;
+  });
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<small style="color:var(--mut); padding:10px;">No messages matching filter.</small>';
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(c => {
+    const qBadge = c.question_number ? `<span class="chat-q-tag">Q${esc(c.question_number)}</span>` : '';
+    const errBadge = c.has_error ? `<span class="gec-tag" style="background:#f59e0b;">⚠️ GEC Feedback</span>` : '';
+
+    let gecSection = '';
+    if (c.has_error && c.edits && c.edits.length) {
+      gecSection = `
+        <div class="gec-box">
+          <div class="gec-box-title">
+            <span>💡 GEC Diagnostic Feedback</span>
+          </div>
+          <div class="gec-correction">
+            <span>✅ Gợi ý sửa: "${esc(c.corrected_message)}"</span>
+          </div>
+          ${c.edits.map(ed => `
+            <div class="gec-edit-item">
+              <div class="gec-edit-header">
+                <span class="gec-tag">${esc(ed.error_type)}</span>
+                <span class="gec-diff">
+                  <del>${esc(ed.original)}</del>
+                  <ins>➔ ${esc(ed.replacement)}</ins>
+                </span>
+              </div>
+              <div class="gec-exp">${esc(ed.explanation_vi)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="chat-card ${c.has_error ? 'has-error' : ''}" data-id="${esc(c.chat_id || c.id)}" onclick="seek(${c.timestamp})">
+        <div class="chat-header">
+          <div class="chat-author-wrap">
+            <span class="chat-badge-spk">${esc(c.speaker_id || 'S')}</span>
+            <span class="chat-author-name">${esc(c.speaker_name || 'Student')}</span>
+            ${qBadge}
+          </div>
+          <div class="chat-meta-right">
+            ${errBadge}
+            <span class="chat-time-btn">⏱ ${fmt(c.timestamp)}</span>
+          </div>
+        </div>
+        <div class="chat-msg-body">${esc(c.original_message)}</div>
+        ${gecSection}
+      </div>
+    `;
+  }).join('');
+}
+
+// Highlight active chat message according to video playback
+function updateActiveChat(t) {
+  if (!chat.length) return;
+  const curChat = chat.find(c => Math.abs(t - c.timestamp) <= 8.0);
+  const curId = curChat ? (curChat.chat_id || curChat.id) : null;
+  if (curId !== activeChatId) {
+    activeChatId = curId;
+    document.querySelectorAll('.chat-card').forEach(card => {
+      const match = card.dataset.id === curId;
+      card.classList.toggle('current', match);
+    });
+  }
+}
+
 // Data Fetcher
 async function fetchJSON(file) {
   try {
@@ -1153,6 +1433,19 @@ async function init() {
     renderVocab();
   } else {
     $('btn-tab-vocab').style.display = 'none';
+  }
+
+  // Render Chat & GEC Feedback Tab
+  chat = await fetchJSON('chat_feedback.json') || await fetchJSON('chat.json') || [];
+  if (chat.length) {
+    $('btn-tab-chat').style.display = 'inline-block';
+    $('chat-count').textContent = chat.length;
+    $('cf-all').textContent = chat.length;
+    $('cf-errors').textContent = chat.filter(c => c.has_error).length;
+    $('cf-questions').textContent = chat.filter(c => c.question_number !== null).length;
+    renderChat();
+  } else {
+    $('btn-tab-chat').style.display = 'none';
   }
 
   // Render Screens
@@ -1231,6 +1524,16 @@ $('vocab-search').addEventListener('input', e => {
   }, 150);
 });
 
+// Chat filters click handler
+$('chat-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.c-filter');
+  if (!btn) return;
+  document.querySelectorAll('.c-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeChatFilter = btn.dataset.filter;
+  renderChat();
+});
+
 // Real-time video synchronization
 v.ontimeupdate = () => {
   const t = v.currentTime;
@@ -1244,6 +1547,9 @@ v.ontimeupdate = () => {
 
   // 3. Sync transcript
   updateTranscriptFeed(t);
+
+  // 4. Sync chat
+  updateActiveChat(t);
 };
 
 // Search debouncing
