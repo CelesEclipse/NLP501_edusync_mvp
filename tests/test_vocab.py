@@ -99,3 +99,4 @@ def test_extract_vocabulary_cefr_levels():
     assert "economic" in v_dict
     assert v_dict["economic"]["level"] == "B1"
     assert "thuộc về kinh tế" in v_dict["economic"]["meaning_vi"]
+
