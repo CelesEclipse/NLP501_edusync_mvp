@@ -1,19 +1,7 @@
 """Extract structured exercise questions (question number, stem, options A/B/C/D) from OCR screen text or worksheet.
+Supports both Part 5 (isolated sentences) and Part 6 (reading passages with in-text blanks).
 Usage: python exercises.py --lesson lessons/<id> [--out exercises.json]"""
-import argparse, difflib, json, os, re
-
-NUM_WORDS = {
-    1: ["một", "one"],
-    2: ["hai", "two"],
-    3: ["ba", "three"],
-    4: ["bốn", "four"],
-    5: ["năm", "five"],
-    6: ["sáu", "six"],
-    7: ["bảy", "seven"],
-    8: ["tám", "eight"],
-    9: ["chín", "nine"],
-    10: ["mười", "ten"],
-}
+import argparse, difflib, json, os, re, sys
 
 
 def extract_stem_and_options(raw_text):
@@ -39,6 +27,52 @@ def extract_stem_and_options(raw_text):
 
     stem = re.sub(r"\s+", " ", stem).strip()
     return stem, opts
+
+
+def extract_passage_exercises(raw_text, screen_id, s_start, s_end):
+    """Extract in-text cloze questions (Part 6) where blanks appear inside reading passages."""
+    splits = list(re.finditer(r"(?:^|\n)\s*(\d+)[\.\)]\s*(?=(?:\([A-D]\)|[A-D][\.\)]))", raw_text))
+    if len(splits) < 2:
+        return []
+
+    questions = []
+    for i, m in enumerate(splits):
+        num = int(m.group(1))
+        opt_start = m.end()
+        next_m = splits[i + 1] if i + 1 < len(splits) else None
+        chunk_after = raw_text[opt_start: next_m.start() if next_m else len(raw_text)]
+        
+        opt_lines = []
+        is_opt = True
+        for line in chunk_after.strip().splitlines():
+            l = line.strip()
+            if re.match(r"^(?:\([A-D]\)|[A-D][\.\)])", l) or (is_opt and re.findall(r"(?:\([A-D]\)|[A-D][\.\)])", l)):
+                opt_lines.append(l)
+            else:
+                is_opt = False
+
+        opt_text = " ".join(opt_lines)
+        pats = re.findall(r"(?:\(([A-D])\)|([A-D])[\.\)])\s*([^A-D(\n]+)", opt_text)
+        options = {}
+        for k1, k2, v in pats:
+            k = (k1 or k2).upper()
+            options[k] = v.strip()
+
+        prev_end = splits[i - 1].end() if i > 0 else 0
+        preceding = raw_text[prev_end: m.start()].strip()
+        pre_lines = [l.strip() for l in preceding.splitlines() if not re.match(r"^(?:\([A-D]\)|[A-D][\.\)])", l.strip())]
+        stem = " ".join(pre_lines[-3:]) if pre_lines else ""
+        stem = re.sub(r"\s+", " ", stem).strip()
+
+        questions.append({
+            "number": num,
+            "stem": stem,
+            "options": options,
+            "screen": screen_id,
+            "start": s_start,
+            "end": s_end
+        })
+    return questions
 
 
 def parse_screen_text(screen):
@@ -88,26 +122,34 @@ def parse_screen_text(screen):
     return parsed
 
 
-def deduplicate_exercises(raw_items):
-    """Merge items with the same number appearing across consecutive screens."""
-    if not raw_items:
+def deduplicate_exercises(items):
+    """Merge questions across consecutive screens using smart recency window."""
+    if not items:
         return []
 
     merged = []
-    for it in raw_items:
-        # Check if can merge with last item if same number and adjacent screen
-        if merged and merged[-1]["number"] == it["number"] and it["screen"] - merged[-1]["screens"][-1] <= 2:
-            prev = merged[-1]
-            prev["screens"].append(it["screen"])
-            prev["end"] = max(prev["end"], it["end"])
-            # Keep richer stem or options
-            if len(it["stem"]) > len(prev["stem"]):
-                prev["stem"] = it["stem"]
-            if len(it["options"]) > len(prev["options"]):
-                prev["options"] = it["options"]
-        else:
+    for it in items:
+        matched = False
+        # Look back up to 8 recent items to handle multi-question screens
+        for prev in reversed(merged[-8:]):
+            same_num = (prev["number"] == it["number"])
+            screen_near = (it["screen"] - max(prev["screens"]) <= 2)
+            stem_sim = difflib.SequenceMatcher(None, prev["stem"], it["stem"]).ratio() if (prev["stem"] and it["stem"]) else 0.5
+            opts_shared = len(set(prev["options"].values()) & set(it["options"].values())) if (prev["options"] and it["options"]) else 1
+
+            if same_num and screen_near and (stem_sim > 0.3 or opts_shared >= 1):
+                prev["screens"].append(it["screen"])
+                prev["end"] = max(prev["end"], it["end"])
+                if len(it["stem"]) > len(prev["stem"]):
+                    prev["stem"] = it["stem"]
+                if len(it["options"]) > len(prev["options"]):
+                    prev["options"] = it["options"]
+                matched = True
+                break
+
+        if not matched:
             merged.append({
-                "id": f"q_{len(merged)+1}",
+                "id": f"q_{len(merged) + 1}",
                 "number": it["number"],
                 "stem": it["stem"],
                 "options": it["options"],
@@ -133,10 +175,13 @@ if __name__ == "__main__":
     screens = json.load(open(screens_file))
     all_raw = []
     for s in screens:
-        all_raw.extend(parse_screen_text(s))
+        passage_items = extract_passage_exercises(s["text"], s["id"], s["start"], s["end"])
+        if passage_items:
+            all_raw.extend(passage_items)
+        else:
+            all_raw.extend(parse_screen_text(s))
 
     exercises = deduplicate_exercises(all_raw)
     out_path = L(a.out)
     json.dump(exercises, open(out_path, "w"), ensure_ascii=False, indent=2)
     print(f"[exercises] Extracted {len(exercises)} structured exercises across {len(screens)} screens -> {out_path}")
-

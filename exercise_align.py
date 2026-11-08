@@ -1,4 +1,5 @@
 """Align extracted exercise questions to teacher speech segments in transcript.json using Monotonic DP.
+Ensures strict chronological progression and disjoint timestamps.
 Outputs <lesson>/exercise_alignment.json.
 Usage: python exercise_align.py --lesson lessons/<id> [--out exercise_alignment.json]"""
 import argparse, json, os, re
@@ -6,14 +7,18 @@ import argparse, json, os, re
 NUM_WORDS_VI = {
     1: "một", 2: "hai", 3: "ba", 4: "bốn", 5: "năm",
     6: "sáu", 7: "bảy", 8: "tám", 9: "chín", 10: "mười",
-    11: "mười một", 12: "mười hai", 13: "mười ba", 14: "mười bốn", 15: "mười lăm"
+    11: "mười một", 12: "mười hai", 13: "mười ba", 14: "mười bốn", 15: "mười lăm",
+    16: "mười sáu", 17: "mười bảy", 18: "mười tám", 19: "mười chín", 20: "hai mươi"
 }
 
 
 def question_pattern(num):
     vi_word = NUM_WORDS_VI.get(num, "")
     word_clause = f"|{vi_word}" if vi_word else ""
-    return re.compile(rf"\b(câu|câu số|number|question)\s*({num}{word_clause})\b", re.I)
+    return re.compile(
+        rf"(?<!text\s)(?<!page\s)(?<!trang\s)\b(?:câu|câu\s+số|question|bài\s+tập|(?:câu\s+)?số)\s*({num}{word_clause})\b",
+        re.I
+    )
 
 
 def token_set(text):
@@ -26,50 +31,56 @@ def align_exercises(exercises, transcript):
         return []
 
     alignments = []
-    last_seg_idx = 0
+    last_seg_idx = -1
+    last_align_time = -1.0
     N_trans = len(transcript)
 
     for ex in exercises:
         num = ex["number"]
         pat = question_pattern(num)
-        
+
         # Screen boundaries
         t_screen_start = ex["start"]
         t_screen_end = ex["end"]
 
-        # Search window in transcript: prefer forward progression
-        # Look from last_seg_idx up to segments within screen display + buffer
+        # Search window in transcript: strictly forward from last_seg_idx + 1
+        start_idx = max(0, last_seg_idx + 1)
         cands = []
-        for idx in range(last_seg_idx, N_trans):
+        for idx in range(start_idx, N_trans):
             seg = transcript[idx]
-            if seg["start"] > t_screen_end + 45.0:
+            if seg["start"] > t_screen_end + 120.0:
                 break
-            # consider segments near screen time
-            if seg["end"] >= t_screen_start - 20.0:
+            if seg["end"] >= t_screen_start - 30.0:
                 cands.append((idx, seg))
 
         if not cands:
-            # Fallback to local search around screen start
-            cands = [(i, s) for i, s in enumerate(transcript) if t_screen_start - 10.0 <= s["start"] <= t_screen_end + 30.0 and i >= last_seg_idx]
+            # Fallback to segments around screen time that are ahead of last_seg_idx
+            cands = [(i, s) for i, s in enumerate(transcript)
+                     if i > last_seg_idx and t_screen_start - 15.0 <= s["start"] <= t_screen_end + 120.0]
 
         best_idx, best_seg, best_score = None, None, -1.0
         ex_tokens = token_set(ex["stem"] + " " + " ".join(ex["options"].values()))
 
         for idx, seg in cands:
+            # Ensure strictly later timestamp
+            if seg["start"] <= last_align_time:
+                continue
+
             score = 0.0
             text = seg["text"]
 
-            # 1. Explicit question mention
+            # 1. Explicit question mention (highest confidence)
             if pat.search(text):
-                score += 20.0
+                score += 25.0
 
-            # 2. Token overlap with stem/options
+            # 2. Token overlap with stem and options
             seg_tokens = token_set(text)
             overlap = len(ex_tokens & seg_tokens)
             score += overlap * 2.0
 
             # 3. Screen display temporal alignment
-            if t_screen_start <= (seg["start"] + seg["end"]) / 2 <= t_screen_end:
+            mid_t = (seg["start"] + seg["end"]) / 2
+            if t_screen_start <= mid_t <= t_screen_end:
                 score += 3.0
 
             if score > best_score and score >= 3.0:
@@ -79,6 +90,7 @@ def align_exercises(exercises, transcript):
 
         if best_seg is not None:
             last_seg_idx = best_idx
+            last_align_time = best_seg["start"]
             alignments.append({
                 "id": ex["id"],
                 "number": num,
@@ -116,4 +128,3 @@ if __name__ == "__main__":
     out_path = L(a.out)
     json.dump(aligned, open(out_path, "w"), ensure_ascii=False, indent=2)
     print(f"[exercise_align] Successfully aligned {len(aligned)}/{len(exercises)} questions to speech -> {out_path}")
-
