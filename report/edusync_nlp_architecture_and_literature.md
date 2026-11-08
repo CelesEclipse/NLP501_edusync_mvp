@@ -123,6 +123,19 @@ Khác với bài toán căn chỉnh tài liệu thông thường, bài giảng t
   2. *Động từ bất quy tắc:* Bảng ánh xạ các cặp bất quy tắc thông dụng (`wrote`/`written` $\to$ `write`, `bought` $\to$ `buy`, `thought` $\to$ `think`).
 - **Phân loại độ khó CEFR (Common European Framework of Reference):** Đối chiếu với từ điển **CEFR-J 1.5** và **Octanove C1/C2** gồm 8,845 mục từ, phân loại từ vựng thành 6 bậc (A1, A2, B1, B2, C1, C2) để định hướng ôn luyện bài thi chuẩn hoá (TOEIC/IELTS).
 
+### 2.7. Phân tích Phản hồi Học viên & Sửa lỗi Ngữ pháp (Grammar Error Correction - GEC)
+Trong môi trường lớp học trực tuyến (Zoom / Google Meet), học viên liên tục gửi câu trả lời, thắc mắc và giải thích thông qua hộp chat. Module `chat_parser.py` và `feedback.py` của EduSync triển khai các kỹ thuật NLP sau:
+- **Bảo mật & Ẩn danh danh tính (FERPA / GDPR Anonymization):** Tách họ tên học viên và tự động ánh xạ thành các định danh giả danh nhất quán ($S_1, S_2, \dots, S_N$).
+- **Liên kết Thực thể Đa phương thức (Cross-modal Entity Linking):** Sử dụng biểu thức chính quy ngữ cảnh bóc tách số thứ tự câu hỏi trong tin nhắn (`"Câu 1 em chọn C"`, `"Text 1 câu 1"`, `"Q3 wholesale"`) và liên kết trực tiếp với thực thể bài tập ($q_1, \dots, q_{34}$).
+- **Chẩn đoán Lỗi Ngữ pháp theo Phân loại ERRANT (Bryant et al., ACL 2019):** Nhắm trúng các lỗi chuyển di ngôn ngữ (L1 Transfer) điển hình của người Việt học tiếng Anh:
+  - `U:VERB:BE` (Thừa to be): *"I am agree"* $\to$ *"I agree"*.
+  - `R:ADJ:PARTICIPLE` (Nhầm lẫn tính từ đuôi -ed/-ing): *"movie was moved"* $\to$ *"moving"*, *"noise is very annoy"* $\to$ *"annoying"*.
+  - `R:VERB:FORM` (Sai dạng động từ sau cấu trúc nhờ vả have/get): *"has his shoes shine"* $\to$ *"shined"*.
+  - `U:PREP` (Thừa giới từ sau modal verbs): *"should to increase"* $\to$ *"should increase"*.
+  - `R:VERB:SVA` (Hòa hợp chủ vị ngôi thứ 3): *"it make me cry"* $\to$ *"makes"*.
+  - `M:VERB:AUX` (Thiếu trợ động từ đảo ngữ trong câu hỏi): *"Why we use"* $\to$ *"Why do we use"*.
+- **Phản hồi Sư phạm Song ngữ (Pedagogical Bilingual Feedback):** Đưa ra câu sửa hoàn chỉnh kèm giải thích chi tiết bằng tiếng Việt giúp học viên hiểu bản chất lỗi sai.
+
 ---
 
 ## 3. Tổng quan các Bài báo Khoa học Liên quan (Literature Review)
@@ -158,15 +171,12 @@ Khác với bài toán căn chỉnh tài liệu thông thường, bài giảng t
 ```mermaid
 timeline
     title Lộ trình Nâng cấp Học thuật & Kỹ thuật EduSync
-    Giai đoạn 1 : Hoàn thiện Sprint 4 GEC & Chat Analytics : Tích hợp mô hình sửa lỗi ngữ pháp ERRANT cho Zoom Chat : Đánh giá WER chính thức trên Gold Transcripts
+    Đã hoàn thành (Sprint 1 - 4) : Tầng 1-2 ASR Whisper Prompting & Monotonic DP : Sprint 3 CEFR Lexicon & Audio Clips : Sprint 4 Zoom Chat GEC ERRANT Engine
     Giai đoạn 2 : End-to-End Multimodal Foundation Model : Thử nghiệm LLM đa phương thức (Gemini 2.0 / Qwen2-VL) tóm tắt bài giảng : Tự động sinh Flashcard Anki kèm âm thanh cắt sẵn
     Giai đoạn 3 : Mở rộng Quy mô Đánh giá (Benchmark Scaling) : Kiểm thử trên 10 bài giảng đa dạng (IELTS, Business English, Math, CS) : Đóng gói thành thư viện Python pip chuyên dụng
 ```
 
-1. **Sprint 4 — Phân tích phản hồi học viên bằng GEC (Grammar Error Correction):**
-   - Đọc tệp tin hội thoại Zoom/Google Meet Chat.
-   - Nhận diện câu trả lời của từng học viên ($S_1, S_2$) tương ứng với câu hỏi trắc nghiệm đang làm.
-   - Ứng dụng mô hình GEC gắn nhãn mã lỗi theo chuẩn **ERRANT** (ví dụ: `R:VERB:TENSE`, `M:DET`, `R:PREP`) và đưa ra giải thích sửa lỗi tức thì.
+1. **Sprint 4 — Đã hoàn thành (GEC & Chat Analytics):** Đọc tin nhắn Zoom/Meet chat, ẩn danh học viên ($S_1 \dots S_N$), liên kết câu hỏi bài tập ($q_1 \dots q_{34}$), chẩn đoán lỗi ngữ pháp chuẩn ERRANT (`U:VERB:BE`, `R:ADJ:PARTICIPLE`, `R:VERB:FORM`, `U:PREP`, `R:VERB:SVA`, `M:VERB:AUX`) và đưa ra giải thích sư phạm tiếng Việt.
 2. **Nâng cấp từ Rule-based sang Hybrid Neural IE:**
    - Ứng dụng mô hình ngôn ngữ nhỏ (SLM như Qwen-2.5-3B hoặc Gemma-2-2B) chạy quantized trên Mac Metal để tóm tắt các điểm ngữ pháp trọng tâm và sinh bảng từ vựng song ngữ chuyên sâu.
 3. **Xuất bản Nghiên cứu Học thuật:**
