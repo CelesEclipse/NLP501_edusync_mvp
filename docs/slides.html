@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduSync - Slide Báo Cáo Đồ Án NLP501 (4 Thành Viên)</title>
+  <!-- KaTeX for crisp mathematical formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --card-bg: rgba(22, 30, 49, 0.88);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      
+      --sp1-color: #06b6d4; /* Cyan - Project Lead */
+      --sp1-glow: rgba(6, 182, 212, 0.25);
+      --sp2-color: #10b981; /* Emerald - Multimodal Alignment */
+      --sp2-glow: rgba(16, 185, 129, 0.25);
+      --sp3-color: #a855f7; /* Purple - Core NLP & Embeddings */
+      --sp3-glow: rgba(168, 85, 247, 0.25);
+      --sp4-color: #f59e0b; /* Amber - System & Demo */
+      --sp4-glow: rgba(245, 158, 11, 0.25);
+      
+      --accent-red: #ef4444;
+      --accent-blue: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP BAR CONTROLS */
+    header.deck-header {
+      height: 52px;
+      background: rgba(11, 15, 25, 0.95);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .subject-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .speaker-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .speaker-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--sp1-color);
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .timer-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      background: #111827;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button.btn-ctrl {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    button.btn-ctrl:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    button.btn-ctrl.active {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+
+    /* SLIDE STAGE */
+    main.stage-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 30%, #151d30 0%, #0b0f19 75%);
+    }
+
+    .slide {
+      position: absolute;
+      width: 92vw;
+      max-width: 1360px;
+      height: 82vh;
+      max-height: 765px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      padding: 2.2rem 2.8rem;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(12px);
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      z-index: 10;
+    }
+
+    /* SLIDE HEADER */
+    .slide-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .slide-speaker-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-num-tag {
+      font-family: ui-monospace, monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      font-weight: 400;
+    }
+
+    /* SLIDE CONTENT LAYOUTS */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      font-size: 1rem;
+      line-height: 1.55;
+      user-select: text;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .box-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .box p, .box li {
+      color: #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    ul.clean-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    ul.clean-list li {
+      position: relative;
+      padding-left: 1.3rem;
+      color: #d1d5db;
+    }
+
+    ul.clean-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0.2rem;
+      color: #38bdf8;
+      font-weight: bold;
+    }
+
+    .highlight-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.18);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .stat-hero {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .stat-hero .stat-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: -1px;
+    }
+
+    .stat-hero .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .code-block {
+      background: #070a12;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-family: ui-monospace, Menlo, Monaco, monospace;
+      font-size: 0.84rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.45;
+    }
+
+    .math-callout {
+      background: rgba(30, 41, 59, 0.7);
+      border-left: 4px solid var(--sp3-color);
+      border-radius: 0 10px 10px 0;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.95rem;
+      margin: 0.4rem 0;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin-top: 0.4rem;
+    }
+
+    table.data-table th {
+      background: rgba(30, 41, 59, 0.8);
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #94a3b8;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    table.data-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #e2e8f0;
+    }
+
+    table.data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* FOOTER & TIMELINE BAR */
+    footer.deck-footer {
+      height: 48px;
+      background: rgba(11, 15, 25, 0.95);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      max-width: 420px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 0 1.5rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 5.5%;
+      background: linear-gradient(90deg, #06b6d4, #a855f7);
+      transition: width 0.3s ease;
+    }
+
+    .nav-hints {
+      display: flex;
+      gap: 14px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    kbd {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: inherit;
+      color: #d1d5db;
+    }
+
+    /* SPEAKER NOTES DRAWER */
+    .speaker-drawer {
+      position: fixed;
+      bottom: 48px;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.98);
+      border-top: 2px solid #3b82f6;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+      padding: 1.2rem 2rem;
+      max-height: 250px;
+      overflow-y: auto;
+      z-index: 150;
+      transform: translateY(105%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: text;
+    }
+
+    .speaker-drawer.open {
+      transform: translateY(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .drawer-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .drawer-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      font-style: italic;
+    }
+
+    /* SLIDE OVERVIEW GRID MODAL */
+    .overview-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 15, 25, 0.94);
+      z-index: 200;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .overview-modal.open {
+      display: flex;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .overview-card {
+      background: #1e293b;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overview-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-3px);
+      background: #25334d;
+    }
+
+    .overview-card.active {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* PRINT TO PDF FORMATTING */
+    @media print {
+      body {
+        overflow: visible;
+        background: white;
+        color: black;
+      }
+      header.deck-header, footer.deck-footer, .speaker-drawer, .overview-modal {
+        display: none !important;
+      }
+      main.stage-container {
+        display: block;
+        background: none;
+      }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: none !important;
+        max-height: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        page-break-after: always;
+        box-shadow: none !important;
+        background: white !important;
+        color: #111827 !important;
+      }
+      .slide-title {
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
+      }
+      .box {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #1e293b !important;
+      }
+      .box p, .box li, .slide-body {
+        color: #1e293b !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="deck-header">
+    <div class="brand-meta">
+      <span class="brand-badge">EDUSYNC</span>
+      <span class="subject-title">NLP501 · Đồ Án Cao Học MSE · Hội Đồng Bảo Vệ</span>
+    </div>
+
+    <div class="speaker-indicator" id="speakerPill">
+      <span class="speaker-dot" id="speakerDot"></span>
+      <span id="speakerLabel">Thành viên 1: Đặt Vấn Đề & Kiến Trúc</span>
+    </div>
+
+    <div class="header-controls">
+      <div class="timer-badge">
+        <span>⏱️</span>
+        <span id="timerDisplay">04:30</span>
+      </div>
+      <button class="btn-ctrl" id="btnTimerToggle" title="Bắt đầu / Tạm dừng đồng hồ">▶ Chạy</button>
+      <button class="btn-ctrl" id="btnTimerReset" title="Đặt lại đồng hồ">↺</button>
+      <button class="btn-ctrl" id="btnNotesToggle" title="Bật/Tắt Lời thoại kịch bản (Phím N)">🎤 Lời thoại (N)</button>
+      <button class="btn-ctrl" id="btnOverviewToggle" title="Xem danh sách tất cả slide (Phím O)">▦ Grid (O)</button>
+      <button class="btn-ctrl" id="btnFullscreen" title="Toàn màn hình (Phím F)">⛶ F</button>
+    </div>
+  </header>
+
+  <!-- MAIN SLIDES STAGE -->
+  <main class="stage-container">
+
+    <!-- SLIDE 1 -->
+    <div class="slide active" data-slide="1" data-speaker="1" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp1-color);">👤 THÀNH VIÊN 1 · PROJECT LEAD</span>
+        <span class="slide-num-tag">Slide 01 / 18</span>
+      </div>
+      <h1 class="slide-title">EDUSYNC: Multimodal Lecture Alignment & Pedagogical Intelligence</h1>
+      <p class="slide-subtitle">Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Trực tuyến ứng dụng NLP Nâng cao</p>
+      
+      <div class="slide-body" style="justify-content: center; gap: 2rem;">
+        <div class="grid-2">
+          <div class="box" style="border-left: 4px solid var(--sp1-color);">
+            <div class="box-title">🎓 Thông Tin Đề Tài & Hội Đồng</div>
+            <ul class="clean-list">
+              <li><strong>Môn học:</strong> Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501)</li>
+              <li><strong>Chương trình:</strong> Thạc sĩ Kỹ thuật Phần mềm (Master of Software Engineering - MSE)</li>
+              <li><strong>Thời lượng báo cáo:</strong> 20 phút thuyết trình + 10 phút Q&A phản biện</li>
+              <li><strong>Mã nguồn & Thực nghiệm:</strong> Nhánh Git <code>edusync-v2</code></li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-left: 4px solid #a855f7;">
+            <div class="box-title">👥 Phân Công Nhóm Nghiên Cứu (4 Thành Viên)</div>
+            <ul class="clean-list">
+              <li><strong style="color: var(--sp1-color);">Thành viên 1:</strong> Đặt vấn đề, Đặc tả SRS & Kiến trúc hệ thống</li>
+              <li><strong style="color: var(--sp2-color);">Thành viên 2:</strong> ASR Whisper Prompting & Căn chỉnh Monotonic DP</li>
+              <li><strong style="color: var(--sp3-color);">Thành viên 3:</strong> CEFR Lexicon, Dense Embeddings & ERRANT GEC</li>
+              <li><strong style="color: var(--sp4-color);">Thành viên 4:</strong> Teacher Dashboard, Live Demo & QA/QC 45 Tests</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+          💡 <em>"Chuyển hóa video bài giảng thụ động thành Cơ sở Tri thức Tương tác Đa chiều cho Người dạy và Người học"</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" data-slide="2" data-speaker="1" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp1-color);">👤 THÀNH VIÊN 1 · ĐẶT VẤN ĐỀ</span>
+        <span class="slide-num-tag">Slide 02 / 18</span>
+      </div>
+      <h1 class="slide-title">Bối Cảnh & Nỗi Đau Thực Tế Trong Học Tập Trực Tuyến</h1>
+      <p class="slide-subtitle">Sự bùng nổ của Video bài giảng sau đại dịch và nghịch lý "Hộp đen thông tin"</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box" style="border-top: 3px solid var(--accent-red);">
+            <div class="box-title" style="color: #f87171;">🛑 Nỗi Đau Của Học Sinh (Student's Friction)</div>
+            <ul class="clean-list">
+              <li><strong>Video quá dài (60–90 phút):</strong> Học sinh mất từ 15–20 phút kéo chuột thủ công (blind scrubbing) chỉ để tìm lại 1 câu hỏi mình làm sai.</li>
+              <li><strong>Lý thuyết rời rạc với bài tập:</strong> Khi làm sai câu hỏi trắc nghiệm, học sinh không biết câu này liên quan đến định lý hay công thức ngữ pháp nào giáo viên đã dạy đầu giờ.</li>
+              <li><strong>Phản hồi chat bị lãng quên:</strong> Hàng trăm tin nhắn tương tác trong hộp chat Zoom không được lưu vết hay sửa lỗi sư phạm sau buổi học.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid #f59e0b;">
+            <div class="box-title" style="color: #fbbf24;">⚠️ Điểm Mù Của Giáo Viên (Teacher's Blind Spot)</div>
+            <ul class="clean-list">
+              <li><strong>Thiếu số liệu định lượng:</strong> Giáo viên không biết mình đã độc thoại bao nhiêu phần trăm (Teacher Talk Time vs Student Talk Time).</li>
+              <li><strong>Không có bản đồ lỗi lớp học:</strong> Rất khó thống kê học sinh đang vấp phải lỗi ngữ pháp nào nhiều nhất từ các câu chat tự do.</li>
+              <li><strong>Thiếu Kế hoạch cải tiến tự động:</strong> Không có báo cáo tự động đề xuất nội dung trọng tâm cần ôn lại cho buổi học tiếp theo.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="box" style="background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.2);">
+          <strong>Hậu quả thực tế:</strong> Hiện tượng "Video Fatigue" khiến hơn 68% học sinh bỏ dở việc xem lại bài giảng cũ, và giáo viên tiếp tục dạy buổi sau theo cảm tính thay vì số liệu thực chứng (data-driven pedagogy).
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" data-slide="3" data-speaker="1" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp1-color);">👤 THÀNH VIÊN 1 · MỤC TIÊU ĐỀ TÀI</span>
+        <span class="slide-num-tag">Slide 03 / 18</span>
+      </div>
+      <h1 class="slide-title">Mục Tiêu Đề Tài & Giá Trị Cốt Lõi (2 Trụ Cột)</h1>
+      <p class="slide-subtitle">Chuyển hóa video thụ động thành Cơ sở Tri thức Đa chiều phục vụ cả Học sinh và Giáo viên</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box" style="border-left: 4px solid var(--sp1-color);">
+            <div class="box-title" style="color: var(--sp1-color);">🎯 TRỤ CỘT 1: HỌC SINH TỰ CHỦ (Personalized Learning)</div>
+            <ul class="clean-list">
+              <li><strong>Click-to-Seek chuẩn xác:</strong> Bấm vào bất kỳ câu hỏi trắc nghiệm nào, video tua ngay đến đúng giây giáo viên bắt đầu chữa bài.</li>
+              <li><strong>Liên kết Khái niệm 2 chiều:</strong> Bấm vào badge ngữ pháp trên câu hỏi $\leftrightarrow$ video nhảy ngược về đoạn lý thuyết gốc đầu giờ.</li>
+              <li><strong>Thẻ Từ Vựng CEFR & Audio thật 1.5s:</strong> Phân bậc từ A1–C1 kèm đoạn audio cắt trực tiếp từ giọng nói thật của giáo viên.</li>
+              <li><strong>Phản hồi Sửa lỗi Chat GEC:</strong> Chẩn đoán lỗi ngữ pháp trong Zoom chat và đưa ra giải thích tiếng Việt.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-left: 4px solid var(--sp4-color);">
+            <div class="box-title" style="color: var(--sp4-color);">📊 TRỤ CỘT 2: TRỢ LÝ SƯ PHẠM (Pedagogical Analytics)</div>
+            <ul class="clean-list">
+              <li><strong>Đo lường thời lượng nói (TTT vs STT):</strong> Phân tích năng lượng âm thanh để xác định tỷ lệ giảng viên nói vs học sinh nói.</li>
+              <li><strong>Bản đồ phân bố lỗi sai (ERRANT Heatmap):</strong> Trực quan hóa các lỗi ngữ pháp học sinh hay mắc nhất trong lớp.</li>
+              <li><strong>Cảnh báo điểm nghẽn (Weakest Concept):</strong> Tự động chỉ ra chủ điểm lý thuyết có nhiều câu hỏi làm sai nhất.</li>
+              <li><strong>Kế hoạch Hành động 3 bước:</strong> Tự động sinh đề xuất warm-up và bài tập củng cố cho buổi học sau.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid-3" style="text-align: center;">
+          <div class="box"><span class="highlight-pill">ĐỘ TRỄ TRUY VẤN</span><div class="stat-hero"><span class="stat-value">&lt; 5ms</span></div><p>Thao tác tìm kiếm & tua video tức thì</p></div>
+          <div class="box"><span class="highlight-pill">ĐỘ CHÍNH XÁC CĂN CHỈNH</span><div class="stat-hero"><span class="stat-value">100%</span></div><p>34/34 câu hỏi TOEIC khớp lời giảng</p></div>
+          <div class="box"><span class="highlight-pill">BẢO MẬT HỌC VIÊN</span><div class="stat-hero"><span class="stat-value">FERPA</span></div><p>Ẩn danh 100% danh tính học sinh</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide" data-slide="4" data-speaker="1" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp1-color);">👤 THÀNH VIÊN 1 · ĐẶC TẢ SRS & KIẾN TRÚC</span>
+        <span class="slide-num-tag">Slide 04 / 18</span>
+      </div>
+      <h1 class="slide-title">Đặc Tả SRS (IEEE 830) & Kiến Trúc Hệ Thống 4 Tầng</h1>
+      <p class="slide-subtitle">Mô hình đường ống phân tầng khép kín từ dữ liệu thô đến ứng dụng Web tương tác</p>
+      
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="box" style="border-top: 3px solid #3b82f6;">
+            <div class="box-title" style="font-size: 0.9rem;">TẦNG 1: INGESTION</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Thu nhận đa phương thức</p>
+            <ul class="clean-list" style="font-size: 0.82rem;">
+              <li>Video bài giảng (MP4)</li>
+              <li>Audio âm thanh (M4A)</li>
+              <li>Log Zoom chat (TXT)</li>
+              <li>Apple Vision OCR</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid var(--sp2-color);">
+            <div class="box-title" style="font-size: 0.9rem; color: var(--sp2-color);">TẦNG 2: ALIGNMENT</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Đồng bộ thời gian đa ngữ</p>
+            <ul class="clean-list" style="font-size: 0.82rem;">
+              <li>Whisper large-v3-turbo</li>
+              <li>Screen Hints Prompting</li>
+              <li>Regex Lookbehind</li>
+              <li>Monotonic DP Alignment</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid var(--sp3-color);">
+            <div class="box-title" style="font-size: 0.9rem; color: var(--sp3-color);">TẦNG 3: NLP CORE</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Trí tuệ ngôn ngữ & đồ thị</p>
+            <ul class="clean-list" style="font-size: 0.82rem;">
+              <li>Dense Embeddings MiniLM</li>
+              <li>Cosine Similarity Graph</li>
+              <li>CEFR-J 8.8k Lemmatization</li>
+              <li>ERRANT Taxonomy GEC</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid var(--sp4-color);">
+            <div class="box-title" style="font-size: 0.9rem; color: var(--sp4-color);">TẦNG 4: PRESENTATION</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Web Demo & Dashboard</p>
+            <ul class="clean-list" style="font-size: 0.82rem;">
+              <li>Single-Page App (SPA)</li>
+              <li>HTML5 / WebAudio API</li>
+              <li>Omnibox Search (Cmd+K)</li>
+              <li>Teacher Pedagogical Hub</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="box" style="background: rgba(15, 23, 42, 0.4); border-color: rgba(255,255,255,0.06);">
+          <div class="box-title">📋 5 Nhóm Yêu Cầu Chức Năng Cốt Lõi (IEEE 830)</div>
+          <p style="font-size: 0.88rem; color: #cbd5e1;">
+            <strong>FR1:</strong> Căn chỉnh video & click-to-seek &nbsp;|&nbsp; 
+            <strong>FR2:</strong> Liên kết câu hỏi - lý thuyết bằng Dense Embeddings &nbsp;|&nbsp; 
+            <strong>FR3:</strong> Phân bậc từ vựng CEFR & cắt audio 1.5s &nbsp;|&nbsp; 
+            <strong>FR4:</strong> Sửa lỗi chat ERRANT & ẩn danh FERPA &nbsp;|&nbsp; 
+            <strong>FR5:</strong> Teacher Analytics Dashboard.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide" data-slide="5" data-speaker="2" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp2-color);">👤 THÀNH VIÊN 2 · MULTIMODAL ACQUISITION</span>
+        <span class="slide-num-tag">Slide 05 / 18</span>
+      </div>
+      <h1 class="slide-title">Thách Thức Âm Thanh Đa Ngữ Anh - Việt & Whisper ASR</h1>
+      <p class="slide-subtitle">Hiện tượng chuyển mã ngôn ngữ (Code-Switching) và giải pháp nhận dạng tiếng nói</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">🗣️ Hiện Tượng Chuyển Mã Ngôn Ngữ (Code-Switching)</div>
+            <p>Trong lớp học ngoại ngữ tại Việt Nam, giáo viên liên tục đan xen giữa tiếng Việt giải thích và tiếng Anh minh họa:</p>
+            <div class="code-block" style="color: #fca5a5;">
+              "Các bạn chú ý câu 3 này chúng ta phải dùng participle -ing vì nó mang nghĩa chủ động, còn nếu là cảm xúc thì phải chọn interested nhé..."
+            </div>
+            <ul class="clean-list">
+              <li>Mô hình ASR thông thường bị nhầm lẫn giữa 2 bảng chữ cái, nuốt mất dấu thanh hoặc biến dạng thuật ngữ tiếng Anh.</li>
+              <li>Tỷ lệ lỗi từ (Word Error Rate - WER) tăng vọt nếu không xử lý chuyển mã.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <div class="box-title">⚡ Giải Pháp Whisper large-v3-turbo Chạy Cục Bộ</div>
+            <ul class="clean-list">
+              <li><strong>Kiến trúc Encoder-Decoder Transformer:</strong> 680.000 giờ dữ liệu đa ngữ.</li>
+              <li><strong>Time-aligned Token Timestamps:</strong> Tính toán trọng số ma trận Cross-Attention weights để xác định mốc thời gian phụ đề chuẩn xác đến từng mili-giây.</li>
+              <li><strong>Nhận diện ngôn ngữ dựa trên mật độ dấu thanh (Diacritics Density):</strong></li>
+            </ul>
+            <div class="math-callout">
+              $$\text{Density}_{\text{vi}}(W) = \frac{\sum_{w \in W} \mathbb{I}(w \text{ chứa ký tự có dấu})}{|W|}$$
+            </div>
+            <p style="font-size: 0.85rem; color: #94a3b8;">Nếu Density &gt; 0.3 $\implies$ Tiếng Việt; Density == 0 $\implies$ Tiếng Anh; ngược lại $\implies$ Mixed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide" data-slide="6" data-speaker="2" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp2-color);">👤 THÀNH VIÊN 2 · CONTEXTUAL PROMPTING</span>
+        <span class="slide-num-tag">Slide 06 / 18</span>
+      </div>
+      <h1 class="slide-title">Giảm Ảo Giác ASR Bằng Bơm Ngữ Cảnh OCR (Screen Hints)</h1>
+      <p class="slide-subtitle">Tận dụng thông tin thị giác từ màn hình slide chia sẻ để định hướng kênh giải mã âm thanh</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box" style="border-left: 4px solid var(--sp2-color);">
+            <div class="box-title">🔄 Quy Trình Contextual Biasing Engine</div>
+            <ol style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem; color: #cbd5e1;">
+              <li><strong>Trích xuất Keyframe:</strong> Bắt các khung hình ổn định từ video bài giảng qua thuật toán Pixel Difference.</li>
+              <li><strong>Apple Vision OCR:</strong> Bóc tách toàn bộ chuỗi văn bản đang xuất hiện trên màn hình bài giảng.</li>
+              <li><strong>Lọc & Tinh chế Từ vựng:</strong> Khử stop words, dấu câu rác và các từ tiếng Việt không dấu dễ gây nhầm lẫn.</li>
+              <li><strong>Bơm vào Whisper `initial_prompt`:</strong> Nạp chuỗi Screen Hints (ví dụ: <em>"participle, adjective, passive, modifier"</em>) vào bộ giải mã trước mỗi cửa sổ 30 giây.</li>
+            </ol>
+          </div>
+
+          <div class="box">
+            <div class="box-title">📊 Kết Quả Thực Nghiệm Trên Bài Giảng TOEIC</div>
+            <div class="stat-hero">
+              <span class="stat-value" style="color: #10b981;">9.2%</span>
+              <span class="stat-label">WER Thuật ngữ (so với 18.4% khi không có Prompt)</span>
+            </div>
+            <ul class="clean-list">
+              <li><strong>Triệt tiêu ảo giác (Hallucination):</strong> Mô hình không còn tự động dịch phiên âm sai thành các từ vô nghĩa.</li>
+              <li><strong>Nhận diện chính xác từ hiếm (OOV):</strong> Các thuật ngữ chuyên ngành ngữ pháp tiếng Anh được chép đúng 100%.</li>
+              <li><strong>Bảo vệ từ đồng âm:</strong> Kích hoạt danh mục <code>VI_HOMOPHONES</code> loại bỏ việc nhầm các từ tiếng Việt ("an", "may", "can") thành từ vựng tiếng Anh trình độ cao.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block">
+          # File transcribe.py: Bơm Screen Hints vào Whisper API
+          initial_prompt = "Bài giảng TOEIC Unit 4. Từ vựng màn hình: " + ", ".join(screen_hints)
+          segments, info = model.transcribe(audio_file, initial_prompt=initial_prompt, word_timestamps=True)
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide" data-slide="7" data-speaker="2" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp2-color);">👤 THÀNH VIÊN 2 · MONOTONIC DP ALIGNMENT</span>
+        <span class="slide-num-tag">Slide 07 / 18</span>
+      </div>
+      <h1 class="slide-title">Trích Xuất Đề Bài & Thuật Toán Căn Chỉnh Đơn Điệu (Monotonic DP)</h1>
+      <p class="slide-subtitle">Ràng buộc quy hoạch động chống đảo ngược thời gian và loại bỏ khẩu lệnh gây nhiễu</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">⚠️ Thách Thức Khi Căn Chỉnh Lời Giảng Với Bài Tập</div>
+            <p>Tìm kiếm từ khóa đơn thuần sẽ thất bại vì:</p>
+            <ul class="clean-list">
+              <li>Giáo viên thường nói: <em>"Hôm trước câu 1 ta làm rồi, hôm nay làm lại câu 1..."</em> hoặc <em>"Xem lại câu 2 đi"</em> khi đang chữa câu 5.</li>
+              <li>Lời giảng có độ trễ 2–5 giây so với thời điểm chuyển màn hình slide.</li>
+              <li>Các từ như <em>"page 1"</em>, <em>"text 1"</em> dễ bị nhận nhầm thành số câu bài tập <em>"câu 1"</em>.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-left: 4px solid var(--sp2-color);">
+            <div class="box-title">📐 Thuật Toán Quy Hoạch Động Đơn Điệu (Monotonic DP)</div>
+            <ul class="clean-list">
+              <li><strong>Regex kèm Negative Lookbehind:</strong></li>
+            </ul>
+            <div class="code-block" style="font-size: 0.8rem;">
+              (?&lt;!page\s)(?&lt;!text\s)\b(?:number|câu|question)\s*(\d+)\b
+            </div>
+            <ul class="clean-list">
+              <li><strong>Ràng buộc toán học đơn điệu nghiêm ngặt:</strong> Thời điểm chữa câu sau bắt buộc phải lớn hơn câu trước:
+                $$\forall k < j \implies t_{\text{start}}^{(k)} < t_{\text{start}}^{(j)}$$
+              </li>
+              <li><strong>Cửa sổ tìm kiếm động (Search Window):</strong> Giới hạn 120 giây giữa các câu hỏi liên tiếp, ngăn chặn việc gán nhảy cóc thời gian.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="math-callout">
+          <strong>Hàm mục tiêu tối ưu Monotonic DP:</strong>
+          $$\text{Score}(k, t) = 25.0 \cdot \text{Match}_{\text{trigger}}(k, t) + 1.5 \cdot \text{Overlap}_{\text{tokens}}(k, t) + \text{Spatial}(k, t) - \text{Penalty}(t \le t_{k-1})$$
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide" data-slide="8" data-speaker="2" data-duration="270">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp2-color);">👤 THÀNH VIÊN 2 · KẾT QUẢ ĐỊNH LƯỢNG</span>
+        <span class="slide-num-tag">Slide 08 / 18</span>
+      </div>
+      <h1 class="slide-title">Kết Quả Định Lượng Căn Chỉnh Bài Tập (34/34 Câu Hỏi)</h1>
+      <p class="slide-subtitle">Đạt 100% Recall trên bài giảng thực tế ECE TOEIC Starter Unit 4 (63 phút video)</p>
+      
+      <div class="slide-body">
+        <div class="grid-3" style="text-align: center;">
+          <div class="box">
+            <span class="highlight-pill" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">RECALL CĂN CHỈNH</span>
+            <div class="stat-hero"><span class="stat-value" style="color: #10b981;">34 / 34</span></div>
+            <p>100% câu hỏi trên slide tìm thấy đoạn giảng</p>
+          </div>
+          <div class="box">
+            <span class="highlight-pill">PRECISION</span>
+            <div class="stat-hero"><span class="stat-value">97.1%</span></div>
+            <p>Loại bỏ hoàn toàn các mốc thời gian giả</p>
+          </div>
+          <div class="box">
+            <span class="highlight-pill">SAI SỐ BIÊN THỜI GIAN</span>
+            <div class="stat-hero"><span class="stat-value">&le; 1.8s</span></div>
+            <p>Video tua đúng trước lúc cô cất lời chữa câu</p>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-title">📦 Cấu Trúc Dữ Liệu Chuẩn Hóa: `exercise_alignment.json`</div>
+          <div class="code-block">
+{
+  "id": "q1",
+  "number": 1,
+  "stem": "The seminar was very [interest / interesting / interested]...",
+  "options": ["A. interest", "B. interesting", "C. interested", "D. interestingly"],
+  "start": 181.42,
+  "end": 245.10,
+  "trigger_text": "bây giờ cô cùng các em chữa câu số 1 này nhé",
+  "screen_idx": 4
+}
+          </div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+          0 câu hỏi bị rỗng stem đề bài (0 empty stems) · Sẵn sàng 100% làm đầu vào cho mô hình Nhúng Ngữ nghĩa Dense Embeddings.
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide" data-slide="9" data-speaker="3" data-duration="300">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp3-color);">👤 THÀNH VIÊN 3 · CORE NLP</span>
+        <span class="slide-num-tag">Slide 09 / 18</span>
+      </div>
+      <h1 class="slide-title">Phân Loại Từ Vựng CEFR-J & Cắt Audio Clip Phát Âm 1.5s</h1>
+      <p class="slide-subtitle">Chuẩn hóa hình thái Lemmatization và tự động trích xuất ngân hàng từ vựng giọng thật</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">📚 Quy Trình Xử Lý Từ Vựng (vocab.py)</div>
+            <ul class="clean-list">
+              <li><strong>Lemmatization 2 lớp:</strong>
+                <br>• Lớp biến cách quy tắc: danh từ số nhiều (<em>-s, -es</em>), quá khứ (<em>-ed</em>), danh động từ (<em>-ing</em>).
+                <br>• Lớp bất quy tắc: bảng tra cứu động từ (<em>wrote/written $\to$ write</em>).
+              </li>
+              <li><strong>Đối chiếu Ngân hàng CEFR-J:</strong> 8.845 mục từ chuẩn hoá chia thành 6 bậc (A1, A2, B1, B2, C1, C2).</li>
+              <li><strong>Khai phá Nghĩa tiếng Việt (Bilingual IE):</strong> Nhận diện mẫu quan hệ: <code>TargetWord + ("là" | "nghĩa là") + Meaning</code>.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-left: 4px solid var(--sp3-color);">
+            <div class="box-title">🔊 Tự Động Cắt Audio Clip Giọng Thật Của Giáo Viên</div>
+            <ul class="clean-list">
+              <li>Thay vì dùng giọng đọc máy Text-to-Speech vô hồn, EduSync dùng <code>ffmpeg</code> định vị chính xác timestamp của từ trong phụ đề.</li>
+              <li>Tự động cắt đoạn âm thanh 1.5 giây đúng ngữ điệu và phát âm của giáo viên trong lớp học thực tế.</li>
+              <li><strong>Kết quả:</strong> Trích xuất 79 từ vựng CEFR kèm 79 file audio <code>.mp3</code> phục vụ học tập trực quan.</li>
+            </ul>
+            <div class="stat-hero" style="margin-top: 10px;">
+              <span class="stat-value" style="color: #a855f7;">79 Clips</span>
+              <span class="stat-label">A1: 28 | A2: 19 | B1: 18 | B2: 12 | C1: 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10 -->
+    <div class="slide" data-slide="10" data-speaker="3" data-duration="300">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp3-color);">👤 THÀNH VIÊN 3 · DENSE EMBEDDINGS</span>
+        <span class="slide-num-tag">Slide 10 / 18</span>
+      </div>
+      <h1 class="slide-title">Vấn Đề Của Keyword Matching & Giải Pháp Dense Embeddings</h1>
+      <p class="slide-subtitle">Sự bất lực của tìm kiếm từ khóa truyền thống và bước nhảy vọt sang không gian vector</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box" style="border-top: 3px solid var(--accent-red);">
+            <div class="box-title" style="color: #f87171;">❌ Tại Sao Khớp Từ Khóa (Keyword / TF-IDF) Thất Bại?</div>
+            <p><strong>Ví dụ thực tế Câu hỏi số 1:</strong></p>
+            <div class="code-block" style="color: #fca5a5;">
+              "The seminar was very [interest / interesting / interested]..."
+            </div>
+            <ul class="clean-list">
+              <li>Trong câu hỏi chỉ có các từ: <em>seminar, was, very, interest...</em></li>
+              <li>Tên chủ điểm lý thuyết trên slide: <em>"Participles as Adjectives (Phân từ làm tính từ)"</em></li>
+              <li><strong>Hiện tượng Lệch Từ vựng (Vocabulary Mismatch):</strong> Không có bất kỳ từ khóa nào trùng nhau!</li>
+              <li>$\implies$ BM25, TF-IDF hoặc Regex cho điểm tương đồng $Score = 0$.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid var(--sp3-color);">
+            <div class="box-title" style="color: #c084fc;">💡 Giải Pháp: Nhúng Vector Ngữ Nghĩa (Dense Embeddings)</div>
+            <ul class="clean-list">
+              <li>Ánh xạ cả câu hỏi và các chủ điểm lý thuyết vào một <strong>không gian vector mật độ cao liên tục $\mathbb{R}^d$</strong>.</li>
+              <li>Mô hình Transformer được huấn luyện trên hàng trăm triệu cặp câu để hiểu rằng: <em>"interesting"</em>, <em>"bored"</em>, <em>"excited"</em> có quan hệ ngữ nghĩa mật thiết với khái niệm <em>"participle"</em> và <em>"adjective"</em>.</li>
+              <li>Khoảng cách hình học trong không gian vector phản ánh chính xác quan hệ ngữ nghĩa giữa câu hỏi bài tập và lý thuyết gốc.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11 -->
+    <div class="slide" data-slide="11" data-speaker="3" data-duration="300">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp3-color);">👤 THÀNH VIÊN 3 · COSINE SIMILARITY</span>
+        <span class="slide-num-tag">Slide 11 / 18</span>
+      </div>
+      <h1 class="slide-title">Không Gian Vector `all-MiniLM-L6-v2` & Cosine Similarity</h1>
+      <p class="slide-subtitle">Cơ sở toán học, phân ngưỡng độ tin cậy và hiệu năng thực thi trên Apple Silicon</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">📐 Biểu Diễn Toán Học & Công Thức Cosine</div>
+            <p>Vector câu hỏi: $\mathbf{u} = \text{Embed}(\text{Stem} \oplus \text{Options}) \in \mathbb{R}^{384}$</p>
+            <p>Vector chủ điểm lý thuyết: $\mathbf{v}_j = \text{Embed}(\text{Title}_j \oplus \text{Formula}_j \oplus \text{Desc}_j) \in \mathbb{R}^{384}$</p>
+            <div class="math-callout">
+              $$\text{Sim}(\mathbf{u}, \mathbf{v}_j) = \frac{\mathbf{u} \cdot \mathbf{v}_j}{\|\mathbf{u}\|_2 \|\mathbf{v}_j\|_2} = \frac{\sum_{i=1}^{384} u_i v_{j,i}}{\sqrt{\sum_{i=1}^{384} u_i^2} \sqrt{\sum_{i=1}^{384} v_{j,i}^2}}$$
+            </div>
+            <p>Chủ điểm ngữ pháp được chọn: $\hat{j} = \arg\max_j \text{Sim}(\mathbf{u}, \mathbf{v}_j)$</p>
+          </div>
+
+          <div class="box" style="border-left: 4px solid var(--sp3-color);">
+            <div class="box-title">⚡ Phân Ngưỡng Tin Cậy & Tốc Độ Thực Thi</div>
+            <ul class="clean-list">
+              <li><strong>Phân ngưỡng tin cậy (Confidence Thresholding):</strong>
+                <br>• <span class="highlight-pill" style="background: rgba(16,185,129,0.2); color:#34d399;">HIGH</span>: $\text{Sim} \ge 0.25$ (Gán badge tím + liên kết 2 chiều).
+                <br>• <span class="highlight-pill" style="background: rgba(245,158,11,0.2); color:#fbbf24;">MEDIUM</span>: $0.15 \le \text{Sim} &lt; 0.25$ (Gợi ý xem lại).
+                <br>• <span class="highlight-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">LOW</span>: $\text{Sim} &lt; 0.15$ (Từ chối gán nhãn giả).
+              </li>
+              <li><strong>Hiệu năng cực nhanh:</strong> Tốc độ suy luận chỉ <strong>4.2ms / câu hỏi</strong> trên chip Apple Silicon qua PyTorch MPS, kích thước mô hình chỉ 80MB, hoàn toàn offline.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="box" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.2);">
+          <strong>Đầu ra:</strong> Tệp <code>exercise_concept_links.json</code> chứa liên kết 2 chiều giữa 34 câu hỏi và 4 chủ điểm ngữ pháp, hiển thị badge tím và nút <code>📖 Lý thuyết (MM:SS) ➔</code> trên giao diện Web Demo.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12 -->
+    <div class="slide" data-slide="12" data-speaker="3" data-duration="300">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp3-color);">👤 THÀNH VIÊN 3 · ERRANT GEC CHAT</span>
+        <span class="slide-num-tag">Slide 12 / 18</span>
+      </div>
+      <h1 class="slide-title">Chẩn Đoán Lỗi Ngữ Pháp GEC Chuẩn ERRANT Từ Zoom Chat</h1>
+      <p class="slide-subtitle">Nhận diện 6 lỗi chuyển di ngôn ngữ (L1 Transfer) kinh điển của học viên Việt Nam</p>
+      
+      <div class="slide-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mã Lỗi ERRANT</th>
+              <th>Ví Dụ Câu Chat Của Học Sinh</th>
+              <th>Câu Sửa Chuẩn Sư Phạm</th>
+              <th>Giải Thích Tiếng Việt Cho Học Sinh</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>U:VERB:BE</code></td>
+              <td><em>"I am agree with A"</em></td>
+              <td><em>"I agree with A"</em></td>
+              <td>'Agree' là động từ thường, không dùng với 'to be'.</td>
+            </tr>
+            <tr>
+              <td><code>R:ADJ:PARTICIPLE</code></td>
+              <td><em>"I am confusing"</em></td>
+              <td><em>"I am confused"</em></td>
+              <td>Miêu tả cảm xúc con người phải dùng phân từ đuôi <strong>-ed</strong>.</td>
+            </tr>
+            <tr>
+              <td><code>M:VERB:AUX</code></td>
+              <td><em>"Why we use -ing?"</em></td>
+              <td><em>"Why do we use -ing?"</em></td>
+              <td>Câu hỏi WH- thì hiện tại đơn phải có trợ động từ 'do/does'.</td>
+            </tr>
+            <tr>
+              <td><code>R:VERB:FORM</code></td>
+              <td><em>"have it clean"</em></td>
+              <td><em>"have it cleaned"</em></td>
+              <td>Cấu trúc nhờ vả Causative bị động: <code>have + O + V3/ed</code>.</td>
+            </tr>
+            <tr>
+              <td><code>U:PREP</code></td>
+              <td><em>"should to increase"</em></td>
+              <td><em>"should increase"</em></td>
+              <td>Sau động từ khiếm khuyết 'should' dùng động từ nguyên thể không 'to'.</td>
+            </tr>
+            <tr>
+              <td><code>R:VERB:SVA</code></td>
+              <td><em>"it make me cry"</em></td>
+              <td><em>"it makes me cry"</em></td>
+              <td>Chủ ngữ ngôi thứ ba số ít 'it' yêu cầu động từ thêm 's/es'.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="box" style="font-size: 0.88rem; color: #cbd5e1;">
+          🔒 <strong>Bảo mật FERPA/GDPR:</strong> Module <code>chat_parser.py</code> tự động băm ẩn danh tên thật học sinh thành $S_1, S_2, \dots, S_N$, loại bỏ 100% rủi ro lộ dữ liệu cá nhân.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13 -->
+    <div class="slide" data-slide="13" data-speaker="3" data-duration="300">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp3-color);">👤 THÀNH VIÊN 3 · HYBRID NEURAL IE</span>
+        <span class="slide-num-tag">Slide 13 / 18</span>
+      </div>
+      <h1 class="slide-title">Trích Xuất Thông Tin Cấu Trúc (Bilingual IE) & Fallback</h1>
+      <p class="slide-subtitle">Kết hợp Gemini 3.5 Flash-Lite Structured Outputs và bộ luật dự phòng khi mất kết nối</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box" style="border-left: 4px solid #3b82f6;">
+            <div class="box-title">🤖 Đường Dẫn Chính (Primary Path: Gemini API)</div>
+            <ul class="clean-list">
+              <li>Gọi mô hình <strong>Gemini 3.5 Flash-Lite</strong> với schema JSON nghiêm ngặt.</li>
+              <li>Bóc tách 4 chủ điểm ngữ pháp trọng tâm (Grammar Focus):
+                <br>• Tiêu đề chuẩn TOEIC & Công thức.
+                <br>• Giải thích cơ chế ngữ pháp bằng tiếng Việt.
+                <br>• Cặp câu ví dụ so sánh phân từ.
+                <br>• Mốc timestamp video lúc giáo viên giảng.
+              </li>
+              <li>Sinh tệp <code>grammar_points.json</code> và <code>vocab_deep.json</code>.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-left: 4px solid var(--accent-red);">
+            <div class="box-title">🛡️ Đường Dẫn Dự Phòng (Rule-based Fallback)</div>
+            <ul class="clean-list">
+              <li>Đảm bảo tính sẵn sàng cao (High Availability) cho phần mềm sản phẩm.</li>
+              <li>Nếu mất kết nối Internet hoặc hết hạn mức API token, hệ thống tự động kích hoạt bộ bóc tách Heuristics Regex.</li>
+              <li>Bảo đảm ứng dụng không bao giờ bị crash (Zero-Crash Guarantee) khi chạy thực tế.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="code-block" style="font-size: 0.82rem;">
+          // Schema dữ liệu đầu ra: grammar_points.json
+          {
+            "id": "gp_participles_adj",
+            "title": "Participles as Adjectives (Hiện tại phân từ & Quá khứ phân từ)",
+            "formula": "V-ing (chủ động, bản chất) vs V-ed (bị động, cảm xúc)",
+            "video_timestamp": 493.5, // Phút 08:13 của video
+            "exam_tip": "Nhìn ngay sau danh từ để xác định nghĩa chủ động hay bị động."
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14 -->
+    <div class="slide" data-slide="14" data-speaker="4" data-duration="360">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp4-color);">👤 THÀNH VIÊN 4 · TEACHER DASHBOARD</span>
+        <span class="slide-num-tag">Slide 14 / 18</span>
+      </div>
+      <h1 class="slide-title">Báo Cáo Sư Phạm Đa Chiều (Teacher Dashboard)</h1>
+      <p class="slide-subtitle">Hội tụ toàn bộ kết quả phân tích NLP thành bảng điều khiển trợ lý sư phạm cho giáo viên</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">⏱️ 1. Tỷ Lệ Thời Lượng Nói (TTT vs STT)</div>
+            <div class="stat-hero">
+              <span class="stat-value" style="color: #f59e0b;">100%</span>
+              <span class="stat-label">Teacher Talk Time (STT: 0% qua Mic)</span>
+            </div>
+            <p style="font-size: 0.88rem;">Giáo viên nói xuyên suốt; học sinh tương tác 100% qua Zoom chat. Khuyến nghị: Giáo viên nên gọi học sinh bật mic phát biểu ở các bài đọc Part 6 dài.</p>
+          </div>
+
+          <div class="box">
+            <div class="box-title">📊 2. Bản Đồ Phân Bố Lỗi Sai (Error Heatmap)</div>
+            <ul class="clean-list" style="font-size: 0.88rem;">
+              <li><code>R:ADJ:PARTICIPLE</code>: <strong>28.6%</strong> (Học sinh sai nhiều nhất)</li>
+              <li><code>M:VERB:AUX</code>: <strong>14.3%</strong> (Thiếu trợ động từ)</li>
+              <li><code>U:VERB:BE</code>: <strong>14.3%</strong> (Thừa to be do ảnh hưởng tiếng Việt)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="box" style="border-left: 4px solid var(--accent-red);">
+            <div class="box-title" style="color: #f87171;">⚠️ 3. Cảnh Báo Điểm Nghẽn Lớp Học (Weakest Concept)</div>
+            <p>Chủ điểm: <strong>Tính từ phân từ bổ nghĩa danh từ</strong> (4 lượt trả lời sai tập trung ở câu 1, 2, 7).</p>
+          </div>
+
+          <div class="box" style="border-left: 4px solid #10b981;">
+            <div class="box-title" style="color: #34d399;">📋 4. Kế Hoạch Cải Tiến 3 Bước (Next-Lesson Action Plan)</div>
+            <ol style="padding-left: 1.2rem; font-size: 0.84rem; display: flex; flex-direction: column; gap: 4px; color: #cbd5e1;">
+              <li>Khởi động 5 phút đầu giờ bằng 3 câu trắc nghiệm phân biệt đuôi <code>-ing</code> và <code>-ed</code>.</li>
+              <li>Nhắc lại công thức sai khiến Causative <code>have/get + O + V3/ed</code>.</li>
+              <li>Dành 3–5 phút cho học sinh tự tìm từ khóa trong Part 6 trước khi cô chữa.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15 -->
+    <div class="slide" data-slide="15" data-speaker="4" data-duration="360">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp4-color);">👤 THÀNH VIÊN 4 · LIVE DEMO SHOWCASE</span>
+        <span class="slide-num-tag">Slide 15 / 18</span>
+      </div>
+      <h1 class="slide-title">Trình Diễn Sản Phẩm Thực Tế (Live Web Demo)</h1>
+      <p class="slide-subtitle">Kịch bản 5 bước trải nghiệm sản phẩm trực tiếp tại địa chỉ http://localhost:8000/</p>
+      
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="box" style="border-top: 3px solid #3b82f6;">
+            <div class="box-title">1. CĂN CHỈNH TUA VIDEO</div>
+            <p style="font-size: 0.88rem;">Bấm vào câu hỏi bất kỳ trên tab <strong>Exercises</strong> $\implies$ Video tua mượt mà tới đúng giây chữa bài, phụ đề chạy đồng bộ từng từ.</p>
+          </div>
+
+          <div class="box" style="border-top: 3px solid #a855f7;">
+            <div class="box-title">2. LIÊN KẾT LÝ THUYẾT</div>
+            <p style="font-size: 0.88rem;">Bấm <code>📖 Lý thuyết (08:13) ➔</code> $\implies$ Video tua ngược về phút thứ 8 lúc cô giảng lý thuyết, mở tab Grammar và highlight thẻ tương ứng.</p>
+          </div>
+
+          <div class="box" style="border-top: 3px solid #10b981;">
+            <div class="box-title">3. AUDIO TỪ VỰNG 1.5S</div>
+            <p style="font-size: 0.88rem;">Vào tab <strong>Vocabulary</strong>, lọc từ bậc B1, bấm nút loa 🔊 $\implies$ Phát đoạn audio 1.5s giọng nói thật của giáo viên.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="box" style="border-top: 3px solid #f59e0b;">
+            <div class="box-title">4. SỬA LỖI CHAT GEC (ERRANT)</div>
+            <p style="font-size: 0.88rem;">Vào tab <strong>Chat & Feedback</strong>, lọc tin nhắn lỗi $\implies$ Xem câu chat của học sinh đã ẩn danh, mã lỗi ERRANT và lời giải thích sư phạm tiếng Việt.</p>
+          </div>
+
+          <div class="box" style="border-top: 3px solid #06b6d4;">
+            <div class="box-title">5. TEACHER DASHBOARD & OMNIBOX</div>
+            <p style="font-size: 0.88rem;">Mở tab <strong>Analytics</strong> xem TTT/STT và Action Plan; bấm <code>Cmd+K</code> gõ <em>"participle"</em> để tìm kiếm tức thì trên toàn bài giảng.</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 0.5rem;">
+          <a href="http://localhost:8000/" target="_blank" style="color: #38bdf8; font-weight: 700; text-decoration: underline; font-size: 1.1rem;">
+            🔗 MỞ TRỰC TIẾP GIAO DIỆN WEB DEMO TẠI ĐÂY (HTTP://LOCALHOST:8000/)
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16 -->
+    <div class="slide" data-slide="16" data-speaker="4" data-duration="360">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp4-color);">👤 THÀNH VIÊN 4 · QA/QC PLAN</span>
+        <span class="slide-num-tag">Slide 16 / 18</span>
+      </div>
+      <h1 class="slide-title">Kế Hoạch QA/QC & Kết Quả Kiểm Thử (45/45 Tests Passed)</h1>
+      <p class="slide-subtitle">Kiểm soát chất lượng nghiêm ngặt theo mô hình Test-Driven Development (TDD)</p>
+      
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <div class="box-title">🧪 10 Bộ Unit Tests Bao Phủ Toàn Bộ Pipeline</div>
+            <table class="data-table" style="font-size: 0.82rem;">
+              <tr><td><code>test_wer.py</code></td><td>5 tests</td><td>Levenshtein WER, khoảng cách chỉnh sửa</td></tr>
+              <tr><td><code>test_text_lang.py</code></td><td>3 tests</td><td>Nhận diện ngôn ngữ & dấu thanh tiếng Việt</td></tr>
+              <tr><td><code>test_screen_hints.py</code></td><td>4 tests</td><td>Khử stop words OCR & Prompt Whisper</td></tr>
+              <tr><td><code>test_exercises.py</code></td><td>4 tests</td><td>Bóc tách đề bài & Căn chỉnh Monotonic DP</td></tr>
+              <tr><td><code>test_vocab.py</code></td><td>8 tests</td><td>Lemmatization, CEFR Lexicon & Audio 1.5s</td></tr>
+              <tr><td><code>test_feedback.py</code></td><td>10 tests</td><td>Zoom chat, ẩn danh FERPA & 6 lỗi ERRANT</td></tr>
+              <tr><td><code>test_neural_ie.py</code></td><td>4 tests</td><td>Gemini API Structured Output & Fallback</td></tr>
+              <tr><td><code>test_concept_link.py</code></td><td>2 tests</td><td>Dense Embeddings & Cosine Similarity</td></tr>
+              <tr><td><code>test_teacher_analytics.py</code></td><td>2 tests</td><td>TTT/STT, Error heatmap & Action plan</td></tr>
+              <tr><td><code>test_diarize.py</code></td><td>3 tests</td><td>Phân vai người nói Giáo viên / Học sinh</td></tr>
+            </table>
+          </div>
+
+          <div class="box" style="border-left: 4px solid #10b981; justify-content: center; text-align: center;">
+            <span class="highlight-pill" style="background: rgba(16,185,129,0.2); color:#34d399; font-size: 1rem; padding: 4px 16px;">TỔNG KẾT KIỂM THỬ</span>
+            <div class="stat-hero" style="justify-content: center; margin: 1.5rem 0;">
+              <span class="stat-value" style="color: #10b981; font-size: 3.8rem;">45 / 45</span>
+            </div>
+            <p style="font-size: 1.1rem; font-weight: 700; color: #34d399;">100% UNIT TESTS PASSED</p>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem;">
+              Thời gian thực thi toàn bộ 45 bài test: <strong>7.5 giây</strong> trên môi trường kiểm thử CI/CD của nhánh <code>edusync-v2</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 17 -->
+    <div class="slide" data-slide="17" data-speaker="4" data-duration="360">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp4-color);">👤 THÀNH VIÊN 4 · ĐÁNH GIÁ & PHÁT TRIỂN</span>
+        <span class="slide-num-tag">Slide 17 / 18</span>
+      </div>
+      <h1 class="slide-title">Đóng Góp Học Thuật, Hạn Chế & Hướng Phát Triển</h1>
+      <p class="slide-subtitle">Nhìn nhận khách quan về đồ án và lộ trình mở rộng quy mô trong tương lai</p>
+      
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="box" style="border-top: 3px solid #10b981;">
+            <div class="box-title" style="color: #34d399;">🌟 Đóng Góp Học Thuật</div>
+            <ul class="clean-list" style="font-size: 0.85rem;">
+              <li>Hiện thực hóa mô hình học tập đa phương thức (Multimodal Learning) kết hợp âm thanh, thị giác và văn bản.</li>
+              <li>Đưa các kỹ thuật NLP lý thuyết tiên tiến (Dense Embeddings, ERRANT, Contextual Prompting) vào giải quyết trực tiếp nỗi đau giáo dục số.</li>
+              <li>Bộ tài liệu học thuật đồ sộ chuẩn mực IEEE/ACM trong thư mục <code>docs/</code> (8 chuyên đề).</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid var(--accent-red);">
+            <div class="box-title" style="color: #f87171;">⚠️ Hạn Chế Hiện Tại</div>
+            <ul class="clean-list" style="font-size: 0.85rem;">
+              <li>Mô hình Whisper và Apple Vision OCR hiện tối ưu tốt nhất trên hệ điều hành macOS (Metal Performance Shaders).</li>
+              <li>Bộ dữ liệu thực nghiệm hiện tại tập trung chủ yếu vào dạng bài tập trắc nghiệm TOEIC (Part 5 & Part 6).</li>
+              <li>Xử lý theo lô (Batch Processing) sau khi buổi học kết thúc, chưa stream thời gian thực.</li>
+            </ul>
+          </div>
+
+          <div class="box" style="border-top: 3px solid #3b82f6;">
+            <div class="box-title" style="color: #60a5fa;">🚀 Hướng Phát Triển</div>
+            <ul class="clean-list" style="font-size: 0.85rem;">
+              <li>Mở rộng sang các bài đọc hiểu dài (IELTS Reading Part 7) và kỹ năng Nói (IELTS Speaking Diarization).</li>
+              <li>Triển khai cơ sở dữ liệu vector phân tán (Milvus / Qdrant) để phục vụ đồng thời cho hàng nghìn lớp học.</li>
+              <li>Tự động xuất bộ Flashcard Anki kèm âm thanh cắt sẵn cho học sinh ôn bài trên điện thoại.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 18 -->
+    <div class="slide" data-slide="18" data-speaker="4" data-duration="360">
+      <div class="slide-meta-row">
+        <span class="slide-speaker-tag" style="color: var(--sp4-color);">👤 THÀNH VIÊN 4 · TỔNG KẾT & Q&A</span>
+        <span class="slide-num-tag">Slide 18 / 18</span>
+      </div>
+      <h1 class="slide-title">Tổng Kết & Bắt Đầu Phiên Hỏi - Đáp (Q&A)</h1>
+      <p class="slide-subtitle">Trân trọng cảm ơn Thầy/Cô Hội đồng và các bạn học viên đã chú ý lắng nghe!</p>
+      
+      <div class="slide-body" style="justify-content: center; align-items: center; text-align: center; gap: 1.8rem;">
+        <div class="box" style="max-width: 800px; padding: 2rem; background: rgba(30, 41, 59, 0.6); border-color: rgba(56, 189, 248, 0.3);">
+          <div style="font-size: 1.35rem; font-weight: 700; color: #f3f4f6; margin-bottom: 0.8rem;">
+            "EduSync không thay thế người thầy, mà trao quyền cho người thầy và học sinh bằng sức mạnh của Trí tuệ Nhân tạo và Xử lý Ngôn ngữ Tự nhiên."
+          </div>
+          <div style="font-size: 0.95rem; color: var(--text-muted);">
+            Branch Git: <code>edusync-v2</code> &nbsp;|&nbsp; 
+            Tài liệu: <code>docs/01</code> đến <code>docs/08</code> &nbsp;|&nbsp; 
+            Demo: <code>http://localhost:8000/</code>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1.5rem; justify-content: center;">
+          <div class="box" style="width: 220px; text-align: left;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--sp1-color);">Thành viên 1</div>
+            <p style="font-size: 0.8rem;">SRS & Kiến trúc<br>FERPA & Q&A Bảo mật</p>
+          </div>
+          <div class="box" style="width: 220px; text-align: left;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--sp2-color);">Thành viên 2</div>
+            <p style="font-size: 0.8rem;">Whisper ASR & Hints<br>Monotonic DP & Q&A</p>
+          </div>
+          <div class="box" style="width: 220px; text-align: left;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--sp3-color);">Thành viên 3</div>
+            <p style="font-size: 0.8rem;">CEFR & Dense Embed<br>ERRANT GEC & Q&A</p>
+          </div>
+          <div class="box" style="width: 220px; text-align: left;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--sp4-color);">Thành viên 4</div>
+            <p style="font-size: 0.8rem;">Teacher Analytics<br>Live Demo & QA/QC</p>
+          </div>
+        </div>
+
+        <div style="font-size: 1.4rem; font-weight: 800; color: #38bdf8; letter-spacing: 1px;">
+          💬 XIN SẴN SÀNG LẮNG NGHE Ý KIẾN VÀ CÂU HỎI TỪ HỘI ĐỒNG!
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER & TIMELINE -->
+  <footer class="deck-footer">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span id="currentSlideNum" style="font-weight: 700; color: #f3f4f6;">1</span>
+      <span style="color: var(--text-dim);">/ 18</span>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <div class="nav-hints">
+      <span><kbd>←</kbd> <kbd>→</kbd> hoặc <kbd>Space</kbd> Chuyển slide</span>
+      <span><kbd>N</kbd> Kịch bản nói</span>
+      <span><kbd>O</kbd> Slide Grid</span>
+      <span><kbd>F</kbd> Toàn màn hình</span>
+    </div>
+  </footer>
+
+  <!-- SPEAKER NOTES DRAWER -->
+  <div class="speaker-drawer" id="speakerDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <span>🎤 KỊCH BẢN LỜI THOẠI NGƯỜI THUYẾT TRÌNH (SPEAKER SCRIPT)</span>
+        <span id="drawerSpeakerTag" class="highlight-pill">Thành viên 1</span>
+      </div>
+      <button class="btn-ctrl" id="btnCloseDrawer" style="padding: 2px 8px;">✕ Đóng (N)</button>
+    </div>
+    <div class="drawer-content" id="drawerContent">
+      Đang tải lời thoại...
+    </div>
+  </div>
+
+  <!-- OVERVIEW GRID MODAL -->
+  <div class="overview-modal" id="overviewModal">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">▦ TỔNG QUAN TẤT CẢ CÁC SLIDE (18 SLIDES)</h2>
+      <button class="btn-ctrl" id="btnCloseOverview">✕ Đóng (O)</button>
+    </div>
+    <div class="overview-grid" id="overviewGrid">
+      <!-- Generated dynamically -->
+    </div>
+  </div>
+
+  <script>
+    // SPEAKER SCRIPTS METADATA (From docs/08_presentation_slides_and_speaker_notes.md)
+    const speakerNotes = {
+      1: "Kính thưa Thầy/Cô và toàn thể các bạn học viên cao học,\nHôm nay, đại diện cho nhóm nghiên cứu đồ án môn Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501), em xin phép được trình bày đề tài: EduSync - Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Trực tuyến.\nNhóm chúng em gồm có 4 thành viên, với sự phân công chuyên trách xuyên suốt từ phân tích yêu cầu, tiền xử lý dữ liệu âm thanh - thị giác đa phương thức, đến xây dựng các mô hình NLP cốt lõi và phát triển giao diện hệ thống hoàn chỉnh.\nSau đây, em xin phép bắt đầu bằng bối cảnh và lý do tại sao nhóm lựa chọn đề tài này.",
+      
+      2: "Thưa Thầy/Cô, thực tế hiện nay các nền tảng họp trực tuyến như Zoom hay Google Meet chỉ đơn thuần đóng vai trò là công cụ truyền tải hình ảnh và âm thanh. Khi buổi học kết thúc, sản phẩm còn lại duy nhất là một tệp video MP4 kéo dài từ 60 đến 90 phút và một tệp log chat dạng văn bản thô.\nĐối với học sinh, đây là một 'hộp đen' khổng lồ: các em mất trung bình 15-20 phút chỉ để tua chuột tìm lại đúng câu hỏi mình làm sai; tệ hơn nữa, các em không có cách nào liên kết ngược câu hỏi đó với phần lý thuyết mà thầy cô đã dạy ở đầu giờ.\nCòn đối với giáo viên, họ hoàn toàn thiếu các chỉ số đo lường định lượng: không biết mình nói quá nhiều hay không, và không thể nhớ hết được trong hàng chục tin nhắn chat của học sinh, lỗi ngữ pháp nào đang là điểm nghẽn phổ biến nhất của cả lớp.\nĐây chính là bài toán thực tiễn mà nhóm em đặt mục tiêu giải quyết triệt để bằng các kỹ thuật NLP hiện đại.",
+      
+      3: "Để giải quyết hai nỗi đau trên, EduSync được định vị dựa trên hai trụ cột giá trị cốt lõi:\nThứ nhất, đối với Học sinh, chúng em trao cho các em khả năng 'chạm là đến': bấm vào câu hỏi là video nhảy ngay đến đoạn giáo viên giải thích; bấm vào khái niệm là nhảy ngược về lý thuyết gốc; học từ vựng có sẵn phân cấp độ CEFR và nghe được đoạn phát âm mẫu 1.5 giây của chính giáo viên.\nThứ hai, đối với Giáo viên, hệ thống hoạt động như một trợ lý sư phạm AI thông minh: tự động phân tích tỷ lệ nói của giáo viên và học sinh, vẽ biểu đồ phân bố lỗi sai và xuất ra ngay một Action Plan 3 bước cho buổi dạy tiếp theo.\nĐiều này giúp giáo viên cải tiến chất lượng giảng dạy dựa trên dữ liệu thực chứng (data-driven pedagogy) thay vì chỉ dựa vào cảm tính cá nhân.",
+      
+      4: "Về mặt kiến trúc kỹ thuật, hệ thống EduSync được chúng em thiết kế theo mô hình 4 tầng chặt chẽ tuân thủ chuẩn đặc tả phần mềm IEEE 830:\nTừ tệp video và log chat đầu vào ở Tầng 1, hệ thống đưa qua Tầng 2 để bóc tách đa phương thức hình ảnh, âm thanh và văn bản. Sau đó, Tầng 3 sẽ thực thi các giải thuật NLP cốt lõi từ căn chỉnh đơn điệu, nhúng ngữ nghĩa vector dense embeddings cho đến chẩn đoán lỗi ngữ pháp. Toàn bộ kết quả được đẩy lên Tầng 4 là một ứng dụng Web tương tác hiệu năng cao.\n👉 Tiếp theo đây, em xin kính mời Bạn [Thành viên 2] sẽ trình bày chi tiết về tầng thu nhận dữ liệu đa phương thức và thuật toán căn chỉnh thời gian đơn điệu.",
+      
+      5: "Kính thưa Thầy/Cô, thách thức kỹ thuật lớn đầu tiên của bài toán nằm ở bản chất âm thanh của lớp học ngoại ngữ tại Việt Nam: đó là hiện tượng Code-Switching (chuyển mã ngôn ngữ) diễn ra với mật độ rất cao. Giáo viên liên tục đan xen giữa tiếng Việt và các thuật ngữ ngữ pháp tiếng Anh.\nNếu sử dụng các thư viện ASR thông thường, tỷ lệ lỗi từ (Word Error Rate - WER) sẽ bị đội lên rất cao do mô hình bị lạc giữa hai không gian từ vựng.\nNhóm chúng em đã lựa chọn kiến trúc Whisper large-v3-turbo tối ưu chạy trên môi trường cục bộ. Mô hình này sử dụng cơ chế Cross-Attention giúp phiên mã chính xác cả hai ngôn ngữ và cung cấp timestamp chính xác đến từng từ, tạo nền tảng vững chắc cho các bước xử lý văn bản phía sau.",
+      
+      6: "Tuy nhiên, ngay cả mô hình Whisper lớn nhất cũng gặp khó khăn khi giáo viên phát âm lướt hoặc micro bị nhiễu âm. Để khắc phục điều này, nhóm đã áp dụng một kỹ thuật tiên tiến được lấy cảm hứng từ bài báo khoa học MaViLS: đó là Contextual Prompting qua Screen Hints.\nCụ thể, trước khi phiên mã một đoạn âm thanh, chúng em chạy OCR trên khung hình video tương ứng để lấy ra danh sách các từ vựng xuất hiện trên màn hình bài giảng. Danh sách này được nạp vào initial_prompt của Whisper đóng vai trò như một ngữ cảnh gợi ý.\nNhờ vậy, khi giáo viên nói đến một từ vựng chuyên ngành có trên slide, bộ giải mã của Whisper sẽ ưu tiên chọn token đó, giúp giảm tỷ lệ nhận diện sai thuật ngữ xuống gần một nửa (từ 18.4% xuống 9.2%) và loại bỏ hoàn toàn các câu ảo giác vô nghĩa.",
+      
+      7: "Sau khi có văn bản lời giảng và đề bài từ slide, bài toán tiếp theo là: Làm sao biết chính xác từ phút thứ mấy đến phút thứ mấy giáo viên đang chữa câu hỏi số 1, số 2, hay số 34?\nNếu chỉ dùng tìm kiếm từ khóa đơn thuần, hệ thống sẽ thất bại ngay lập tức vì giáo viên thường xuyên nói những câu như 'Xem lại câu 2 đi' khi đang chữa câu 5, gây ra hiện tượng nhảy ngược thời gian.\nNhóm em đã giải quyết bài toán này bằng Thuật toán Quy hoạch động Đơn điệu (Monotonic DP Alignment). Thuật toán áp dụng một ràng buộc đơn điệu nghiêm ngặt: thời điểm bắt đầu chữa câu hỏi sau luôn luôn phải lớn hơn câu hỏi trước (t_{k+1} > t_k), kết hợp với một cửa sổ trượt 120 giây.\nĐiều này đảm bảo timeline của buổi học luôn xuôi chiều tự nhiên và không bao giờ bị nhảy lộn xộn.",
+      
+      8: "Nhờ thuật toán Monotonic DP, trên bộ dữ liệu thực tế bài giảng TOEIC dài 63 phút với 34 câu hỏi trắc nghiệm, hệ thống của nhóm đã đạt độ phủ Recall tuyệt đối 100%, tức là tìm ra chính xác toàn bộ 34/34 câu hỏi mà giáo viên chữa trong bài.\nSai số mốc thời gian trung bình chỉ là 1.8 giây — một con số hoàn toàn lý tưởng cho trải nghiệm người dùng học tập, vì khi học sinh bấm vào câu hỏi, video sẽ bắt đầu ngay trước lúc giáo viên cất lời chữa bài khoảng 1-2 giây.\n👉 Tiếp theo, để biến các câu hỏi bài tập này thành tri thức ngữ nghĩa và liên kết với lý thuyết, em xin kính mời Bạn [Thành viên 3] trình bày phần Kỹ thuật NLP cốt lõi.",
+      
+      9: "Kính thưa Thầy/Cô, bước sang tầng xử lý NLP ngữ nghĩa, tính năng đầu tiên nhóm xây dựng là Bộ trích xuất và phân loại từ vựng CEFR.\nThông thường, các ứng dụng khác chỉ liệt kê từ mới và lấy phát âm từ giọng đọc robot text-to-speech. Nhưng EduSync làm khác biệt hoàn toàn:\nSau khi lemmatize và đối chiếu với từ điển chuẩn CEFR-J gồm gần 9.000 từ để phân loại từ A1 đến C1, hệ thống của nhóm sẽ định vị chính xác vị trí timestamp của từ đó trong lời giảng và tự động cắt ra một đoạn audio 1.5 giây.\nKhi học sinh bấm vào biểu tượng loa, các em được nghe chính ngữ điệu và phát âm chuẩn của giáo viên trong lớp học, giúp việc ghi nhớ từ vựng trực quan và chân thực hơn rất nhiều.",
+      
+      10: "Tiếp theo là bài toán liên kết câu hỏi với lý thuyết ngữ pháp — một trong những điểm nhấn quan trọng nhất của đề tài mà Thầy/Cô đã định hướng cho nhóm.\nNếu chúng ta dùng phương pháp so khớp từ khóa truyền thống (như BM25 hay TF-IDF), thuật toán sẽ hoàn toàn bất lực. Ví dụ một câu hỏi bài tập yêu cầu điền từ 'interesting', trong toàn bộ câu hỏi không hề xuất hiện chữ 'participle' hay 'phân từ'. Khớp từ khóa sẽ cho kết quả bằng 0.\nĐể giải quyết triệt để vấn đề này, nhóm chúng em đã áp dụng phương pháp Nhúng Vector Ngữ nghĩa (Dense Semantic Embeddings). Chúng em chuyển đổi cả câu hỏi và các đoạn lý thuyết vào một không gian vector đa chiều, nơi mà các khái niệm có quan hệ ngữ nghĩa sẽ tự động hội tụ về gần nhau.",
+      
+      11: "Cụ thể về mặt kỹ thuật, nhóm sử dụng mô hình pre-trained all-MiniLM-L6-v2. Mỗi câu hỏi và mỗi chủ điểm ngữ pháp được mã hóa thành một vector 384 chiều.\nSau đó, chúng em tính toán độ tương đồng Cosine giữa vector câu hỏi và 4 vector chủ điểm lý thuyết trong bài giảng. Chủ điểm nào đạt độ tương đồng cực đại và vượt qua ngưỡng tin cậy sẽ được ghép cặp với câu hỏi đó.\nKết quả chạy thực nghiệm cho thấy thời gian nhúng chỉ mất 4.2 mili-giây cho mỗi câu hỏi trên chip Mac M-series, và hệ thống đã gán nhãn thành công các câu hỏi về phân từ, câu bị động và vị trí tính từ với độ chính xác rất cao, tạo nên tệp exercise_concept_links.json phục vụ trực tiếp cho giao diện web.",
+      
+      12: "Song song với bài tập, một mỏ dữ liệu quý giá khác mà trước nay thường bị bỏ quên chính là khung chat của học sinh.\nNhóm chúng em đã xây dựng module GEC Feedback tuân thủ theo bảng phân loại lỗi quốc tế ERRANT của Đại học Cambridge. Chúng em tập trung nhận diện 6 mẫu lỗi L1 Transfer phổ biến nhất của người Việt khi học tiếng Anh, ví dụ như lỗi thừa động từ 'to be' khi nói 'I am agree', hay lỗi nhầm lẫn tai hại giữa tính từ đuôi -ing và -ed.\nHệ thống không chỉ đưa ra câu sửa chuẩn mà còn cung cấp lời giải thích sư phạm chi tiết bằng tiếng Việt, giúp học sinh nhận thức rõ nguyên nhân mình sai và cách khắc phục.",
+      
+      13: "Để trích xuất được các chủ điểm ngữ pháp này một cách tự động từ văn bản lời giảng, nhóm đã áp dụng mô hình Hybrid Neural Information Extraction.\nChúng em sử dụng Gemini 3.5 Flash-Lite với cơ chế Structured Outputs để ép kiểu dữ liệu trả về đúng schema JSON gồm công thức toán học ngữ pháp, ví dụ song ngữ và mốc thời gian giảng bài.\nĐặc biệt, để đảm bảo tính sẵn sàng cao của phần mềm trong môi trường production, nhóm đã lập trình sẵn một cơ chế Fallback bằng luật. Nếu không có kết nối Internet hoặc API bị gián đoạn, hệ thống vẫn tự động trích xuất được bộ khung lý thuyết cơ bản mà không làm crash ứng dụng.\n👉 Sau đây, em xin kính mời Bạn [Thành viên 4] sẽ trình bày về Báo cáo Sư phạm Teacher Dashboard và trực tiếp điều phối phiên Live Demo sản phẩm.",
+      
+      14: "Kính thưa Thầy/Cô, toàn bộ các kết quả phân tích NLP từ giọng nói, văn bản và chat ở các bước trước không chỉ phục vụ cho học sinh ôn bài, mà còn hội tụ lại tại Bảng điều khiển Sư phạm Teacher Dashboard.\nĐây chính là giải pháp giúp giáo viên giải quyết trọn vẹn bài toán quản lý lớp học:\nThay vì phải đọc lại từng dòng log chat, giáo viên chỉ cần nhìn vào Dashboard là thấy ngay: Hôm nay lớp học của mình có mức độ tương tác ra sao; học sinh đang vấp phải lỗi ngữ pháp nào nhiều nhất; và đặc biệt hệ thống tự động sinh ra một Kế hoạch hành động 3 bước cho buổi học ngày mai, hướng dẫn giáo viên nên warm-up bài gì và cần nhắc lại công thức nào.\nĐể Thầy/Cô có cái nhìn trực quan nhất, ngay sau đây em xin phép được trình chiếu Live Demo sản phẩm đang chạy thực tế trên máy chủ cục bộ.",
+      
+      15: "(Thành viên 4 thao tác trực tiếp trên trang http://localhost:8000/)\nThưa Thầy/Cô, đây là giao diện Web Demo thực tế của EduSync.\nĐầu tiên, ở Tab Exercises bên tay phải, khi em bấm vào Câu hỏi số 1, video ngay lập tức tua đến giây thứ 181 khi giáo viên bắt đầu đọc đề. Các Thầy/Cô có thể thấy một Badge màu tím hiển thị chủ điểm ngữ pháp được gắn nhãn tự động bởi mô hình Dense Embeddings.\nKhi em bấm vào nút 'Lý thuyết (08:13)', video lập tức tua ngược về phút thứ 8 lúc cô giáo bắt đầu giảng công thức, đồng thời hệ thống tự chuyển sang Tab Grammar và highlight đúng thẻ lý thuyết này!\nTiếp theo, tại Tab Vocabulary, khi lọc các từ cấp độ B1 và bấm vào biểu tượng loa cạnh từ 'distribute', chúng ta nghe thấy chính xác đoạn phát âm 1.5 giây giọng cô giáo vừa giảng trong bài.\nChuyển sang Tab Chat, hệ thống đã ẩn danh tên học sinh thành S1, S2 theo chuẩn FERPA và gắn nhãn các lỗi sai ngữ pháp bằng mô hình ERRANT.\nVà cuối cùng, tại Tab Analytics, giáo viên có một bảng tổng hợp đầy đủ từ biểu đồ tương tác, phân bố lỗi sai đến kế hoạch hành động 3 bước cho buổi sau.\nMọi tính năng đều hoạt động với độ trễ dưới 5ms ngay trên trình duyệt mà không cần tải lại trang.",
+      
+      16: "Kính thưa Thầy/Cô, để đạt được độ tin cậy cao như trong bài demo vừa rồi, nhóm em đã áp dụng quy trình kiểm chuẩn phần mềm cực kỳ nghiêm ngặt.\nToàn bộ pipeline hệ thống được bao phủ bởi 45 bài Unit Tests tự động bằng framework Pytest.\nCác bài test này kiểm tra từ tính đúng đắn toán học của thuật toán Levenshtein WER, độ chính xác của bộ lemmatize hình thái, thuật toán quy hoạch động đơn điệu, cho đến độ bền vững của mô hình nhúng vector và cơ chế fallback khi gọi API.\nToàn bộ 45/45 bài test hiện đều đạt trạng thái PASSED 100% trên nhánh edusync-v2 của dự án.",
+      
+      17: "Nhìn lại toàn bộ quá trình nghiên cứu, nhóm tự hào đã hiện thực hóa được một giải pháp hoàn chỉnh từ lý thuyết NLP đến sản phẩm phần mềm thực tiễn, đóng góp một hướng đi mới cho việc ứng dụng AI vào phân tích sư phạm trực tuyến.\nTuy nhiên, đề tài cũng còn một số hạn chế nhất định, chẳng hạn như hiện tại hệ thống tập trung sâu vào dạng bài tập trắc nghiệm tiếng Anh.\nTrong tương lai, nhóm dự kiến sẽ mở rộng kiến trúc này sang các dạng bài đọc hiểu phức tạp hơn của kỳ thi IELTS và tích hợp các cơ sở dữ liệu vector phân tán để có thể phục vụ đồng thời cho hàng ngàn lớp học trên toàn trường.",
+      
+      18: "Kính thưa Thầy/Cô, EduSync ra đời với tâm niệm không phải để thay thế người thầy, mà là để trao quyền cho người thầy giảng dạy hiệu quả hơn và giúp các bạn học sinh tiếp thu tri thức một cách chủ động, dễ dàng hơn.\nToàn bộ mã nguồn, dữ liệu mẫu và tài liệu chuẩn IEEE của đồ án đã được công khai trên GitHub của nhóm.\nChúng em xin trân trọng cảm ơn Thầy/Cô và các bạn đã dành thời gian theo dõi bài báo cáo. Sau đây, cả 4 thành viên trong nhóm chúng em xin sẵn sàng lắng nghe các ý kiến nhận xét và giải đáp các câu hỏi phản biện từ Thầy/Cô Hội đồng. Em xin trân trọng cảm ơn!"
+    };
+
+    const speakerMeta = {
+      1: { name: "Thành viên 1", role: "Project Lead & Requirements", color: "var(--sp1-color)", label: "Thành viên 1: Đặt Vấn Đề & Kiến Trúc", time: 270 },
+      2: { name: "Thành viên 2", role: "Multimodal Alignment", color: "var(--sp2-color)", label: "Thành viên 2: ASR Whisper & Căn Chỉnh DP", time: 270 },
+      3: { name: "Thành viên 3", role: "Core NLP & Embeddings", color: "var(--sp3-color)", label: "Thành viên 3: Dense Embeddings & ERRANT", time: 300 },
+      4: { name: "Thành viên 4", role: "System, Analytics & Live Demo", color: "var(--sp4-color)", label: "Thành viên 4: Teacher Dashboard, Live Demo & QA/QC", time: 360 }
+    };
+
+    let currentSlide = 1;
+    const totalSlides = 18;
+    const slides = document.querySelectorAll('.slide');
+
+    // Timer state
+    let timerInterval = null;
+    let timerRunning = false;
+    let currentSpeakerId = 1;
+    let secondsLeft = speakerMeta[1].time;
+
+    function updateSpeakerInfo(speakerId) {
+      if (currentSpeakerId !== speakerId) {
+        currentSpeakerId = speakerId;
+        secondsLeft = speakerMeta[speakerId].time;
+        updateTimerDisplay();
+      }
+      const meta = speakerMeta[speakerId];
+      document.getElementById('speakerDot').style.background = meta.color;
+      document.getElementById('speakerDot').style.boxShadow = `0 0 8px ${meta.color}`;
+      document.getElementById('speakerLabel').innerText = meta.label;
+      document.getElementById('speakerLabel').style.color = meta.color;
+
+      // Drawer tag
+      document.getElementById('drawerSpeakerTag').innerText = `${meta.name} (${meta.role})`;
+      document.getElementById('drawerSpeakerTag').style.color = meta.color;
+      document.getElementById('drawerSpeakerTag').style.borderColor = meta.color;
+    }
+
+    function showSlide(index) {
+      if (index < 1 || index > totalSlides) return;
+      currentSlide = index;
+
+      slides.forEach(slide => {
+        const sNum = parseInt(slide.dataset.slide);
+        if (sNum === currentSlide) {
+          slide.classList.add('active');
+          const speakerId = parseInt(slide.dataset.speaker);
+          updateSpeakerInfo(speakerId);
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update footer
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      // Update speaker notes
+      document.getElementById('drawerContent').innerText = speakerNotes[currentSlide] || "Chưa có lời thoại cho slide này.";
+
+      // Update overview highlight
+      document.querySelectorAll('.overview-card').forEach(card => {
+        if (parseInt(card.dataset.slide) === currentSlide) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+
+      // Render KaTeX if needed
+      if (window.renderMathInElement) {
+        window.renderMathInElement(document.body);
+      }
+    }
+
+    // Timer Controls
+    function updateTimerDisplay() {
+      const mins = Math.floor(secondsLeft / 60);
+      const secs = secondsLeft % 60;
+      const fmt = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      const disp = document.getElementById('timerDisplay');
+      disp.innerText = fmt;
+      if (secondsLeft <= 30) {
+        disp.style.color = '#ef4444';
+      } else {
+        disp.style.color = '#e5e7eb';
+      }
+    }
+
+    function toggleTimer() {
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('btnTimerToggle').innerText = '▶ Chạy';
+      } else {
+        timerRunning = true;
+        document.getElementById('btnTimerToggle').innerText = '⏸ Dừng';
+        timerInterval = setInterval(() => {
+          if (secondsLeft > 0) {
+            secondsLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            document.getElementById('btnTimerToggle').innerText = '▶ Hết giờ';
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      document.getElementById('btnTimerToggle').innerText = '▶ Chạy';
+      secondsLeft = speakerMeta[currentSpeakerId].time;
+      updateTimerDisplay();
+    }
+
+    // Modal Overview
+    function buildOverview() {
+      const grid = document.getElementById('overviewGrid');
+      grid.innerHTML = '';
+      slides.forEach(slide => {
+        const sNum = slide.dataset.slide;
+        const spId = slide.dataset.speaker;
+        const titleEl = slide.querySelector('.slide-title');
+        const titleText = titleEl ? titleEl.innerText : `Slide ${sNum}`;
+
+        const card = document.createElement('div');
+        card.className = `overview-card ${parseInt(sNum) === currentSlide ? 'active' : ''}`;
+        card.dataset.slide = sNum;
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: ${speakerMeta[spId].color}; font-weight: 700; margin-bottom: 6px;">
+            <span>SLIDE ${sNum}</span>
+            <span>${speakerMeta[spId].name}</span>
+          </div>
+          <div style="font-size: 0.85rem; font-weight: 600; color: #f3f4f6; line-height: 1.3;">${titleText}</div>
+        `;
+        card.addEventListener('click', () => {
+          showSlide(parseInt(sNum));
+          toggleOverview(false);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function toggleOverview(force) {
+      const modal = document.getElementById('overviewModal');
+      const isOpen = force !== undefined ? force : !modal.classList.contains('open');
+      if (isOpen) {
+        buildOverview();
+        modal.classList.add('open');
+      } else {
+        modal.classList.remove('open');
+      }
+    }
+
+    function toggleDrawer(force) {
+      const drawer = document.getElementById('speakerDrawer');
+      const isOpen = force !== undefined ? force : !drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.add('open');
+        document.getElementById('btnNotesToggle').classList.add('active');
+      } else {
+        drawer.classList.remove('open');
+        document.getElementById('btnNotesToggle').classList.remove('active');
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        showSlide(currentSlide - 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        showSlide(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        showSlide(totalSlides);
+      } else if (e.key.toLowerCase() === 'n') {
+        toggleDrawer();
+      } else if (e.key.toLowerCase() === 'o') {
+        toggleOverview();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      } else if (e.key === 'Escape') {
+        toggleOverview(false);
+        toggleDrawer(false);
+      }
+    });
+
+    // Button Listeners
+    document.getElementById('btnTimerToggle').addEventListener('click', toggleTimer);
+    document.getElementById('btnTimerReset').addEventListener('click', resetTimer);
+    document.getElementById('btnNotesToggle').addEventListener('click', () => toggleDrawer());
+    document.getElementById('btnCloseDrawer').addEventListener('click', () => toggleDrawer(false));
+    document.getElementById('btnOverviewToggle').addEventListener('click', () => toggleOverview());
+    document.getElementById('btnCloseOverview').addEventListener('click', () => toggleOverview(false));
+    document.getElementById('btnFullscreen').addEventListener('click', toggleFullscreen);
+
+    // Init
+    showSlide(1);
+    updateTimerDisplay();
+  </script>
+</body>
+</html>

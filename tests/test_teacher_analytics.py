@@ -43,3 +43,4 @@ def test_teacher_report_output_file_saved():
     assert out_file.is_file()
     data = json.loads(out_file.read_text(encoding="utf-8"))
     assert data["class_meta"]["total_students_active"] == 5
+
