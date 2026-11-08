@@ -225,3 +225,4 @@ Tài liệu này xác lập nền tảng kỹ thuật và sư phạm vững ch�
 1. **Tính Thực tiễn Cao:** Giải quyết trọn vẹn nhu cầu thiết thực của học sinh (tiết kiệm thời gian ôn tập, tra cứu trực quan) và giáo viên (đo lường định lượng, báo cáo tự động để cải tiến giảng dạy).
 2. **Hàm lượng Kỹ thuật NLP Đậm đặc:** Áp dụng toàn diện các kỹ thuật NLP hiện đại: **ASR Contextual Prompting**, **Monotonic DP Sequence Alignment**, **Dense Semantic Embeddings với Cosine Similarity**, **Morphological Lemmatization**, **Information Extraction**, và **Grammatical Error Correction (ERRANT)**.
 3. **Khả năng Nhân rộng (Scalability):** Hệ thống được module hóa theo chuẩn cắm-rút (plug-and-play), sẵn sàng áp dụng cho bất kỳ video bài giảng trực tuyến nào chỉ với một lệnh thực thi pipeline duy nhất.
+
