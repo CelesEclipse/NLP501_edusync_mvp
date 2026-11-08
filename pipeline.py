@@ -19,6 +19,7 @@ STEPS = [
     ("links", ["slides.json", "transcript.json", "alignment.json"], ["links.json"], ["link_materials.py"], "pdf"),
     ("exercises", ["screens.json"], ["exercises.json"], ["exercises.py"], "no-pdf"),
     ("exercise_align", ["exercises.json", "transcript.json"], ["exercise_alignment.json"], ["exercise_align.py"], "no-pdf"),
+    ("vocab", ["screens.json", "transcript.json"], ["vocab.json"], ["vocab.py"], "no-pdf"),
     ("content", ["screens.json", "transcript.json"], ["content.md"], ["lesson_content.py"], "no-pdf"),
 ]
 

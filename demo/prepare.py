@@ -46,7 +46,11 @@ else:
     print("warning: neither alignment.json nor screens.json found")
 
 # 2. Files to copy or clean up
-shared_files = ["transcript.json", "speakers.json", "lesson.json", "exercises.json", "exercise_alignment.json", "screens.json"]
+shared_files = [
+    "transcript.json", "speakers.json", "lesson.json",
+    "exercises.json", "exercise_alignment.json", "screens.json",
+    "vocab.json"
+]
 for f in shared_files:
     if os.path.exists(L(f)):
         shutil.copy(L(f), D(f))
@@ -86,6 +90,16 @@ elif has_screens:
             shutil.rmtree(D("screens"), ignore_errors=True)
         os.symlink(os.path.relpath(src_screens, DEMO), D("screens"))
         print("screens/ ->", src_screens)
+
+    # Link vocab_audio directory
+    src_vocab_audio = os.path.abspath(L("vocab_audio"))
+    if os.path.isdir(src_vocab_audio):
+        if os.path.islink(D("vocab_audio")):
+            os.remove(D("vocab_audio"))
+        elif os.path.isdir(D("vocab_audio")):
+            shutil.rmtree(D("vocab_audio"), ignore_errors=True)
+        os.symlink(os.path.relpath(src_vocab_audio, DEMO), D("vocab_audio"))
+        print("vocab_audio/ ->", src_vocab_audio)
 
 # 4. Link video
 video = L("video.mp4")

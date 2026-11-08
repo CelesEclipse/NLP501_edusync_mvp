@@ -18,13 +18,17 @@ demo/exercise_alignment.json
 demo/screens.json
 demo/speakers.json
 demo/lesson.json
+demo/vocab.json
+demo/vocab_audio
+demo/vocab_audio/
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/
 __pycache__/
 .DS_Store
-# screen images extracted from videos, and raw YouTube metadata
+# screen images extracted from videos, audio slices, and raw YouTube metadata
 lessons/*/screens/
+lessons/*/vocab_audio/
 lessons/*/.source.json
 # lessons from third-party videos (the repo is public): only lesson.json is shared; extracted text,
 # experiment transcripts and labels stay local until the team decides

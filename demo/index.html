@@ -454,6 +454,168 @@
     .screen-btn.active .screen-sub { color: rgba(255,255,255,0.8); }
     .screen-sub { font-size: 11px; color: var(--mut); }
 
+    /* Vocabulary CEFR tab */
+    .vocab-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .v-filter {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .v-filter:hover {
+      border-color: var(--brand);
+    }
+    .v-filter.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+    .vocab-search-wrap {
+      margin-bottom: 12px;
+    }
+    .vocab-search-input {
+      width: 100%;
+      padding: 7px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      font-size: 12.5px;
+      outline: none;
+    }
+    .vocab-search-input:focus {
+      border-color: var(--brand);
+    }
+    .vocab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .v-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .v-card:hover {
+      border-color: var(--brand);
+      background: var(--card);
+    }
+    .v-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .v-word-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .v-word {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fg);
+    }
+    .v-pos {
+      font-size: 11px;
+      color: var(--mut);
+      font-style: italic;
+    }
+    .v-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .v-badge.A1 { background: rgba(16, 185, 129, 0.15); color: #059669; }
+    .v-badge.A2 { background: rgba(20, 184, 166, 0.15); color: #0d9488; }
+    .v-badge.B1 { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
+    .v-badge.B2 { background: rgba(139, 92, 246, 0.15); color: #7c3aed; }
+    .v-badge.C1, .v-badge.C2 { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+    .v-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .v-btn-audio {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .v-btn-audio:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+    .v-btn-audio.playing {
+      background: #10b981;
+      color: #fff;
+      border-color: #10b981;
+      animation: pulse 1s infinite;
+    }
+    .v-btn-seek {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--fg);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .v-btn-seek:hover {
+      background: var(--bg);
+      border-color: var(--brand);
+    }
+    .v-meaning {
+      font-size: 12.5px;
+      color: #059669;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .v-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--mut);
+    }
+      color: #fff;
+      border-color: var(--brand);
+    }
+    .screen-btn.active .screen-sub { color: rgba(255,255,255,0.8); }
+    .screen-sub { font-size: 11px; color: var(--mut); }
+
     /* Readings / Links */
     .read-item {
       border-bottom: 1px solid var(--border);
@@ -557,8 +719,9 @@
     <div class="tabs-wrap">
       <div class="nav-tabs" id="nav-tabs">
         <button class="nav-tab active" data-tab="tab-exercises" id="btn-tab-ex">📝 Exercises (<span id="ex-count">0</span>)</button>
+        <button class="nav-tab" data-tab="tab-vocab" id="btn-tab-vocab">📚 Vocab (<span id="vocab-count">0</span>)</button>
         <button class="nav-tab" data-tab="tab-screens" id="btn-tab-screens">🖼 Screens (<span id="screens-count">0</span>)</button>
-        <button class="nav-tab" data-tab="tab-readings" id="btn-tab-readings" style="display:none;">📚 Readings</button>
+        <button class="nav-tab" data-tab="tab-readings" id="btn-tab-readings" style="display:none;">📖 Readings</button>
         <button class="nav-tab" data-tab="tab-stats" id="btn-tab-stats">📊 Analytics</button>
       </div>
 
@@ -569,7 +732,25 @@
         </div>
       </div>
 
-      <!-- Tab 2: Screens / Slides -->
+      <!-- Tab 2: Vocabulary CEFR -->
+      <div class="tab-content" id="tab-vocab">
+        <div class="vocab-filters" id="vocab-filters">
+          <button class="v-filter active" data-level="ALL">All (<span id="vf-all">0</span>)</button>
+          <button class="v-filter" data-level="A1">A1 (<span id="vf-a1">0</span>)</button>
+          <button class="v-filter" data-level="A2">A2 (<span id="vf-a2">0</span>)</button>
+          <button class="v-filter" data-level="B1">B1 (<span id="vf-b1">0</span>)</button>
+          <button class="v-filter" data-level="B2">B2 (<span id="vf-b2">0</span>)</button>
+          <button class="v-filter" data-level="C1">C1+ (<span id="vf-c1">0</span>)</button>
+        </div>
+        <div class="vocab-search-wrap">
+          <input type="text" id="vocab-search" class="vocab-search-input" placeholder="Search vocab by word or Vietnamese definition..." autocomplete="off">
+        </div>
+        <div class="vocab-list" id="vocab-list">
+          <small style="color:var(--mut);">Loading vocabulary...</small>
+        </div>
+      </div>
+
+      <!-- Tab 3: Screens / Slides -->
       <div class="tab-content" id="tab-screens">
         <div class="screen-grid" id="screen-list"></div>
       </div>
@@ -618,10 +799,25 @@ let lessonMeta = {};
 let alignments = [];     // [{slide, start, end, text, image}, ...]
 let transcript = [];     // [{start, end, text, speaker, lang}, ...]
 let exercises = [];      // [{id, number, stem, options, screen, start, end, trigger_text}, ...]
+let vocab = [];          // [{id, word, lemma, level, pos, meaning_vi, score, occurrences, timestamp, audio}, ...]
 let readings = {};       // {slide_id: [links...]}
 let speakers = {};       // {source, roles, talk_time, turns}
 let activeSlide = -1;
 let activeExerciseId = null;
+let activeVocabLevel = 'ALL';
+let vocabSearchQuery = '';
+
+const vocabAudioPlayer = new Audio();
+function playVocabAudio(src, btn) {
+  if (!src) return;
+  vocabAudioPlayer.src = src;
+  vocabAudioPlayer.play().catch(() => {});
+  if (btn) {
+    btn.classList.add('playing');
+    vocabAudioPlayer.onended = () => btn.classList.remove('playing');
+    vocabAudioPlayer.onerror = () => btn.classList.remove('playing');
+  }
+}
 
 // Seek and play
 function seek(t) {
@@ -773,12 +969,27 @@ function runSearch(query) {
     }
   });
 
+  // Match in vocabulary
+  vocab.forEach(v => {
+    const text = (v.word + ' ' + (v.meaning_vi || '')).toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (text.includes(t) ? 3 : 0), 0);
+    if (score > 0 && v.timestamp !== null) {
+      results.push({
+        type: 'vocab',
+        start: v.timestamp,
+        speaker: `VOCAB [${v.level}]`,
+        text: `[Vocab ${v.word}] ${v.meaning_vi ? '🇻🇳 ' + v.meaning_vi : ''} (${v.pos || ''})`,
+        score: score + 2
+      });
+    }
+  });
+
   results.sort((a, b) => b.score - a.score || a.start - b.start);
   const topResults = results.slice(0, 30);
 
   $('search-count').textContent = `${topResults.length} matches`;
   if (!topResults.length) {
-    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech or exercises.</small>';
+    hitsDiv.innerHTML = '<small style="color:var(--mut); padding:6px 0; display:block;">No matches found in speech, exercises or vocabulary.</small>';
     return;
   }
 
@@ -791,6 +1002,84 @@ function runSearch(query) {
       <div>${esc(h.text).replace(re, '<mark>$&</mark>')}</div>
     </button>
   `).join('');
+}
+
+// Render Vocabulary List
+function renderVocab() {
+  const listEl = $('vocab-list');
+  if (!vocab.length) {
+    listEl.innerHTML = '<small style="color:var(--mut);">No vocabulary detected in this lesson.</small>';
+    return;
+  }
+
+  const q = vocabSearchQuery.trim().toLowerCase();
+  const filtered = vocab.filter(it => {
+    // 1. Level filter
+    if (activeVocabLevel !== 'ALL') {
+      if (activeVocabLevel === 'C1') {
+        if (it.level !== 'C1' && it.level !== 'C2') return false;
+      } else if (it.level !== activeVocabLevel) {
+        return false;
+      }
+    }
+    // 2. Query filter
+    if (q) {
+      const matchWord = it.word.toLowerCase().includes(q);
+      const matchMeaning = (it.meaning_vi || '').toLowerCase().includes(q);
+      if (!matchWord && !matchMeaning) return false;
+    }
+    return true;
+  });
+
+  if (!filtered.length) {
+    listEl.innerHTML = '<small style="color:var(--mut); padding:10px;">No vocabulary matching filters.</small>';
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(it => {
+    const screensText = (it.occurrences && it.occurrences.screens && it.occurrences.screens.length)
+      ? `Screen ${it.occurrences.screens.slice(0, 3).join(', ')}`
+      : 'Slide/Worksheet';
+    const speechText = (it.occurrences && it.occurrences.speech_count)
+      ? `${it.occurrences.speech_count}x in speech`
+      : '';
+
+    return `
+      <div class="v-card" data-id="${esc(it.id)}">
+        <div class="v-card-top">
+          <div class="v-word-wrap">
+            <span class="v-word">${esc(it.word)}</span>
+            <span class="v-badge ${esc(it.level)}">${esc(it.level)}</span>
+            ${it.pos ? `<span class="v-pos">[${esc(it.pos)}]</span>` : ''}
+          </div>
+          <div class="v-actions">
+            ${it.audio ? `
+              <button class="v-btn-audio" onclick="playVocabAudio('${esc(it.audio)}', this)">
+                🔊 Listen (1.5s)
+              </button>
+            ` : ''}
+            ${it.timestamp !== null ? `
+              <button class="v-btn-seek" onclick="seek(${it.timestamp})">
+                ⏱ ${fmt(it.timestamp)}
+              </button>
+            ` : ''}
+          </div>
+        </div>
+
+        ${it.meaning_vi ? `
+          <div class="v-meaning">
+            <span>🇻🇳</span>
+            <span>${esc(it.meaning_vi)}</span>
+          </div>
+        ` : ''}
+
+        <div class="v-meta">
+          <span>🖥️ ${esc(screensText)}</span>
+          <span>${esc(speechText)}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // Data Fetcher
@@ -807,6 +1096,7 @@ async function init() {
   lessonMeta = await fetchJSON('lesson.json') || {};
   alignments = await fetchJSON('alignment.json') || [];
   exercises = await fetchJSON('exercise_alignment.json') || await fetchJSON('exercises.json') || [];
+  vocab = await fetchJSON('vocab.json') || [];
   transcript = await fetchJSON('transcript.json') || [];
   speakers = await fetchJSON('speakers.json') || {};
   readings = await fetchJSON('links.json') || {};
@@ -843,6 +1133,26 @@ async function init() {
     $('btn-tab-ex').style.display = 'none';
     $('btn-tab-screens').click();
     $('pill-aligned').innerHTML = `<b>${alignments.length}</b> slides synced`;
+  }
+
+  // Render Vocabulary CEFR Tab
+  if (vocab.length) {
+    $('btn-tab-vocab').style.display = 'inline-block';
+    $('vocab-count').textContent = vocab.length;
+    const vLevels = { ALL: vocab.length, A1: 0, A2: 0, B1: 0, B2: 0, C1: 0 };
+    vocab.forEach(it => {
+      if (it.level === 'C1' || it.level === 'C2') vLevels.C1++;
+      else if (vLevels[it.level] !== undefined) vLevels[it.level]++;
+    });
+    $('vf-all').textContent = vLevels.ALL;
+    $('vf-a1').textContent = vLevels.A1;
+    $('vf-a2').textContent = vLevels.A2;
+    $('vf-b1').textContent = vLevels.B1;
+    $('vf-b2').textContent = vLevels.B2;
+    $('vf-c1').textContent = vLevels.C1;
+    renderVocab();
+  } else {
+    $('btn-tab-vocab').style.display = 'none';
   }
 
   // Render Screens
@@ -899,6 +1209,26 @@ $('nav-tabs').addEventListener('click', e => {
   btn.classList.add('active');
   const target = $(btn.dataset.tab);
   if (target) target.classList.add('active');
+});
+
+// Vocab filters click handler
+$('vocab-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.v-filter');
+  if (!btn) return;
+  document.querySelectorAll('.v-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeVocabLevel = btn.dataset.level;
+  renderVocab();
+});
+
+// Vocab live search handler
+let vocabSearchTimer;
+$('vocab-search').addEventListener('input', e => {
+  clearTimeout(vocabSearchTimer);
+  vocabSearchTimer = setTimeout(() => {
+    vocabSearchQuery = e.target.value;
+    renderVocab();
+  }, 150);
 });
 
 // Real-time video synchronization
