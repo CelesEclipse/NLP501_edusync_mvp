@@ -308,3 +308,4 @@ Hệ thống bổ sung thêm 2 tệp kiểm thử tự động mới (`test_conc
 Tài liệu Thiết kế Chi tiết (SDD) và Kế hoạch Kiểm soát Chất lượng (QA/QC) này hoàn thiện mắt xích quan trọng nhất của dự án EduSync:
 - Biến các khái niệm lý thuyết trừu tượng của môn học NLP thành các **module mã nguồn cụ thể, đo lường được và kiểm thử tự động được**.
 - Định hình rõ ràng lộ trình làm việc của nhóm, giúp từng thành viên biết chính xác nhiệm vụ kỹ thuật và tiêu chuẩn chất lượng cần đạt được trước khi nghiệm thu đề tài.
+
