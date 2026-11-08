@@ -25,6 +25,8 @@ demo/chat.json
 demo/chat_feedback.json
 demo/grammar_points.json
 demo/vocab_deep.json
+demo/exercise_concept_links.json
+demo/teacher_report.json
 # downloaded PDFs (python fetch_materials.py --pdf ...)
 materials/*.pdf
 .venv/

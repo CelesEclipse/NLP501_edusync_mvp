@@ -50,7 +50,8 @@ shared_files = [
     "transcript.json", "speakers.json", "lesson.json",
     "exercises.json", "exercise_alignment.json", "screens.json",
     "vocab.json", "chat.json", "chat_feedback.json",
-    "grammar_points.json", "vocab_deep.json"
+    "grammar_points.json", "vocab_deep.json",
+    "exercise_concept_links.json", "teacher_report.json"
 ]
 for f in shared_files:
     if os.path.exists(L(f)):

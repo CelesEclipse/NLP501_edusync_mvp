@@ -18,7 +18,8 @@ NLP501_edusync_mvp/docs/
 ├── 03_requirements_analysis_srs.md        # Đặc tả & Phân tích Yêu cầu Bài toán (SRS)
 ├── 04_detailed_design_and_qa_plan.md      # Thiết kế Chi tiết Hệ thống (SDD) & Kế hoạch QA/QC
 ├── 05_solution_dense_embeddings_guide.md  # Hướng dẫn Kỹ thuật Giải pháp Dense Semantic Embeddings
-└── 06_user_guide_and_demo.md              # Hướng dẫn Sử dụng Web Demo cho Học sinh & Giáo viên
+├── 06_user_guide_and_demo.md              # Hướng dẫn Sử dụng Web Demo cho Học sinh & Giáo viên
+└── 07_feature_detailed_design_matrix.md   # Ma trận Thiết kế Chi tiết Từng Tính năng & Rà soát Mã nguồn
 ```
 
 ---
@@ -33,6 +34,7 @@ NLP501_edusync_mvp/docs/
 | [**`04_detailed_design_and_qa_plan.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/04_detailed_design_and_qa_plan.md) | Kỹ sư phần mềm, Tester | - Thiết kế kiến trúc 4 tầng chi tiết.<br>- Cấu trúc dữ liệu JSON trung gian.<br>- Thuật toán mã giả (Pseudocode) cho từng module.<br>- Lộ trình triển khai (Gantt chart) & Kế hoạch QA/QC 45+ unit tests.<br>- Ma trận quản lý rủi ro và giải pháp khắc phục. |
 | [**`05_solution_dense_embeddings_guide.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/05_solution_dense_embeddings_guide.md) | Lập trình viên NLP trong nhóm | - Giải thích trực quan tại sao Keyword Matching thất bại.<br>- Cơ sở toán học của Dense Vectors & Cosine Similarity.<br>- Hướng dẫn code chi tiết file `concept_link.py` bằng `sentence-transformers`.<br>- Cách tích hợp kết quả vào Web Demo. |
 | [**`06_user_guide_and_demo.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/06_user_guide_and_demo.md) | Học sinh, Giáo viên, Người dùng thử nghiệm | - Hướng dẫn khởi chạy Web Demo với 2 câu lệnh.<br>- Hướng dẫn ôn tập 5 bước cho Học sinh (Click-to-seek, Vocab audio 1.5s, GEC error review, Omnibox search).<br>- Hướng dẫn quản lý lớp học cho Giáo viên (TTT/STT gauges, Error heatmap, Action Plan). |
+| [**`07_feature_detailed_design_matrix.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/07_feature_detailed_design_matrix.md) | Giảng viên chấm code, Kỹ sư phần mềm | - Ma trận thiết kế chi tiết 10 tính năng cốt lõi.<br>- Rà soát mã nguồn thực tế đối chiếu với thiết kế.<br>- Thống kê khối lượng code (~4,900 LOC) và độ phủ unit test (45/45 tests passed 100%). |
 
 ---
 

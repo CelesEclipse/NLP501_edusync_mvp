@@ -23,6 +23,8 @@ STEPS = [
     ("chat", ["chat.txt"], ["chat.json"], ["chat_parser.py"], "no-pdf"),
     ("feedback", ["chat.json"], ["chat_feedback.json"], ["feedback.py"], "no-pdf"),
     ("neural_ie", ["transcript.json", "exercises.json"], ["grammar_points.json", "vocab_deep.json"], ["neural_ie.py"], "no-pdf"),
+    ("concept_link", ["exercises.json", "grammar_points.json"], ["exercise_concept_links.json"], ["concept_link.py"], "no-pdf"),
+    ("teacher_analytics", ["speakers.json", "chat_feedback.json"], ["teacher_report.json"], ["teacher_analytics.py"], "no-pdf"),
     ("content", ["screens.json", "transcript.json"], ["content.md"], ["lesson_content.py"], "no-pdf"),
 ]
 

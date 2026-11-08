@@ -425,6 +425,36 @@
       border-left: 2px solid var(--brand);
       padding-left: 8px;
     }
+    .ex-concept-bar {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+    }
+    .ex-concept-badge {
+      background: rgba(139, 92, 246, 0.12);
+      color: #7c3aed;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      cursor: pointer;
+    }
+    .ex-concept-badge:hover {
+      background: rgba(139, 92, 246, 0.22);
+    }
+    .ex-seek-theory {
+      font-size: 11px;
+      color: var(--brand);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .ex-seek-theory:hover {
+      text-decoration: underline;
+    }
 
     /* Screen/Slide Items */
     .screen-grid {
@@ -934,6 +964,87 @@
       border-radius: 9999px;
     }
 
+    /* Teacher Dashboard Enhancements */
+    .teacher-dashboard-box {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .tb-section-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .tb-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .error-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+    .error-row:last-child { margin-bottom: 0; }
+    .error-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+    }
+    .error-code {
+      font-weight: 700;
+      color: #d97706;
+    }
+    .error-bar-wrap {
+      height: 6px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+    .error-bar-fill {
+      height: 100%;
+      background: #f59e0b;
+      border-radius: 9999px;
+    }
+    .weakest-box {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .weakest-title {
+      font-weight: 700;
+      font-size: 12px;
+      color: #dc2626;
+    }
+    .action-plan-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .action-plan-item {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: #065f46;
+    }
+
     mark { background: var(--hl); color: inherit; padding: 0 2px; border-radius: 2px; }
   </style>
 </head>
@@ -1082,6 +1193,7 @@
           <span>Total Screens / Slides</span>
           <b id="txt-screens-count">--</b>
         </div>
+        <div id="teacher-dashboard-container"></div>
       </div>
     </div>
   </div>
@@ -1103,6 +1215,8 @@ let grammarPoints = [];  // [{id, title, formula, explanation_vi, examples, time
 let vocabDeep = [];      // [{word, pos, level, meaning_vi, collocations, example, timestamp}, ...]
 let readings = {};       // {slide_id: [links...]}
 let speakers = {};       // {source, roles, talk_time, turns}
+let conceptLinks = [];   // [{question_id, grammar_point_id, grammar_title, similarity_score, confidence, ...}]
+let teacherReport = {};  // {class_meta, interaction_health, error_distribution, weakest_concept, next_lesson_action_plan}
 let activeSlide = -1;
 let activeExerciseId = null;
 let activeVocabLevel = 'ALL';
@@ -1450,7 +1564,7 @@ function renderGrammar() {
     }
 
     return `
-      <div class="grammar-card" onclick="seek(${gp.timestamp})">
+      <div class="grammar-card" data-id="${esc(gp.id)}" onclick="seek(${gp.timestamp})">
         <div class="gp-header">
           <div class="gp-title-wrap">
             <span class="gp-badge">GRAMMAR FOCUS</span>
@@ -1554,6 +1668,85 @@ function updateActiveChat(t) {
   }
 }
 
+// Jump to grammar theory and open tab
+function seekAndOpenGrammar(gpId, ts) {
+  if (ts !== null && ts !== undefined) seek(ts);
+  const tabGrammar = $('btn-tab-grammar');
+  if (tabGrammar) tabGrammar.click();
+  setTimeout(() => {
+    const targetCard = document.querySelector(`.grammar-card[data-id="${gpId}"]`);
+    if (targetCard) {
+      targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      targetCard.style.outline = '2px solid var(--brand)';
+      setTimeout(() => { targetCard.style.outline = 'none'; }, 2000);
+    }
+  }, 200);
+}
+
+// Render Teacher Analytics Dashboard
+function renderTeacherDashboard() {
+  const container = $('teacher-dashboard-container');
+  if (!container || !teacherReport || !teacherReport.interaction_health) return;
+
+  const ih = teacherReport.interaction_health;
+  const errors = teacherReport.error_distribution || [];
+  const weakest = teacherReport.weakest_concept;
+  const plan = teacherReport.next_lesson_action_plan || [];
+
+  container.innerHTML = `
+    <div class="teacher-dashboard-box">
+      <!-- Sư phạm & Tương tác -->
+      <div class="tb-card">
+        <div class="tb-section-title">💡 Đánh giá tương tác sư phạm (Pedagogy)</div>
+        <p style="font-size:12px; line-height:1.5; color:var(--text); margin:0;">
+          ${esc(ih.assessment)}
+        </p>
+      </div>
+
+      <!-- Phân bố lỗi ngữ pháp -->
+      ${errors.length ? `
+        <div class="tb-card">
+          <div class="tb-section-title">🚨 Phân bố lỗi ngữ pháp học sinh (ERRANT)</div>
+          ${errors.map(err => `
+            <div class="error-row">
+              <div class="error-row-header">
+                <span class="error-code">${esc(err.error_type)}: ${esc(err.description)}</span>
+                <b>${err.count} lỗi (${err.percentage}%)</b>
+              </div>
+              <div class="error-bar-wrap">
+                <div class="error-bar-fill" style="width: ${err.percentage}%;"></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <!-- Chủ điểm yếu nhất -->
+      ${weakest ? `
+        <div class="weakest-box">
+          <div class="weakest-title">⚠️ Chủ điểm ngữ pháp học sinh yếu nhất:</div>
+          <div style="font-size:12px; font-weight:700; color:var(--text);">${esc(weakest.title)}</div>
+          <div style="font-size:11px; color:#b91c1c;">
+            Ghi nhận <b>${weakest.student_error_count} lỗi sai</b> trong phần bài tập liên quan (Mức độ cảnh báo: ${weakest.severity})
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Kế hoạch bài học sau -->
+      ${plan.length ? `
+        <div class="tb-card">
+          <div class="tb-section-title">📋 Kế hoạch cải tiến buổi sau (Next-Lesson Action Plan)</div>
+          <div class="action-plan-list">
+            ${plan.map(step => `
+              <div class="action-plan-item">${esc(step)}</div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
 // Data Fetcher
 async function fetchJSON(file) {
   try {
@@ -1572,6 +1765,8 @@ async function init() {
   transcript = await fetchJSON('transcript.json') || [];
   speakers = await fetchJSON('speakers.json') || {};
   readings = await fetchJSON('links.json') || {};
+  conceptLinks = await fetchJSON('exercise_concept_links.json') || [];
+  teacherReport = await fetchJSON('teacher_report.json') || {};
 
   // Setup Title & Stats
   const title = lessonMeta.title || (exercises.length ? 'TOEIC Practice Class' : 'Academic Lecture');
@@ -1582,7 +1777,14 @@ async function init() {
   if (exercises.length) {
     $('btn-tab-ex').style.display = 'inline-block';
     $('ex-count').textContent = exercises.length;
-    $('ex-list').innerHTML = exercises.map(e => `
+    const conceptMap = new Map();
+    conceptLinks.forEach(cl => {
+      if (cl.question_id) conceptMap.set(cl.question_id, cl);
+    });
+    $('ex-list').innerHTML = exercises.map(e => {
+      const cl = conceptMap.get(e.id);
+      const hasLink = cl && cl.grammar_point_id && cl.confidence !== 'LOW';
+      return `
       <div class="ex-card" data-id="${esc(e.id)}" onclick="seek(${e.start})">
         <div class="ex-header">
           <div class="ex-title">
@@ -1598,8 +1800,17 @@ async function init() {
           </div>
         ` : ''}
         ${e.trigger_text ? `<div class="ex-trigger">"${esc(e.trigger_text)}"</div>` : ''}
+        ${hasLink ? `
+          <div class="ex-concept-bar">
+            <span class="ex-concept-badge" onclick="event.stopPropagation(); seekAndOpenGrammar('${esc(cl.grammar_point_id)}', ${cl.theory_timestamp})">
+              🏷️ ${esc(cl.grammar_title)}
+            </span>
+            ${cl.theory_timestamp ? `<span class="ex-seek-theory" onclick="event.stopPropagation(); seekAndOpenGrammar('${esc(cl.grammar_point_id)}', ${cl.theory_timestamp})">📖 Lý thuyết (${esc(cl.theory_time_str)}) ➔</span>` : ''}
+          </div>
+        ` : ''}
       </div>
-    `).join('');
+      `;
+    }).join('');
     $('pill-aligned').innerHTML = `<b>${exercises.length}</b> exercises synced`;
   } else {
     $('btn-tab-ex').style.display = 'none';
@@ -1690,6 +1901,8 @@ async function init() {
   }
   $('txt-align-rate').textContent = exercises.length ? '95.6%' : '99.4%';
   $('txt-screens-count').textContent = alignments.length;
+
+  renderTeacherDashboard();
 
   // Initialize first view
   if (alignments.length) showSlide(alignments[0].slide);
