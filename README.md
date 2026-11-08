@@ -1,12 +1,38 @@
-# EduSync: slide-video alignment
+# EduSync: Multimodal Online Lecture Alignment & Pedagogical Analytics
 
-Aligns a lecture video with its PDF slides, so each slide gets a start time in the video, and links every
-slide to the papers and tutorials that explain it.
-Full results and error analysis: see [report/edusync_mvp_report.md](report/edusync_mvp_report.md).
+EduSync is an educational NLP platform that turns online classroom recordings (Zoom/Google Meet/YouTube) into structured, interactive study notebooks for students and automated pedagogical quality dashboards for teachers.
 
-**Next direction:** English-language lessons recorded on Google Meet/Zoom (slides, teacher speech, exercises,
-worked examples, attachments, chat). Roadmap: [docs/esl_roadmap.md](docs/esl_roadmap.md); current phase:
-[docs/phase1_plan.md](docs/phase1_plan.md) (both in Vietnamese).
+---
+
+## 📚 Official Project Documentation Suite (`docs/`)
+
+Toàn bộ tài liệu chính thức của đồ án môn học NLP (NLP501 - MSE) được chuẩn hóa và duy trì tại thư mục [`docs/`](docs/):
+
+| STT | Tài liệu | Mô tả Trọng tâm |
+| :---: | :--- | :--- |
+| 📖 | [**`docs/README.md`**](docs/README.md) | **Mục lục Trung tâm & Hướng dẫn duyệt tài liệu** |
+| 01 | [**`01_project_proposal.md`**](docs/01_project_proposal.md) | Đề xuất Đề tài, Bối cảnh Sư phạm & Nghiên cứu Khả thi |
+| 02 | [**`02_nlp_architecture_and_literature.md`**](docs/02_nlp_architecture_and_literature.md) | Cơ sở Lý thuyết NLP sâu, Đa phương thức & Tổng quan Nghiên cứu |
+| 03 | [**`03_requirements_analysis_srs.md`**](docs/03_requirements_analysis_srs.md) | Đặc tả & Phân tích Yêu cầu Bài toán (SRS - IEEE 830) |
+| 04 | [**`04_detailed_design_and_qa_plan.md`**](docs/04_detailed_design_and_qa_plan.md) | Thiết kế Chi tiết Hệ thống (SDD) & Kế hoạch Kiểm soát Chất lượng (QA/QC) |
+| 05 | [**`05_solution_dense_embeddings_guide.md`**](docs/05_solution_dense_embeddings_guide.md) | Hướng dẫn Kỹ thuật Giải pháp Nhúng Vector Ngữ nghĩa (Sentence-Transformers) |
+| 06 | [**`06_user_guide_and_demo.md`**](docs/06_user_guide_and_demo.md) | Sổ tay Hướng dẫn Sử dụng Web Demo cho Học sinh và Giáo viên |
+
+> ⚠️ **Quy ước Dự án (Project Convention):** Thư mục `docs/` là **Nguồn Chân lý Duy nhất (Single Source of Truth - SSOT)** cho toàn bộ tài liệu kỹ thuật, kiến trúc và báo cáo của dự án. Mọi thay đổi, bổ sung về giải pháp kỹ thuật bắt buộc phải được cập nhật trực tiếp tại đây.
+
+---
+
+## Quick Start & Web Demo
+
+Khởi chạy Web Demo tương tác chỉ với 2 lệnh:
+```bash
+# 1. Đồng bộ dữ liệu bài học
+python demo/prepare.py --lesson lessons/ece-toeic-starter-u4
+
+# 2. Khởi chạy máy chủ Web
+cd demo && ../.venv/bin/python -m RangeHTTPServer 8000
+# Mở trình duyệt tại: http://localhost:8000/
+```
 
 ## Setup
 

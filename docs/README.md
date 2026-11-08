@@ -76,3 +76,4 @@ Khi nộp đồ án hoặc báo cáo môn học NLP501, đề xuất thứ tự 
 3. **Báo cáo Cơ sở Lý thuyết & Thuật toán:** Sử dụng [`02_nlp_architecture_and_literature.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/02_nlp_architecture_and_literature.md) và [`05_solution_dense_embeddings_guide.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/05_solution_dense_embeddings_guide.md).
 4. **Báo cáo Thiết kế & Đảm bảo Chất lượng:** Sử dụng [`04_detailed_design_and_qa_plan.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/04_detailed_design_and_qa_plan.md).
 5. **Thuyết minh & Trình chiếu Demo:** Sử dụng [`06_user_guide_and_demo.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/06_user_guide_and_demo.md) và mở trực tiếp máy chủ web tại `http://localhost:8000/`.
+

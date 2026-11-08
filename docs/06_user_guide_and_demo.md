@@ -82,3 +82,4 @@ flowchart TD
   1. Bài kiểm tra khởi động 5 phút đầu giờ cho buổi sau.
   2. Các chủ điểm ngữ pháp cần củng cố lại.
   3. Điều chỉnh nhịp độ giảng dạy (pacing) cho các bài đọc dài.
+

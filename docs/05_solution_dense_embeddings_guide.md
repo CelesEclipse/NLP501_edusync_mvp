@@ -166,3 +166,4 @@ File `exercise_concept_links.json` sau khi sinh ra sẽ được nạp vào Web 
      - 📖 **"Xem Lý thuyết Gốc"**: Tua video về đoạn cô giảng lý thuyết ở đầu bài (vd: `00:49`) và mở tab Grammar.
 2. **Trên Bảng điều khiển Giáo viên (Teacher Dashboard):**
    - Đếm số lượng học sinh làm sai theo từng `grammar_point_id` để vẽ biểu đồ và đề xuất kế hoạch giảng dạy cho buổi học tiếp theo.
+
