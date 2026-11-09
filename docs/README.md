@@ -24,6 +24,8 @@ NLP501_edusync_mvp/docs/
 ├── 08_presentation_slides_marp.md                      # Slide thuyết trình định dạng Marp Markdown
 ├── 09_teacher_presentation_and_technical_nlp_guide.md  # ⭐ CẨM NANG TRÌNH BÀY CHO GIẢNG VIÊN & BỘ CÂU HỎI PHẢN BIỆN NLP
 ├── slides.html                                         # Slide thuyết trình HTML tương tác (Có Timer & Presenter Notes)
+├── slides.pptx                                         # 📊 Tệp Slide Microsoft PowerPoint (.pptx) trình chiếu chính thức
+├── slides.pdf                                          # 📄 Tệp Slide định dạng PDF chất lượng cao (A4 ngang / 16:9)
 ├── esl_roadmap.md                                      # Lộ trình 7 gói công việc (WP1–WP7) cho bài giảng tiếng Anh
 └── phase1_plan.md                                      # Báo cáo thực nghiệm Phase 1 trên bộ dữ liệu bài giảng TOEIC
 ```
