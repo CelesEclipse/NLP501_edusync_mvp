@@ -87,8 +87,8 @@ style: |
 <!-- Slide 01 -->
 <div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · PROJECT LEAD (00:00 - 04:30)</div>
 
-# EDUSYNC: Multimodal Lecture Alignment & Pedagogical Intelligence
-## Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Trực tuyến
+# EDUSYNC: Multimodal Lecture Alignment & Pedagogical Intelligence for English Test Prep
+## Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Tiếng Anh (TOEIC & IELTS)
 
 <div class="grid-2">
 <div class="box">
@@ -581,3 +581,4 @@ $$\text{Score}(k, t) = 25.0 \cdot \text{Trigger}(k, t) + 1.5 \cdot \text{Overlap
 </div>
 
 ### 💬 Cả 4 thành viên xin sẵn sàng lắng nghe ý kiến nhận xét và giải đáp các câu hỏi phản biện từ Hội đồng!
+
