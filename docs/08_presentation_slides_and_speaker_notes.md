@@ -40,43 +40,43 @@ Người trình bày: THÀNH VIÊN 1 (Project Lead) - Thời gian: 04 phút 30 g
 
 ---
 
-### SLIDE 02: BỐI CẢNH & NỖI ĐAU THỰC TẾ TRONG DẠY VÀ HỌC TRỰC TUYẾN
+### SLIDE 02: BỐI CẢNH & NỖI ĐAU THỰC TẾ TRONG DẠY VÀ HỌC TRỰC TUYẾN (KÈM DẪN CHỨNG NGHIÊN CỨU)
 * **Nội dung trình chiếu:**
-  * **Sự bùng nổ của Video bài giảng:** Sau đại dịch, hàng triệu giờ học trực tuyến qua Zoom/Teams được lưu trữ dưới dạng video dài từ 60–90 phút.
-  * **Nỗi đau Học sinh (The Student's Friction):**
-    * *Mất phương hướng trong video dài:* Muốn tìm một câu hỏi bài tập hoặc đoạn ngữ pháp phải kéo chuột thủ công (random scrubbing), mất 15–20 phút mỗi buổi.
-    * *Lý thuyết rời rạc với bài tập:* Khi làm sai một câu hỏi, không biết câu này liên quan đến chủ điểm ngữ pháp nào giáo viên đã dạy trước đó.
-    * *Phản hồi chat bị lãng quên:* Các câu trả lời sai ngữ pháp trong khung chat Zoom không được lưu vết hay giải thích cặn kẽ sau giờ học.
-  * **Nỗi đau Giáo viên (The Teacher's Blind Spot):**
-    * *Thiếu dữ liệu định lượng:* Giáo viên không biết mình đã độc thoại bao nhiêu phần trăm (Teacher Talk Time), học sinh có thực sự tương tác hay không.
-    * *Không có báo cáo sư phạm:* Rất khó tổng hợp xem toàn lớp đang yếu nhất ở điểm ngữ pháp nào để lên kế hoạch cải tiến cho buổi học kế tiếp.
+  * **Sự bùng nổ của Video bài giảng TOEIC / IELTS:** Hàng ngàn giờ học trực tuyến qua Zoom/Meet kéo dài 60–90 phút được lưu lại dưới dạng "hộp đen" MP4 phi cấu trúc.
+  * **Nỗi đau Học viên & Rào cản Tâm lý khi Ôn thi (Kèm dẫn chứng khoa học):**
+    * *Dễ bỏ cuộc vì video quá dài (Video Dropout):* Theo nghiên cứu trên **6,9 triệu phiên xem video** của **Guo et al. (MIT — ACM L@S 2014)**, thời gian tập trung trung vị chỉ đạt **tối đa 6 phút** và **69% người học bỏ qua bài tập** sau khi xem video dài; đồng thời **61% thao tác tua thanh trượt** chỉ để mò điểm chuyển bài/slide (**Kim et al., MIT & Harvard — ACM L@S 2014**).
+    * *Tâm lý ngại hỏi giáo viên & sợ mất mặt (Foreign Language Anxiety):* Theo **Horwitz et al. (1986 — FLCAS)** và nghiên cứu trên sinh viên EFL Việt Nam (**Ho & Truong, 2022; Nguyen, 2025**), nỗi sợ bị đánh giá tiêu cực (*Fear of Negative Evaluation*) và sợ mất thể diện trước lớp (*fear of losing face*) khiến học viên không dám bật mic hỏi lại cô giáo khi không hiểu câu trắc nghiệm hoặc quên lý thuyết đầu giờ.
+    * *Mất tự tin khi không được sửa lỗi kịp thời:* Các câu trả lời sai ngữ pháp trong khung chat Zoom bị trôi mất mà không được giải thích, làm giảm sự tự tin (*Self-Efficacy* — **Farmani et al., 2017**).
+  * **Điểm mù của Giáo viên (The Teacher's Blind Spot):**
+    * *Thiếu dữ liệu định lượng:* Không đo lường được tỷ lệ nói của giáo viên và học sinh (**TTT vs STT**).
+    * *Không có bản đồ lỗi lớp học:* Không thống kê được lỗi ngữ pháp chuyển di ngôn ngữ (*L1 Transfer*) nào cả lớp đang mắc nhiều nhất để điều chỉnh giáo án buổi sau.
 
 > 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Thưa Thầy/Cô, thực tế hiện nay các nền tảng họp trực tuyến như Zoom hay Google Meet chỉ đơn thuần đóng vai trò là công cụ truyền tải hình ảnh và âm thanh. Khi buổi học kết thúc, sản phẩm còn lại duy nhất là một tệp video MP4 kéo dài từ 60 đến 90 phút và một tệp log chat dạng văn bản thô.  
-> Đối với học sinh, đây là một 'hộp đen' khổng lồ: các em mất trung bình 15-20 phút chỉ để tua chuột tìm lại đúng câu hỏi mình làm sai; tệ hơn nữa, các em không có cách nào liên kết ngược câu hỏi đó với phần lý thuyết mà thầy cô đã dạy ở đầu giờ.  
-> Còn đối với giáo viên, họ hoàn toàn thiếu các chỉ số đo lường định lượng: không biết mình nói quá nhiều hay không, và không thể nhớ hết được trong hàng chục tin nhắn chat của học sinh, lỗi ngữ pháp nào đang là điểm nghẽn phổ biến nhất của cả lớp.  
-> Đây chính là bài toán thực tiễn mà nhóm em đặt mục tiêu giải quyết triệt để bằng các kỹ thuật NLP hiện đại."*
+> *"Thưa Thầy/Cô, thực tế hiện nay tại các lớp luyện thi TOEIC và IELTS trực tuyến trên Zoom hay Google Meet, khi buổi học 90 phút kết thúc, thứ duy nhất còn lại là một tệp video MP4 thô và một tệp log chat.  
+> Nhóm chúng em đã khảo cứu các công trình khoa học quốc tế và nhận thấy 3 rào cản lớn khiến học viên nản chí khi ôn thi:  
+> Thứ nhất là hiệu ứng bỏ cuộc khi xem video dài: Nghiên cứu của Guo và cộng sự tại MIT trên 6,9 triệu phiên học chỉ ra rằng thời gian tập trung trung vị của người học chỉ tối đa là 6 phút, và tới 69% học viên bỏ qua bài tập sau các video dài; trong khi nghiên cứu của Kim và cộng sự (MIT & Harvard) chứng minh 61% thao tác kéo thanh trượt của học viên chỉ để mò tìm chỗ chuyển bài tập.  
+> Thứ hai là rào cản tâm lý ngại hỏi giáo viên: Theo lý thuyết Lo âu Ngoại ngữ của Horwitz (1986) và các nghiên cứu trên sinh viên Việt Nam (Nguyen, 2025), tâm lý sợ sai và sợ mất mặt trước đám đông khiến học viên dù không hiểu tại sao câu trắc nghiệm đó chọn đáp án B cũng không dám bật mic hỏi lại thầy cô.  
+> Thay vì để học viên phải ngại ngùng hỏi giáo viên hoặc nản lòng bỏ cuộc trước video 90 phút, EduSync ứng dụng NLP để giúp học viên tự tra cứu kín đáo: bấm vào câu sai là nhảy ngay tới giây cô chữa, bấm vào nhãn ngữ pháp là quay về đúng phút cô giảng công thức gốc, và được sửa lỗi chat ẩn danh kèm giải thích tiếng Việt — qua đó giúp học viên dễ hiểu bài và tăng quyết tâm chinh phục kỳ thi TOEIC, IELTS."*
 
 ---
 
 ### SLIDE 03: MỤC TIÊU ĐỀ TÀI & GIÁ TRỊ CỐT LÕI (2 TRỤ CỘT)
 * **Nội dung trình chiếu:**
-  * **Mục tiêu tối thượng:** Chuyển hóa video bài giảng thụ động thành một **Cơ sở Tri thức Tương tác Đa chiều (Interactive Knowledge Base)**.
-  * **Trụ cột 1 - Trải nghiệm Học sinh (Personalized Learning):**
-    * Căn chỉnh từng câu hỏi bài tập khớp từng giây với lời giảng video (Click-to-seek).
-    * Liên kết ngữ nghĩa 2 chiều giữa Câu hỏi thực hành $\leftrightarrow$ Lý thuyết gốc.
-    * Tự động bóc tách từ vựng CEFR kèm file audio phát âm chuẩn giọng giáo viên.
-    * Chẩn đoán và giải thích lỗi sai ngữ pháp trong tin nhắn Zoom chat.
-  * **Trụ cột 2 - Công cụ Quản trị cho Giáo viên (Pedagogical Analytics):**
+  * **Mục tiêu tối thượng:** Chuyển hóa video bài giảng thụ động thành **Cơ sở Tri thức Tương tác Đa chiều**, tháo gỡ rào cản tâm lý "ngại hỏi thầy cô" và tăng quyết tâm ôn thi TOEIC/IELTS.
+  * **Trụ cột 1 - Học viên Tự chủ & Tự tin (Learner Autonomy & Self-Efficacy):**
+    * *Chia nhỏ video 90 phút thành các nút câu hỏi < 2 phút:* Click-to-seek khớp 100% câu hỏi với lời giảng (khắc phục rào cản bỏ cuộc 6 phút của *Guo et al., 2014*).
+    * *Thay thế việc ngại hỏi giáo viên bằng Liên kết Ngữ nghĩa 2 chiều:* Làm sai câu nào, bấm Badge Ngữ pháp để nhảy ngược về lý thuyết gốc đầu giờ mà không sợ "mất mặt" trước lớp.
+    * *Từ vựng CEFR (A1–C2) & Audio mẫu 1.5s:* Nghe phát âm chuẩn giọng thật giáo viên theo đúng band điểm mục tiêu TOEIC/IELTS.
+    * *Phản hồi sửa lỗi GEC ẩn danh & tức thì:* Ẩn danh học viên ($S_1 \dots S_N$) và giải thích lỗi ngữ pháp bằng tiếng Việt giúp tăng sự tự tin (*Self-Efficacy* — *Farmani et al., 2017*).
+  * **Trụ cột 2 - Trợ lý Sư phạm cho Giáo viên (Pedagogical Analytics):**
     * Đo lường thời lượng nói TTT (Teacher Talk Time) vs STT (Student Talk Time).
     * Bản đồ phân bố lỗi sai ngữ pháp theo chuẩn ERRANT quốc tế.
     * Xác định chủ điểm yếu nhất (Weakest Concept) và tự động sinh Kế hoạch Cải tiến 3 bước (Next-Lesson Action Plan).
 
 > 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Để giải quyết hai nỗi đau trên, EduSync được định vị dựa trên hai trụ cột giá trị cốt lõi:  
-> Thứ nhất, đối với Học sinh, chúng em trao cho các em khả năng 'chạm là đến': bấm vào câu hỏi là video nhảy ngay đến đoạn giáo viên giải thích; bấm vào khái niệm là nhảy ngược về lý thuyết gốc; học từ vựng có sẵn phân cấp độ CEFR và nghe được đoạn phát âm mẫu 1.5 giây của chính giáo viên.  
-> Thứ hai, đối với Giáo viên, hệ thống hoạt động như một trợ lý sư phạm AI thông minh: tự động phân tích tỷ lệ nói của giáo viên và học sinh, vẽ biểu đồ phân bố lỗi sai và xuất ra ngay một Action Plan 3 bước cho buổi dạy tiếp theo.  
-> Điều này giúp giáo viên cải tiến chất lượng giảng dạy dựa trên dữ liệu thực chứng (data-driven pedagogy) thay vì chỉ dựa vào cảm tính cá nhân."*
+> *"Để giải quyết trọn vẹn các rào cản học thuật và tâm lý trên, EduSync được thiết kế xoay quanh hai trụ cột giá trị:  
+> Thứ nhất, đối với Học viên luyện thi TOEIC và IELTS, hệ thống trao cho các bạn quyền tự chủ trong một môi trường an toàn tâm lý: thay vì phải ngại ngùng hỏi lại giáo viên câu ngữ pháp cơ bản trước cả lớp, học viên chỉ cần bấm vào câu hỏi là video nhảy ngay đến đoạn cô giải thích; bấm vào nhãn ngữ pháp là nhảy ngược về lý thuyết gốc đầu giờ; mọi lỗi sai trong khung chat đều được ẩn danh thành S1, S2 và được giải thích chi tiết bằng tiếng Việt. Các nghiên cứu của Farmani (2017) đã chứng minh phản hồi tức thì, không phán xét này giúp tăng mạnh sự tự tin (Self-Efficacy) và quyết tâm ôn thi của người học.  
+> Thứ hai, đối với Giáo viên, hệ thống đóng vai trò trợ lý sư phạm tự động: đo tỷ lệ nói TTT/STT, vẽ bản đồ nhiệt các lỗi ngữ pháp cả lớp đang vấp phải dù các em không trực tiếp giơ tay hỏi, và đề xuất ngay kế hoạch 3 bước cho buổi dạy tiếp theo."*
 
 ---
 

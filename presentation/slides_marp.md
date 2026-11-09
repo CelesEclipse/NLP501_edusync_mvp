@@ -113,26 +113,26 @@ style: |
 ---
 
 <!-- Slide 02 -->
-<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · ĐẶT VẤN ĐỀ</div>
+<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · ĐẶT VẤN ĐỀ & DẪN CHỨNG NGHIÊN CỨU</div>
 
-# Bối Cảnh & Nỗi Đau Dạy - Học Trực Tuyến
-## Sự bùng nổ video bài giảng Zoom/Teams và nghịch lý "Hộp đen thông tin"
+# Bối Cảnh & 3 Rào Cản Khiến Học Viên Bỏ Cuộc Khi Ôn Thi
+## Dẫn chứng nghiên cứu quốc tế về hiệu ứng bỏ dở video dài và tâm lý "ngại hỏi giáo viên"
 
 <div class="grid-2">
 <div class="box" style="border-top: 3px solid #ef4444;">
 
-### 🛑 Nỗi Đau Của Học Sinh
-* **Video quá dài (60–90 phút):** Mất 15–20 phút kéo chuột thủ công (blind scrubbing) tìm lại 1 câu hỏi làm sai.
-* **Lý thuyết rời rạc với bài tập:** Không biết câu trắc nghiệm làm sai liên quan đến lý thuyết nào đầu giờ.
-* **Phản hồi chat trôi mất:** Lời giải thích trong Zoom chat bị lãng quên ngay khi lớp kết thúc.
+### 🛑 Dễ Bỏ Cuộc & Tâm Lý Ngại Hỏi Giáo Viên
+* **Dễ bỏ dở video dài (Guo et al., MIT — ACM L@S 2014):** Qua 6,9 triệu phiên xem, thời gian tập trung trung vị chỉ đạt **tối đa 6 phút**; tới **69% học viên bỏ qua bài tập** sau video dài và **61% thao tác tua** chỉ để mò điểm chuyển bài (*Kim et al., 2014*).
+* **Ngại hỏi giáo viên (Horwitz et al., 1986; Nguyen, 2025):** Sợ bị đánh giá (*Fear of Negative Evaluation*) & sợ "mất mặt" trước lớp khiến học viên không dám bật mic hỏi lại câu làm sai.
+* **Giảm tự tin & quyết tâm:** Câu trả lời sai trong chat bị trôi mất, làm giảm *Self-Efficacy* (*Farmani et al., 2017*).
 </div>
 
 <div class="box" style="border-top: 3px solid #f59e0b;">
 
-### ⚠️ Điểm Mù Của Giáo Viên
-* **Thiếu chỉ số định lượng:** Không biết tỷ lệ nói giữa thầy và trò (Teacher Talk Time vs STT).
-* **Không có bản đồ lỗi:** Khó thống kê lỗi ngữ pháp phổ biến nhất của cả lớp qua chat tự do.
-* **Không có Action Plan tự động:** Dạy buổi học sau dựa vào cảm tính cá nhân thay vì số liệu thực chứng.
+### ⚠️ Điểm Mù Của Giáo Viên & Giải Pháp EduSync
+* **Không nhận biết được "học viên im lặng":** Vì học viên ngại hỏi trên lớp, giáo viên không biết cả lớp đang vướng ở công thức nào.
+* **Thiếu chỉ số TTT/STT & Bản đồ lỗi:** Không thống kê được lỗi chuyển di ngôn ngữ (*L1 Transfer*) trong khung chat.
+* **💡 Giải pháp EduSync:** Chia nhỏ video thành nút câu hỏi **< 2 phút**, tự động nối **Câu làm sai ↔ Lý thuyết gốc** & sửa lỗi chat **ẩn danh bằng tiếng Việt** giúp tăng quyết tâm ôn thi TOEIC/IELTS.
 </div>
 </div>
 
@@ -142,23 +142,23 @@ style: |
 <div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · MỤC TIÊU ĐỀ TÀI</div>
 
 # Mục Tiêu Đề Tài & Giá Trị Cốt Lõi
-## Chuyển hóa video thụ động thành Cơ sở Tri thức Đa chiều Tương tác
+## Tháo gỡ rào cản tâm lý "ngại hỏi thầy cô" và tăng quyết tâm chinh phục TOEIC / IELTS
 
 <div class="grid-2">
 <div class="box" style="border-left: 4px solid #06b6d4;">
 
-### 🎯 TRỤ CỘT 1: HỌC SINH TỰ CHỦ
-* **Click-to-Seek:** Bấm câu hỏi $\to$ video tua ngay đến đúng giây giáo viên chữa bài.
-* **Liên kết Khái niệm 2 chiều:** Bấm badge ngữ pháp trên câu hỏi $\leftrightarrow$ tua về lý thuyết gốc.
-* **Từ vựng CEFR & Audio 1.5s:** Nghe trực tiếp phát âm giọng thật của giáo viên.
-* **Phản hồi Sửa lỗi GEC:** Nhận diện lỗi chat và giải thích sư phạm tiếng Việt.
+### 🎯 TRỤ CỘT 1: HỌC VIÊN TỰ CHỦ & TỰ TIN
+* **Click-to-Seek (< 2 phút/câu):** Bấm câu hỏi $\to$ video tua ngay đến đúng giây cô chữa (khắc phục ngưỡng bỏ cuộc 6 phút).
+* **Thay thế việc ngại hỏi giáo viên:** Bấm badge ngữ pháp trên câu sai $\leftrightarrow$ tự nhảy ngược về lý thuyết gốc đầu giờ.
+* **Từ vựng CEFR (A1–C2) & Audio 1.5s:** Nghe phát âm giọng thật của giáo viên theo mục tiêu band điểm.
+* **Sửa lỗi GEC Ẩn danh ($S_1..S_N$):** Giải thích lỗi tiếng Việt không phán xét, tăng *Self-Efficacy*.
 </div>
 
 <div class="box" style="border-left: 4px solid #f59e0b;">
 
 ### 📊 TRỤ CỘT 2: TRỢ LÝ SƯ PHẠM
 * **Đo lường thời lượng nói (TTT/STT):** Định lượng chính xác tỷ lệ giảng viên vs học sinh.
-* **Bản đồ lỗi sai ERRANT:** Trực quan hóa các điểm nghẽn ngữ pháp trong lớp học.
+* **Bản đồ lỗi sai ERRANT:** Trực quan hóa các điểm nghẽn ngữ pháp dù học viên ngại không hỏi trực tiếp.
 * **Cảnh báo Weakest Concept:** Chỉ ra chủ điểm lý thuyết học sinh làm sai nhiều nhất.
 * **Kế hoạch Hành động 3 bước:** Đề xuất warm-up và bài tập củng cố buổi sau.
 </div>

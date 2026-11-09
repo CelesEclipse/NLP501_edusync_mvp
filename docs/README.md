@@ -1,68 +1,69 @@
 # MỤC LỤC TÀI LIỆU DỰ ÁN (DOCUMENTATION INDEX)
-## EDUSYNC: NỀN TẢNG ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM BÀI GIẢNG TRỰC TUYẾN
+## EDUSYNC: NỀN TẢNG ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM BÀI GIẢNG TIẾNG ANH (TOEIC & IELTS)
 **Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501 - Master of Software Engineering)  
 **Nhánh Git:** `edusync-v2`  
 **Cập nhật lần cuối:** Tháng 11/2026  
 
 ---
 
-## 1. Cấu trúc Cây Thư mục Tài liệu (`docs/`)
+## 1. Cấu trúc Bộ Tài liệu Chuẩn hóa (`docs/`)
 
-Toàn bộ tài liệu phân tích, kiến trúc học thuật, thiết kế kỹ thuật và hướng dẫn sử dụng của đồ án EduSync được chuẩn hóa theo chuẩn IEEE/ACM trong thư mục `docs/`:
+Toàn bộ tài liệu của đồ án EduSync đã được chuẩn hóa xuyên suốt theo định hướng **Xử lý và Phân tích Bài giảng Luyện thi Tiếng Anh (TOEIC & IELTS)**, thiết kế trực quan để dễ dàng trình bày và bảo vệ trước giảng viên:
 
 ```text
 NLP501_edusync_mvp/docs/
-├── README.md                              # [Bạn đang xem] Mục lục và điều hướng toàn bộ tài liệu
-├── 01_project_proposal.md                 # Đề xuất Đề tài & Nghiên cứu Khả thi (Proposal)
-├── 02_nlp_architecture_and_literature.md  # Cơ sở Lý thuyết NLP, Đa phương thức & Literature Review
-├── 03_requirements_analysis_srs.md        # Đặc tả & Phân tích Yêu cầu Bài toán (SRS)
-├── 04_detailed_design_and_qa_plan.md      # Thiết kế Chi tiết Hệ thống (SDD) & Kế hoạch QA/QC
-├── 05_solution_dense_embeddings_guide.md  # Hướng dẫn Kỹ thuật Giải pháp Dense Semantic Embeddings
-├── 06_user_guide_and_demo.md              # Hướng dẫn Sử dụng Web Demo cho Học sinh & Giáo viên
-├── 07_feature_detailed_design_matrix.md   # Ma trận Thiết kế Chi tiết Từng Tính năng & Rà soát Mã nguồn
-├── 08_presentation_slides_and_speaker_notes.md # Kịch bản Thuyết trình & Lời thoại 4 Thành viên
-├── 08_presentation_slides_marp.md         # Slide thuyết trình định dạng Marp Markdown (Xuất PPTX/PDF)
-└── slides.html                            # Slide thuyết trình HTML tương tác trực tiếp (Có Timer & Presenter Mode)
+├── README.md                                           # [Bạn đang xem] Mục lục trung tâm & Bản đồ Technical NLP
+├── 01_project_proposal.md                              # Đề xuất Đề tài: Bài toán lớp học TOEIC/IELTS & 4 Trụ cột NLP
+├── 02_nlp_architecture_and_literature.md               # Cơ sở Lý thuyết NLP sâu (7 kỹ thuật NLP) & Literature Review
+├── 03_requirements_analysis_srs.md                     # Đặc tả & Phân tích Yêu cầu Phần mềm (SRS - IEEE 830)
+├── 04_detailed_design_and_qa_plan.md                   # Thiết kế Chi tiết Hệ thống (SDD) & Kế hoạch QA/QC (45/45 Tests)
+├── 05_solution_dense_embeddings_guide.md               # Chuyên đề: Giải pháp Dense Semantic Embeddings nối Câu hỏi ↔ Ngữ pháp
+├── 06_user_guide_and_demo.md                           # Kịch bản Demo 90 giây trước Giảng viên & Hướng dẫn sử dụng
+├── 07_feature_detailed_design_matrix.md                # Ma trận Ánh xạ 10 Tính năng ↔ Kỹ thuật NLP ↔ Code & Unit Tests
+├── 08_presentation_slides_and_speaker_notes.md         # Kịch bản Thuyết trình 18 Slides & Lời thoại 4 Thành viên
+├── 08_presentation_slides_marp.md                      # Slide thuyết trình định dạng Marp Markdown
+├── 09_teacher_presentation_and_technical_nlp_guide.md  # ⭐ CẨM NANG TRÌNH BÀY CHO GIẢNG VIÊN & BỘ CÂU HỎI PHẢN BIỆN NLP
+├── slides.html                                         # Slide thuyết trình HTML tương tác (Có Timer & Presenter Notes)
+├── esl_roadmap.md                                      # Lộ trình 7 gói công việc (WP1–WP7) cho bài giảng tiếng Anh
+└── phase1_plan.md                                      # Báo cáo thực nghiệm Phase 1 trên bộ dữ liệu bài giảng TOEIC
 ```
 
 ---
 
-## 2. Tóm tắt Nội dung Từng Tài liệu
+## 2. Hướng dẫn Sử dụng Tài liệu Khi Trình bày Trước Giảng viên
 
-| Tên Tệp Tài liệu | Đối tượng Độc giả | Nội dung Trọng tâm |
+| Mục đích Trình bày / Bảo vệ | Tài liệu Cần Mở | Nội dung Cốt lõi để Báo cáo |
 | :--- | :--- | :--- |
-| [**`01_project_proposal.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/01_project_proposal.md) | Giảng viên, Hội đồng bảo vệ | - Bối cảnh bài toán, lý do chọn đề tài.<br>- Mục tiêu nghiên cứu và phạm vi bài toán.<br>- Kế hoạch thực hiện tổng quan. |
-| [**`02_nlp_architecture_and_literature.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/02_nlp_architecture_and_literature.md) | Giảng viên chấm điểm chuyên môn NLP | - Cơ sở toán học & lý thuyết NLP sâu (Whisper ASR Contextual Prompting, Levenshtein WER, Monotonic DP Sequence Alignment, Bilingual IE, CEFR profiling).<br>- Tổng quan các bài báo khoa học liên quan (*MaViLS 2024, Whisper ICML 2023, Code-Switching ASR, Cambridge EVP, ERRANT ACL 2019*).<br>- Phân tích SWOT học thuật. |
-| [**`03_requirements_analysis_srs.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/03_requirements_analysis_srs.md) | Nhóm phát triển, Quản lý dự án | - Phân tích nỗi đau thực tế của Học sinh & Giáo viên.<br>- Đặc tả Yêu cầu Chức năng (FR1-FR5) & Phi chức năng (NFR1-NFR4).<br>- Sơ đồ Ca sử dụng (Use Case Diagram) & Sơ đồ Luồng Sequence.<br>- Tiêu chí chấp thuận và ma trận kiểm thử TC01–TC08. |
-| [**`04_detailed_design_and_qa_plan.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/04_detailed_design_and_qa_plan.md) | Kỹ sư phần mềm, Tester | - Thiết kế kiến trúc 4 tầng chi tiết.<br>- Cấu trúc dữ liệu JSON trung gian.<br>- Thuật toán mã giả (Pseudocode) cho từng module.<br>- Lộ trình triển khai (Gantt chart) & Kế hoạch QA/QC 45+ unit tests.<br>- Ma trận quản lý rủi ro và giải pháp khắc phục. |
-| [**`05_solution_dense_embeddings_guide.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/05_solution_dense_embeddings_guide.md) | Lập trình viên NLP trong nhóm | - Giải thích trực quan tại sao Keyword Matching thất bại.<br>- Cơ sở toán học của Dense Vectors & Cosine Similarity.<br>- Hướng dẫn code chi tiết file `concept_link.py` bằng `sentence-transformers`.<br>- Cách tích hợp kết quả vào Web Demo. |
-| [**`06_user_guide_and_demo.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/06_user_guide_and_demo.md) | Học sinh, Giáo viên, Người dùng thử nghiệm | - Hướng dẫn khởi chạy Web Demo với 2 câu lệnh.<br>- Hướng dẫn ôn tập 5 bước cho Học sinh (Click-to-seek, Vocab audio 1.5s, GEC error review, Omnibox search).<br>- Hướng dẫn quản lý lớp học cho Giáo viên (TTT/STT gauges, Error heatmap, Action Plan). |
-| [**`07_feature_detailed_design_matrix.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/07_feature_detailed_design_matrix.md) | Giảng viên chấm code, Kỹ sư phần mềm | - Ma trận thiết kế chi tiết 10 tính năng cốt lõi.<br>- Rà soát mã nguồn thực tế đối chiếu với thiết kế.<br>- Thống kê khối lượng code (~4,900 LOC) và độ phủ unit test (45/45 tests passed 100%). |
-| [**`08_presentation_slides_and_speaker_notes.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/08_presentation_slides_and_speaker_notes.md) | Cả 4 thành viên nhóm báo cáo | - Kịch bản 18 slide chi tiết kèm lời thoại từng giây.<br>- Bảng phân chia timeline và nhiệm vụ 4 người.<br>- Bảng dự đoán câu hỏi phản biện Q&A và người trả lời chính. |
-| [**`slides.html`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/slides.html) | Người thuyết trình | - Bộ slide tương tác độc lập (Standalone HTML).<br>- Tích hợp đồng hồ đếm ngược, kịch bản ẩn (Phím N), chế độ Grid (Phím O) và Fullscreen (Phím F).<br>- Có thể In/Lưu PDF (Cmd+P) chuẩn 16:9. |
+| 🌟 **Ôn tập nhanh toàn bộ Kiến thức NLP & Trả lời Phản biện** | [**`09_teacher_presentation_and_technical_nlp_guide.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/09_teacher_presentation_and_technical_nlp_guide.md) | • Cách dẫn dắt câu chuyện (Storytelling) từ nỗi đau học viên TOEIC/IELTS.<br>• Phân tích chi tiết **7 điểm áp dụng Technical NLP** kèm công thức toán.<br>• **8 câu hỏi phản biện chuyên sâu** của giảng viên và câu trả lời mẫu. |
+| 🎯 **Trình bày Đề xuất & Bối cảnh Bài toán TOEIC/IELTS** | [**`01_project_proposal.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/01_project_proposal.md) | • 3 nỗi đau của học viên và giáo viên luyện thi TOEIC/IELTS.<br>• Mô hình "Nút tri thức đa phương thức" và 3 câu hỏi nghiên cứu (RQ1–RQ3).<br>• Kết quả định lượng trên bộ dữ liệu bài giảng thực tế. |
+| 🧠 **Giải thích Sâu Cơ sở Toán học & Lý thuyết NLP** | [**`02_nlp_architecture_and_literature.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/02_nlp_architecture_and_literature.md)<br>[**`05_solution_dense_embeddings_guide.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/05_solution_dense_embeddings_guide.md) | • Contextual Biasing ASR ($P(Y \mid X, H)$), Levenshtein WER.<br>• Code-switching Diacritics Density & lọc đồng âm `VI_HOMOPHONES`.<br>• Monotonic DP ($t_{k+1} > t_k$) & Regex Negative Lookbehind.<br>• Siamese Bi-Encoder `all-MiniLM-L6-v2` ($\mathbb{R}^{384}$) & Cosine Similarity.<br>• Lemmatization 2 lớp, từ điển CEFR-J (8.845 từ) & chuẩn lỗi ERRANT. |
+| 🏗️ **Báo cáo Phân tích Thiết kế Hệ thống & Kiểm thử** | [**`03_requirements_analysis_srs.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/03_requirements_analysis_srs.md)<br>[**`04_detailed_design_and_qa_plan.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/04_detailed_design_and_qa_plan.md)<br>[**`07_feature_detailed_design_matrix.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/07_feature_detailed_design_matrix.md) | • Đặc tả FR1–FR5 và NFR1–NFR4 chuẩn IEEE 830.<br>• Kiến trúc 4 tầng, lược đồ JSON Schema và cơ chế Offline Fallback.<br>• Ma trận đối chiếu 10 tính năng với 45/45 Unit Tests (100% PASS). |
+| 🖥️ **Trình chiếu Slide & Demo Trực tiếp** | [**`slides.html`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/slides.html)<br>[**`08_presentation_slides_and_speaker_notes.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/08_presentation_slides_and_speaker_notes.md)<br>[**`06_user_guide_and_demo.md`**](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/06_user_guide_and_demo.md) | • Bộ slide HTML 18 trang tích hợp sẵn đồng hồ và lời thoại (bấm phím `N`).<br>• Kịch bản 5 bước Demo 90 giây trên `http://localhost:8000/`. |
 
 ---
 
-## 3. Bản đồ Chuyển dịch từ Lý thuyết NLP sang Sản phẩm Thực tiễn
+## 3. Bản đồ Ánh xạ 7 Kỹ thuật NLP Cốt lõi sang Tính năng Sản phẩm TOEIC / IELTS
 
 ```mermaid
-graph TD
-    subgraph NLP_Theory["LÝ THUYẾT NLP ĐÃ ÁP DỤNG"]
-        T1["Speech-to-Text & Contextual Prompting (Whisper)"]
-        T2["Monotonic Dynamic Programming Alignment"]
-        T3["Dense Semantic Embeddings (Sentence-Transformers)"]
-        T4["Morphological Analysis & CEFR-J Lexicon"]
-        T5["Grammatical Error Correction (ERRANT Taxonomy)"]
-        T6["Hybrid Neural Information Extraction (Gemini API)"]
+graph LR
+    subgraph NLP_Techniques["7 KỸ THUẬT NLP CỐT LÕI (TECHNICAL NLP)"]
+        T1["1. Whisper ASR + OCR Screen Hints Prompting"]
+        T2["2. Code-Switching ID & VI_HOMOPHONES Filter"]
+        T3["3. Monotonic DP Alignment & Regex Lookbehind"]
+        T4["4. Dense Embeddings (all-MiniLM-L6-v2, R^384)"]
+        T5["5. 2-Stage Lemmatizer & CEFR-J Lexicon (A1-C2)"]
+        T6["6. Hybrid Neural IE (Gemini JSON + Regex Fallback)"]
+        T7["7. ERRANT Taxonomy GEC & FERPA Anonymizer"]
     end
 
-    subgraph Product_Features["TÍNH NĂNG THỰC TẾ TRÊN WEB DEMO"]
-        F1["Tìm kiếm Omnibox & Lời giảng đồng bộ từng giây"]
-        F2["Tua thông minh 34 câu hỏi trắc nghiệm (100% recall)"]
-        F3["Badge liên kết câu hỏi với lý thuyết gốc 2 chiều"]
-        F4["Tab Vocab: Lọc A1-C1 & Nghe audio mẫu 1.5s"]
-        F5["Tab Chat & GEC: Xem câu sửa & Giải thích lỗi tiếng Việt"]
-        F6["Tab Grammar & Teacher Dashboard: Báo cáo cải tiến tự động"]
+    subgraph TOEIC_IELTS_Features["GIÁ TRỊ THỰC TIỄN TRONG LỚP HỌC TOEIC / IELTS"]
+        F1["Phụ đề song ngữ Việt-Anh chuẩn xác thuật ngữ đề thi"]
+        F2["Khử nhiễu từ tiếng Việt trùng mặt chữ từ tiếng Anh"]
+        F3["Click-to-seek 34/34 câu hỏi trắc nghiệm (100% Recall)"]
+        F4["Badge nối Câu hỏi thực hành ↔ Lý thuyết Ngữ pháp gốc"]
+        F5["Thẻ từ vựng theo Band điểm + Audio 1.5s giọng cô giáo"]
+        F6["Tóm tắt công thức ngữ pháp & Mẹo làm bài TOEIC/IELTS"]
+        F7["Sửa lỗi ngữ pháp Chat học viên & Báo cáo Teacher Dashboard"]
     end
 
     T1 --> F1
@@ -71,16 +72,5 @@ graph TD
     T4 --> F4
     T5 --> F5
     T6 --> F6
+    T7 --> F7
 ```
-
----
-
-## 4. Hướng dẫn Dành cho Người Chấm điểm / Báo cáo Đồ án
-
-Khi nộp đồ án hoặc báo cáo môn học NLP501, đề xuất thứ tự trình bày và tham chiếu:
-1. **Trình bày Slide Đề dẫn:** Dựa trên [`01_project_proposal.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/01_project_proposal.md).
-2. **Báo cáo Phân tích Yêu cầu:** Trích dẫn nội dung từ [`03_requirements_analysis_srs.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/03_requirements_analysis_srs.md).
-3. **Báo cáo Cơ sở Lý thuyết & Thuật toán:** Sử dụng [`02_nlp_architecture_and_literature.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/02_nlp_architecture_and_literature.md) và [`05_solution_dense_embeddings_guide.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/05_solution_dense_embeddings_guide.md).
-4. **Báo cáo Thiết kế & Đảm bảo Chất lượng:** Sử dụng [`04_detailed_design_and_qa_plan.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/04_detailed_design_and_qa_plan.md).
-5. **Thuyết minh & Trình chiếu Demo:** Sử dụng [`06_user_guide_and_demo.md`](file:///Users/binhpham/Documents/Study/MSE/NLP/NLP501_edusync_mvp/docs/06_user_guide_and_demo.md) và mở trực tiếp máy chủ web tại `http://localhost:8000/`.
-

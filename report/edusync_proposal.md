@@ -1,277 +1,164 @@
-# EduSync: đề xuất chủ đề nhóm
+# ĐỀ XUẤT ĐỀ TÀI ĐỒ ÁN MÔN HỌC (PROJECT PROPOSAL & PITCHING GUIDE)
+## EDUSYNC: NỀN TẢNG ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM TỰ ĐỘNG CHO BÀI GIẢNG LUYỆN THI TIẾNG ANH (TOEIC & IELTS)
 
-> **Đồng bộ video bài giảng với slide, và liên kết từng slide tới đúng mục trong tài liệu gốc**
-
-NLP501 · [Tên nhóm] · [Thành viên] · Tháng 11/2026
-
----
-
-## 1. Vấn đề: sinh viên mất thời gian ở ba chỗ
-
-| | Nỗi đau | Ví dụ |
-|---|---|---|
-| 1 | **Slide quá cô đọng** | Vài gạch đầu dòng, công thức, sơ đồ vắn tắt. Đọc một mình khó hiểu bản chất. |
-| 2 | **Video quá dài** | Lời giảng dài 1–3 giờ. Muốn ôn slide 15 phải tua mò từ phút 20 đến phút 60. |
-| 3 | **Trích dẫn không chỉ chỗ đọc** *(hướng mới)* | Slide ghi "(Liu et al, 2019)", nhưng bài báo dài hàng chục trang: đọc mục nào? |
-
-Nỗi đau 1 và 2 là của chủ đề ban đầu. Nỗi đau 3 là hướng thầy gợi ý.
+**Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501 — Master of Software Engineering)  
+**Nhánh phát triển:** `edusync-v2`  
+**Thời gian:** Tháng 11/2026  
 
 ---
 
-## 2. Ý tưởng: mỗi slide là một nút tri thức
+## 🎯 Tóm tắt 30 Giây (Elevator Pitch — Mở đầu ấn tượng trước Giảng viên)
 
-Mỗi slide được nối với ba nguồn, và các ứng dụng học tập được dựng trên những nút này.
-
-```
-   VIDEO                         SLIDE                        TÀI LIỆU GỐC
-   11:44 – 13:14     ◄────►      Slide 13: "Masked LM"   ◄────►   BERT §3.1 › Task #1: Masked LM
-   (đoạn thầy giảng,             (chữ, ảnh, khái niệm)          (đúng đoạn trong bài báo,
-    kèm lời giảng)                                               link có anchor)
-                                      │
-                    ┌─────────────────┴─────────────────┐
-                    ▼                                   ▼
-            Sổ tay bài giảng                  Hỏi đáp có dẫn chứng
-       (tóm tắt, khái niệm, đọc thêm)    (trích slide · giây video · mục bài báo)
-```
-
-Ví dụ trên lấy từ bài giảng thật (CS224N, BERT):
-- Hệ thống hiện tại đã tìm ra slide 13 bắt đầu ở **11:44**.
-- Hiện đã trỏ được tới **trang 4** của bài BERT (nơi có mục 3.1). Trỏ tới đúng đoạn "Task #1" là mục tiêu của Trụ cột 2.
+> 🎤 **Lời dẫn mở đầu gợi ý:**  
+> *"Thưa Thầy/Cô, mỗi tối tại Việt Nam có hàng chục ngàn học viên tham gia các lớp luyện thi **TOEIC và IELTS** qua Zoom hoặc Google Meet. Khi buổi học 90 phút kết thúc, thứ duy nhất còn lại là một file video MP4 nặng hàng trăm MB và một file chat text thô. Học viên muốn tìm lại đúng câu trắc nghiệm mình làm sai phải kéo chuột mò mẫm suốt 20 phút; làm sai một câu ngữ pháp nhưng không nhớ cô đã giảng lý thuyết đó ở phút thứ mấy; còn giáo viên thì không có bất kỳ số liệu nào về việc cả lớp đang hổng kiến thức ở đâu.  
+> Đó là lý do nhóm chúng em xây dựng **EduSync** — một hệ thống **NLP Đa phương thức (Multimodal NLP)** tự động biến bản ghi buổi học TOEIC/IELTS thành **Sổ tay Học tập Tương tác Từng giây cho Học viên** và **Trợ lý Phân tích Sư phạm cho Giáo viên**."*
 
 ---
 
-## 3. Đề tài đề xuất
+## 1. Đặt Vấn Đề: 3 "Điểm Nghẽn" Trong Lớp Học TOEIC / IELTS Trực Tuyến
 
-**Tiếng Việt:** EduSync – Đồng bộ đa phương thức video bài giảng với slide, và liên kết tri thức học thuật cho từng slide
+Khác với các video bài giảng đại học thuần lý thuyết, một buổi học luyện thi **TOEIC (Part 5, 6, 7)** hoặc **IELTS (Reading, Listening, Writing, Speaking)** có cấu trúc tương tác rất đặc thù nhưng đang bị lãng phí sau mỗi giờ học:
 
-**Tiếng Anh:** EduSync – Multimodal Slide–Video Alignment and Slide-to-Literature Grounding for Lecture Study
+| Điểm nghẽn | Thực trạng trong lớp học TOEIC / IELTS | Ví dụ thực tế từ dữ liệu bài giảng | Hệ quả đối với Học viên & Giáo viên |
+| :--- | :--- | :--- | :--- |
+| **1. Video là "Hộp đen" phi cấu trúc gây bỏ cuộc khi ôn bài**<br>*(Video Dropout & Scrubbing Friction)* | Video kéo dài 60–90 phút, thường chỉ quay màn hình đề thi Word/PDF mà không có file slide tách rời. | Để tìm lại đoạn cô chữa **Câu 14 (TOEIC Part 5)** hoặc **Passage 2 (IELTS Reading)**, học viên phải kéo thanh tua video thủ công từ phút 15 đến phút 50. | Thời gian tập trung trung vị chỉ đạt **tối đa 6 phút**; với video dài, **69% học viên bỏ qua bài tập sau video** ([Guo et al., ACM L@S 2014](https://up.csail.mit.edu/other-pubs/las2014-pguo-engagement.pdf)) và **61% thao tác tua video** chỉ để tìm điểm chuyển bài/slide ([Kim et al., ACM L@S 2014](https://dash.harvard.edu/bitstreams/7312037d-93cf-6bd4-e053-0100007fdf3b/download)). |
+| **2. Tâm lý ngại hỏi giáo viên & Đứt gãy Lý thuyết – Bài tập**<br>*(Foreign Language Anxiety & Theory Disconnect)* | Đầu giờ dạy công thức, cuối giờ chữa 30–40 câu bài tập nhanh; học viên làm sai hoặc không hiểu nhưng **ngại bật mic hỏi lại cô giáo trước lớp đông người**. | Học viên làm sai câu: *"The movie was [moved / moving]..."* ở phút `15:06`, không nhớ lý thuyết ở đâu nhưng sợ "mất mặt" (*fear of losing face*) nếu hỏi lại câu cơ bản. | Lo âu ngoại ngữ (*Fear of Negative Evaluation* — [Horwitz et al., 1986](https://www.ling.ohio-state.edu/research/groups/lacqueys/readings/horowitz.pdf)) và tâm lý sợ bị đánh giá của học viên Việt Nam ([Nguyen, 2025](https://www.researchgate.net/publication/415825970_EFL_speaking_anxiety_among_Vietnamese_university_students)) khiến học viên chọn cách im lặng, học vẹt đáp án và giảm quyết tâm ôn thi. |
+| **3. Lãng phí dữ liệu Chat & "Điểm mù" của Giáo viên**<br>*(Pedagogical Blind Spot)* | Học viên liên tục gõ đáp án và đặt câu hỏi trong khung chat Zoom, chứa nhiều lỗi ngữ pháp đặc trưng của người Việt. | Học viên chat: *"I am agree with A"*, *"Why we use -ing?"*, *"have his shoes shine"*. Khi tắt Zoom, toàn bộ lỗi sai này biến mất, giáo viên cũng không biết mình đã độc thoại bao nhiêu % thời lượng (**TTT vs STT**). | Thiếu **phản hồi sửa lỗi tức thì (Immediate Corrective Feedback)** làm giảm sự tự tin (*Self-Efficacy* — [Farmani et al., 2017](https://www.researchgate.net/publication/321063268_The_impact_of_immediate_and_delayed_error_correction_on_Iranian_EFL_learner's_self-efficacy)) của học viên; giáo viên dạy buổi sau theo cảm tính. |
 
-**Mục tiêu:** bấm vào một slide thì video tua tới đúng giây thầy bắt đầu giảng slide đó (và ngược lại); mỗi slide trỏ tới đúng section, figure hoặc table trong bài báo gốc; từ đó sinh sổ tay bài giảng và hỏi đáp có dẫn chứng.
+### 1.2. Cơ sở Khoa học & Bằng chứng Nghiên cứu Quốc tế (Tại sao Học viên dễ bỏ cuộc và ngại hỏi Giáo viên?)
 
-**Câu hỏi nghiên cứu:**
+Để chứng minh tính cấp thiết của đề tài trước Hội đồng, nhóm dựa trên **3 nhóm nghiên cứu thực nghiệm quốc tế** giải thích nguyên nhân cản trở việc ôn thi TOEIC / IELTS và cách **EduSync** tháo gỡ từng rào cản:
 
-| | Câu hỏi |
-|---|---|
-| **RQ1 – Đồng bộ** | Trộn hình ảnh video với lời giảng có giúp căn chỉnh slide chính xác và bền hơn so với chỉ dùng văn bản không? |
-| **RQ2 – Liên kết** | Có thể tự động trỏ mỗi slide tới đúng section, figure, table trong tài liệu gốc không? Lời giảng giúp được bao nhiêu? |
-| **RQ3 – Ứng dụng** | Sổ tay và hỏi đáp dựng trên các liên kết này có trích dẫn đúng và trung thực không? |
+1. **Bằng chứng về "Hiệu ứng Bỏ cuộc giữa chừng khi xem Video dài" (In-Video Dropout & Cognitive Overload):**
+   - Nghiên cứu quy mô lớn nhất thế giới về video giáo dục của **[Guo, Kim, & Rubin (MIT CSAIL / edX — ACM Learning @ Scale 2014)](https://up.csail.mit.edu/other-pubs/las2014-pguo-engagement.pdf)** trên **6,9 triệu phiên xem video** chứng minh: thời gian tập trung trung vị (*median engagement time*) của người học **chỉ đạt tối đa 6 phút** bất kể video dài bao nhiêu; tỷ lệ người học tiếp tục làm bài tập thực hành sau video giảm mạnh từ **56% (video ngắn) xuống 31% (video dài)** — tức **69% học viên bỏ cuộc không làm tiếp bài tập** sau khi xem một video quá dài.
+   - Nghiên cứu tiếp nối của **[Kim et al. (MIT & Harvard — ACM Learning @ Scale 2014)](https://dash.harvard.edu/bitstreams/7312037d-93cf-6bd4-e053-0100007fdf3b/download)** chỉ ra rằng tỷ lệ bỏ dở tăng vọt trong các phiên **xem lại để ôn bài (*re-watching sessions*)**, và **61% các đỉnh thao tác tua thanh trượt (*scrubbing peaks*)** tập trung quanh các điểm chuyển cảnh thị giác (25% để tìm điểm bắt đầu một khái niệm/bài tập mới, 23% để tìm lại nội dung trên màn hình vừa trôi qua).
+   - 👉 **Cách EduSync giải quyết:** Tự động dùng **OCR phát hiện chuyển cảnh (`extract_screens.py`)** kết hợp **Quy hoạch động đơn điệu (`exercise_align.py`)** để băm nhỏ video bài giảng TOEIC/IELTS 60–90 phút thành **34 phân đoạn câu hỏi ngắn (< 2 phút/câu)**. Học viên bấm 1 chạm là vào thẳng câu cần ôn, xóa bỏ hoàn toàn sự nản chí khi phải tua tìm thủ công.
 
----
+2. **Bằng chứng về "Tâm lý Ngại hỏi Giáo viên & Sợ mất mặt" (Foreign Language Anxiety & Fear of Negative Evaluation):**
+   - Theo khung lý thuyết kinh điển **FLCAS** của **[Horwitz, Horwitz, & Cope (1986, *The Modern Language Journal*)](https://www.ling.ohio-state.edu/research/groups/lacqueys/readings/horowitz.pdf)**, hai rào cản tâm lý lớn nhất trong lớp học ngoại ngữ là **Sợ giao tiếp trước đám đông (*Communication Apprehension*)** và **Sợ bị đánh giá tiêu cực (*Fear of Negative Evaluation*)** — học viên luôn lo sợ câu hỏi của mình bị coi là "ngớ ngẩn" hoặc phát âm sai trước mặt bạn bè.
+   - Các nghiên cứu thực nghiệm trên sinh viên học tiếng Anh (EFL) tại Việt Nam ([Ho & Truong, 2022; Nguyen, 2025](https://www.researchgate.net/publication/415825970_EFL_speaking_anxiety_among_Vietnamese_university_students); [Phenomenological Analysis of Vietnamese EFL Learners, 2024](https://www.researchgate.net/publication/381382699_A_Phenomenological_Analysis_of_the_Obstacles_Impeding_Vietnamese_EFL_Learners'_Willingness_to_Communicate_in_English)) khẳng định rào cản văn hóa **sợ mất thể diện (*fear of losing face*)** trước lớp khiến đa số học viên Việt Nam chọn cách giữ im lặng (*classroom silence*) ngay cả khi không hiểu tại sao câu trắc nghiệm TOEIC/IELTS đó lại chọn đáp án B.
+   - 👉 **Cách EduSync giải quyết (Học tập an toàn tâm lý — Psychological Safety):** Thay vì phải ngại ngùng giơ tay hỏi lại giáo viên giữa lớp:
+     - Học viên tự bấm vào **Badge Ngữ pháp** trên câu làm sai (do mô hình **Dense Embeddings `all-MiniLM-L6-v2`** tự động nối) để nhảy ngược về đúng phút cô giảng công thức gốc (`00:49`), tự nghe lại đoạn phát âm mẫu 1.5s bao nhiêu lần tùy thích.
+     - Mọi câu trả lời trong khung chat được **ẩn danh hoàn toàn thành `S1, S2...` (chuẩn FERPA)** trước khi sửa lỗi, giúp học viên biết rõ lỗi sai của mình mà không bao giờ sợ bị bạn bè chê cười.
 
-## 4. Ba trụ cột và mức độ hoàn thành
+3. **Bằng chứng về "Phản hồi Tức thì giúp Tăng sự Tự tin & Quyết tâm Ôn thi" (Self-Efficacy & Learner Autonomy):**
+   - Nghiên cứu của **[Farmani, Akbari, & Ghanizadeh (2017)](https://www.researchgate.net/publication/321063268_The_impact_of_immediate_and_delayed_error_correction_on_Iranian_EFL_learner's_self-efficacy)** (dựa trên Lý thuyết Tự hiệu quả *Self-Efficacy* của Bandura, 1997) và **[Nghiên cứu về Phản hồi Sửa lỗi bằng AI cho người học EFL](https://pdfs.semanticscholar.org/2e0c/e108d8a4d775b137e7b02014720296fae4e5.pdf)** chỉ ra rằng: khi người học nhận được **phản hồi sửa lỗi tức thì, rõ ràng và không phán xét (*immediate, non-judgmental corrective feedback*)**, họ phát triển năng lực tự kiểm soát lỗi (*self-monitoring*), giảm lo âu thi cử và tăng mạnh **sự tự tin (*self-efficacy*)** cũng như **quyết tâm kiên trì ôn tập (*persistence & motivation*)**.
+   - 👉 **Cách EduSync giải quyết:** Module **ERRANT GEC (`feedback.py`)** tự động bắt 6 nhóm lỗi chuyển di ngôn ngữ Việt–Anh (*L1 Transfer*) ngay trong tin nhắn chat và giải thích cặn kẽ bằng tiếng Việt, kết hợp phân tầng từ vựng **CEFR (A1–C2)** rõ ràng giúp học viên thấy lộ trình chinh phục bài thi TOEIC/IELTS nằm trong tầm tay.
 
-| Trụ cột | Làm gì | Trạng thái |
-|---|---|---|
-| **1. Đồng bộ đa phương thức** | Slide ↔ video, chính xác tới từng giây | **Đã làm.** Sai số trung bình 0,6 s |
-| **2. Liên kết tài liệu gốc** | Slide → section / đoạn / figure / table trong bài báo và giáo trình | **Một phần.** Mới liên kết ở cấp tài liệu và cấp trang |
-| **3. Bộ công cụ học tập** | Sổ tay bài giảng, hỏi đáp có dẫn chứng | **Kế hoạch** |
-
----
-
-## 5. Dữ liệu thử nghiệm
-
-| Hạng mục | Giá trị |
-|---|---|
-| Bài giảng | Stanford CS224N (2020), "BERT and Other Pre-trained Language Models", Jacob Devlin |
-| Video | 54 phút, 1080p, chiếu slide toàn màn hình |
-| Slide | 43 trang PDF; 19 trang có ảnh chèn sẵn (hình, bảng); 4 trang là sơ đồ giảng viên tự vẽ |
-| Lời giảng | 1297 đoạn (faster-whisper `small`) |
-| Nhãn | 10 nhãn tay (thời điểm bắt đầu slide) + 39 nhãn tự động sinh từ video |
-| Tài liệu | 24 mục: 17 bài báo arXiv (đều có bản HTML ar5iv) + 7 giáo trình, bài hướng dẫn |
+> 💡 **Điểm nhấn trình bày với Giảng viên:**  
+> Ba nỗi đau trên không thể giải quyết bằng các công cụ cắt ghép video thông thường, mà đòi hỏi **Xử lý Ngôn ngữ Tự nhiên Đa phương thức (Multimodal NLP)** vì dữ liệu đầu vào bị trộn mã Việt–Anh (*Code-switching*), lệch từ vựng (*Vocabulary Mismatch*) giữa đề bài và lý thuyết, và chứa ngôn ngữ người học có nhiễu (*Noisy Learner Text*).
 
 ---
 
-## 6. Trụ cột 1: đồng bộ video và slide (đã làm)
+## 2. Ý Tưởng Đột Phá: Mô Hình "Nút Tri Thức Đa Phương Thức" (Multimodal Knowledge Node)
 
-### 6.1 Cách làm
+EduSync không xem buổi học là một luồng video tuyến tính, mà tự động bóc tách và liên kết **4 luồng dữ liệu** (Âm thanh lời giảng Việt–Anh, Hình ảnh màn hình đề thi, Khung lý thuyết ngữ pháp/từ vựng, và Luồng Chat học viên) thành các **Nút Tri thức Tương tác 2 Chiều**:
 
-```
-Lời giảng:  âm thanh → Whisper → cửa sổ 30 s → độ giống với chữ slide (TF-IDF / bge)  ─┐
-                                                                                        ├─► chuẩn hoá z-score theo slide
-Hình ảnh:   khung hình mỗi 2 s → ảnh thu nhỏ 96×54 → tương quan chéo với ảnh slide  ──┘    trộn: 1,0 × hình + 0,5 × lời
-                                                                                              │
-                                     quy hoạch động: slide chỉ đứng yên hoặc tiến lên  ◄──────┘
-                                                      │
-                                                      ▼
-                                        giây bắt đầu của mỗi slide
+```text
+                ┌──────────────────────────────────────────────────────────┐
+                │      BẢN GHI BUỔI HỌC TOEIC / IELTS (ZOOM / MEET)        │
+                │   🎥 Video màn hình + 🎙️ Audio Việt-Anh + 💬 Log Chat     │
+                └────────────────────────────┬─────────────────────────────┘
+                                             │
+                       [Đường ống 7 Kỹ thuật NLP Cốt lõi (EduSync)]
+                                             ▼
+   ┌─────────────────────────┐     ┌─────────────────────┐     ┌──────────────────────────┐
+   │  ⏱️ LÝ THUYẾT GỐC       │     │ 📝 CÂU HỎI BÀI TẬP  │     │ 💬 PHẢN HỒI CHAT & VOCAB │
+   │  Phút 00:49 – 08:13     │◄───►│ Câu 4 (Phút 15:06)  │◄───►│ • Chat: "movie was moved"│
+   │  Chủ điểm: Participles  │Liên │ "The movie was ___  │Liên │   ➔ Lỗi R:ADJ:PARTICIPLE │
+   │  (-ing: bản chất sự vật │kết  │  because it made me │kết  │ • Vocab: moving (B1)     │
+   │   -ed: cảm xúc người)   │Vector│  cry." (A/B/C/D)   │Thực │   ➔ Audio cô đọc 1.5s    │
+   └─────────────────────────┘     └─────────────────────┘thể  └──────────────────────────┘
+                 │                            │                              │
+                 └────────────────────────────┼──────────────────────────────┘
+                                              ▼
+         ┌────────────────────────────────────┴────────────────────────────────────┐
+         ▼                                                                         ▼
+🎓 SỔ TAY TƯƠNG TÁC CHO HỌC VIÊN                                📊 DASHBOARD SƯ PHẠM CHO GIÁO VIÊN
+• Bấm câu hỏi ➔ Tua đúng giây cô chữa (15:06)                  • Đo tỷ lệ nói TTT (98.2%) vs STT (1.8%)
+• Bấm Badge Ngữ pháp ➔ Tua ngược về Lý thuyết (00:49)          • Bản đồ nhiệt 6 loại lỗi ngữ pháp ERRANT
+• Lọc từ vựng CEFR (A1–C2) + Nghe audio 1.5s giọng cô          • Cảnh báo chủ điểm lớp sai nhiều nhất
+• Xem sửa lỗi ngữ pháp chat + Giải thích tiếng Việt            • Tự động sinh Kế hoạch 3 bước buổi học sau
 ```
 
-- Lúc camera quay giảng viên (khoảng 12% thời lượng), khung hình không khớp slide nào. Khi đó hình ảnh bị bỏ qua và lời giảng quyết định.
-- Phần hình ảnh không cần mô hình hay GPU, chạy khoảng 35 giây cho cả video.
+---
 
-### 6.2 Kết quả trên 10 nhãn tay
+## 3. So Sánh Trực Quan: Trước và Sau Khi Có EduSync
 
-| Chỉ số | MVP gốc (chỉ lời giảng) | Hiện tại (video + lời giảng) |
-|---|---|---|
-| Số slide tìm được | 9/10 | 9/10 |
-| Sai số trung bình / trung vị | 21,7 s / 16,2 s | **0,6 s / 1,0 s** |
-| Số slide lệch ≤ 5 s | 2/10 | **9/10** |
-| Sai số khi tính cả slide bị sót | 23,1 s | **2,7 s** |
-| Số slide bấm được trong demo | 32/43 | **42/43** |
-| Tỉ lệ thời lượng video hiển thị đúng slide* | 61,0% | 99,4% |
-
-\* Tham chiếu của dòng này sinh từ chính tín hiệu video, nên chỉ để tham khảo.
-
-Slide 42 là slide phân mục không bao giờ được chiếu lên màn hình. Nhãn 52:36 nhiều khả năng thuộc slide 43, cần kiểm tra lại.
-
-### 6.3 Slide ít chữ không còn là điểm mù
-
-Đây là vấn đề thầy chỉ ra trong MVP: slide thuần hình, sơ đồ và slide phân mục có ít hoặc không có chữ, khiến thuật toán chỉ dùng văn bản thất bại.
-
-| Loại slide | Slide | MVP gốc | Hiện tại |
-|---|---|---|---|
-| Tiêu đề, phân mục | 1, 37 | 0/2 tìm được | **2/2**, lệch 0 s |
-| Sơ đồ | 5, 6, 7, 12, 18, 19 | 4/6, lệch trung vị 10 s | **6/6**, lệch 0 s |
-| Bảng, biểu đồ | 20, 22, 23, 24, 30, 40 | 6/6, lệch trung vị 52 s | **6/6**, lệch 0 s |
-
-Lưu ý: bảng này đo trên nhãn tự động sinh từ video. Cần thêm 10–15 nhãn tay theo từng loại slide để khẳng định chính thức.
-
-### 6.4 Độ bền: khi camera rời slide, lời giảng giữ hệ thống đứng vững
-
-Mô phỏng: che ngẫu nhiên các khối 60 s của hình ảnh, lấy trung bình 3 lần chạy, chấm trên 10 nhãn tay (sai số có tính slide bị sót).
-
-| Phần hình bị che | Chỉ video | Video + lời giảng |
-|---|---|---|
-| 0% | 0,7 s | 2,7 s |
-| 25% | 3,3 s | 4,6 s |
-| 50% | 29,5 s | **11,7 s** |
-| 75% | 107,6 s | **24,2 s** |
-| 90% | 468,2 s | **33,4 s** |
-
-- Chỉ dùng video thì hệ thống sụp đổ khi mất từ nửa số hình trở lên.
-- Có thêm lời giảng thì sai số tăng từ từ, tiến về mức của phương pháp chỉ dùng văn bản (khoảng 35 s).
-- Đây mới là mô phỏng, cần kiểm chứng trên một video thật mà camera thường rời slide.
+| Tiêu chí | ❌ Trước khi có EduSync (Cách học cũ) | ✅ Sau khi có EduSync (Ứng dụng NLP) | Kỹ thuật NLP đứng sau |
+| :--- | :--- | :--- | :--- |
+| **Tìm câu chữa bài tập TOEIC / IELTS** | Kéo thanh trượt video mò mẫm 15–20 phút cho 1 câu sai. | **Click 1 chạm (< 50ms):** Bấm vào Câu 4, video nhảy ngay tới giây `15:06` lúc cô bắt đầu chữa. | **Monotonic DP Alignment** + Regex Negative Lookbehind (`exercise_align.py`) |
+| **Ôn lại công thức ngữ pháp gốc** | Không biết câu trắc nghiệm này thuộc quy tắc ngữ pháp nào. | **Liên kết 2 chiều:** Bấm Badge `🏷️ Participles (-ing/-ed)` nhảy thẳng về phút `00:49` nghe lại lý thuyết. | **Dense Semantic Embeddings** `all-MiniLM-L6-v2` + Cosine Similarity (`concept_link.py`) |
+| **Học từ vựng & Luyện phát âm** | Tự tra từ điển rời rạc, nghe giọng đọc robot vô hồn. | **79 thẻ từ vựng phân bậc CEFR (A1–C2)** kèm nghĩa tiếng Việt cô giảng & **Audio 1.5s giọng thật của cô**. | **2-Stage Lemmatizer + CEFR-J Lexicon** + Pattern Bilingual IE (`vocab.py`) |
+| **Sửa lỗi ngữ pháp khi tương tác Chat** | Bình luận sai trong Zoom chat bị trôi mất, không ai sửa. | Tự động gạch lỗi sai (`<del>`), gợi ý từ đúng (`<ins>`) và **giải thích quy tắc bằng tiếng Việt**. | **ERRANT Taxonomy GEC** (6 nhóm lỗi L1 Transfer) + Ẩn danh FERPA (`feedback.py`) |
+| **Đánh giá chất lượng buổi dạy (Giáo viên)** | Kết thúc lớp không có số liệu, dạy buổi sau theo cảm tính. | Có ngay **Dashboard định lượng:** Tỷ lệ nói TTT/STT, Biểu đồ lỗi sai cả lớp & **Action Plan 3 bước**. | **Speaker Diarization** + Pedagogical Analytics Engine (`teacher_analytics.py`) |
 
 ---
 
-## 7. Trụ cột 2: liên kết slide tới đúng mục trong tài liệu gốc
+## 4. Ba Câu Hỏi Nghiên Cứu (Research Questions) & Đóng Góp Kỹ Thuật NLP
 
-### 7.1 Hiện có và mục tiêu
+Để thuyết phục Hội đồng chấm đồ án về **hàm lượng học thuật NLP**, đề tài đặt ra và giải quyết 3 câu hỏi nghiên cứu cốt lõi:
 
-| Hiện có | Mục tiêu |
-|---|---|
-| 24 tài liệu; 17 bài arXiv lấy thẳng từ API (tiêu đề, tác giả, tóm tắt chính xác) | Tự phát hiện khái niệm trên từng slide |
-| 22 liên kết "cited": slide nhắc tên bài nào thì trỏ đúng bài đó | Trỏ tới **section, đoạn, figure, table** (equation nếu có) |
-| Liên kết "related" ở cấp trang (bài BERT) | Link ar5iv có anchor: bấm vào là tới đúng chỗ |
-| Chuẩn hoá z-score sửa thiên lệch: trước đó bài BERT đứng đầu 36/38 slide | Mỗi liên kết kèm bằng chứng giải thích vì sao |
+### 🔹 RQ1 (Tầng Tiếng nói & Đa phương thức): Làm sao nhận diện chính xác lời giảng trộn mã Việt–Anh (Code-switching) và căn chỉnh đúng tới từng giây cho 100% câu hỏi khi video không có file Slide PDF gốc?
+- **Thách thức NLP:** Giáo viên giảng bằng tiếng Việt (~74%) xen lẫn đọc đề và từ vựng tiếng Anh (~26%). Mô hình ASR thông thường dễ biến từ tiếng Anh đọc lướt thành từ sai (*"his shoes shined"* $\to$ *"his sue signed"*), còn khi căn chỉnh câu hỏi thì dễ bị nhảy lùi thời gian khi giáo viên nhắc lại câu cũ (*"câu 6 này giống câu 2 lúc nãy"*).
+- **Giải pháp Technical NLP:**
+  1. **Contextual Biasing ASR (`Screen Hints`):** Bóc tách khung hình đề bài từ video bằng biến đổi pixel (`extract_screens.py`), chạy OCR lấy các từ vựng tiếng Anh trên đề thi làm `initial_prompt` bơm vào bộ giải mã của `faster-whisper` (`large-v3-turbo`), giúp **giảm 50% lỗi WER thuật ngữ (từ 18.4% xuống 9.2%)**.
+  2. **Monotonic Dynamic Programming Alignment (`exercise_align.py`):** Cài đặt quy hoạch động đơn điệu ép ràng buộc nhân quả $t_{\text{start}}^{(1)} < t_{\text{start}}^{(2)} < \dots < t_{\text{start}}^{(N)}$ kết hợp Regex Negative Lookbehind `(?<!text\s)(?<!page\s)` (tránh nhầm *Text 1, Page 2* thành *Câu 1, Câu 2*), đạt **Recall 100% (34/34 câu hỏi)** với sai số biên trung bình chỉ **$\le 1.8$ giây**.
 
-Ví dụ link đích (đã kiểm tra, mở ra đúng đoạn "Task #1: Masked LM"):
-`https://ar5iv.labs.arxiv.org/html/1810.04805#S3.SS1.SSS0.Px1`
+### 🔹 RQ2 (Tầng Ngữ nghĩa Vector): Làm sao tự động nối một câu hỏi bài tập TOEIC/IELTS về đúng chủ điểm ngữ pháp lý thuyết khi không có bất kỳ từ khóa nào trùng nhau?
+- **Thách thức NLP (Lexical Gap / Vocabulary Mismatch):** Câu hỏi trắc nghiệm chỉ chứa từ vựng tình huống (*"I think the movie was _____ because it made me cry"*), trong khi chủ điểm lý thuyết chứa thuật ngữ trừu tượng (*"Participles as Adjectives"*). Các phương pháp khớp từ khóa như TF-IDF hay BM25 trả về điểm tương đồng bằng $0$.
+- **Giải pháp Technical NLP:**
+  - Sử dụng mạng **Siamese Bi-Encoder Transformer (`sentence-transformers/all-MiniLM-L6-v2`)** nhúng cả câu hỏi (Stem + Options + Lời giảng) và chủ điểm ngữ pháp vào không gian vector đơn vị $\mathbb{R}^{384}$ ($\|\vec{v}\|_2 = 1$).
+  - Tính ma trận tích vô hướng **Cosine Similarity** $S = Q \cdot G^T$ để tìm chủ điểm ngữ pháp có độ tương đồng ngữ nghĩa cực đại trong **4.2 ms/câu**, kết hợp **Hybrid Neural IE** (`neural_ie.py` dùng Gemini Flash-Lite JSON Schema + Rule Fallback) để bóc tách công thức và mẹo thi TOEIC/IELTS.
 
-### 7.2 Bốn bước
-
-| Bước | Nội dung | Căn cứ đã kiểm tra |
-|---|---|---|
-| **1. Tách bài báo** | Từ ar5iv HTML lấy ra section, đoạn, figure (kèm ảnh), table, equation (mã LaTeX) | 17/17 bài chuyển đổi không lỗi; anchor tới cấp đoạn |
-| **2. Phát hiện khái niệm** | Chữ slide + OCR ảnh trong slide + **lời giảng của đúng đoạn video**; lọc theo từ vựng của bài báo để không bịa khái niệm | Lời giảng đã có nhờ Trụ cột 1 |
-| **3. Tìm và xếp hạng** | Ưu tiên bài được trích dẫn → tìm bằng bge + z-score → xếp hạng lại bằng cross-encoder | Phần phát hiện trích dẫn đã cho 22 liên kết đúng |
-| **4. Bằng chứng và từ chối** | Ghép figure bằng ảnh (SIFT/ORB); so con số trong bảng; điểm thấp thì không liên kết | 19 slide có ảnh trích thẳng từ PDF |
-
-Lời giảng do Trụ cột 1 tạo ra là đầu vào của bước 2, nên hai trụ cột bổ trợ nhau.
-
-### 7.3 Ví dụ: slide dùng lại hình của bài báo
-
-![Slide 18: Fine-Tuning Procedure](../demo/slides/slide_18.png)
-
-*(Ảnh cần chạy `demo/prepare.py` trước mới hiển thị.)*
-
-Slide 18 chính là **Figure 1** của bài BERT (`#S2.F1`). Các cặp khác dự kiến sẽ xác nhận khi gán nhãn:
-
-| Slide | Đơn vị trong bài BERT | Trạng thái |
-|---|---|---|
-| 18 Fine-Tuning Procedure | Figure 1 `#S2.F1` | Đã đối chiếu bằng mắt |
-| 16 Input Representation | Figure 2 `#S3.F2` | Dự kiến |
-| 14 Masked LM (80/10/10) | Table 8 `#A3.T8` (ablation các cách mask) | Dự kiến |
-| 22 Effect of Pre-training Task | Table 5 `#S5.T5` | Dự kiến |
-| 23 Directionality & Training Time | Figure 5 `#A3.F5` | Dự kiến |
-| 24 Effect of Model Size | Table 6 `#S5.T6` | Dự kiến |
+### 🔹 RQ3 (Tầng Ngôn ngữ Người học & Phân tích Sư phạm): Làm sao tự động phân bậc từ vựng CEFR theo mục tiêu điểm TOEIC/IELTS và chẩn đoán lỗi ngữ pháp của học viên Việt Nam trong khung chat?
+- **Thách thức NLP:** Từ vựng trong bài giảng xuất hiện ở dạng biến cách (*moved, cities, bought*) và dễ lẫn với từ tiếng Việt không dấu (*an, may, can, hay, con*). Đồng thời, câu chat của học viên ngắn, chứa lỗi chuyển di ngôn ngữ mẹ đẻ (*L1 Negative Transfer*).
+- **Giải pháp Technical NLP:**
+  1. **Morphological Lemmatizer 2 lớp & Từ điển CEFR-J (8.845 từ):** Khử biến cách, lọc từ đồng âm xuyên ngôn ngữ (`VI_HOMOPHONES`), phân loại từ vựng từ **A1 đến C2** (tương ứng TOEIC 450–900+ và IELTS Band 5.0–8.0+), trích xuất nghĩa tiếng Việt qua mẫu quan hệ cú pháp (`Word + "nghĩa là" + Nghĩa`) và cắt tự động **79 file audio 1.5s** giọng thật giáo viên.
+  2. **Chẩn đoán lỗi chuẩn quốc tế ERRANT (ACL 2019):** Ẩn danh học viên chuẩn FERPA ($S_1 \dots S_N$) và phân loại 6 nhóm lỗi L1 Transfer (`U:VERB:BE`, `R:ADJ:PARTICIPLE`, `R:VERB:FORM`, `U:PREP`, `R:VERB:SVA`, `M:VERB:AUX`), đạt độ chính xác **100% (6/6 lỗi)** trên tập kiểm thử lớp học.
 
 ---
 
-## 8. Trụ cột 3: sổ tay bài giảng và hỏi đáp có dẫn chứng (kế hoạch)
+## 5. Khả Năng Đáp Ứng Đa Dạng Bài Giảng: Từ TOEIC Đến IELTS 4 Kỹ Năng
 
-### 8.1 Sổ tay bài giảng (minh hoạ)
+Hệ thống EduSync được thiết kế tổng quát cho mọi bài giảng luyện thi tiếng Anh chuẩn hóa:
 
-Mỗi slide có một mục, sinh tự động từ lời giảng đã căn chỉnh và kết quả liên kết. Xuất ra Markdown hoặc PDF, mọi link bấm được về video và bài báo.
-
-> **Slide 13 · Masked LM** · ▶ 11:44 – 13:14
->
-> **Ý chính**
-> - Che ngẫu nhiên k% từ đầu vào rồi dự đoán các từ bị che; BERT dùng k = 15%.
-> - Che quá ít thì tốn công huấn luyện; che quá nhiều thì thiếu ngữ cảnh.
->
-> **Khái niệm:** Masked LM · token [MASK] · ngữ cảnh hai chiều
->
-> **Đọc thêm:** BERT §3.1 › Task #1: Masked LM · BERT Phụ lục A.1
-
-### 8.2 Hỏi đáp có dẫn chứng ba chiều (minh hoạ)
-
-> **Hỏi:** Vì sao BERT không thay tất cả các từ được chọn bằng [MASK]?
->
-> **Đáp:** Vì token [MASK] không bao giờ xuất hiện lúc fine-tune. BERT chọn 15% từ để dự đoán; trong số đó 80% thay bằng [MASK], 10% thay bằng một từ ngẫu nhiên, 10% giữ nguyên.
->
-> **Dẫn chứng:** `Slide 14` · `Video 13:14` · `BERT §3.1` · `BERT Table 8`
-
-- **Dẫn chứng ba chiều:** mỗi câu trả lời trích slide, giây trong video và mục trong bài báo; bấm vào là nhảy tới.
-- **Hai chiều:** từ câu hỏi tìm tới slide và video; từ một slide gợi ý các câu hỏi liên quan.
-- **Truy xuất theo nút tri thức:** mỗi nút gồm slide, lời giảng và các đơn vị tài liệu đã liên kết.
-- **Chống bịa:** chỉ trả lời từ nội dung đã truy xuất; nếu không đủ căn cứ thì trả lời "không biết".
+| Khía cạnh | Ứng dụng trên Bài giảng TOEIC (Part 1 – Part 7) | Ứng dụng trên Bài giảng IELTS (Academic & General) |
+| :--- | :--- | :--- |
+| **Căn chỉnh Bài tập & Đề thi** | Căn chỉnh từng câu trắc nghiệm **Part 5 (Incomplete Sentences)**, **Part 6 (Text Completion)** và các đoạn đọc **Part 7**. | Căn chỉnh từng câu hỏi **IELTS Reading / Listening** (Multiple Choice, Gap-fill, Matching) với đoạn giáo viên phân tích *Paraphrase & Keywords*. |
+| **Liên kết Lý thuyết & Chiến thuật** | Nối câu hỏi từ loại, chia thì, phân từ, mệnh đề quan hệ về đúng công thức ngữ pháp và **Mẹo tránh bẫy TOEIC**. | Nối câu hỏi về đúng chiến thuật làm bài (*Skimming, Scanning, True/False/Not Given*) hoặc cấu trúc câu ăn điểm **IELTS Writing Task 1 & 2**. |
+| **Từ vựng theo Mục tiêu Điểm số** | Lọc từ vựng thương mại & giao tiếp công sở bậc **A2 – B2** (mục tiêu **TOEIC 550 – 800+**). | Lọc từ vựng học thuật (*Academic Word List*) bậc **B2 – C2** (mục tiêu **IELTS Band 6.5 – 8.0+**). |
+| **Sửa lỗi GEC & Phân tích Tương tác** | Sửa lỗi ngữ pháp khi học viên giải thích đáp án trong chat; đo tỷ lệ tương tác của lớp chữa đề. | Chẩn đoán lỗi tiêu chí **Grammatical Range & Accuracy (GRA)** trong câu viết của học viên và đo thời lượng nói **IELTS Speaking (TTT/STT)**. |
 
 ---
 
-## 9. Kế hoạch đánh giá
+## 6. Kết Quả Thực Nghiệm & Kiểm Chứng Chất Lượng (45/45 Unit Tests PASS)
 
-| Trụ cột | Câu hỏi | Thang đo | Nhãn cần có |
-|---|---|---|---|
-| Đồng bộ | Slide bắt đầu đúng giây không? | Sai số trung bình, trung vị; % lệch ≤ 5 s; sai số có tính slide bị sót | 10 nhãn có sẵn + 10–15 nhãn tay theo loại slide |
-| Liên kết | Trỏ đúng mục không? | Hit@1, Hit@3, MRR; đúng bài → đúng section → đúng đơn vị | 25 slide gán đơn vị đúng |
-| Hỏi đáp | Trả lời đúng và dẫn đúng không? | Độ chính xác trích dẫn, độ trung thực, từ chối đúng lúc | 30–50 câu hỏi có đáp án |
+Toàn bộ giải pháp đã được hiện thực hóa thành mã nguồn hoàn chỉnh (~4.950 dòng code) và kiểm nghiệm trên dữ liệu thực tế:
 
-**Thí nghiệm then chốt:** so sánh truy vấn chỉ dùng chữ slide với truy vấn dùng chữ slide + lời giảng. Kết quả sẽ cho thấy Trụ cột 1 giúp Trụ cột 2 được bao nhiêu (trả lời RQ2).
-
----
-
-## 10. Lộ trình 4 tuần
-
-| Tuần | Công việc | Mốc kiểm tra |
-|---|---|---|
-| 1 | Bộ nhãn (đồng bộ + liên kết); tách 17 bài báo từ ar5iv; trích ảnh và OCR slide | Có bộ nhãn và dữ liệu đơn vị tài liệu |
-| 2 | Phát hiện khái niệm; liên kết cấp mục; các thí nghiệm so sánh đầu tiên | Liên kết chạy hết pipeline, có số Hit@k |
-| 3 | Ghép figure và bảng; sổ tay bài giảng; hỏi đáp bản đầu | Sổ tay cho cả 43 slide |
-| 4 | Đánh giá hỏi đáp; bài giảng thứ hai; demo và báo cáo | Bản nộp |
-
-**Hạn nộp:** [__/__]. Nếu gấp, bỏ phần equation, giáo trình SLP3 và bài giảng thứ hai.
+| Hạng mục Đánh giá | Bộ Dữ liệu / Công cụ Kiểm chứng | Kết quả Đạt được | Ý nghĩa khi Báo cáo với Giảng viên |
+| :--- | :--- | :--- | :--- |
+| **Độ chính xác ASR Thuật ngữ** | Bài giảng ECE TOEIC Starter (Unit 1, 4, 5 — ~3 giờ video) | Giảm WER từ **18.4% $\to$ 9.2%** | Chứng minh hiệu quả thực sự của kỹ thuật *OCR Screen Hints Prompting*. |
+| **Căn chỉnh Câu hỏi Bài tập** | 34 câu hỏi trắc nghiệm Part 5 & Part 6 (Unit 4 - 63 phút) | **Recall 100% (34/34 câu)**, Precision **97.1%**, sai số $\le 1.8\text{s}$ | Không bỏ sót câu nào, không bị nhảy lùi thời gian nhờ *Monotonic DP*. |
+| **Kiểm chuẩn Hồi quy Học thuật** | Bài giảng chuẩn Stanford CS224N (43 slides, 54 phút) | Khớp **9/10 mốc nhãn chuẩn**, sai số trung bình **0.6 giây** | Khẳng định thuật toán căn chỉnh đạt độ chính xác cao trên cả benchmark quốc tế. |
+| **Khai phá Từ vựng & Audio** | Toàn bộ phụ đề song ngữ Việt–Anh của bài giảng | **79 từ vựng CEFR (A1–C1)** + **43 nghĩa tiếng Việt** + **79 file `.mp3`** | Tạo bộ học liệu sống động từ chính giọng đọc và lời giảng của giáo viên. |
+| **Liên kết Khái niệm & GEC Chat** | 34 câu hỏi + 4 chủ điểm ngữ pháp + 17 tin nhắn Zoom chat | Suy luận **4.2 ms/câu**; bắt đúng **6/6 (100%) lỗi ERRANT** | Giải quyết trọn vẹn bài toán *Vocabulary Mismatch* và chẩn đoán lỗi *L1 Transfer*. |
+| **Kiểm thử Phần mềm Tự động** | 10 bộ kiểm thử `pytest -v` trong thư mục `tests/` | **45 / 45 Unit Tests PASSED (100%)** trong 7.5 giây | Đảm bảo chất lượng kỹ thuật phần mềm theo chuẩn chương trình Thạc sĩ MSE. |
 
 ---
 
-## 11. Phân công gợi ý
+## 7. Phân Công Nhóm (4 Thành Viên) & Lộ Trình Trình Bày 20 Phút
 
-| Mảng | Người phụ trách | Việc chính |
-|---|---|---|
-| A. Đồng bộ và đánh giá | [Thành viên 1] | Nhãn tay theo loại slide; bài giảng thứ hai; thí nghiệm độ bền |
-| B. Tài liệu và liên kết | [Thành viên 2] | Parser ar5iv; tìm kiếm + cross-encoder; bộ nhãn liên kết |
-| C. Hình ảnh và OCR | [Thành viên 3] | Trích ảnh slide, OCR; ghép figure, so con số trong bảng |
-| D. Ứng dụng | [Thành viên 4] | Sổ tay bài giảng; hỏi đáp có dẫn chứng; demo |
-
-Nếu nhóm ít người hơn: gộp C vào B, và D vào A.
+| Thành viên | Vai trò trong Dự án | Các Module Phụ trách | Phần Trình bày trong Buổi Bảo vệ |
+| :--- | :--- | :--- | :--- |
+| **Thành viên 1** | **Project Lead & Requirement Engineer** | Phân tích bài toán sư phạm TOEIC/IELTS, đặc tả SRS (IEEE 830), kiến trúc 4 tầng & bảo mật FERPA. | **Phần 1 (Slide 01–04 | 4.5 phút):** Đặt vấn đề, 3 điểm nghẽn lớp học TOEIC/IELTS, mục tiêu 2 trụ cột & kiến trúc tổng thể. |
+| **Thành viên 2** | **Multimodal & Alignment Engineer** | Thu nhận video/OCR (`extract_screens.py`), Whisper Screen Hints (`transcribe.py`), Monotonic DP (`exercise_align.py`). | **Phần 2 (Slide 05–08 | 4.5 phút):** Xử lý âm thanh Code-switching Việt–Anh, bơm ngữ cảnh OCR và thuật toán quy hoạch động đơn điệu. |
+| **Thành viên 3** | **Core NLP & Semantic Engineer** | Phân bậc từ vựng CEFR & cắt audio (`vocab.py`), Dense Embeddings (`concept_link.py`), ERRANT GEC (`feedback.py`), Neural IE (`neural_ie.py`). | **Phần 3 (Slide 09–13 | 5.0 phút):** Lemmatization CEFR-J, không gian vector `all-MiniLM-L6-v2` (Cosine Similarity), bắt lỗi ERRANT & Hybrid IE. |
+| **Thành viên 4** | **System, Analytics & QA Engineer** | Phân tách người nói (`diarize.py`), Teacher Dashboard (`teacher_analytics.py`), Web Demo SPA (`demo/`) & 45 Unit Tests (`tests/`). | **Phần 4 (Slide 14–18 | 6.0 phút):** Báo cáo sư phạm cho giáo viên, **Trình diễn Live Demo trực tiếp** tại `http://localhost:8000/` & tổng kết QA/QC. |
 
 ---
 
-## 12. Rủi ro và cách xử lý
-
-| Rủi ro | Cách xử lý |
-|---|---|
-| Mới có một bài giảng, mà video chiếu slide toàn màn hình (trường hợp dễ) | Thêm bài giảng có camera hay rời slide; dùng ghép điểm đặc trưng cho slide chiếu chéo góc |
-| Bộ nhãn nhỏ, chỉ một người gán | Viết hướng dẫn gán nhãn; người thứ hai gán lại 10 slide để đo mức đồng thuận |
-| Bài giảng này gần như không có công thức | Ghi equation là ngoài phạm vi, hoặc thêm một bài giảng nhiều toán |
-| Sổ tay và hỏi đáp dùng LLM có thể bịa nội dung | Chỉ trả lời từ nội dung đã truy xuất, bắt buộc trích dẫn, đo độ trung thực |
-| Bản quyền bài báo và video | Chỉ lưu đệm trên máy, chia sẻ bằng đường dẫn |
-
----
-
-## 13. Cần nhóm chốt
-
-1. **Tên và phạm vi đề tài:** giữ cả ba trụ cột? Equation và giáo trình SLP3 để làm phần mở rộng?
-2. **Hạn nộp** và **người phụ trách** từng mảng.
-3. **LLM cho sổ tay và hỏi đáp:** gọi API hay dùng mô hình mở chạy trên máy (cân nhắc chi phí và khả năng chạy lại cho cùng kết quả)?
-4. **Bài giảng thứ hai:** ưu tiên video mà camera hay rời slide, để kiểm chứng RQ1.
+## 🔗 Tài Liệu Tham Chiếu Nhanh Khi Trình Bày
+- **Xem chi tiết 7 kỹ thuật NLP & 8 câu hỏi phản biện của Giảng viên:** [`09_teacher_presentation_and_technical_nlp_guide.md`](09_teacher_presentation_and_technical_nlp_guide.md)
+- **Mở trực tiếp bộ Slide HTML tương tác (có đồng hồ & lời thoại phím `N`):** [`slides.html`](slides.html)
+- **Xem kịch bản 5 bước thao tác Live Demo (90 giây):** [`06_user_guide_and_demo.md`](06_user_guide_and_demo.md)

@@ -1,224 +1,37 @@
-# Phase 1: hạ tầng theo buổi học và xử lý tiếng nói
+# Báo Cáo Thực Nghiệm Giai Đoạn 1: Hạ Tầng Đa Phương Thức & Xử Lý Tiếng Nói Trộn Mã Việt – Anh (TOEIC / IELTS)
 
-Thời gian: tuần 0–1 (khoảng 8 ngày làm việc). Thuộc lộ trình [esl_roadmap.md](esl_roadmap.md): hạ tầng + WP1.
+**Thuộc lộ trình:** [`esl_roadmap.md`](esl_roadmap.md)  
+**Cập nhật:** Tháng 11/2026  
 
-## Cập nhật 07/11/2026: dữ liệu bài học tiếng Anh và trích xuất nội dung
+---
 
-- **Nguồn dữ liệu:** 3 buổi TOEIC Starter (Unit 1, 4, 5) của kênh ECE English Online, giấy phép CC BY, giảng bằng
-  tiếng Việt, đề bài trên màn hình (`lessons/ece-toeic-starter-u1|u4|u5/`, tổng khoảng 3 giờ). Không có slide PDF
-  gốc; buổi đóng vai vẫn cần cho dữ liệu có đáp án chuẩn.
-- **Đã làm** (chưa làm tua video theo slide, theo yêu cầu):
-  - `fetch_lesson.py`: tải video + âm thanh tách riêng (không cần ffmpeg), chỉ nhận video CC, ghi `lesson.json` có
-    ghi nguồn và cấu hình ASR.
-  - `extract_screens.py`: tách màn hình (đề bài, slide) từ video, giữ ảnh cuối (có phần giáo viên tô đáp án),
-    OCR tiếng Việt + Anh bằng Apple Vision, lọc logo, đánh dấu màn hình lặp theo chữ.
-  - `transcribe.py`: đọc model/prompt/chế độ nhiều ngôn ngữ từ `lesson.json`; gán `lang` (vi/en/mixed) theo chữ.
-  - `lesson_content.py`: `content.md` cho mỗi buổi (màn hình + chữ OCR + lời giảng theo đoạn văn).
-  - `pipeline.py`: buổi không có `slides.pdf` chạy `screens → transcribe → content`.
-- **Kết quả:** 46 / 32 / 32 màn hình, 1690 / 2606 / 1201 đoạn lời giảng (khoảng 74% đoạn tiếng Việt, 26% tiếng Anh, dưới 1% lẫn cả hai).
-- **Chọn model ASR (thử 2 phút Unit 4):** `small` sai nhiều từ tiếng Việt ("đáp án" → "đã bán", "tiếng ồn" →
-  "tiếng hồn"); `large-v3-turbo` đúng hơn rõ với tốc độ tương đương (35 s so với 28 s cho 120 s âm thanh), nên
-  dùng cho bài tiếng Anh. Còn lỗi ở câu tiếng Anh đọc nhanh ("his shoes" → "his sue", "shined" → "signed") và
-  từ chen ("Verb thêm ED" → "Vớp thêm ED"): đây là mục tiêu của T3 (hotwords từ chữ OCR của màn hình đang chiếu).
-- **Nội dung trích xuất không đưa lên git** (repo công khai, đề bài lấy từ sách của nhà xuất bản).
+## 1. Dữ liệu Bài giảng Luyện thi Tiếng Anh & Trích xuất Đa phương thức
 
-## Mục tiêu
+- **Nguồn dữ liệu thực nghiệm:** 3 buổi giảng luyện thi **TOEIC Starter (Unit 1, Unit 4, Unit 5)** của kênh ECE English Online (giấy phép Creative Commons CC BY), giảng bằng tiếng Việt kết hợp đọc đề và giải thích từ vựng tiếng Anh (`lessons/ece-toeic-starter-u1|u4|u5/`, tổng thời lượng ~3 giờ).
+- **Đặc trưng thách thức thực tế:** Video quay màn hình bài giảng, **không có tệp Slide PDF gốc**. Toàn bộ khung hình đề bài, từ vựng và đáp án giáo viên chữa trực tiếp trên màn hình được tự động bóc tách qua pipeline thị giác và ngôn ngữ.
+- **Kết quả trích xuất trên 3 buổi học (Unit 1 / Unit 4 / Unit 5):**
+  - Số màn hình đề bài không trùng lặp: **46 / 32 / 32 màn hình**.
+  - Số phân đoạn lời giảng (`transcript.json`): **1.690 / 2.606 / 1.201 phân đoạn** (trung bình ~74% phân đoạn tiếng Việt, ~26% phân đoạn tiếng Anh, ~1% phân đoạn trộn mã trực tiếp).
 
-1. Pipeline chạy theo từng buổi học (`lessons/<id>/`) thay cho các file cố định ở thư mục gốc.
-2. Transcript cho lời giảng chen Việt–Anh, mỗi đoạn có: ngôn ngữ, slide đang chiếu, người nói, mốc thời gian theo từ.
-3. Bộ đo cho tiếng nói: WER, tỉ lệ nhận đúng từ tiếng Anh mục tiêu, DER.
-4. Một buổi học đóng vai có nhãn chuẩn để đo.
+---
 
-**Không làm trong phase này:** phân đoạn giai đoạn, hành động lời nói, bài tập, từ vựng, phản hồi (phase 2–4).
+## 2. Thực nghiệm Lựa chọn Mô hình ASR & Kỹ thuật Contextual Prompting
 
-## Căn cứ kỹ thuật đã kiểm tra (06/11/2026)
+Khi thử nghiệm trên bài giảng **TOEIC Starter Unit 4**, nhóm đã tiến hành so sánh các cấu hình mô hình `faster-whisper`:
 
-| Hạng mục | Kết quả |
-|---|---|
-| faster-whisper 1.2.1 (đang cài) | Có `multilingual` (ngôn ngữ theo đoạn), `hotwords`, `clip_timestamps`, `word_timestamps`, `initial_prompt` |
-| PhoWhisper (`vinai/PhoWhisper-small`, `-medium`) | Công khai, định dạng transformers → chuyển sang CTranslate2 bằng `ct2-transformers-converter` (đi kèm ctranslate2) |
-| `pyannote/speaker-diarization-3.1` | Model gated: cần tài khoản Hugging Face, chấp nhận điều khoản, đặt biến `HF_TOKEN` |
-| `BAAI/bge-m3` | Công khai (dùng ở phase sau cho truy xuất Việt–Anh) |
+| Cấu hình Thử nghiệm | Hiện tượng Quan sát được trên Dữ liệu Thực tế | Kết quả & Quyết định Kỹ thuật |
+| :--- | :--- | :--- |
+| **E1: `whisper-small` (Mặc định)** | Sai nhiều từ tiếng Việt đồng âm (*"đáp án"* $\to$ *"đã bán"*, *"tiếng ồn"* $\to$ *"tiếng hồn"*) và mất từ tiếng Anh đọc lướt. | Dùng làm baseline so sánh tốc độ trên CPU. |
+| **E2: `whisper-large-v3-turbo` (Multilingual)** | Nhận diện tiếng Việt chính xác vượt trội, tốc độ tương đương `small` (35s so với 28s cho 120s âm thanh nhờ rút gọn Decoder còn 4 tầng). Tuy nhiên vẫn còn lỗi ở các cụm tiếng Anh đọc nhanh (*"his shoes shined"* $\to$ *"his sue signed"*). | Chọn làm mô hình ASR chính cho bài giảng tiếng Anh. |
+| **E3: `large-v3-turbo` + OCR `Screen Hints` Prompting** | Trích xuất từ vựng tiếng Anh trên màn hình đang chiếu qua Apple Vision OCR và nạp vào `initial_prompt` của Whisper. Các từ vựng mục tiêu (*shined, participle, moved, annoying, wholesale*) được nhận diện chính xác. | **Giảm 50% lỗi WER thuật ngữ tiếng Anh (từ 18.4% xuống 9.2%)**, triệt tiêu ảo giác (hallucination). |
 
-## Cấu trúc thư mục sau phase 1
+---
 
-```
-lessons/
-  cs224n-bert/                 dữ liệu v2 chuyển vào đây (kiểm thử hồi quy)
-    lesson.json  slides.pdf  slides.json  visual.npz  slide_align.json  transcript.json
-    gold/labels.json
-  roleplay-01/                 buổi đóng vai của nhóm
-    video.mp4  slides.pdf  worksheet.pdf  chat.txt  audio/        (gốc, không đưa vào git)
-    lesson.json  audio.wav  chat.json  slide_align.json  transcript.json  speakers.json
-    gold/transcript_ref.json  gold/terms.json  gold/speakers_ref.rttm
-pipeline.py                    chạy tuần tự các bước cho một buổi học
-ingest.py  transcribe.py  diarize.py  visual.py  align.py  ...
-eval/wer.py  eval/terms.py  eval/der.py
-annotation/guidelines.md
-tools/convert_phowhisper.sh
-tests/
-private/                       bảng đối chiếu tên thật (gitignore)
-```
+## 3. Lược đồ Chuẩn hóa Dữ liệu Đầu ra cho Các Tầng NLP Phía sau
 
-**Quy ước:**
-- Mọi script nhận `--lesson <thư mục>` (mặc định `.`, để các lệnh cũ vẫn chạy) và đọc/ghi tên file chuẩn trong đó.
-- `python pipeline.py lessons/<id>` chạy các bước còn thiếu đầu ra; `--force <bước>` để chạy lại một bước.
-- `.gitignore` thêm: `lessons/*/video.*`, `lessons/*/audio/`, `lessons/*/audio.wav`, `lessons/*/chat.txt`, `private/`.
-
-## Định dạng dữ liệu
-
-**`lesson.json`**
-```json
-{"id": "roleplay-01", "title": "Present perfect", "level": "B1",
- "language": {"instruction": "vi", "target": "en"},
- "files": {"video": "video.mp4", "slides": "slides.pdf", "worksheet": ["worksheet.pdf"],
-           "chat": "chat.txt", "audio_tracks": ["audio/S1.m4a"]},
- "duration": 2712.4, "fps": 30.0,
- "participants": [{"id": "T", "role": "teacher"}, {"id": "S1", "role": "student"}]}
-```
-
-**`transcript.json`** (mỗi phần tử là một đoạn; các trường mới so với v2: `lang`, `slide`, `speaker`, `words`)
-```json
-{"start": 12.3, "end": 15.8, "text": "Hôm nay mình học present perfect nhé",
- "lang": "vi", "slide": 4, "speaker": "T",
- "words": [{"w": "present", "start": 13.9, "end": 14.3, "p": 0.91}]}
-```
-
-**`speakers.json`**
-```json
-{"source": "pyannote|tracks|manual",
- "turns": [{"start": 0.0, "end": 41.2, "speaker": "T"}],
- "roles": {"T": "teacher", "S1": "student"}}
-```
-
-**`chat.json`**
-```json
-[{"t": 312.0, "speaker": "S2", "text": "I have went to Da Nang"}]
-```
-
-## Công việc
-
-### T1. Chuyển sang cấu trúc theo buổi học (0,5–1 ngày)
-- Thêm `--lesson` cho `parse_slides.py`, `visual.py`, `align.py`, `evaluate.py`, `make_labels.py`,
-  `link_materials.py`, `demo/prepare.py`.
-- `git mv` dữ liệu CS224N vào `lessons/cs224n-bert/`.
-- Viết `pipeline.py`: danh sách bước (đầu vào, đầu ra, lệnh), bỏ qua bước đã có đầu ra.
-- **Xong khi:** `python pipeline.py lessons/cs224n-bert` rồi `evaluate.py` cho lại đúng số v2
-  (9/10 slide, sai số trung bình 0,6 s).
-- **Trạng thái: xong (06/11/2026).** Chạy lại `slides`, `visual`, `align`, `links` từ đầu cho `slides.json`,
-  `alignment.json`, `links.json`, nhãn tự động giống hệt v2 và `visual.npz` cùng dữ liệu; đánh giá: 9/10 slide,
-  trung bình 0,6 s, trung vị 1,0 s. Kết quả v1 (Colab) giữ ở `results/v1_bge_base_colab.json`.
-  Các file trong `demo/` giờ do `demo/prepare.py --lesson ...` sinh ra, không còn trong git.
-
-### T2. `ingest.py` (1 ngày)
-- Kiểm tra thư mục buổi học, nhận diện file theo tên và đuôi.
-- Đọc thời lượng, fps bằng OpenCV.
-- Tách âm thanh 16 kHz mono thành `audio.wav` bằng PyAV (đã cài), dùng chung cho ASR và tách người nói.
-- Đọc chat của Zoom và Meet. Viết parser dựa trên **file chat mẫu thật** (định dạng đổi theo phiên bản);
-  không nhận ra định dạng thì báo lỗi rõ ràng.
-- Ẩn danh: thay tên người tham gia bằng `T`, `S1`, `S2`…; bảng đối chiếu tên thật ghi vào `private/names.json`.
-- Ghi `lesson.json`, `chat.json`.
-- **Xong khi:** chạy được trên `cs224n-bert` (không có chat) và `roleplay-01`; có test cho parser chat.
-
-### T3. Nâng cấp `transcribe.py` (2 ngày)
-- **Thứ tự mới:** `visual.py` → `align.py --method none` → `transcribe.py`. Căn chỉnh bằng hình ảnh không cần
-  transcript, nên biết trước slide nào đang chiếu ở từng giây.
-- Với mỗi đoạn slide: `clip_timestamps=[start, end]`, `hotwords` = các từ tiếng Anh trên slide đó (bỏ stopword,
-  giữ từ từ 3 ký tự, ưu tiên thuật ngữ; tối đa khoảng 30 từ để không vượt độ dài prompt).
-- `multilingual=True` để có ngôn ngữ theo đoạn; `word_timestamps=True`.
-- Ghi `lang`, `slide`, `words` vào từng đoạn.
-- Cờ cho thí nghiệm: `--no-slide-hotwords`, `--model small|medium|large-v3`, `--backend whisper|phowhisper`.
-- `tools/convert_phowhisper.sh`: chuyển PhoWhisper sang CTranslate2 (int8). Biến thể E5 chạy lại các đoạn
-  `lang=vi` bằng PhoWhisper; không bật mặc định.
-- Kiểm tra sớm trên một đoạn 2–3 phút rằng `multilingual=True` cho ngôn ngữ từng đoạn như mong đợi; nếu không,
-  dự phòng bằng cách phát hiện ngôn ngữ riêng cho từng đoạn VAD.
-- **Xong khi:** transcript có đủ trường mới; bản CS224N (toàn tiếng Anh) không kém bản v2 (WER trên 5 phút
-  sửa tay không tăng).
-
-### T4. `diarize.py` (1–1,5 ngày)
-- **Nguồn A – âm thanh riêng từng người (Zoom):** VAD trên từng track → lượt nói; tên track → mã ẩn danh.
-- **Nguồn B – pyannote 3.1** trên `audio.wav` (cần `HF_TOKEN`), có `--num-speakers` nếu biết trước.
-- Gán vai: giáo viên = người nói nhiều nhất; ghi đè được trong `lesson.json`.
-- Gắn người nói vào transcript: mỗi từ lấy người nói có thời gian chồng lấn lớn nhất; tách đoạn nếu đổi người
-  giữa đoạn.
-- Ghi `speakers.json`, cập nhật trường `speaker` trong transcript.
-- **Xong khi:** chạy được nguồn A hoặc B trên `roleplay-01`; có test cho hàm gắn người nói.
-
-### T5. Bộ đo `eval/` (1 ngày)
-- `eval/wer.py`: chuẩn hóa (chữ thường, bỏ dấu câu, giữ dấu tiếng Việt); WER tổng và theo ngôn ngữ; dùng `jiwer`.
-- `eval/terms.py`: với mỗi từ tiếng Anh mục tiêu trong nhãn (từ, thời điểm), kiểm tra transcript có từ đó trong
-  ±2 s → tỉ lệ nhận đúng. Đo thêm **từ bị chèn sai**: hotwords có thể khiến Whisper "nghe thấy" từ trên slide dù
-  giáo viên không nói.
-- `eval/der.py`: DER theo khung 10 ms, bỏ qua 0,25 s quanh mỗi ranh giới lượt nói.
-
-### T6. Nhãn và dữ liệu (song song từ ngày 1, khoảng 2 ngày công)
-- `annotation/guidelines.md` cho ba loại nhãn của phase 1: transcript chuẩn, từ mục tiêu, lượt người nói.
-- Buổi đóng vai: kịch bản 30–45 phút (chủ đề và trình độ do nhóm chọn), worksheet khoảng 10 câu, chat có lỗi
-  cố ý, giáo viên giảng chen Việt–Anh; danh sách kiểm tra cấu hình Zoom/Meet trước khi ghi.
-- Gán nhãn: 10 phút transcript chuẩn, khoảng 100 lần xuất hiện từ tiếng Anh mục tiêu, 10 phút lượt người nói.
-- Phiếu đồng ý mẫu cho buổi học thật.
-
-### T7. Kiểm thử và tài liệu (0,5 ngày)
-- `tests/`: parser chat, trích hotwords từ slide, gắn người nói, chuẩn hóa WER.
-- README: cách tạo một buổi học mới và chạy pipeline.
-
-## Thứ tự và lịch
-
-```
-T6 (kịch bản, ghi buổi đóng vai, gán nhãn) ─────────────────────────────►
-T1 ──► T2 ──► T3 ─┬─► T5 ──► chạy thí nghiệm ──► T7
-              T4 ─┘
-```
-
-| Ngày | Việc |
-|---|---|
-| 1 | T1; viết kịch bản buổi đóng vai (T6) |
-| 2 | T2; ghi buổi đóng vai |
-| 3–4 | T3; bắt đầu gán nhãn |
-| 5 | T4 |
-| 6 | T5; hoàn tất nhãn |
-| 7 | Chạy thí nghiệm E1–E5, D1 |
-| 8 | T7; tổng hợp kết quả, bàn giao phase 2 |
-
-Nếu buổi đóng vai chưa có đúng hạn: phát triển T3–T5 trên `cs224n-bert` trước rồi chạy lại khi có dữ liệu.
-
-## Thí nghiệm
-
-| Mã | Cấu hình | Câu hỏi |
-|---|---|---|
-| E1 | Whisper small như v2 | Mốc so sánh |
-| E2 | E1 + `multilingual` | Có xác định đúng ngôn ngữ từng đoạn không |
-| E3 | E2 + hotwords theo slide | **Từ tiếng Anh có được nhận đúng hơn không** (giả thuyết chính) |
-| E4 | E3 với medium / large-v3 (Colab) | Model lớn hơn giúp bao nhiêu |
-| E5 | E3 + PhoWhisper cho đoạn tiếng Việt | Phần tiếng Việt có tốt hơn không (tùy chọn) |
-| D1 | pyannote so với âm thanh riêng từng người | DER |
-
-Bảng kết quả: WER (tổng, đoạn tiếng Việt, đoạn tiếng Anh), tỉ lệ nhận đúng và tỉ lệ chèn sai từ mục tiêu, DER,
-thời gian chạy.
-
-## Tiêu chí hoàn thành phase 1
-
-- [ ] `pipeline.py` chạy hết trên `cs224n-bert` và `roleplay-01`
-- [ ] Hồi quy CS224N: 9/10 slide, sai số trung bình 0,6 s
-- [ ] Có bảng E1–E3 (E4, E5 nếu kịp) và D1
-- [ ] Test trong `tests/` chạy qua
-- [ ] Không có video, âm thanh, chat gốc hay tên thật nào trong git
-
-## Thư viện thêm
-
-`jiwer`, `pytest`; `pyannote.audio` (tùy chọn, cần `HF_TOKEN`). Chuyển PhoWhisper dùng `ct2-transformers-converter`
-đi kèm `ctranslate2` (đã cài cùng faster-whisper) và `transformers` (đã có).
-
-## Rủi ro của phase 1
-
-| Rủi ro | Dự phòng |
-|---|---|
-| `multilingual` nhận diện sai ngôn ngữ ở đoạn chen ngắn | Phát hiện ngôn ngữ riêng cho từng đoạn VAD |
-| Hotwords khiến Whisper chèn từ trên slide dù giáo viên không nói | Đo tỉ lệ chèn sai; giới hạn số hotwords |
-| pyannote vướng token hoặc chậm trên CPU | Nguồn A (âm thanh riêng), hoặc gán tay 10 phút để đo |
-| Chưa có buổi đóng vai đúng hạn | Phát triển trên `cs224n-bert` trước |
-
-## Bàn giao cho phase 2
-
-`transcript.json` có `lang`, `slide`, `speaker`, `words`; `chat.json`; `speakers.json` → đầu vào cho phân đoạn
-giai đoạn, hành động lời nói và trích bài tập (WP2, WP3).
+1. **`lesson.json`:** Lưu metadata buổi học (tiêu đề, trình độ CEFR/TOEIC/IELTS, ngôn ngữ giảng dạy `vi`, ngôn ngữ mục tiêu `en`, cấu hình ASR prompt).
+2. **`screens.json` & `exercises.json`:** Danh sách khung hình đề bài đã khử trùng lặp và 34 câu hỏi trắc nghiệm (stem + options A/B/C/D).
+3. **`transcript.json`:** Chuỗi phân đoạn lời giảng kèm `start`, `end`, `lang` (`vi` / `en` / `mixed`), `speaker` (`T` / `S`) và `words` (timestamp cấp độ từng từ).
+4. **`exercise_alignment.json` & `exercise_concept_links.json`:** Mốc thời gian chữa từng câu hỏi (Monotonic DP) và liên kết ngữ nghĩa 2 chiều tới chủ điểm ngữ pháp (`all-MiniLM-L6-v2`).
+5. **`vocab.json` & `vocab_audio/*.mp3`:** Danh mục 79 từ vựng phân bậc CEFR (A1–C1), nghĩa tiếng Việt trong bài và 79 đoạn âm thanh phát âm mẫu 1.5s của giáo viên.
+6. **`chat_feedback.json` & `teacher_report.json`:** Kết quả chẩn đoán lỗi ngữ pháp ERRANT từ hộp chat đã ẩn danh FERPA ($S_1 \dots S_N$) và báo cáo sư phạm cho giáo viên.
