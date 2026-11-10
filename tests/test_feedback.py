@@ -52,49 +52,79 @@ def test_link_chat_to_exercises():
     assert linked[0]["exercise_id"] == "q_1"
 
 
+def _cats(text):
+    edits, corrected = GECRuleEngine().check_sentence(text)
+    return [e["category"] for e in edits], [e["error_type"] for e in edits], corrected
+
+
 def test_gec_unnecessary_be():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("I am agree with teacher.")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "U:VERB:BE"
+    cats, types, corrected = _cats("I am agree with teacher.")
+    assert cats == ["BE_VERB"] and types == ["U:VERB:TENSE"]
     assert "I agree" in corrected
 
 
+def test_gec_be_verb_generalises():
+    assert _cats("She is not understand the question")[2] == "She does not understand the question"
+    assert _cats("I'm think the answer is B")[0] == ["BE_VERB"]
+
+
 def test_gec_participle_confusion():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("The movie was moved.")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "R:ADJ:PARTICIPLE"
+    cats, types, corrected = _cats("The movie was moved.")
+    assert cats == ["PARTICIPLE"] and types == ["R:VERB:FORM"]
     assert "moving" in corrected
 
 
+def test_gec_participle_generalises():
+    assert _cats("I am so confusing")[2] == "I am so confused"
+    assert _cats("This noise is very annoy")[2] == "This noise is very annoying"
+    assert _cats("The lesson was bored")[2] == "The lesson was boring"
+
+
 def test_gec_causative_verb():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("He has his shoes shine.")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "R:VERB:FORM"
+    cats, types, corrected = _cats("He has his shoes shine.")
+    assert cats == ["CAUSATIVE"] and types == ["R:VERB:FORM"]
     assert "shined" in corrected
+    assert _cats("I will have my car repair tomorrow")[2] == "I will have my car repaired tomorrow"
 
 
 def test_gec_modal_bare_infinitive():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("Sales should to increase by 200%.")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "U:PREP"
+    cats, types, corrected = _cats("Sales should to increase by 200%.")
+    assert cats == ["MODAL_TO"] and types == ["U:VERB:FORM"]
     assert "should increase" in corrected
+    assert _cats("I can't to hear you")[2] == "I can't hear you"
 
 
 def test_gec_subject_verb_agreement():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("It make me feel happy.")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "R:VERB:SVA"
+    cats, types, corrected = _cats("It make me feel happy.")
+    assert cats == ["SVA"] and types == ["R:VERB:SVA"]
     assert "makes" in corrected
+    assert _cats("she don't like it")[2] == "she doesn't like it"
 
 
 def test_gec_missing_auxiliary():
-    engine = GECRuleEngine()
-    edits, corrected = engine.check_sentence("Why we use this word?")
-    assert len(edits) == 1
-    assert edits[0]["error_type"] == "M:VERB:AUX"
+    cats, types, corrected = _cats("Why we use this word?")
+    assert cats == ["WH_DO"] and types == ["M:VERB:TENSE"]
     assert "Why do we use" in corrected
+    assert _cats("How she know the answer?")[2] == "How does she know the answer?"
+
+
+@pytest.mark.parametrize("ok", [
+    "I am interested in this topic", "She had her hair cut yesterday", "Does it make sense?",
+    "I know why we use it", "Make it work", "He has to go", "You ought to study", "I was bored",
+    "The movie was moving", "He's like his father", "Can I ask a question?", "We are agreed on the plan",
+])
+def test_gec_no_false_alarm_on_correct_sentences(ok):
+    assert _cats(ok)[0] == []
+
+
+def test_answer_choice_parsed():
+    linked, _ = anonymize_and_link([{"sender": "A", "timestamp": 5.0, "time_str": "00:00:05",
+                                     "message": "Câu 1 em chọn C, central luxury hotel."}])
+    assert linked[0]["answer_choice"] == "C"
+
+
+def test_chat_links_to_latest_question_with_that_number():
+    exercises = [{"id": "q_1", "number": 1, "start": 100.0}, {"id": "q_5", "number": 1, "start": 800.0}]
+    linked, _ = anonymize_and_link([{"sender": "A", "timestamp": 900.0, "time_str": "00:15:00", "message": "Câu 1 em chọn B"}],
+                                   exercises)
+    assert linked[0]["exercise_id"] == "q_5"

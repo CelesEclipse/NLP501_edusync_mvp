@@ -1,0 +1,56 @@
+{
+  "gold_verified": false,
+  "n_items": 70,
+  "sentence": {
+    "tp": 32,
+    "fp": 0,
+    "fn": 12,
+    "tn": 26,
+    "precision": 1.0,
+    "recall": 0.727,
+    "f1": 0.842
+  },
+  "per_category": {
+    "BE_VERB": {
+      "errant_type": "U:VERB:TENSE",
+      "gold": 8,
+      "precision": 1.0,
+      "recall": 0.5
+    },
+    "PARTICIPLE": {
+      "errant_type": "R:VERB:FORM",
+      "gold": 8,
+      "precision": 1.0,
+      "recall": 0.875
+    },
+    "CAUSATIVE": {
+      "errant_type": "R:VERB:FORM",
+      "gold": 8,
+      "precision": 1.0,
+      "recall": 0.75
+    },
+    "MODAL_TO": {
+      "errant_type": "U:VERB:FORM",
+      "gold": 8,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "SVA": {
+      "errant_type": "R:VERB:SVA",
+      "gold": 8,
+      "precision": 1.0,
+      "recall": 0.625
+    },
+    "WH_DO": {
+      "errant_type": "M:VERB:TENSE",
+      "gold": 7,
+      "precision": 1.0,
+      "recall": 0.429
+    }
+  },
+  "exact_correction": {
+    "n": 44,
+    "accuracy": 0.659
+  },
+  "other_only_sentences_flagged": "0/10"
+}

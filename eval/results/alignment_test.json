@@ -1,0 +1,62 @@
+{
+  "lesson": "ece-toeic-starter-u5",
+  "split": "test",
+  "results": {
+    "screen_start": {
+      "n": 35,
+      "acc_10s": 0.486,
+      "acc_30s": 0.629,
+      "median_abs_err_s": 15.5,
+      "mean_abs_err_s": 33.3,
+      "order_inversions": 0
+    },
+    "trigger_first": {
+      "n": 35,
+      "acc_10s": 0.714,
+      "acc_30s": 0.8,
+      "median_abs_err_s": 0.0,
+      "mean_abs_err_s": 21.3,
+      "order_inversions": 2
+    },
+    "greedy": {
+      "n": 35,
+      "acc_10s": 0.771,
+      "acc_30s": 0.886,
+      "median_abs_err_s": 0.0,
+      "mean_abs_err_s": 8.6,
+      "order_inversions": 0
+    },
+    "dp": {
+      "n": 35,
+      "acc_10s": 0.771,
+      "acc_30s": 0.886,
+      "median_abs_err_s": 0.0,
+      "mean_abs_err_s": 8.6,
+      "order_inversions": 0
+    },
+    "greedy+refine": {
+      "n": 35,
+      "acc_10s": 0.8,
+      "acc_30s": 0.886,
+      "median_abs_err_s": 0.0,
+      "mean_abs_err_s": 8.1,
+      "order_inversions": 0
+    },
+    "dp+refine": {
+      "n": 35,
+      "acc_10s": 0.8,
+      "acc_30s": 0.886,
+      "median_abs_err_s": 0.0,
+      "mean_abs_err_s": 8.1,
+      "order_inversions": 0
+    },
+    "v1 (commit 73d9a62)": {
+      "n": 35,
+      "acc_10s": 0.571,
+      "acc_30s": 0.714,
+      "median_abs_err_s": 1.0,
+      "mean_abs_err_s": 28.5,
+      "order_inversions": 2
+    }
+  }
+}

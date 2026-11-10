@@ -1,0 +1,538 @@
+{
+  "annotator": "claude-subagent (draft synthetic learner sentences; needs check by the team)",
+  "verified": false,
+  "note": "Synthetic sentences written independently of the detector rules. Sentence-initial lowercase, missing final punctuation and Vietnamese code-mixing (cô ơi, ạ, câu 5, em nghĩ...) are chat conventions and are not tagged as errors.",
+  "items": [
+    {
+      "id": "g001",
+      "text": "I am agree with Lan's answer.",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "I agree with Lan's answer."
+    },
+    {
+      "id": "g002",
+      "text": "I am interested in this topic, cô ạ.",
+      "tags": [],
+      "corrected": "I am interested in this topic, cô ạ."
+    },
+    {
+      "id": "g003",
+      "text": "I am confusing about câu 12",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "I am confused about câu 12"
+    },
+    {
+      "id": "g004",
+      "text": "It make me cry when I see my score",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "It makes me cry when I see my score"
+    },
+    {
+      "id": "g005",
+      "text": "She had the report check by her manager.",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "She had the report checked by her manager."
+    },
+    {
+      "id": "g006",
+      "text": "We should to increase our vocabulary.",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "We should increase our vocabulary."
+    },
+    {
+      "id": "g007",
+      "text": "Why we use -ing after 'enjoy'?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "Why do we use -ing after 'enjoy'?"
+    },
+    {
+      "id": "g008",
+      "text": "She had her hair cut yesterday.",
+      "tags": [],
+      "corrected": "She had her hair cut yesterday."
+    },
+    {
+      "id": "g009",
+      "text": "Yesterday I go to the library to practice Part 7.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "Yesterday I went to the library to practice Part 7."
+    },
+    {
+      "id": "g010",
+      "text": "She is come from Hue, cô ơi",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "She comes from Hue, cô ơi"
+    },
+    {
+      "id": "g011",
+      "text": "The lesson today was bored",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "The lesson today was boring"
+    },
+    {
+      "id": "g012",
+      "text": "It makes sense.",
+      "tags": [],
+      "corrected": "It makes sense."
+    },
+    {
+      "id": "g013",
+      "text": "He go to work by bus every day.",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "He goes to work by bus every day."
+    },
+    {
+      "id": "g014",
+      "text": "What you mean, cô?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "What do you mean, cô?"
+    },
+    {
+      "id": "g015",
+      "text": "I need to have my laptop repair, so I will join late.",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "I need to have my laptop repaired, so I will join late."
+    },
+    {
+      "id": "g016",
+      "text": "I can't to hear you clearly, cô ơi",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "I can't hear you clearly, cô ơi"
+    },
+    {
+      "id": "g017",
+      "text": "Why do we use -ing here?",
+      "tags": [],
+      "corrected": "Why do we use -ing here?"
+    },
+    {
+      "id": "g018",
+      "text": "We have many homeworks this week.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "We have a lot of homework this week."
+    },
+    {
+      "id": "g019",
+      "text": "em nghĩ Nam is agree but he don't say anything",
+      "tags": [
+        "BE_VERB",
+        "SVA"
+      ],
+      "corrected": "em nghĩ Nam agrees but he doesn't say anything"
+    },
+    {
+      "id": "g020",
+      "text": "this noise is very annoy",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "this noise is very annoying"
+    },
+    {
+      "id": "g021",
+      "text": "He has to go now, cô ơi.",
+      "tags": [],
+      "corrected": "He has to go now, cô ơi."
+    },
+    {
+      "id": "g022",
+      "text": "She don't like the listening part.",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "She doesn't like the listening part."
+    },
+    {
+      "id": "g023",
+      "text": "How she know the answer so fast?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "How does she know the answer so fast?"
+    },
+    {
+      "id": "g024",
+      "text": "You ought to study harder for Part 5.",
+      "tags": [],
+      "corrected": "You ought to study harder for Part 5."
+    },
+    {
+      "id": "g025",
+      "text": "You can have it send to your email, cô ơi.",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "You can have it sent to your email, cô ơi."
+    },
+    {
+      "id": "g026",
+      "text": "You must to finish Part 5 in 10 minutes.",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "You must finish Part 5 in 10 minutes."
+    },
+    {
+      "id": "g027",
+      "text": "We discussed about this topic last week.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "We discussed this topic last week."
+    },
+    {
+      "id": "g028",
+      "text": "we are not understand câu 5 ạ",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "we don't understand câu 5 ạ"
+    },
+    {
+      "id": "g029",
+      "text": "I am going to try câu 10 again.",
+      "tags": [],
+      "corrected": "I am going to try câu 10 again."
+    },
+    {
+      "id": "g030",
+      "text": "I feel very interesting in Part 7.",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "I feel very interested in Part 7."
+    },
+    {
+      "id": "g031",
+      "text": "I'm so confusing, should we to use past perfect here?",
+      "tags": [
+        "PARTICIPLE",
+        "MODAL_TO"
+      ],
+      "corrected": "I'm so confused, should we use past perfect here?"
+    },
+    {
+      "id": "g032",
+      "text": "My teacher always say that practice is important.",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "My teacher always says that practice is important."
+    },
+    {
+      "id": "g033",
+      "text": "The movie was moving.",
+      "tags": [],
+      "corrected": "The movie was moving."
+    },
+    {
+      "id": "g034",
+      "text": "Why she got her phone fix?",
+      "tags": [
+        "WH_DO",
+        "CAUSATIVE"
+      ],
+      "corrected": "Why did she get her phone fixed?"
+    },
+    {
+      "id": "g035",
+      "text": "He is engineer at Samsung.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "He is an engineer at Samsung."
+    },
+    {
+      "id": "g036",
+      "text": "I'm think the answer is B",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "I think the answer is B"
+    },
+    {
+      "id": "g037",
+      "text": "Maybe we will to discuss câu 7 later",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "Maybe we will discuss câu 7 later"
+    },
+    {
+      "id": "g038",
+      "text": "I was bored because the audio was too long.",
+      "tags": [],
+      "corrected": "I was bored because the audio was too long."
+    },
+    {
+      "id": "g039",
+      "text": "He has his hair cutting every month.",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "He has his hair cut every month."
+    },
+    {
+      "id": "g040",
+      "text": "We were so excite about the mock test!",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "We were so excited about the mock test!"
+    },
+    {
+      "id": "g041",
+      "text": "What is the different between 'affect' and 'effect'?",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "What is the difference between 'affect' and 'effect'?"
+    },
+    {
+      "id": "g042",
+      "text": "We are agreed on the plan.",
+      "tags": [],
+      "corrected": "We are agreed on the plan."
+    },
+    {
+      "id": "g043",
+      "text": "Everyone have the same answer, cô ạ.",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "Everyone has the same answer, cô ạ."
+    },
+    {
+      "id": "g044",
+      "text": "How many questions we have to do for homework?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "How many questions do we have to do for homework?"
+    },
+    {
+      "id": "g045",
+      "text": "My brother was study at FPT University last year.",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "My brother studied at FPT University last year."
+    },
+    {
+      "id": "g046",
+      "text": "Does it make sense?",
+      "tags": [],
+      "corrected": "Does it make sense?"
+    },
+    {
+      "id": "g047",
+      "text": "He might to be late because of the rain.",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "He might be late because of the rain."
+    },
+    {
+      "id": "g048",
+      "text": "I have studied English since 3 years.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "I have studied English for 3 years."
+    },
+    {
+      "id": "g049",
+      "text": "We should get our essays mark before Friday.",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "We should get our essays marked before Friday."
+    },
+    {
+      "id": "g050",
+      "text": "Can I ask a question?",
+      "tags": [],
+      "corrected": "Can I ask a question?"
+    },
+    {
+      "id": "g051",
+      "text": "Listening Part 3 is so tired, em nghe không kịp",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "Listening Part 3 is so tiring, em nghe không kịp"
+    },
+    {
+      "id": "g052",
+      "text": "Who know the answer ạ?",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "Who knows the answer ạ?"
+    },
+    {
+      "id": "g053",
+      "text": "Cô ơi, which answer you choose for câu 9?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "Cô ơi, which answer did you choose for câu 9?"
+    },
+    {
+      "id": "g054",
+      "text": "Who knows the answer to câu 15?",
+      "tags": [],
+      "corrected": "Who knows the answer to câu 15?"
+    },
+    {
+      "id": "g055",
+      "text": "They are live in District 7 now.",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "They live in District 7 now."
+    },
+    {
+      "id": "g056",
+      "text": "My score is more higher than last time.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "My score is higher than last time."
+    },
+    {
+      "id": "g057",
+      "text": "I could not to open the link.",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "I could not open the link."
+    },
+    {
+      "id": "g058",
+      "text": "She got her car washed last weekend.",
+      "tags": [],
+      "corrected": "She got her car washed last weekend."
+    },
+    {
+      "id": "g059",
+      "text": "I got the document translate into English rồi ạ",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "I got the document translated into English rồi ạ"
+    },
+    {
+      "id": "g060",
+      "text": "I'm really surprising that I got 750 điểm",
+      "tags": [
+        "PARTICIPLE"
+      ],
+      "corrected": "I'm really surprised that I got 750 điểm"
+    },
+    {
+      "id": "g061",
+      "text": "This exercise is really confusing.",
+      "tags": [],
+      "corrected": "This exercise is really confusing."
+    },
+    {
+      "id": "g062",
+      "text": "I very like this exercise.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "I really like this exercise."
+    },
+    {
+      "id": "g063",
+      "text": "Lan is absent today because she have a fever.",
+      "tags": [
+        "SVA"
+      ],
+      "corrected": "Lan is absent today because she has a fever."
+    },
+    {
+      "id": "g064",
+      "text": "when the test start tomorrow?",
+      "tags": [
+        "WH_DO"
+      ],
+      "corrected": "when does the test start tomorrow?"
+    },
+    {
+      "id": "g065",
+      "text": "I'm used to doing Part 7 at night.",
+      "tags": [],
+      "corrected": "I'm used to doing Part 7 at night."
+    },
+    {
+      "id": "g066",
+      "text": "He's not like this kind of question.",
+      "tags": [
+        "BE_VERB"
+      ],
+      "corrected": "He doesn't like this kind of question."
+    },
+    {
+      "id": "g067",
+      "text": "I listened the audio three times but I still don't understand.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "I listened to the audio three times but I still don't understand."
+    },
+    {
+      "id": "g068",
+      "text": "Students MUST TO submit homework before 9pm",
+      "tags": [
+        "MODAL_TO"
+      ],
+      "corrected": "Students MUST submit homework before 9pm"
+    },
+    {
+      "id": "g069",
+      "text": "Did you have your TOEIC certificate print?",
+      "tags": [
+        "CAUSATIVE"
+      ],
+      "corrected": "Did you have your TOEIC certificate printed?"
+    },
+    {
+      "id": "g070",
+      "text": "I am waiting for the result since Monday.",
+      "tags": [
+        "OTHER"
+      ],
+      "corrected": "I have been waiting for the result since Monday."
+    }
+  ]
+}

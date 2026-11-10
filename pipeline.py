@@ -23,8 +23,10 @@ STEPS = [
     ("chat", ["chat.txt"], ["chat.json"], ["chat_parser.py"], "no-pdf"),
     ("feedback", ["chat.json"], ["chat_feedback.json"], ["feedback.py"], "no-pdf"),
     ("neural_ie", ["transcript.json", "exercises.json"], ["grammar_points.json", "vocab_deep.json"], ["neural_ie.py"], "no-pdf"),
-    ("concept_link", ["exercises.json", "grammar_points.json"], ["exercise_concept_links.json"], ["concept_link.py"], "no-pdf"),
-    ("teacher_analytics", ["speakers.json", "chat_feedback.json"], ["teacher_report.json"], ["teacher_analytics.py"], "no-pdf"),
+    ("concept_link", ["exercises.json", "grammar_points.json", "exercise_alignment.json", "transcript.json"],
+     ["exercise_concept_links.json"], ["concept_link.py"], "no-pdf"),
+    ("teacher_analytics", ["speakers.json", "chat_feedback.json", "exercise_concept_links.json"], ["teacher_report.json"],
+     ["teacher_analytics.py"], "no-pdf"),
     ("content", ["screens.json", "transcript.json"], ["content.md"], ["lesson_content.py"], "no-pdf"),
 ]
 
@@ -51,8 +53,8 @@ ready = lambda f: has(f) or (any(x in planned for x in f) if isinstance(f, tuple
 for name, inputs, outputs, cmd, when in STEPS:
     if when not in ("any", profile):
         continue
-    if name in ("chat", "feedback") and not (has("chat.txt") or has("chat.json")):
-        continue
+    if name in ("chat", "feedback", "teacher_analytics") and not (has("chat.txt") or has("chat.json")):
+        continue  # lectures without a class chat (most recorded videos): no learner errors to analyse
     forced = name in a.force or "all" in a.force
     if all(map(has, outputs)) and not forced:
         print(f"[{name}] skip, have {', '.join(outputs)}", flush=True)

@@ -1186,8 +1186,8 @@
           <span id="txt-stt">--</span>
         </div>
         <div class="stat-row">
-          <span>Target Alignment Rate</span>
-          <b id="txt-align-rate">--%</b>
+          <span>Questions matched to speech</span>
+          <b id="txt-align-rate">--</b>
         </div>
         <div class="stat-row">
           <span>Total Screens / Slides</span>
@@ -1502,7 +1502,7 @@ function renderVocab() {
           <div class="v-actions">
             ${it.audio ? `
               <button class="v-btn-audio" onclick="playVocabAudio('${esc(it.audio)}', this)">
-                🔊 Listen (1.5s)
+                🔊 Nghe giọng cô
               </button>
             ` : ''}
             ${it.timestamp !== null ? `
@@ -1727,7 +1727,7 @@ function renderTeacherDashboard() {
           <div class="weakest-title">⚠️ Chủ điểm ngữ pháp học sinh yếu nhất:</div>
           <div style="font-size:12px; font-weight:700; color:var(--text);">${esc(weakest.title)}</div>
           <div style="font-size:11px; color:#b91c1c;">
-            Ghi nhận <b>${weakest.student_error_count} lỗi sai</b> trong phần bài tập liên quan (Mức độ cảnh báo: ${weakest.severity})
+            Ghi nhận <b>${weakest.student_error_count} tin nhắn có lỗi</b> ở các câu thuộc chủ điểm này (${(weakest.questions || []).length ? 'câu ' + weakest.questions.join(', ') + ' · ' : ''}mức cảnh báo: ${weakest.severity})
           </div>
         </div>
       ` : ''}
@@ -1888,7 +1888,13 @@ async function init() {
   }
 
   // Populate Analytics
-  if (speakers && speakers.talk_time) {
+  const ihMeasured = !(teacherReport && teacherReport.interaction_health && teacherReport.interaction_health.measured === false);
+  if (!ihMeasured) {
+    $('bar-ttt').style.width = '0%';
+    $('bar-stt').style.width = '0%';
+    $('txt-ttt').textContent = 'chưa đo (1 người nói)';
+    $('txt-stt').textContent = 'chưa đo';
+  } else if (speakers && speakers.talk_time) {
     const tTime = speakers.talk_time['T'] || 0;
     const sTime = Object.entries(speakers.talk_time).filter(([k]) => k !== 'T').reduce((acc, [, v]) => acc + v, 0);
     const total = tTime + sTime || 1;
@@ -1899,10 +1905,18 @@ async function init() {
     $('txt-ttt').textContent = `${fmt(tTime)} (${tPct}%)`;
     $('txt-stt').textContent = `${fmt(sTime)} (${sPct}%)`;
   }
-  $('txt-align-rate').textContent = exercises.length ? '95.6%' : '99.4%';
+  // share of questions the aligner matched to a speech segment (others fall back to screen time); accuracy
+  // against hand labels is reported in docs/10_evaluation_results.md, not here
+  const matched = exercises.filter(e => e.matched !== false).length;
+  $('txt-align-rate').textContent = exercises.length ? `${matched}/${exercises.length}` : '--';
   $('txt-screens-count').textContent = alignments.length;
 
   renderTeacherDashboard();
+
+  // open a tab from the URL (?tab=tab-stats or #tab-stats) — handy for presenting and for screenshots
+  const wanted = new URLSearchParams(location.search).get('tab') || location.hash.slice(1);
+  const tabBtn = wanted && document.querySelector(`[data-tab="${wanted}"]`);
+  if (tabBtn) tabBtn.click();
 
   // Initialize first view
   if (alignments.length) showSlide(alignments[0].slide);

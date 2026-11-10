@@ -1,0 +1,5 @@
+transcript                    segs    en repeats  logprob  on-screen recall
+results/asr_none.json         2606   26%       6      nan      463/976 = 47%
+results/asr_chunks.json        545   11%       3   -0.147      470/976 = 48%
+results/asr_words.json         484   12%      20   -0.334      509/976 = 52%
+results/asr_lines.json         559   15%      27   -0.462      509/976 = 52%

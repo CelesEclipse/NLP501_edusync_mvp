@@ -57,3 +57,46 @@ def test_align_exercises_monotonic():
     assert aligned[1]["number"] == 2
     assert aligned[1]["start"] == 25.0
 
+
+
+# ---- monotonic DP alignment -----------------------------------------------------------------------------------
+from exercise_align import align_dp, align_greedy, start_times, question_pattern
+
+
+def _ex(i, num, stem, start=0.0, end=100.0):
+    return {"id": f"q{i}", "number": num, "stem": stem, "options": {}, "screens": [1], "start": start, "end": end}
+
+
+def _seg(t, text):
+    return {"start": t, "end": t + 4.0, "text": text}
+
+
+def test_dp_finds_global_optimum_where_greedy_fails():
+    # q1's strongest cue comes late (t=50), q2 is only discussed at t=30. Greedy takes q1@50 and loses q2;
+    # DP takes q1@10 + q2@30 (higher total, both matched, still monotonic).
+    exercises = [_ex(1, 1, "hotel luxury central"), _ex(2, 2, "package massage weekend")]
+    transcript = [_seg(10.0, "luxury hotel central"), _seg(30.0, "câu số 2 package massage"),
+                  _seg(50.0, "câu số 1 hotel luxury")]
+    assert align_greedy(exercises, transcript) == {0: 2}
+    assert align_dp(exercises, transcript) == {0: 0, 1: 1}
+
+
+def test_unsupported_number_mention_is_demoted():
+    # "câu số 1" at t=5 is followed (within 60 s) by unrelated words only; the real question is discussed at t=90
+    exercises = [_ex(1, 1, "plaza hotel located heart city")]
+    transcript = [_seg(5.0, "câu số 1 news"), _seg(9.0, "danh từ news"), _seg(90.0, "located plaza hotel heart city")]
+    assert align_dp(exercises, transcript) == {0: 2}
+
+
+def test_ordinal_and_spelled_numbers_are_triggers():
+    assert question_pattern(4).search("Sang câu thứ 4.")
+    assert question_pattern(4).search("câu thứ tư")
+    assert not question_pattern(2).search("text 2 nói về")
+    assert not question_pattern(5).search("part 5 incomplete sentences")
+
+
+def test_unmatched_fallback_keeps_order():
+    exercises = [_ex(1, 1, "a", start=0.0), _ex(2, 2, "b", start=5.0), _ex(3, 3, "c", start=50.0)]
+    transcript = [_seg(40.0, "x"), _seg(60.0, "y")]
+    times = start_times(exercises, transcript, {0: 0, 2: 1})   # q2 unmatched, its screen start (5) < q1 (40)
+    assert times == sorted(times) and times[1] == 40.0

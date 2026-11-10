@@ -1,0 +1,126 @@
+{
+  "gold_verified": false,
+  "n_questions": 34,
+  "label_counts": {
+    "gp_4": 1,
+    "gp_1": 8,
+    "none": 22,
+    "gp_3": 1,
+    "gp_2": 2
+  },
+  "results": {
+    "majority(none)": {
+      "acc_with_none_loo": 0.735,
+      "link_precision": 0.0,
+      "link_recall": 0.0,
+      "links_made": 0,
+      "acc1_concept_questions": null
+    },
+    "tfidf": {
+      "acc_with_none_loo": 0.824,
+      "link_precision": 0.857,
+      "link_recall": 0.583,
+      "links_made": 7,
+      "acc1_concept_questions": 0.833,
+      "n_concept_questions": 12
+    },
+    "bm25": {
+      "acc_with_none_loo": 0.706,
+      "link_precision": 0.571,
+      "link_recall": 0.417,
+      "links_made": 7,
+      "acc1_concept_questions": 0.917,
+      "n_concept_questions": 12
+    },
+    "minilm+cues (v1)": {
+      "acc_with_none_loo": 0.765,
+      "link_precision": 0.727,
+      "link_recall": 0.583,
+      "links_made": 11,
+      "acc1_concept_questions": 0.667,
+      "n_concept_questions": 12
+    },
+    "minilm": {
+      "acc_with_none_loo": 0.618,
+      "link_precision": 0.333,
+      "link_recall": 0.25,
+      "links_made": 9,
+      "acc1_concept_questions": 0.5,
+      "n_concept_questions": 12
+    },
+    "minilm+speech": {
+      "acc_with_none_loo": 0.735,
+      "link_precision": 0.571,
+      "link_recall": 0.667,
+      "links_made": 14,
+      "acc1_concept_questions": 0.833,
+      "n_concept_questions": 12
+    },
+    "mminilm": {
+      "acc_with_none_loo": 0.765,
+      "link_precision": 0.714,
+      "link_recall": 0.5,
+      "links_made": 7,
+      "acc1_concept_questions": 0.75,
+      "n_concept_questions": 12
+    },
+    "mminilm+speech": {
+      "acc_with_none_loo": 0.765,
+      "link_precision": 0.75,
+      "link_recall": 0.5,
+      "links_made": 8,
+      "acc1_concept_questions": 0.833,
+      "n_concept_questions": 12
+    },
+    "me5": {
+      "acc_with_none_loo": 0.853,
+      "link_precision": 0.8,
+      "link_recall": 0.75,
+      "links_made": 10,
+      "acc1_concept_questions": 0.917,
+      "n_concept_questions": 12
+    },
+    "me5+speech": {
+      "acc_with_none_loo": 0.912,
+      "link_precision": 0.833,
+      "link_recall": 0.833,
+      "links_made": 12,
+      "acc1_concept_questions": 0.917,
+      "n_concept_questions": 12
+    }
+  },
+  "deployed": {
+    "lessons/ece-toeic-starter-u4/exercise_concept_links.json": {
+      "accuracy": 0.912,
+      "link_precision": 0.9,
+      "link_recall": 0.75,
+      "links_made": 10
+    },
+    "lessons/ece-toeic-starter-u4/results/v1/exercise_concept_links.json": {
+      "accuracy": 0.588,
+      "link_precision": 0.391,
+      "link_recall": 0.667,
+      "links_made": 23
+    }
+  },
+  "theory_timestamps": {
+    "lessons/ece-toeic-starter-u4/grammar_points.json": {
+      "abs_err_s": {
+        "gp_1": 20.0,
+        "gp_2": 7.5,
+        "gp_3": 2.3,
+        "gp_4": 14.9
+      },
+      "mean_abs_err_s": 11.2
+    },
+    "lessons/ece-toeic-starter-u4/results/v1/grammar_points.json": {
+      "abs_err_s": {
+        "gp_1": 882.7,
+        "gp_2": 88.1,
+        "gp_3": 2505.6,
+        "gp_4": 53.5
+      },
+      "mean_abs_err_s": 882.5
+    }
+  }
+}

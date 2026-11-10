@@ -5,6 +5,9 @@ Outputs <lesson>/chat.json.
 Usage: python chat_parser.py --lesson lessons/<id> [--out chat.json]"""
 import argparse, json, os, re
 
+# "em chọn C", "chọn đáp án B", "đáp án A", "answer is D", "câu 2 em chọn A"
+ANSWER_RE = re.compile(r"(?:chọn(?:\s+đáp\s+án)?|đáp\s+án(?:\s+là)?|answer\s+(?:is\s+)?)\s*\(?([A-D])\)?\b", re.I)
+
 
 def parse_timestamp(time_str):
     """Convert HH:MM:SS or MM:SS to float seconds."""
@@ -96,22 +99,27 @@ def anonymize_and_link(entries, exercises=None):
         msg = e["message"]
         t = e["timestamp"]
 
-        # 1. Detect question number in message (e.g. "Câu 4", "Q4", "Text 1 câu 1")
+        # 1. Detect question number in message (e.g. "Câu 4", "Q4", "Text 1 câu 1") and the chosen option
         ex_num = None
         m_q = re.search(r"\b(?:câu|question|q)\s*(\d+)\b", msg, re.I)
         if m_q:
             ex_num = int(m_q.group(1))
+        m_a = ANSWER_RE.search(msg)
+        answer = m_a.group(1).upper() if m_a else None
 
         # 2. Match with aligned exercises
         matched_ex_id = None
         if exercises:
-            # First try matching by explicit question number
+            # First try matching by explicit question number. Numbers restart in every exercise section, so take
+            # the most recent question with that number whose aligned start is before the message (students
+            # answer after the teacher reaches the question); otherwise the nearest one in time.
             if ex_num is not None:
-                # Find exercise matching this question number nearest in time
                 cands = [x for x in exercises if x.get("number") == ex_num]
-                if cands:
-                    cands.sort(key=lambda c: abs(c.get("start", 0) - t))
-                    matched_ex_id = cands[0].get("id")
+                before = [x for x in cands if x.get("start", 0) <= t + 5.0]
+                if before:
+                    matched_ex_id = max(before, key=lambda c: c.get("start", 0)).get("id")
+                elif cands:
+                    matched_ex_id = min(cands, key=lambda c: abs(c.get("start", 0) - t)).get("id")
 
             # Fallback: if no explicit number, match by active exercise window
             if not matched_ex_id:
@@ -130,7 +138,8 @@ def anonymize_and_link(entries, exercises=None):
             "speaker_name": spk_info["name"],
             "message": msg,
             "question_number": ex_num,
-            "exercise_id": matched_ex_id
+            "exercise_id": matched_ex_id,
+            "answer_choice": answer
         })
 
     return linked, speaker_map

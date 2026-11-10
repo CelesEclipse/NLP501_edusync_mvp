@@ -9,3 +9,5 @@ opencv-python-headless
 yt-dlp
 rangehttpserver
 ocrmac  # macOS only: OCR for extract_screens.py
+# optional: exact ERRANT typing in feedback.py and eval/errant_check.py
+#   pip install errant && python -m spacy download en_core_web_sm

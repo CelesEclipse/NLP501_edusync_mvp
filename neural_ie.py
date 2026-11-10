@@ -9,8 +9,12 @@ Extracts:
    collocations, CEFR levels, and links to speech audio clips.
 
 Architecture:
-- Tier 1: Gemini API (gemini-3.5-flash-lite / gemini-flash-latest) via structured JSON.
-- Tier 2 / Fallback: Deterministic Rule-based heuristic extractor if no API key or network error.
+- Tier 1: Gemini API (gemini-3.5-flash-lite) in JSON mode (responseMimeType=application/json); required fields are
+  checked after parsing. The LLM sees ~30 sampled transcript segments, so its timestamps are only guesses.
+- Tier 2 / Fallback (no API key or network error): a generic TOEIC grammar taxonomy matched against cue phrases in
+  the transcript; deep vocabulary taken from vocab.json.
+- Grounding (both tiers): each grammar point's timestamp is re-anchored to the most similar transcript window under
+  multilingual-e5-small (ground_theory_timestamps). `--ground-only` applies this to an existing grammar_points.json.
 """
 
 import argparse
@@ -75,88 +79,103 @@ def call_gemini_api(prompt: str, api_key: str, model_name: str = "gemini-3.5-fla
         return json.loads(text)
 
 
+# Generic TOEIC grammar taxonomy for the offline fallback: a topic is reported when its cue phrases are spoken at
+# least MIN_CUE_HITS times in the lesson. Nothing here is specific to one lesson.
+GRAMMAR_TAXONOMY = [
+    {"key": "participle_adj", "title": "Participles as Adjectives (-ing vs. -ed) (Phân từ làm tính từ)",
+     "formula": "V-ing (gây ra tính chất/cảm xúc) / V-ed (người chịu cảm xúc)",
+     "explanation_vi": "Phân từ hiện tại (-ing) mô tả tính chất của sự vật gây ra cảm xúc; phân từ quá khứ (-ed) mô tả cảm xúc của người chịu tác động.",
+     "cues": ["phân từ", "participle", "động tính từ", "thêm ing", "thêm ed"]},
+    {"key": "causative", "title": "Causative have/get + object + V3 (Cấu trúc nhờ vả)",
+     "formula": "have/get + vật + V3/ed; have + người + V nguyên mẫu",
+     "explanation_vi": "Diễn tả việc nhờ/thuê người khác làm gì; tân ngữ chỉ vật đi với phân từ hai.",
+     "cues": ["nhờ vả", "sai khiến", "causative"]},
+    {"key": "passive", "title": "Passive Voice (Câu bị động)", "formula": "be + V3/ed",
+     "explanation_vi": "Chủ ngữ là đối tượng chịu tác động của hành động.", "cues": ["bị động", "passive"]},
+    {"key": "subjunctive", "title": "Subjunctive after require/suggest that (Câu giả định)",
+     "formula": "require/suggest/demand + that + S + (should) + V nguyên mẫu",
+     "explanation_vi": "Sau các động từ yêu cầu/đề nghị, mệnh đề that dùng động từ nguyên mẫu.",
+     "cues": ["giả định", "require cộng that", "suggest cộng that", "demand cộng that"]},
+    {"key": "noun_modifier", "title": "Word Form before a Noun (Tính từ bổ nghĩa cho danh từ)",
+     "formula": "(Det) + Adjective + Noun", "explanation_vi": "Vị trí trước danh từ cần tính từ để bổ nghĩa.",
+     "cues": ["bổ nghĩa cho danh từ", "loại từ"]},
+    {"key": "relative_clause", "title": "Relative Clauses (Mệnh đề quan hệ)", "formula": "N + who/which/that + clause",
+     "explanation_vi": "Mệnh đề bổ nghĩa cho danh từ đứng trước.", "cues": ["mệnh đề quan hệ", "đại từ quan hệ", "relative clause"]},
+    {"key": "comparison", "title": "Comparatives and Superlatives (So sánh)", "formula": "adj-er/more adj than; the adj-est/most adj",
+     "explanation_vi": "So sánh hơn và so sánh nhất.", "cues": ["so sánh hơn", "so sánh nhất", "comparative", "superlative"]},
+    {"key": "gerund_infinitive", "title": "Gerunds and Infinitives (Danh động từ và động từ nguyên mẫu)",
+     "formula": "V + V-ing / V + to V", "explanation_vi": "Một số động từ theo sau bởi V-ing, một số bởi to V.",
+     "cues": ["danh động từ", "gerund", "to infinitive", "nguyên mẫu có to"]},
+    {"key": "conditional", "title": "Conditional Sentences (Câu điều kiện)", "formula": "If + clause, clause",
+     "explanation_vi": "Câu điều kiện loại 1, 2, 3.", "cues": ["câu điều kiện", "conditional"]},
+    {"key": "tense", "title": "Verb Tenses (Thì động từ)", "formula": "present / past / perfect",
+     "explanation_vi": "Chia thì theo mốc thời gian và dấu hiệu nhận biết.",
+     "cues": ["hiện tại hoàn thành", "quá khứ đơn", "present perfect", "past simple", "dấu hiệu nhận biết"]},
+]
+MIN_CUE_HITS = 3
+GROUNDING_MODEL = ("intfloat/multilingual-e5-small", "query: ", "passage: ")
+GROUNDING_WINDOW = 6  # transcript segments per window (about 10-20 s of speech)
+
+
 def fallback_rule_based_extraction(transcript: list, exercises: list, vocab_items: list) -> dict:
-    """
-    Deterministic rule-based fallback when offline or no API key.
-    Mines grammar points and deep vocabulary using pattern templates.
-    """
-    grammar_points = [
-        {
-            "id": "gp_1",
-            "title": "Participles as Adjectives (Phân từ làm Tính từ)",
-            "formula": "V-ing (Active/Chủ động: gây ra cảm xúc) vs. V-ed (Passive/Bị động: nhận cảm xúc)",
-            "explanation_vi": "Phân từ có thể đóng vai trò như một tính từ bổ nghĩa cho danh từ. Đuôi '-ing' dùng cho đối tượng gây ra tính chất (e.g. boring movie, annoying noise). Đuôi '-ed' dùng cho đối tượng chịu cảm xúc đó (e.g. feel bored, pleased with).",
-            "examples": [
-                {"en": "The movie was moving because it made me cry.", "vi": "Bộ phim rất cảm động vì nó làm tôi rơi nước mắt."},
-                {"en": "The baby fell asleep because it felt bored.", "vi": "Đứa bé ngủ thiếp đi vì nó cảm thấy chán."},
-                {"en": "This continuous noise is very annoying.", "vi": "Tiếng ồn liên tục này rất khó chịu."}
-            ],
-            "timestamp": 855.0,
-            "time_str": "14:15",
-            "toeic_tips": "Xét chủ ngữ/danh từ được bổ nghĩa: nếu là vật mang đặc tính chọn -ing; nếu là người cảm nhận trạng thái chọn -ed."
-        },
-        {
-            "id": "gp_2",
-            "title": "Causative Verbs (Cấu trúc Nhờ vả / Sai khiến)",
-            "formula": "S + have/get + O (vật/việc) + V3/V-ed (Past Participle)",
-            "explanation_vi": "Diễn tả việc nhờ, thuê hoặc yêu cầu người khác làm gì cho mình. Khi tân ngữ là đồ vật hoặc sự việc (bị tác động), động từ chính bắt buộc chia ở dạng phân từ 2 (V-ed/V3).",
-            "examples": [
-                {"en": "He has his shoes shined every day.", "vi": "Anh ấy nhờ người đánh bóng giày mỗi ngày."},
-                {"en": "She had her hair cut yesterday.", "vi": "Cô ấy đã đi cắt tóc hôm qua."}
-            ],
-            "timestamp": 952.0,
-            "time_str": "15:52",
-            "toeic_tips": "Bẫy thường gặp trong đề thi là cho động từ nguyên thể (shine) hoặc V-ing. Hãy tìm tân ngữ chỉ vật đứng giữa 'have/get' để chọn ngay V-ed/V3."
-        },
-        {
-            "id": "gp_3",
-            "title": "Modal Verbs with Bare Infinitive (Động từ Khuyết thiếu)",
-            "formula": "Modal Verb (should, must, can, will) + V-bare (nguyên thể không 'to')",
-            "explanation_vi": "Sau các trợ động từ khuyết thiếu như should, could, can, will, must, động từ theo sau luôn ở dạng nguyên mẫu không chia và tuyệt đối không thêm giới từ 'to'.",
-            "examples": [
-                {"en": "Sales should increase by 200%.", "vi": "Doanh số nên tăng thêm 200%."},
-                {"en": "We must submit the proposal on time.", "vi": "Chúng ta phải nộp đề xuất đúng hạn."}
-            ],
-            "timestamp": 1365.0,
-            "time_str": "22:45",
-            "toeic_tips": "Người học hay dịch 'nên để làm gì' dẫn đến lỗi thừa 'to' (e.g. should to increase). Đề thi TOEIC Part 5 thường xuyên kiểm tra bare infinitive sau modal."
-        },
-        {
-            "id": "gp_4",
-            "title": "Adjective + Preposition Collocations (Tính từ đi kèm Giới từ)",
-            "formula": "S + be + Adj + Preposition (pleased with, safe for, afraid of)",
-            "explanation_vi": "Nhiều tính từ đi kèm giới từ cố định để bổ sung tân ngữ. Không dùng theo thói quen dịch từng từ tiếng Việt.",
-            "examples": [
-                {"en": "The manager was pleased with her performance.", "vi": "Người quản lý rất hài lòng với biểu hiện của cô ấy."},
-                {"en": "Boiled water is safe for drinking.", "vi": "Nước đun sôi thì an toàn cho việc uống."}
-            ],
-            "timestamp": 1015.0,
-            "time_str": "16:55",
-            "toeic_tips": "Ghi nhớ các cặp giới từ cố định: pleased with (hài lòng với), safe for (an toàn cho), interested in (quan tâm)."
-        }
-    ]
-
+    """Offline fallback (no API key / network): report the taxonomy topics whose cue phrases the teacher says at least
+    MIN_CUE_HITS times, timestamped at the first cue (later replaced by ground_theory_timestamps), and take the deep
+    vocabulary from vocab.json (B1+ words with their mined Vietnamese meaning). Examples are left empty rather than
+    invented."""
+    low = [(s["start"], s["text"].lower()) for s in transcript]
+    found = []
+    for topic in GRAMMAR_TAXONOMY:
+        hits = [t for t, txt in low for c in topic["cues"] if c in txt]
+        if len(hits) >= MIN_CUE_HITS:
+            found.append((len(hits), min(hits), topic))
+    found.sort(key=lambda x: x[1])
+    grammar_points = []
+    for i, (n, t0, topic) in enumerate(sorted(found, key=lambda x: -x[0])[:5]):
+        grammar_points.append({
+            "id": f"gp_{i + 1}", "title": topic["title"], "formula": topic["formula"],
+            "explanation_vi": topic["explanation_vi"], "examples": [], "timestamp": float(t0),
+            "time_str": format_time(t0), "toeic_tips": "", "source": "taxonomy_fallback", "cue_hits": n,
+        })
     vocab_deep = []
-    # Collect words from vocab_items if available, or build high-frequency TOEIC words
-    candidate_words = [
-        {"word": "retail", "pos": "noun", "level": "B2", "meaning_vi": "Bán lẻ (đến tay người tiêu dùng)", "collocations": ["retail sales", "retail price", "retail outlet"], "example": "Wholesale and retail sales increased dramatically.", "timestamp": 678.0},
-        {"word": "wholesale", "pos": "noun", "level": "B2", "meaning_vi": "Bán buôn, bán sỉ (số lượng lớn)", "collocations": ["wholesale price", "wholesale business"], "example": "The company engages in both wholesale and retail.", "timestamp": 678.0},
-        {"word": "depression", "pos": "noun", "level": "B2", "meaning_vi": "Thời kỳ suy thoái kinh tế nặng nề", "collocations": ["economic depression", "severe depression"], "example": "The country suffered through a prolonged economic depression.", "timestamp": 735.0},
-        {"word": "prosperity", "pos": "noun", "level": "C1", "meaning_vi": "Sự thịnh vượng, phồn vinh", "collocations": ["economic prosperity", "period of prosperity"], "example": "A period of great prosperity followed the expansion.", "timestamp": 85.0},
-        {"word": "determine", "pos": "verb", "level": "B1", "meaning_vi": "Xác định, quyết định một cách dứt khoát", "collocations": ["determine the cause", "determine factors"], "example": "We need to determine the primary factor of sales growth.", "timestamp": 110.0},
-        {"word": "luxury", "pos": "noun", "level": "B1", "meaning_vi": "Sang trọng, xa xỉ", "collocations": ["luxury hotel", "luxury goods"], "example": "They stayed at a central luxury hotel.", "timestamp": 202.0},
-        {"word": "thirsty", "pos": "adj", "level": "A2", "meaning_vi": "Khát nước (trong kinh doanh: kích thích nhu cầu đồ uống)", "collocations": ["feel thirsty", "make customers thirsty"], "example": "Salty popcorn will make customers more thirsty.", "timestamp": 1405.0},
-        {"word": "pleased", "pos": "adj", "level": "B1", "meaning_vi": "Hài lòng, vừa ý (đi với giới từ with)", "collocations": ["pleased with", "pleased to meet"], "example": "It is not very easy to make her pleased.", "timestamp": 1015.0}
-    ]
+    for v in vocab_items:
+        if v.get("level") in ("B1", "B2", "C1", "C2"):
+            ts = float(v.get("timestamp") or 0.0)
+            vocab_deep.append({"word": v["word"], "pos": v.get("pos", ""), "level": v["level"],
+                               "meaning_vi": v.get("meaning_vi", ""), "collocations": [],
+                               "example": v.get("example_context", ""), "timestamp": ts, "time_str": format_time(ts)})
+    return {"grammar_points": grammar_points, "vocab_deep": vocab_deep[:12]}
 
-    for item in candidate_words:
-        item["time_str"] = format_time(item["timestamp"])
-        vocab_deep.append(item)
 
-    return {
-        "grammar_points": grammar_points,
-        "vocab_deep": vocab_deep
-    }
+def ground_theory_timestamps(grammar_points: list, transcript: list) -> list:
+    """Replace each grammar point's timestamp by the transcript window most similar to the concept
+    (title + formula + English examples + Vietnamese explanation) under a multilingual bi-encoder.
+    The LLM only sees a sample of the transcript, so its own timestamps are guesses; they are kept as
+    'llm_timestamp'. Without sentence-transformers the timestamps are left unchanged."""
+    if not grammar_points or not transcript:
+        return grammar_points
+    try:
+        from sentence_transformers import SentenceTransformer
+    except ImportError:
+        print("[neural_ie] sentence-transformers not installed; theory timestamps not grounded.", flush=True)
+        return grammar_points
+    name, qp, pp = GROUNDING_MODEL
+    model = SentenceTransformer(name)
+    W = GROUNDING_WINDOW
+    windows = [" ".join(s["text"] for s in transcript[i:i + W]) for i in range(len(transcript))]
+    E = model.encode([pp + w for w in windows], normalize_embeddings=True, batch_size=64)
+    for g in grammar_points:
+        ex = " ".join(x.get("en", "") for x in g.get("examples", []) if isinstance(x, dict))
+        text = f"{g.get('title', '')}. Formula: {g.get('formula', '')}. Examples: {ex}. {g.get('explanation_vi', '')}"
+        c = model.encode([qp + text], normalize_embeddings=True)[0]
+        sims = E @ c
+        best = int(sims.argmax())
+        if "llm_timestamp" not in g and g.get("source") != "taxonomy_fallback":
+            g["llm_timestamp"] = g.get("timestamp")
+        g["timestamp"] = float(transcript[best]["start"])
+        g["time_str"] = format_time(g["timestamp"])
+        g["timestamp_source"] = "grounded:" + name.split("/")[-1]
+        g["grounding_score"] = round(float(sims[best]), 3)
+    return grammar_points
 
 
 def extract_neural_ie(lesson_dir: Path, force_rule_based: bool = False) -> dict:
@@ -174,14 +193,17 @@ def extract_neural_ie(lesson_dir: Path, force_rule_based: bool = False) -> dict:
     exercises = json.loads(exercises_path.read_text(encoding="utf-8")) if exercises_path.is_file() else []
     vocab_items = json.loads(vocab_path.read_text(encoding="utf-8")) if vocab_path.is_file() else []
     chat_feedback = json.loads(chat_path.read_text(encoding="utf-8")) if chat_path.is_file() else []
+    lesson_meta_path = lesson_dir / "lesson.json"
+    lesson_title = (json.loads(lesson_meta_path.read_text(encoding="utf-8")).get("title", lesson_dir.name)
+                    if lesson_meta_path.is_file() else lesson_dir.name)
 
     api_key = None if force_rule_based else load_env_key()
 
     if not api_key:
-        print("[neural_ie] No GEMINI_API_KEY found or forced. Using deterministic Rule-based IE.", flush=True)
+        print("[neural_ie] No GEMINI_API_KEY found or forced. Using the taxonomy-based fallback.", flush=True)
         return fallback_rule_based_extraction(transcript, exercises, vocab_items)
 
-    print("[neural_ie] GEMINI_API_KEY detected. Invoking Gemini 3.5 Flash-Lite Neural IE...", flush=True)
+    print("[neural_ie] GEMINI_API_KEY detected. Calling Gemini (JSON mode)...", flush=True)
 
     # 2. Build representative context prompt
     # Sample transcript every N segments to fit comfortably
@@ -194,7 +216,7 @@ def extract_neural_ie(lesson_dir: Path, force_rule_based: bool = False) -> dict:
     ]
 
     prompt = f"""Bạn là chuyên gia giảng dạy tiếng Anh TOEIC và chuyên gia Xử lý Ngôn ngữ Tự nhiên (NLP).
-Nhiệm vụ: Phân tích sâu bài giảng tiếng Anh TOEIC Starter Unit 4 (Bài giảng song ngữ Anh - Việt).
+Nhiệm vụ: Phân tích sâu bài giảng "{lesson_title}" (bài giảng luyện thi tiếng Anh, giảng song ngữ Việt - Anh).
 
 Dữ liệu bài tập trắc nghiệm mẫu của bài:
 {json.dumps(sampled_ex, ensure_ascii=False)}
@@ -238,12 +260,12 @@ Trả về JSON thuần túy, không có văn bản giải thích phụ bên ngo
         if gps and vds:
             # Ensure timestamps and time_str are sanitized
             for g in gps:
-                ts = float(g.get("timestamp", 0.0))
+                ts = float(g.get("timestamp") or 0.0)
                 g["timestamp"] = ts
                 if "time_str" not in g or not g["time_str"]:
                     g["time_str"] = format_time(ts)
             for v in vds:
-                ts = float(v.get("timestamp", 0.0))
+                ts = float(v.get("timestamp") or 0.0)
                 v["timestamp"] = ts
                 if "time_str" not in v or not v["time_str"]:
                     v["time_str"] = format_time(ts)
@@ -262,7 +284,10 @@ def main():
     parser = argparse.ArgumentParser(description="Extract grammar points and deep vocabulary via Hybrid Neural IE.")
     parser.add_argument("lesson_pos", nargs="?", default=None, help="Path to lesson directory (positional)")
     parser.add_argument("--lesson", default=None, help="Path to lesson directory (flag)")
-    parser.add_argument("--force-rule-based", action="store_true", help="Force deterministic rule-based fallback")
+    parser.add_argument("--force-rule-based", action="store_true", help="Force the offline taxonomy fallback")
+    parser.add_argument("--ground-only", action="store_true",
+                        help="Do not extract: re-ground the timestamps of the existing grammar_points.json")
+    parser.add_argument("--no-ground", action="store_true", help="Skip timestamp grounding")
     args = parser.parse_args()
 
     target_lesson = args.lesson or args.lesson_pos or "lessons/ece-toeic-starter-u4"
@@ -271,10 +296,20 @@ def main():
         print(f"Error: {lesson_dir} is not a directory", file=sys.stderr)
         sys.exit(1)
 
-    result = extract_neural_ie(lesson_dir, force_rule_based=args.force_rule_based)
-
     gp_path = lesson_dir / "grammar_points.json"
     vd_path = lesson_dir / "vocab_deep.json"
+    transcript = json.loads((lesson_dir / "transcript.json").read_text(encoding="utf-8"))
+
+    if args.ground_only:
+        gps = ground_theory_timestamps(json.loads(gp_path.read_text(encoding="utf-8")), transcript)
+        gp_path.write_text(json.dumps(gps, ensure_ascii=False, indent=2), encoding="utf-8")
+        for g in gps:
+            print(f"[neural_ie] {g['id']}: {g.get('llm_timestamp')} -> {g['timestamp']} ({g['time_str']})")
+        return
+
+    result = extract_neural_ie(lesson_dir, force_rule_based=args.force_rule_based)
+    if not args.no_ground:
+        result["grammar_points"] = ground_theory_timestamps(result["grammar_points"], transcript)
 
     gp_path.write_text(json.dumps(result["grammar_points"], ensure_ascii=False, indent=2), encoding="utf-8")
     vd_path.write_text(json.dumps(result["vocab_deep"], ensure_ascii=False, indent=2), encoding="utf-8")
