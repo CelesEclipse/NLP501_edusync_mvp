@@ -1,584 +1,627 @@
 ---
 marp: true
-theme: uncover
-class: invert
+theme: default
 paginate: true
-header: 'EduSync · Đồ Án NLP501 · Master of Software Engineering'
-footer: 'Nhánh Git: edusync-v2 · Đại Học MSE · Tháng 11/2026'
+size: 16:9
+footer: 'EduSync · NLP501 · số liệu: docs/10_evaluation_results.md'
 style: |
   section {
-    background: radial-gradient(circle at 50% 30%, #151d30 0%, #0b0f19 80%);
-    color: #f3f4f6;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
-    padding: 40px 60px;
-    font-size: 24px;
-    line-height: 1.5;
+    background: #fcfcfb; color: #1f1f1d;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 21px; line-height: 1.38; padding: 40px 54px 46px;
+    display: flex !important; flex-direction: column !important; justify-content: flex-start !important;
   }
-  h1 {
-    color: #38bdf8;
-    font-size: 1.6em;
-    font-weight: 800;
-    margin-bottom: 0.2em;
-  }
-  h2 {
-    color: #94a3b8;
-    font-size: 1.0em;
-    font-weight: 500;
-    margin-top: 0;
-    margin-bottom: 0.8em;
-  }
-  .speaker-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 0.7em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-  }
-  .sp1 { background: rgba(6, 182, 212, 0.2); color: #06b6d4; border: 1px solid #06b6d4; }
-  .sp2 { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
-  .sp3 { background: rgba(168, 85, 247, 0.2); color: #a855f7; border: 1px solid #a855f7; }
-  .sp4 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    text-align: left;
-    font-size: 0.82em;
-  }
-  .box {
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 16px 20px;
-  }
-  ul {
-    margin: 8px 0 0 20px;
-    padding: 0;
-  }
-  li {
-    margin-bottom: 6px;
-  }
-  code {
-    background: #1e293b;
-    color: #38bdf8;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.88em;
-  }
-  table {
-    font-size: 0.72em;
-    width: 100%;
-    margin-top: 10px;
-  }
-  th {
-    background: #1e293b;
-    color: #38bdf8;
-    padding: 6px 10px;
-  }
-  td {
-    padding: 6px 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
+  h1 { font-size: 32px; margin: 0 0 2px; color: #1f1f1d; font-weight: 700; }
+  h2 { font-size: 19px; margin: 0 0 16px; color: #5f5e58; font-weight: 400; }
+  h3 { font-size: 20px; margin: 0 0 6px; color: #1c5cab; }
+  strong { color: #1c5cab; }
+  ul, ol { margin: 4px 0 0 0; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  table { font-size: 17px; border-collapse: collapse; margin: 6px 0; }
+  th { background: #eef4fc; color: #1f1f1d; font-weight: 600; padding: 5px 10px; border: none; }
+  td { padding: 4px 10px; border: none; border-bottom: 1px solid #e6e5e0; background: transparent; }
+  tr:nth-child(2n) td { background: transparent; }
+  code { background: #f1f0ec; color: #1f1f1d; padding: 1px 5px; border-radius: 4px; font-size: 0.86em; }
+  footer { font-size: 12px; color: #8a8980; }
+  section::after { font-size: 13px; color: #8a8980; }
+  .who { position: absolute; top: 16px; right: 54px; font-size: 13px; font-weight: 600; letter-spacing: .4px;
+         padding: 3px 10px; border-radius: 6px; }
+  .tv1 { background: #e3eefb; color: #1c5cab; } .tv2 { background: #fdeee6; color: #a8461d; }
+  .tv3 { background: #e2f5ec; color: #11734f; } .tv4 { background: #fdf3dc; color: #8a5b00; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .cols-62 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 26px; }
+  .box { background: #f4f4f1; border-radius: 10px; padding: 12px 16px; }
+  .note { font-size: 15.5px; color: #5f5e58; }
+  .big { font-size: 40px; font-weight: 700; color: #1c5cab; line-height: 1.1; }
+  .formula { font-family: "SF Mono", Menlo, monospace; font-size: 17px; background: #f1f0ec; border-radius: 8px;
+             padding: 8px 12px; margin: 6px 0; }
+  img { display: block; }
+  section.lead { justify-content: center !important; }
+  section.lead h1 { font-size: 52px; color: #1c5cab; }
+  section.lead h2 { font-size: 24px; margin-bottom: 28px; }
 ---
 
-<!-- Slide 01 -->
-<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · PROJECT LEAD (00:00 - 04:30)</div>
+<!-- _class: lead -->
 
-# EDUSYNC: Multimodal Lecture Alignment & Pedagogical Intelligence for English Test Prep
-## Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Tiếng Anh (TOEIC & IELTS)
+<div class="who tv1">TV1 · 00:00</div>
 
-<div class="grid-2">
+# EduSync
+## Căn chỉnh đa phương thức và phân tích bài giảng luyện thi TOEIC (giảng Việt – Anh)
+
+<div class="cols">
 <div class="box">
 
-### 🎓 Thông Tin Đề Tài & Hội Đồng
-* **Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501)
-* **Chương trình:** Cao học Kỹ thuật Phần mềm (MSE)
-* **Thời lượng:** 20 phút báo cáo + 10 phút Q&A
-* **Mã nguồn:** Nhánh Git `edusync-v2` (4.950 LOC)
-</div>
+### Đề tài
+- Đầu vào: video quay màn hình, lời giảng trộn mã Việt – Anh, log chat
+- Đầu ra: **sổ tay học viên** (tua theo câu hỏi, chủ điểm, từ vựng) và **báo cáo cho giáo viên**
+- Môn NLP501 · 20 phút trình bày + hỏi đáp
 
+</div>
 <div class="box">
 
-### 👥 Phân Công Nhóm 4 Thành Viên
-* **TV 1:** Đặt vấn đề, Đặc tả SRS & Kiến trúc 4 tầng
-* **TV 2:** ASR Whisper Prompting & Monotonic DP
-* **TV 3:** CEFR Lexicon, Dense Embeddings & ERRANT
-* **TV 4:** Teacher Dashboard, Live Demo & QA/QC 45 Tests
+### Phân công
+- **TV1** Bài toán, dữ liệu, kiến trúc
+- **TV2** Nhận dạng tiếng nói, căn chỉnh câu hỏi
+- **TV3** Liên kết chủ điểm, trích xuất, phát hiện lỗi
+- **TV4** Báo cáo giáo viên, demo, đánh giá, kết luận
+
 </div>
 </div>
+
+<!--
+TV1: Chào thầy/cô. Nhóm em trình bày EduSync: từ bản ghi một buổi luyện thi TOEIC, hệ thống tạo sổ tay cho học viên và báo cáo cho giáo viên. Tất cả số liệu trong bài nằm ở docs/10 và tái tạo được bằng một lệnh.
+-->
 
 ---
 
-<!-- Slide 02 -->
-<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · ĐẶT VẤN ĐỀ & DẪN CHỨNG NGHIÊN CỨU</div>
+<div class="who tv1">TV1</div>
 
-# Bối Cảnh & 3 Rào Cản Khiến Học Viên Bỏ Cuộc Khi Ôn Thi
-## Dẫn chứng nghiên cứu quốc tế về hiệu ứng bỏ dở video dài và tâm lý "ngại hỏi giáo viên"
+# Vấn đề
+## Sau buổi học chỉ còn một video 60 phút và một file chat
 
-<div class="grid-2">
-<div class="box" style="border-top: 3px solid #ef4444;">
+<div class="cols">
+<div>
 
-### 🛑 Dễ Bỏ Cuộc & Tâm Lý Ngại Hỏi Giáo Viên
-* **Dễ bỏ dở video dài (Guo et al., MIT — ACM L@S 2014):** Qua 6,9 triệu phiên xem, thời gian tập trung trung vị chỉ đạt **tối đa 6 phút**; tới **69% học viên bỏ qua bài tập** sau video dài và **61% thao tác tua** chỉ để mò điểm chuyển bài (*Kim et al., 2014*).
-* **Ngại hỏi giáo viên (Horwitz et al., 1986; Nguyen, 2025):** Sợ bị đánh giá (*Fear of Negative Evaluation*) & sợ "mất mặt" trước lớp khiến học viên không dám bật mic hỏi lại câu làm sai.
-* **Giảm tự tin & quyết tâm:** Câu trả lời sai trong chat bị trôi mất, làm giảm *Self-Efficacy* (*Farmani et al., 2017*).
+### Học viên
+- Muốn xem lại đoạn chữa một câu phải tua thủ công. Thời gian xem trung vị của video bài giảng chỉ khoảng **6 phút** (Guo et al., L@S 2014); các đỉnh tua tập trung quanh chỗ chuyển cảnh (Kim et al., L@S 2014).
+- Ngại hỏi lại trước lớp: sợ bị đánh giá tiêu cực (Horwitz et al., 1986).
+
+### Giáo viên
+- Không biết lớp đang sai ở chủ điểm nào; lỗi trong chat trôi mất.
+
+</div>
+<div class="box">
+
+### Mục tiêu của EduSync
+1. Bấm một câu hỏi → video tua đến lúc cô **bắt đầu chữa** câu đó
+2. Câu hỏi → **chủ điểm ngữ pháp** → đoạn giảng lý thuyết
+3. Từ vựng theo bậc **CEFR**, nghĩa tiếng Việt cô giảng, audio giọng cô
+4. Chat: phát hiện **lỗi điển hình của người Việt**, giải thích bằng tiếng Việt
+5. Báo cáo sau buổi học cho giáo viên
+
+</div>
 </div>
 
-<div class="box" style="border-top: 3px solid #f59e0b;">
-
-### ⚠️ Điểm Mù Của Giáo Viên & Giải Pháp EduSync
-* **Không nhận biết được "học viên im lặng":** Vì học viên ngại hỏi trên lớp, giáo viên không biết cả lớp đang vướng ở công thức nào.
-* **Thiếu chỉ số TTT/STT & Bản đồ lỗi:** Không thống kê được lỗi chuyển di ngôn ngữ (*L1 Transfer*) trong khung chat.
-* **💡 Giải pháp EduSync:** Chia nhỏ video thành nút câu hỏi **< 2 phút**, tự động nối **Câu làm sai ↔ Lý thuyết gốc** & sửa lỗi chat **ẩn danh bằng tiếng Việt** giúp tăng quyết tâm ôn thi TOEIC/IELTS.
-</div>
-</div>
+<!--
+TV1: Ba khó khăn: tìm lại đoạn chữa bài, ngại hỏi lại, và giáo viên không có số liệu. Năm mục tiêu bên phải tương ứng với các bài toán NLP ở slide sau.
+-->
 
 ---
 
-<!-- Slide 03 -->
-<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · MỤC TIÊU ĐỀ TÀI</div>
+<div class="who tv1">TV1</div>
 
-# Mục Tiêu Đề Tài & Giá Trị Cốt Lõi
-## Tháo gỡ rào cản tâm lý "ngại hỏi thầy cô" và tăng quyết tâm chinh phục TOEIC / IELTS
+# Bài toán NLP và dữ liệu
 
-<div class="grid-2">
-<div class="box" style="border-left: 4px solid #06b6d4;">
+<div class="cols-62">
+<div>
 
-### 🎯 TRỤ CỘT 1: HỌC VIÊN TỰ CHỦ & TỰ TIN
-* **Click-to-Seek (< 2 phút/câu):** Bấm câu hỏi $\to$ video tua ngay đến đúng giây cô chữa (khắc phục ngưỡng bỏ cuộc 6 phút).
-* **Thay thế việc ngại hỏi giáo viên:** Bấm badge ngữ pháp trên câu sai $\leftrightarrow$ tự nhảy ngược về lý thuyết gốc đầu giờ.
-* **Từ vựng CEFR (A1–C2) & Audio 1.5s:** Nghe phát âm giọng thật của giáo viên theo mục tiêu band điểm.
-* **Sửa lỗi GEC Ẩn danh ($S_1..S_N$):** Giải thích lỗi tiếng Việt không phán xét, tăng *Self-Efficacy*.
+### Bốn bài toán con
+1. **Căn chỉnh đơn điệu**: câu hỏi $e_k$ → thời điểm $t_k$, với $t_1 < t_2 < \dots$
+2. **Liên kết** câu hỏi → chủ điểm $g \in G \cup \{\text{none}\}$
+3. **Từ vựng**: lemma, bậc CEFR, nghĩa tiếng Việt lấy từ lời giảng
+4. **Lỗi người học** trong chat: 6 mẫu chuyển di từ tiếng Việt
+
+### Thách thức
+- Lời giảng trộn mã: 73% đoạn tiếng Việt, 26% tiếng Anh
+- OCR nhiễu; số câu đánh lại từ 1 ở mỗi phần
+- Câu hỏi và tên chủ điểm thường không có từ chung
+
+</div>
+<div>
+
+| Bài (ECE, CC BY) | Dài | Vai trò |
+|---|---|---|
+| TOEIC Starter U4 | 58′ · 34 câu | phát triển |
+| TOEIC Starter U5 | 58′ · 35 câu | **kiểm tra độc lập** |
+| TOEIC Starter U1 | 65′ | ASR |
+| CS224N (BERT) | 54′ · 43 slide | hồi quy v1 |
+
+<p class="note">Chỉ có <b>một người nói</b> (giáo viên). Chat của U4 (17 tin nhắn) là <b>dữ liệu mô phỏng</b>. Nhãn chuẩn là bản nháp do AI gán, chưa xem output hệ thống; nhóm đang kiểm tra lại với video.</p>
+
+</div>
 </div>
 
-<div class="box" style="border-left: 4px solid #f59e0b;">
-
-### 📊 TRỤ CỘT 2: TRỢ LÝ SƯ PHẠM
-* **Đo lường thời lượng nói (TTT/STT):** Định lượng chính xác tỷ lệ giảng viên vs học sinh.
-* **Bản đồ lỗi sai ERRANT:** Trực quan hóa các điểm nghẽn ngữ pháp dù học viên ngại không hỏi trực tiếp.
-* **Cảnh báo Weakest Concept:** Chỉ ra chủ điểm lý thuyết học sinh làm sai nhiều nhất.
-* **Kế hoạch Hành động 3 bước:** Đề xuất warm-up và bài tập củng cố buổi sau.
-</div>
-</div>
+<!--
+TV1: Bốn bài toán con. Về dữ liệu: em nói rõ ba điểm giới hạn — một người nói, chat là mô phỏng, nhãn là bản nháp. Thuật toán được chỉnh trên Unit 4 và chỉ chạy một lần trên Unit 5 để kiểm tra.
+-->
 
 ---
 
-<!-- Slide 04 -->
-<div class="speaker-badge sp1">👤 THÀNH VIÊN 1 · ĐẶC TẢ SRS & KIẾN TRÚC</div>
+<div class="who tv1">TV1</div>
 
-# Đặc Tả Yêu Cầu SRS & Kiến Trúc 4 Tầng
-## Mô hình đường ống phân tầng khép kín tuân thủ chuẩn phần mềm IEEE 830
+# Kiến trúc
+## Bốn điểm kết hợp giữa các luồng dữ liệu (①–④)
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│ TẦNG 1: INGESTION (Video MP4, Audio M4A, Chat Zoom TXT, Apple OCR)    │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TẦNG 2: ALIGNMENT (Whisper large-v3-turbo, Screen Hints, Monotonic DP) │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TẦNG 3: NLP CORE (Dense Embeddings MiniLM, Cosine, CEFR, ERRANT GEC)   │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│ TẦNG 4: PRESENTATION (Web Demo SPA, Omnibox Search, Teacher Analytics) │
-└────────────────────────────────────────────────────────────────────────┘
-```
-👉 *Chuyển giao: Kính mời Thành viên 2 trình bày Tầng thu nhận dữ liệu và Căn chỉnh thời gian.*
+<svg viewBox="0 0 1180 420" width="1170" height="400" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Arial" font-size="15">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8980"/></marker></defs>
+  <g fill="#eef4fc" stroke="#2a78d6" stroke-width="1.5">
+    <rect x="10" y="40" width="170" height="56" rx="8"/><rect x="10" y="190" width="170" height="56" rx="8"/><rect x="10" y="340" width="170" height="56" rx="8"/>
+  </g>
+  <g fill="#1f1f1d" font-weight="600"><text x="95" y="73" text-anchor="middle">Video màn hình</text><text x="95" y="215" text-anchor="middle">Lời giảng</text><text x="95" y="234" text-anchor="middle" font-weight="400" font-size="13">Việt – Anh</text><text x="95" y="365" text-anchor="middle">Log chat</text><text x="95" y="384" text-anchor="middle" font-weight="400" font-size="13">(mô phỏng)</text></g>
+  <g fill="#f4f4f1" stroke="#b9b8b0" stroke-width="1.2">
+    <rect x="240" y="20" width="230" height="50" rx="8"/><rect x="240" y="92" width="230" height="50" rx="8"/><rect x="240" y="190" width="230" height="56" rx="8"/><rect x="240" y="268" width="230" height="50" rx="8"/><rect x="240" y="340" width="230" height="56" rx="8"/>
+    <rect x="550" y="40" width="250" height="56" rx="8"/><rect x="550" y="118" width="250" height="56" rx="8"/><rect x="550" y="196" width="250" height="56" rx="8"/><rect x="550" y="274" width="250" height="50" rx="8"/><rect x="550" y="340" width="250" height="56" rx="8"/>
+  </g>
+  <g fill="#1f1f1d" text-anchor="middle">
+    <text x="355" y="42">Tách màn hình + OCR</text><text x="355" y="60" font-size="12" fill="#5f5e58">extract_screens.py</text>
+    <text x="355" y="114">Bóc câu hỏi A–D</text><text x="355" y="132" font-size="12" fill="#5f5e58">exercises.py</text>
+    <text x="355" y="214">Whisper + nhãn vi/en</text><text x="355" y="234" font-size="12" fill="#5f5e58">transcribe.py</text>
+    <text x="355" y="290">Phân vai người nói</text><text x="355" y="308" font-size="12" fill="#5f5e58">diarize.py</text>
+    <text x="355" y="364">Ẩn danh S1…SN + đáp án</text><text x="355" y="384" font-size="12" fill="#5f5e58">chat_parser.py</text>
+    <text x="675" y="64">Căn chỉnh câu hỏi (DP)</text><text x="675" y="84" font-size="12" fill="#5f5e58">exercise_align.py</text>
+    <text x="675" y="142">Liên kết câu hỏi ↔ chủ điểm</text><text x="675" y="162" font-size="12" fill="#5f5e58">concept_link.py · e5 + lời giảng</text>
+    <text x="675" y="220">Chủ điểm + neo mốc lý thuyết</text><text x="675" y="240" font-size="12" fill="#5f5e58">neural_ie.py · Gemini + e5</text>
+    <text x="675" y="296">Từ vựng CEFR + audio</text><text x="675" y="314" font-size="12" fill="#5f5e58">vocab.py</text>
+    <text x="675" y="364">Phát hiện 6 nhóm lỗi</text><text x="675" y="384" font-size="12" fill="#5f5e58">feedback.py</text>
+  </g>
+  <g fill="#e8f6ef" stroke="#1baf7a" stroke-width="1.5"><rect x="890" y="90" width="270" height="70" rx="8"/><rect x="890" y="290" width="270" height="70" rx="8"/></g>
+  <g fill="#1f1f1d" text-anchor="middle" font-weight="600"><text x="1025" y="120">Sổ tay học viên</text><text x="1025" y="320">Báo cáo giáo viên</text></g>
+  <g fill="#5f5e58" text-anchor="middle" font-size="12"><text x="1025" y="140">demo/index.html</text><text x="1025" y="340">teacher_analytics.py</text></g>
+  <g stroke="#8a8980" stroke-width="1.4" fill="none" marker-end="url(#a)">
+    <path d="M180,60 L238,48"/><path d="M355,70 L355,90"/><path d="M180,218 L238,218"/><path d="M180,230 L238,290"/><path d="M180,368 L238,368"/>
+    <path d="M470,117 L548,74"/><path d="M470,210 L548,82"/><path d="M470,224 L548,226"/><path d="M470,236 L548,296"/><path d="M470,368 L548,368"/>
+    <path d="M675,196 L675,176"/><path d="M800,66 L888,112"/><path d="M800,146 L888,128"/><path d="M800,298 L888,150"/><path d="M800,368 L888,336"/><path d="M800,160 L888,310"/>
+  </g>
+  <path d="M470,45 H490 V212 H472" stroke="#2a78d6" stroke-width="1.6" stroke-dasharray="6 4" fill="none" marker-end="url(#a)"/>
+  <path d="M675,96 L675,116" stroke="#2a78d6" stroke-width="2" fill="none" marker-end="url(#a)"/>
+  <g font-weight="700" font-size="15" fill="#fff">
+    <circle cx="502" cy="130" r="12" fill="#2a78d6"/><text x="502" y="135" text-anchor="middle">1</text>
+    <circle cx="522" cy="96" r="12" fill="#2a78d6"/><text x="522" y="101" text-anchor="middle">2</text>
+    <circle cx="700" cy="106" r="12" fill="#2a78d6"/><text x="700" y="111" text-anchor="middle">3</text>
+    <circle cx="845" cy="232" r="12" fill="#2a78d6"/><text x="845" y="237" text-anchor="middle">4</text>
+  </g>
+</svg>
 
----
+<p class="note">① chữ OCR của màn hình đang chiếu làm gợi ý cho ASR (thử nghiệm) · ② thời điểm màn hình + lời giảng → căn chỉnh · ③ lời giảng trong đoạn chữa câu → liên kết chủ điểm · ④ lỗi trong chat → câu hỏi → chủ điểm yếu trong báo cáo</p>
 
-<!-- Slide 05 -->
-<div class="speaker-badge sp2">👤 THÀNH VIÊN 2 · MULTIMODAL ALIGNMENT (04:30 - 09:00)</div>
-
-# Thách Thức Âm Thanh Đa Ngữ & Whisper ASR
-## Hiện tượng chuyển mã ngôn ngữ (Code-Switching) và giải pháp nhận dạng
-
-<div class="grid-2">
-<div class="box">
-
-### 🗣️ Code-Switching Trong Lớp Ngoại Ngữ
-* Giáo viên liên tục xen kẽ tiếng Việt và tiếng Anh:
-  > *"Câu 3 này dùng participle -ing vì mang nghĩa chủ động, còn cảm xúc là interested..."*
-* ASR thông thường dễ nhầm lẫn bảng chữ cái, nuốt dấu thanh hoặc biến dạng thuật ngữ.
-* Nguy cơ Word Error Rate (WER) tăng vọt.
-</div>
-
-<div class="box">
-
-### ⚡ Giải Pháp Whisper `large-v3-turbo`
-* Mô hình Transformer 680k giờ đa ngữ chạy local.
-* Cross-attention weights cho timestamp từng từ.
-* **Heuristic mật độ dấu thanh tiếng Việt:**
-  $$\text{Density}_{\text{vi}}(W) = \frac{\sum_{w} \mathbb{I}(w \text{ có dấu})}{|W|}$$
-  (Density > 0.3: `vi`, Density == 0: `en`, còn lại: `mixed`).
-</div>
-</div>
+<!--
+TV1: Ba luồng vào: video, lời giảng, chat. Điểm đáng chú ý là bốn chỗ các luồng kết hợp với nhau, đánh số 1 đến 4. Ví dụ số 3: lời cô giảng khi chữa một câu giúp xác định câu đó thuộc chủ điểm nào. Em mời TV2.
+-->
 
 ---
 
-<!-- Slide 06 -->
-<div class="speaker-badge sp2">👤 THÀNH VIÊN 2 · CONTEXTUAL PROMPTING</div>
+<div class="who tv1">TV1</div>
 
-# Giảm Ảo Giác ASR Bằng Bơm Ngữ Cảnh OCR
-## Kỹ thuật Screen Hints Contextual Prompting định hướng kênh giải mã
+# Nghiên cứu liên quan
 
-<div class="grid-2">
-<div class="box">
+| Công trình | Ý chính | EduSync dùng / khác gì |
+|---|---|---|
+| Anderer et al. 2024, MaViLS (arXiv 2409.16765) | Căn chỉnh video ↔ slide bằng ASR + OCR + đặc trưng hình ảnh, quy hoạch động | Không có slide gốc; căn chỉnh tới **từng câu hỏi** |
+| Radford et al., ICML 2023 (Whisper) | ASR đa ngữ quy mô lớn, điều kiện hóa bằng văn bản đi trước | ASR lời giảng trộn mã; thử gợi ý từ màn hình |
+| Peng et al., Interspeech 2023 | Dùng prompt để điều khiển Whisper zero-shot | Cơ sở cho gợi ý theo ngữ cảnh màn hình |
+| Reimers & Gurevych 2019; Wang et al. 2022/2024 (E5, mE5) | Bi-encoder câu; embedding đa ngữ | Liên kết câu hỏi tiếng Anh ↔ chủ điểm giảng bằng tiếng Việt |
+| Bryant, Felice & Briscoe, ACL 2017 (ERRANT) | Tự động gán loại lỗi cho cặp câu gốc / câu sửa | Gán loại lỗi; nhãn kiểm chứng bằng errant 3.0.2 |
+| CEFR-J Wordlist; English Vocabulary Profile | Từ vựng phân bậc A1–C2 | Từ điển 8.845 mục (CEFR-J + Octanove) |
 
-### 🔄 Quy Trình Screen Hints Prompting
-1. **Bắt Keyframe video:** Qua thuật toán Pixel Diff.
-2. **Apple Vision OCR:** Trích xuất văn bản trên slide.
-3. **Lọc từ vựng:** Khử stopwords và ký tự rác.
-4. **Bơm vào Whisper `initial_prompt`:**
-   ```python
-   prompt = "Từ vựng màn hình: " + ", ".join(hints)
-   model.transcribe(audio, initial_prompt=prompt)
-   ```
-</div>
-
-<div class="box">
-
-### 📊 Hiệu Quả Thực Nghiệm
-* **WER thuật ngữ giảm từ 18.4% $\to$ 9.2%**
-* **Triệt tiêu ảo giác (Hallucination):** Bộ giải mã ưu tiên token xuất hiện trên slide.
-* **Bảo vệ từ đồng âm xuyên ngôn ngữ:** Kích hoạt danh mục `VI_HOMOPHONES` (loại bỏ nhầm lẫn *"an", "may", "can"*).
-</div>
-</div>
+<!--
+TV1: Gần nhất với nhóm là MaViLS: căn chỉnh video với slide bằng quy hoạch động. Khác biệt của nhóm là không có slide gốc và cần căn chỉnh tới từng câu hỏi trắc nghiệm.
+-->
 
 ---
 
-<!-- Slide 07 -->
-<div class="speaker-badge sp2">👤 THÀNH VIÊN 2 · MONOTONIC DP ALIGNMENT</div>
+<div class="who tv2">TV2 · 04:30</div>
 
-# Trích Xuất Đề Bài & Thuật Toán Monotonic DP
-## Ràng buộc quy hoạch động chống đảo ngược thời gian và lọc khẩu lệnh nhiễu
+# Nhận dạng lời giảng trộn mã Việt – Anh
 
-<div class="grid-2">
-<div class="box">
+<div class="cols">
+<div>
 
-### ⚠️ Thách Thức Khi Căn Chỉnh
-* Giáo viên thường nói câu gây nhiễu: *"Hôm trước câu 1 ta làm rồi..."* hoặc *"Xem lại câu 2 đi"* khi đang chữa câu 5.
-* Lời giảng trễ 2–5s so với chuyển slide.
-* Nhầm lẫn *"page 1"*, *"text 1"* thành *"câu 1"*.
+### Cách làm
+- `faster-whisper large-v3-turbo`, chế độ đa ngữ, chạy trên máy cá nhân
+- Gán ngôn ngữ cho từng đoạn theo **mật độ chữ có dấu**: > 0,3 → `vi`; 0 → `en`; còn lại → `mixed`
+- Thử nghiệm: lấy từ tiếng Anh trên **màn hình đang chiếu** (OCR) làm `hotwords` cho Whisper ①
+
+### Trạng thái đánh giá
+- **Chưa có WER**: 5 clip tham chiếu (10 phút) vẫn là bản nháp, chưa sửa tay
+- Pipeline hiện dùng bản **không gợi ý**
+
+</div>
+<div>
+
+Chỉ số gián tiếp (Unit 4, toàn bài)
+
+| Cấu hình | Lặp liên tiếp | Từ trên màn hình được nói ra |
+|---|---|---|
+| Không gợi ý | 6 | 47% |
+| Cắt theo màn hình (đối chứng) | 3 | 48% |
+| Gợi ý = từ | 20 | 52% |
+| Gợi ý = dòng | 27 | 52% |
+
+<p class="note">Gợi ý tăng proxy khoảng 4 điểm nhưng làm tăng số đoạn lặp (dấu hiệu ảo giác), và proxy có thể tăng chỉ vì Whisper chép lại từ gợi ý. Cần WER thật mới kết luận được.</p>
+
+</div>
 </div>
 
-<div class="box">
-
-### 📐 Thuật Toán Monotonic DP
-* **Regex Negative Lookbehind:**
-  `(?<!page\s)(?<!text\s)\b(?:number|câu)\s*(\d+)\b`
-* **Ràng buộc toán học đơn điệu:**
-  $$\forall k < j \implies t_{\text{start}}^{(k)} < t_{\text{start}}^{(j)}$$
-* **Cửa sổ tìm kiếm động:** 120s buffer giữa các câu hỏi liên tiếp.
-</div>
-</div>
-
-$$\text{Score}(k, t) = 25.0 \cdot \text{Trigger}(k, t) + 1.5 \cdot \text{Overlap}(k, t) - \text{Penalty}(t \le t_{k-1})$$
+<!--
+TV2: Bọn em chưa có WER, vì bản chép tham chiếu chưa sửa tay xong. Chỉ số gián tiếp cho thấy gợi ý từ màn hình có tác dụng hai chiều: nhận được nhiều từ trên màn hình hơn, nhưng số đoạn lặp tăng. Vì vậy pipeline chưa bật gợi ý.
+-->
 
 ---
 
-<!-- Slide 08 -->
-<div class="speaker-badge sp2">👤 THÀNH VIÊN 2 · KẾT QUẢ ĐỊNH LƯỢNG</div>
+<div class="who tv2">TV2</div>
 
-# Kết Quả Căn Chỉnh Bài Tập (34/34 Câu Hỏi)
-## Đạt Recall tuyệt đối 100% trên bài giảng TOEIC Starter Unit 4 (63 phút video)
+# Căn chỉnh câu hỏi ↔ lời giảng
+## Quy hoạch động đơn điệu với khẩu lệnh có xác minh ngữ cảnh
 
-| Chỉ Số Đánh Giá | Kết Quả Đạt Được | Ý Nghĩa Thực Tiễn |
-| :--- | :---: | :--- |
-| **Recall Căn Chỉnh** | **34 / 34 câu (100%)** | Tìm ra chính xác toàn bộ câu hỏi trên slide |
-| **Precision** | **97.1%** | Triệt tiêu hoàn toàn mốc thời gian giả |
-| **Sai số biên thời gian** | **$\Delta t \le 1.8$ giây** | Tua video đón đầu trước lúc cô bắt đầu đọc đề |
-| **Dữ liệu rỗng** | **0 empty stems** | 100% câu hỏi có đầy đủ đề bài và lựa chọn A/B/C/D |
+<div class="cols">
+<div>
 
-```json
-{
-  "id": "q1", "number": 1, "stem": "The seminar was very [interest/interesting/interested]...",
-  "start": 181.42, "end": 245.10, "trigger_text": "bây giờ cô cùng các em chữa câu số 1 nhé"
-}
-```
-👉 *Chuyển giao: Kính mời Thành viên 3 trình bày Kỹ thuật NLP cốt lõi & Nhúng Vector.*
+<div class="formula">s(k, j) = 25·trigger + 2·|từ chung| + 3·đang_chiếu</div>
+
+- **trigger**: đoạn $j$ nói "câu (số/thứ) N", "câu hỏi số N", "câu thứ tư"; loại "text / page / part / trang N"
+- **Xác minh**: nếu 60 s sau đó không có từ nào của câu hỏi thì trigger chỉ được **2** điểm thay vì 25
+
+<div class="formula">D[k][j] = s(k,j) + max(0, max D[k′][j′]) với k′ &lt; k, t(j′) &lt; t(j)</div>
+
+- Tối ưu toàn cục, cho phép bỏ qua câu; sau đó **lùi mốc** về các đoạn ngay trước có chung từ với câu hỏi
+
+</div>
+<div class="box">
+
+### Tình huống thật ở Unit 4
+Màn hình chiếu **Exercise B**, nhưng cô chữa **Exercise A trong sách** trước:
+
+> "…chúng ta sẽ bước vào làm câu số 1." (03:09): nói về Exercise A, không có từ nào của câu B1
+
+Bản cũ gán câu B1 vào 03:09 (lệch 216 s). Bản mới bỏ qua khẩu lệnh không được xác minh này và chọn 07:05, trong đoạn cô chữa câu B1 (lệch 21 s so với nhãn 06:45).
+
+</div>
+</div>
+
+<!--
+TV2: Điểm của mỗi đoạn gồm khẩu lệnh "câu N", số từ trùng với câu hỏi, và việc màn hình câu đó có đang chiếu không. Thay đổi quan trọng nhất là xác minh khẩu lệnh: "câu số 1" chỉ được tính đủ điểm nếu ngay sau đó cô nói về đúng câu này. Bộ giải mã là DP đơn điệu tối ưu toàn cục.
+-->
 
 ---
 
-<!-- Slide 09 -->
-<div class="speaker-badge sp3">👤 THÀNH VIÊN 3 · CORE NLP & LEXICON (09:00 - 14:00)</div>
+<div class="who tv2">TV2</div>
 
-# Phân Loại Từ Vựng CEFR & Audio Clip 1.5s
-## Chuẩn hóa hình thái Lemmatization và trích xuất ngân hàng từ vựng giọng thật
+# Kết quả căn chỉnh
 
-<div class="grid-2">
-<div class="box">
+<div class="cols-62">
+<div>
 
-### 📚 Quy Trình Phân Bậc Từ Vựng
-* **Lemmatization 2 lớp:**
-  * Lớp quy tắc: `-s`, `-es`, `-ed`, `-ing`.
-  * Lớp bất quy tắc: `wrote/written` $\to$ `write`.
-* **Từ điển chuẩn CEFR-J:** 8.845 mục từ (A1 đến C2).
-* **Bilingual IE:** Trích nghĩa tiếng Việt trực tiếp từ lời giảng (*"TargetWord + là/nghĩa là + Meaning"*).
+![w:640](figures/alignment_accuracy.png)
+
 </div>
+<div>
 
-<div class="box">
+### Trên bài kiểm tra độc lập (U5)
+- Đúng trong ±10 s: **57% → 80%**
+- Sai số trung bình: **28,5 s → 8,1 s**
+- Đảo thứ tự câu: **2 → 0**
 
-### 🔊 Cắt Audio Clip 1.5s Giọng Thật
-* Không dùng robot Text-to-Speech vô hồn.
-* Tự động định vị timestamp và cắt 1.5s audio bằng `ffmpeg` đúng ngữ điệu giáo viên.
-* **79 Từ Vựng Trọng Tâm Trích Xuất:**
-  * A1: 28 | A2: 19 | B1: 18 | B2: 12 | C1: 2
-  * Kèm 79 file audio `.mp3` chất lượng cao.
+### Ghi chú trung thực
+- Trên cả hai bài, **DP chọn giống greedy**; phần cải thiện đến từ cách tính điểm, bước lùi mốc và cách xử lý câu không khớp
+- Lỗi còn lại chủ yếu ở chỗ trống trong đoạn văn (Part 6/7): cô đọc liền cả đoạn nên khó xác định lúc bắt đầu
+- Chuẩn so sánh: chỉ dùng thời điểm màn hình đạt 49% (±10 s)
+
 </div>
 </div>
+
+<!--
+TV2: Thuật toán được chỉnh trên Unit 4 và chỉ chạy một lần trên Unit 5. Trên Unit 5, độ chính xác trong 10 giây tăng từ 57 lên 80 phần trăm. Em nói rõ: DP và greedy cho cùng kết quả trên hai bài này. Em mời TV3.
+-->
 
 ---
 
-<!-- Slide 10 -->
-<div class="speaker-badge sp3">👤 THÀNH VIÊN 3 · DENSE EMBEDDINGS</div>
+<div class="who tv3">TV3 · 09:00</div>
 
-# Vấn Đề Của Keyword Matching & Dense Embeddings
-## Sự bất lực của so khớp từ khóa và bước nhảy vọt sang không gian vector
+# Liên kết câu hỏi ↔ chủ điểm ngữ pháp
 
-<div class="grid-2">
-<div class="box" style="border-top: 3px solid #ef4444;">
+<div class="cols">
+<div>
 
-### ❌ Sự Thất Bại Của Keyword / TF-IDF
-* **Câu hỏi số 1:**
-  > *"The seminar was very [interest / interesting / interested]..."*
-* **Lý thuyết bài giảng:**
-  > *"Participles as Adjectives (Phân từ làm tính từ)"*
-* **Hiện tượng Vocabulary Mismatch:** Không có bất kỳ từ nào trùng nhau!
-* BM25 / TF-IDF trả về $\text{Score} = 0$.
+### Vấn đề
+"The movie was very ___ (A) move (B) moving (C) moved" ↔ *Participles as Adjectives*: không có từ chung.
+
+### Bản cũ (v1)
+- `all-MiniLM-L6-v2`: chỉ hiểu tiếng Anh, trong khi phần giải thích chủ điểm bằng tiếng Việt
+- Ghép thêm **từ khóa viết tay**, trong đó có cả từ đáp án (`central`, `luxury`, `shined`…) → **rò rỉ nhãn**
+- Bỏ từ khóa: 76,5% → **61,8%**
+
+</div>
+<div class="box">
+
+### Bản hiện tại
+<div class="formula">score(q, c) = ½ [cos(E(câu hỏi), E(c)) + cos(E(lời giảng khi chữa q), E(c))]</div>
+
+- E = `multilingual-e5-small` (đa ngữ, 384 chiều)
+- Lời giảng ③: *"chọn động từ thêm ing hay thêm ed để làm tính từ"*, *"công thức nhờ vả"*
+- Gắn nếu score ≥ 0,835, ngược lại là "không gắn" (câu từ vựng / đọc hiểu)
+- Không dùng từ khóa viết tay; dự phòng bằng TF-IDF
+
+</div>
 </div>
 
-<div class="box" style="border-top: 3px solid #a855f7;">
-
-### 💡 Giải Pháp: Dense Semantic Embeddings
-* Ánh xạ câu hỏi và lý thuyết vào cùng một **không gian vector liên tục $\mathbb{R}^d$**.
-* Mô hình Transformer hiểu được quan hệ ngữ nghĩa tiềm ẩn:
-  `interesting, bored, excited` $\sim$ `participle, adjective`.
-* Khoảng cách hình học phản ánh mức độ tương đồng khái niệm trừu tượng.
-</div>
-</div>
+<!--
+TV3: Bản cũ đạt điểm nhờ từ khóa viết tay có chứa cả đáp án; bỏ đi thì tụt xuống 62 phần trăm. Bản mới dùng mô hình đa ngữ, và quan trọng là dùng lời cô giảng trong lúc chữa câu đó — đây chính là tín hiệu đa phương thức.
+-->
 
 ---
 
-<!-- Slide 11 -->
-<div class="speaker-badge sp3">👤 THÀNH VIÊN 3 · COSINE SIMILARITY</div>
+<div class="who tv3">TV3</div>
 
-# Không Gian Vector `all-MiniLM-L6-v2`
-## Cơ sở toán học, phân ngưỡng tin cậy và tốc độ thực thi trên Apple Silicon
+# Kết quả liên kết chủ điểm (Unit 4, 34 câu)
 
-<div class="grid-2">
-<div class="box">
+<div class="cols-62">
+<div>
 
-### 📐 Biểu Diễn Toán Học
-* Vector câu hỏi: $\mathbf{u} \in \mathbb{R}^{384}$
-* Vector chủ điểm lý thuyết: $\mathbf{v}_j \in \mathbb{R}^{384}$
-* **Độ tương đồng Cosine:**
-  $$\text{Sim}(\mathbf{u}, \mathbf{v}_j) = \frac{\mathbf{u} \cdot \mathbf{v}_j}{\|\mathbf{u}\|_2 \|\mathbf{v}_j\|_2}$$
-* Chọn chủ điểm: $\hat{j} = \arg\max_j \text{Sim}(\mathbf{u}, \mathbf{v}_j)$
+![w:620](figures/concept_linking.png)
+
 </div>
+<div>
 
-<div class="box">
+### Đầu ra thực tế trong demo
 
-### ⚡ Phân Ngưỡng & Hiệu Năng
-* **Phân ngưỡng tin cậy (Confidence):**
-  * `HIGH` ($\ge 0.25$): Gán badge tím + liên kết 2 chiều.
-  * `MEDIUM` ($0.15 \le \text{Sim} < 0.25$): Gợi ý xem lại.
-  * `LOW` ($< 0.15$): Từ chối gán nhãn giả.
-* **Tốc độ suy luận:** **4.2ms / câu hỏi** trên Mac Metal GPU, hoàn toàn offline.
+| | v1 | Hiện tại |
+|---|---|---|
+| Độ chính xác | 58,8% | **91,2%** |
+| Badge đúng (precision) | 39,1% | **90,0%** |
+| Câu có chủ điểm được gắn (recall) | 66,7% | **75,0%** |
+| Số badge | 23 | 10 |
+
+<p class="note">22/34 câu là từ vựng / đọc hiểu nên "luôn không gắn" đã đạt 73,5%. Mô hình và ngưỡng được chọn trên chính 34 câu này, và một số ví dụ chủ điểm do Gemini sinh chép gần nguyên câu hỏi, nên kết quả có thể lạc quan; chưa có tập kiểm tra độc lập cho bài toán này.</p>
+
 </div>
 </div>
+
+<!--
+TV3: Cần so với mốc 73,5 phần trăm của cách "luôn không gắn", vì đa số câu là từ vựng hoặc đọc hiểu. Bản cũ chỉ hơn mốc này 3 điểm. Trong demo cũ, 61 phần trăm badge gắn sai; bản mới còn 1 trên 10.
+-->
 
 ---
 
-<!-- Slide 12 -->
-<div class="speaker-badge sp3">👤 THÀNH VIÊN 3 · ERRANT GEC CHAT</div>
+<div class="who tv3">TV3</div>
 
-# Chẩn Đoán Lỗi Ngữ Pháp GEC Từ Zoom Chat
-## Bắt 6 lỗi chuyển di ngôn ngữ (L1 Transfer) kinh điển theo chuẩn ERRANT quốc tế
+# Trích xuất chủ điểm và từ vựng
 
-| Mã Lỗi ERRANT | Câu Chat Học Sinh | Câu Sửa Chuẩn Sư Phạm | Giải Thích Tiếng Việt |
-| :--- | :--- | :--- | :--- |
-| `U:VERB:BE` | *"I am agree with A"* | *"I agree with A"* | 'Agree' là V thường, không đi với 'to be'. |
-| `R:ADJ:PARTICIPLE` | *"I am confusing"* | *"I am confused"* | Miêu tả cảm xúc người phải dùng đuôi **-ed**. |
-| `M:VERB:AUX` | *"Why we use -ing?"* | *"Why do we use -ing?"* | Câu hỏi WH- cần trợ động từ 'do/does'. |
-| `R:VERB:FORM` | *"have it clean"* | *"have it cleaned"* | Causative bị động: `have + O + V3/ed`. |
-| `U:PREP` | *"should to increase"* | *"should increase"* | Sau modal verb 'should' dùng V nguyên thể. |
-| `R:VERB:SVA` | *"it make me cry"* | *"it makes me cry"* | Chủ ngữ ngôi 3 số ít 'it' động từ thêm 's/es'. |
+<div class="cols">
+<div>
 
-🔒 *Bảo mật FERPA/GDPR: Mã hóa tên thật học sinh thành $S_1, S_2, \dots, S_N$.*
+### Chủ điểm: Gemini (JSON mode) + neo mốc
+Gemini chỉ thấy khoảng 30 đoạn lấy mẫu nên mốc thời gian nó trả về là đoán. Neo lại vào cửa sổ lời giảng giống chủ điểm nhất (e5):
+
+| Chủ điểm | Nhãn | v1 | Hiện tại |
+|---|---|---|---|
+| Participles | 00:24 | 15:06 | **00:44** |
+| Causative | 15:46 | 17:14 | **15:38** |
+| Passive / require that | 13:16 | 55:02 | **13:18** |
+| Noun modifiers | 07:20 | 08:13 | **07:35** |
+
+Sai số trung bình: **882,5 s → 11,2 s**. Khi không có mạng: dùng bảng chủ điểm TOEIC và tìm từ khóa trong lời giảng.
+
+</div>
+<div>
+
+### Từ vựng (`vocab.py`)
+- Lemma 2 lớp (bảng bất quy tắc + bỏ hậu tố)
+- Tra **CEFR-J + Octanove** (8.845 mục)
+- Lọc từ tiếng Việt trùng mặt chữ tiếng Anh: *hay, con, cho, ra, nam, sau…*
+- Lấy nghĩa từ lời giảng: "X là / nghĩa là …"
+
+**Unit 4:** 80 từ (A1 26 · A2 26 · B1 18 · B2 9 · C1 1); 52 từ có nghĩa tiếng Việt; 79 clip audio 0,7–2,2 s giọng cô
+
+<p class="note">Độ đúng của nghĩa và audio chưa được đánh giá.</p>
+
+</div>
+</div>
+
+<!--
+TV3: Mốc "Lý thuyết" trước đây là do Gemini đoán và lệch gần 42 phút với phần bị động. Neo lại bằng embedding giảm sai số trung bình còn 11 giây.
+-->
 
 ---
 
-<!-- Slide 13 -->
-<div class="speaker-badge sp3">👤 THÀNH VIÊN 3 · HYBRID NEURAL IE</div>
+<div class="who tv3">TV3</div>
 
-# Trích Xuất Thông Tin Cấu Trúc (Bilingual IE)
-## Kết hợp Gemini 3.5 Flash-Lite Structured Outputs và bộ luật dự phòng Fallback
+# Phát hiện lỗi người học trong chat
+## Luật cho 6 mẫu lỗi chuyển di từ tiếng Việt; nhãn loại lỗi kiểm chứng bằng errant 3.0.2
 
-<div class="grid-2">
-<div class="box">
+| Nhóm | Ví dụ → sửa | Loại ERRANT | Recall |
+|---|---|---|---|
+| Thừa *be* | I am agree → I agree | U:VERB:TENSE | 50% |
+| -ing / -ed | the movie was moved → moving | R:VERB:FORM | 88% |
+| Nhờ vả | have my car repair → repaired | R:VERB:FORM | 75% |
+| Modal + to | should to increase → should increase | U:VERB:FORM | 100% |
+| Hòa hợp chủ vị | it make → it makes | R:VERB:SVA | 63% |
+| Thiếu *do* | Why we use…? → Why do we use…? | M:VERB:TENSE | 43% |
 
-### 🤖 Primary Path: Gemini Flash-Lite
-* Sử dụng Prompt với JSON Schema nghiêm ngặt.
-* Bóc tách 4 chủ điểm ngữ pháp trọng tâm:
-  * Tiêu đề & Công thức toán học ngữ pháp.
-  * Giải thích cơ chế bằng tiếng Việt.
-  * Cặp ví dụ minh họa và mốc video (timestamp).
-  * Mẹo làm bài thi TOEIC (Exam Tips).
+<div class="cols">
+<div>
+
+**Tập độc lập 70 câu** (viết riêng, không xem luật): v1 P 90% / R 21% → hiện tại **P 100% / R 72,7% / F1 84,2%**
+
+</div>
+<div class="note">
+
+Không phải mô hình GEC tổng quát: bỏ qua mọi lỗi ngoài 6 nhóm. Tên học viên được ẩn danh thành S1…SN. Trước khi chốt, tập 70 câu được xem một lần để sửa 3 lỗi cài đặt.
+
+</div>
 </div>
 
-<div class="box">
-
-### 🛡️ Fallback Path: Rule-based Regex
-* Tự động kích hoạt khi offline hoặc hết quota API.
-* Quét biểu thức chính quy trích xuất bộ khung lý thuyết cơ bản.
-* **Đảm bảo tính sẵn sàng 100%:** Phần mềm không bao giờ bị gián đoạn hay crash.
-</div>
-</div>
-
-👉 *Chuyển giao: Kính mời Thành viên 4 trình bày Báo cáo sư phạm, Live Demo và QA/QC.*
+<!--
+TV3: Bản cũ khớp nguyên văn từng câu chat nên tỉ lệ 6/6 không có ý nghĩa. Bản mới dùng luật tổng quát và được đo trên 70 câu viết độc lập: precision 100 phần trăm, recall 73 phần trăm. Nhãn ERRANT chạy bằng thư viện chính thức. Em mời TV4.
+-->
 
 ---
 
-<!-- Slide 14 -->
-<div class="speaker-badge sp4">👤 THÀNH VIÊN 4 · TEACHER DASHBOARD (14:00 - 20:00)</div>
+<div class="who tv4">TV4 · 14:30</div>
 
-# Báo Cáo Sư Phạm Đa Chiều (Teacher Dashboard)
-## Hội tụ toàn bộ dữ liệu NLP thành Bảng điều khiển trợ lý sư phạm thông minh
+# Báo cáo cho giáo viên
 
-<div class="grid-2">
-<div class="box">
+<div class="cols">
+<div>
 
-### ⏱️ 1. Thời Lượng Nói (TTT vs STT)
-* **TTT:** 100% (Giáo viên nói qua mic)
-* **STT:** 0% (Học sinh chat qua Zoom)
-* *Khuyến nghị:* Gọi học sinh bật mic phát biểu ở các bài đọc Part 6 dài.
+![w:570](figures/demo_analytics.png)
 
-### 📊 2. Bản Đồ Lỗi Sai (Error Heatmap)
-* `R:ADJ:PARTICIPLE`: **28.6%** (Sai nhiều nhất)
-* `M:VERB:AUX`: **14.3%** | `U:VERB:BE`: **14.3%**
 </div>
+<div>
 
-<div class="box">
+- **Phân bố lỗi** trong chat theo 6 nhóm
+- **Chủ điểm yếu nhất**: lỗi trong chat → câu hỏi (theo `exercise_id`) → chủ điểm. Unit 4: *Participles* (2 tin nhắn, câu 4 và 6)
+- **Gợi ý buổi sau**: câu mẫu điền từ dữ liệu (không dùng LLM), mỗi dòng nêu căn cứ
+- **TTT / STT: "chưa đo"**, vì bản ghi chỉ có một người nói. Cần ghi âm tách kênh từng người (Zoom) hoặc dùng pyannote
 
-### ⚠️ 3. Điểm Nghẽn Lớp Học (Weakest Concept)
-* Chủ điểm: **Tính từ phân từ bổ nghĩa danh từ** (4 câu làm sai tập trung ở câu 1, 2, 7).
+<p class="note">Bản cũ ghi TTT 100% / STT 0% và kế hoạch viết sẵn; demo cũ còn hiển thị cứng "tỷ lệ căn chỉnh 95,6%". Cả ba đã được bỏ.</p>
 
-### 📋 4. Action Plan 3 Bước Buổi Sau
-1. Khởi động 5 phút bằng 3 câu trắc nghiệm phân biệt đuôi `-ing` và `-ed`.
-2. Nhắc lại công thức nhờ vả `have/get + O + V3/ed`.
-3. Dành 3–5 phút cho học sinh tự tìm từ khóa Part 6.
 </div>
 </div>
+
+<!--
+TV4: Báo cáo giờ chỉ hiển thị những gì tính được từ dữ liệu. Với bản ghi một người nói, hệ thống ghi rõ là chưa đo được tỉ lệ nói, thay vì báo 100/0.
+-->
 
 ---
 
-<!-- Slide 15 -->
-<div class="speaker-badge sp4">👤 THÀNH VIÊN 4 · LIVE DEMO SHOWCASE</div>
+<div class="who tv4">TV4</div>
 
-# Trình Diễn Sản Phẩm Thực Tế (Live Web Demo)
-## Kịch bản 5 bước thao tác trực tiếp tại http://localhost:8000/
+# Demo
 
-<div class="grid-2">
-<div class="box">
+<div class="cols-62">
+<div>
 
-* **Bước 1 — Căn chỉnh Video:** Bấm câu hỏi trên tab *Exercises* $\to$ video tua mượt mà tới đúng giây chữa bài.
-* **Bước 2 — Liên kết Khái niệm:** Bấm `📖 Lý thuyết (08:13)` $\to$ video nhảy về phút thứ 8 lúc cô giảng công thức, mở tab *Grammar*.
-* **Bước 3 — Audio Từ vựng 1.5s:** Vào tab *Vocabulary*, bấm loa 🔊 $\to$ nghe phát âm giọng thật của giáo viên.
+![w:640](figures/demo_exercises_card.png)
+
+<p class="note">Bên trái của giao diện là video + transcript chạy theo; bên phải là danh sách câu hỏi với badge chủ điểm.</p>
+
+</div>
+<div>
+
+1. Tab **Exercises**: bấm Question 4 (*The movie was very…*) → video tua đến 15:05, lúc cô bắt đầu chữa
+2. Badge *Participles* → **Lý thuyết (00:44)**: tua về đoạn giảng đầu giờ
+3. Tab **Vocab**: lọc theo CEFR, nghe audio
+4. Tab **Chat & GEC**: lỗi, câu sửa, giải thích tiếng Việt
+5. Tab **Analytics** (mở thẳng bằng `?tab=tab-stats`)
+
+<p class="note">Chạy: <code>python demo/prepare.py --lesson lessons/ece-toeic-starter-u4</code> rồi <code>cd demo && python -m RangeHTTPServer 8000</code>. Có video quay sẵn để dự phòng.</p>
+
+</div>
 </div>
 
-<div class="box">
-
-* **Bước 4 — Sửa lỗi Chat GEC:** Vào tab *Chat & Feedback* $\to$ xem câu chat đã ẩn danh, mã lỗi ERRANT và câu sửa tiếng Việt.
-* **Bước 5 — Dashboard & Omnibox:** Mở tab *Analytics* xem TTT/STT; bấm `Cmd+K` gõ *"participle"* tra cứu tức thì toàn bài.
-</div>
-</div>
-
-🔗 **Link Web Demo:** [http://localhost:8000/](http://localhost:8000/) *(Độ trễ < 5ms trên trình duyệt)*
+<!--
+TV4: (Demo trực tiếp khoảng 2 phút.) Question 4 "The movie was very…": bấm vào, video tua đến 15:05; badge Participles tua về 00:44. Sau đó vào tab Vocab, Chat & GEC và Analytics.
+-->
 
 ---
 
-<!-- Slide 16 -->
-<div class="speaker-badge sp4">👤 THÀNH VIÊN 4 · QA/QC PLAN</div>
+<div class="who tv4">TV4</div>
 
-# Kế Hoạch QA/QC & Kết Quả Kiểm Thử (45/45 Tests)
-## Kiểm soát chất lượng toàn diện theo mô hình Test-Driven Development (TDD)
+# Đánh giá tái lập được
 
-<div class="grid-2">
+<div class="cols">
+<div>
+
+### Một lệnh tạo lại mọi số liệu
+<div class="formula">python eval/run_all.py</div>
+
+- Baseline v1 chạy lại từ commit `73d9a62`
+- Căn chỉnh: chỉnh trên U4, kiểm tra trên U5
+- Hồi quy CS224N: 9/10 mốc chuyển slide, sai số TB 0,6 s
+- `pytest`: **71/71** test; test không còn ghi vào dữ liệu bài học
+
+</div>
+<div>
+
+### Nhãn chuẩn (đều là bản nháp)
+
+| Bộ nhãn | Quy mô |
+|---|---|
+| Mốc chữa câu U4 / U5 | 32 / 35 câu |
+| Mốc lý thuyết U4 | 4 chủ điểm |
+| Chủ điểm của câu hỏi U4 | 34 câu |
+| Câu kiểu chat (độc lập) | 70 câu (54 có lỗi, 16 đúng) |
+| Bản chép ASR | 5 × 2 phút, **chưa sửa** |
+
+<p class="note">Nhãn do AI gán, không xem output hệ thống; nhóm đang kiểm tra lại với video trước khi bảo vệ.</p>
+
+</div>
+</div>
+
+<!--
+TV4: Mọi con số trong bài đều tái tạo được bằng một lệnh, baseline được chạy lại từ commit cũ. Nhãn chuẩn hiện là bản nháp; nhóm đang đối chiếu với video.
+-->
+
+---
+
+<div class="who tv4">TV4</div>
+
+# Hạn chế và hướng phát triển
+
+<div class="cols">
 <div class="box">
 
-### 🧪 10 Bộ Unit Tests Bao Phủ Toàn Bộ
-* `test_wer.py` (5 tests): Khoảng cách Levenshtein
-* `test_text_lang.py` (3 tests): Nhận diện dấu thanh
-* `test_screen_hints.py` (4 tests): Lọc stopwords OCR
-* `test_exercises.py` (4 tests): Monotonic DP
-* `test_vocab.py` (8 tests): CEFR & Lemmatization
-* `test_feedback.py` (10 tests): FERPA & ERRANT
-* `test_neural_ie.py` (4 tests): Schema & Fallback
-* `test_concept_link.py` (2 tests): Dense Embeddings
-* `test_teacher_analytics.py` (2 tests): TTT & Action Plan
-* `test_diarize.py` (3 tests): Phân vai Teacher/Student
+### Hạn chế
+- Dữ liệu nhỏ: 2 bài có nhãn, 1 giáo viên, 1 người nói
+- Nhãn chuẩn do AI gán, chưa được người kiểm tra hết
+- Chat là dữ liệu mô phỏng
+- Chưa đo WER; gợi ý từ màn hình chưa chứng minh được hiệu quả
+- Ngưỡng liên kết chủ điểm chọn trên tập phát triển
+- Phát hiện lỗi dựa trên luật, chỉ 6 mẫu
+
+</div>
+<div class="box">
+
+### Hướng phát triển
+- Sửa 5 clip ASR → WER thật cho 3 cấu hình
+- Thu bản ghi lớp thật: tách kênh từng người + chat thật → đo TTT/STT
+- Tập kiểm tra độc lập cho liên kết chủ điểm (U5)
+- Phát hiện lỗi bằng mô hình sửa câu (seq2seq / LLM) + errant để gán loại
+- Mở rộng sang bài giảng IELTS
+
+</div>
 </div>
 
-<div class="box" style="text-align: center; justify-content: center;">
-
-### 🎯 TỔNG KẾT KIỂM THỬ
-# 45 / 45
-### 100% UNIT TESTS PASSED
-* Thời gian chạy: **7.5 giây**
-* Tự động hóa hoàn toàn với `pytest -v`
-* Nhánh Git: `edusync-v2`
-</div>
-</div>
+<!--
+TV4: Nhóm nêu rõ các giới hạn. Việc đầu tiên là sửa tay 5 clip để có WER thật, và thu bản ghi lớp học thật.
+-->
 
 ---
 
-<!-- Slide 17 -->
-<div class="speaker-badge sp4">👤 THÀNH VIÊN 4 · ĐÁNH GIÁ & PHÁT TRIỂN</div>
+<div class="who tv4">TV4</div>
 
-# Đóng Góp Học Thuật, Hạn Chế & Hướng Phát Triển
-## Nhìn nhận khách quan về đồ án và lộ trình mở rộng quy mô trong tương lai
+# Kết luận
 
-<div class="grid-2">
-<div class="box" style="border-top: 3px solid #10b981;">
+<div class="cols">
+<div>
 
-### 🌟 Đóng Góp Nổi Bật
-* Hiện thực hóa mô hình Multimodal Learning âm thanh + thị giác + văn bản.
-* Đưa nghiên cứu NLP lý thuyết (Dense Embeddings, ERRANT) giải quyết trực tiếp nỗi đau giáo dục.
-* Xây dựng bộ tài liệu chuẩn mực IEEE/ACM trong thư mục `docs/` (8 chuyên đề).
+1. **Căn chỉnh câu hỏi ↔ lời giảng** với khẩu lệnh có xác minh ngữ cảnh: **80%** câu đúng trong ±10 s trên bài kiểm tra độc lập (v1: 57%)
+2. **Lời giảng làm tín hiệu liên kết chủ điểm** (e5 đa ngữ): **91,2%** trên 34 câu (v1: 58,8%), không dùng từ khóa viết tay
+3. **Đánh giá tái lập được**: nhãn, script, baseline; số liệu chưa đo được ghi rõ là chưa đo
+
 </div>
+<div class="box">
 
-<div class="box" style="border-top: 3px solid #ef4444;">
+### Tài liệu
+- `docs/10_evaluation_results.md`: toàn bộ số liệu
+- `eval/run_all.py`: tái tạo số liệu
+- `demo/`: sổ tay học viên và báo cáo giáo viên
 
-### ⚠️ Hạn Chế & Hướng Mở Rộng
-* **Hạn chế:** Tối ưu tốt nhất trên Mac Metal; hiện tập trung vào trắc nghiệm TOEIC.
-* **Hướng phát triển:**
-  * Mở rộng sang bài đọc hiểu dài (IELTS Reading Part 7) và kỹ năng Nói (Speaking).
-  * Tích hợp vector database phân tán (Milvus/Qdrant) cho quy mô toàn trường.
-  * Xuất Flashcard Anki kèm audio cắt sẵn.
+<p class="big" style="margin-top:22px">Hỏi – đáp</p>
+
 </div>
 </div>
 
----
-
-<!-- Slide 18 -->
-<div class="speaker-badge sp4">👤 THÀNH VIÊN 4 · TỔNG KẾT & Q&A</div>
-
-# Tổng Kết & Bắt Đầu Phiên Hỏi - Đáp (Q&A)
-## Trân trọng cảm ơn Thầy/Cô Hội đồng và các bạn học viên đã chú ý lắng nghe!
-
-<div class="box" style="text-align: center; margin: 20px 0;">
-
-> *"EduSync không thay thế người thầy, mà trao quyền cho người thầy và học sinh bằng sức mạnh của Trí tuệ Nhân tạo và Xử lý Ngôn ngữ Tự nhiên."*
-
-**Branch Git:** `edusync-v2` &nbsp;|&nbsp; **Docs:** `docs/01` đến `docs/08` &nbsp;|&nbsp; **Demo:** `http://localhost:8000/`
-</div>
-
-### 💬 Cả 4 thành viên xin sẵn sàng lắng nghe ý kiến nhận xét và giải đáp các câu hỏi phản biện từ Hội đồng!
-
+<!--
+TV4: Ba đóng góp chính, mỗi đóng góp đi kèm số liệu đo được. Cảm ơn thầy/cô, nhóm em sẵn sàng trả lời câu hỏi.
+-->

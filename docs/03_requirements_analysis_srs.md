@@ -1,35 +1,37 @@
 # TÀI LIỆU ĐẶC TẢ & PHÂN TÍCH YÊU CẦU DỰ ÁN (SRS)
-## EDUSYNC: NỀN TẢNG ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM BÀI GIẢNG LUYỆN THI TIẾNG ANH (TOEIC & IELTS)
+## EDUSYNC: ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM BÀI GIẢNG LUYỆN THI TIẾNG ANH (thực nghiệm trên TOEIC; IELTS là hướng mở rộng)
 **Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501 - Master of Software Engineering)  
 **Nhánh phát triển:** `edusync-v2`  
-**Phiên bản tài liệu:** v2.1  
-**Ngày phát hành:** Tháng 11/2026  
+**Phiên bản tài liệu:** v2.2  
+**Ngày cập nhật:** 10/11/2026  
+
+> Tài liệu này mô tả **yêu cầu** (mục tiêu). Trạng thái "đạt / chưa đạt / chưa đo" của từng yêu cầu chỉ được ghi theo [docs/10_evaluation_results.md](10_evaluation_results.md), nguồn số liệu duy nhất của dự án.
 
 ---
 
 ## 💡 Điểm nhấn Trình bày với Giảng viên (SRS Overview)
 
-> - **Đối tượng bài toán:** Các lớp học luyện thi chứng chỉ tiếng Anh quốc tế (**TOEIC Listening & Reading**, **IELTS Academic & General**) giảng dạy trực tuyến qua Zoom / Google Meet.
+> - **Đối tượng bài toán:** lớp luyện thi tiếng Anh trực tuyến (Zoom / Google Meet) do giáo viên Việt Nam giảng. Dữ liệu thực nghiệm hiện có: 3 bài **TOEIC** Starter của ECE (YouTube, CC BY, một giáo viên). Chưa có dữ liệu IELTS.
 > - **5 Phân hệ Chức năng (FR1–FR5):**
->   1. **FR1 — Multimodal Alignment:** Nhận dạng giọng nói trộn mã Việt–Anh (Whisper + OCR Screen Hints) và căn chỉnh đơn điệu từng câu hỏi bài tập TOEIC/IELTS (Monotonic DP).
->   2. **FR2 — Semantic Concept Grounding:** Liên kết câu hỏi bài tập với lý thuyết ngữ pháp gốc bằng Dense Semantic Embeddings (`all-MiniLM-L6-v2` + Cosine Similarity).
->   3. **FR3 — CEFR Lexical Profiling & Audio Slicing:** Phân tầng từ vựng A1–C2 (8.845 từ CEFR-J/Octanove) cho mục tiêu band điểm TOEIC/IELTS kèm cắt audio mẫu 1.5s giọng thật giáo viên.
->   4. **FR4 — Learner GEC & Privacy:** Ẩn danh học viên chuẩn FERPA ($S_1 \dots S_N$) và bắt lỗi ngữ pháp L1 Transfer trong khung chat theo chuẩn quốc tế **ERRANT**.
->   5. **FR5 — Teacher Analytics & Omnibox Search:** Đo tỷ lệ nói TTT/STT, bản đồ lỗi sai của lớp, đề xuất kế hoạch 3 bước cho buổi học tiếp theo và tra cứu toàn bài dưới 30ms.
+>   1. **FR1 — Căn chỉnh đa phương thức:** ASR trộn mã Việt–Anh (Whisper) và căn chỉnh đơn điệu từng câu hỏi bài tập với lời giảng (quy hoạch động).
+>   2. **FR2 — Liên kết câu hỏi ↔ chủ điểm ngữ pháp:** bi-encoder đa ngữ `multilingual-e5-small`, kết hợp câu hỏi với lời giảng trong đoạn chữa.
+>   3. **FR3 — Hồ sơ từ vựng CEFR & clip phát âm:** phân bậc A1–C2 (CEFR-J/Octanove, 8.845 mục), nghĩa tiếng Việt khai thác từ lời giảng, clip `.wav` 0,7–2,2 s giọng giáo viên.
+>   4. **FR4 — Lỗi người học & quyền riêng tư:** ẩn danh hoá tên người gửi ($S_1 \dots S_N$) và phát hiện 6 nhóm lỗi chuyển di L1 bằng luật, mỗi lỗi kèm loại lỗi **ERRANT**.
+>   5. **FR5 — Báo cáo giáo viên & tìm kiếm:** TTT/STT (khi có bản ghi nhiều người nói), phân bố lỗi, chủ điểm yếu nhất, gợi ý cho buổi sau bằng câu mẫu; ô tìm kiếm trên toàn bài.
 
 ---
 
 ## 1. Tổng quan Dự án & Tuyên ngôn Giá trị (Project Overview)
 
-### 1.1. Bối cảnh Thực tế trong Đào tạo TOEIC & IELTS Trực tuyến
-Trong các khóa luyện thi TOEIC và IELTS trực tuyến (Zoom / Google Meet / MS Teams), bản ghi hình buổi học (Lecture Recording) dài 60–90 phút là nguồn học liệu quý giá nhất nhưng lại bị đóng băng trong một "hộp đen phi cấu trúc" (*unstructured black-box*):
-- **Đối với Học viên luyện thi TOEIC / IELTS:** Khi muốn ôn lại một câu trắc nghiệm ngữ pháp (TOEIC Part 5/6) hoặc một câu hỏi đọc hiểu (IELTS Reading) bị làm sai, học viên phải mất 15–20 phút kéo thanh trượt video một cách mù mờ (*blind scrubbing*). Hơn nữa, khi làm sai câu hỏi thực hành, học viên không biết câu đó thuộc chủ điểm ngữ pháp nào mà giáo viên đã giảng ở đầu buổi, cũng không có danh sách từ vựng phân theo band điểm (CEFR B1–C2) kèm âm thanh phát âm chuẩn của thầy cô.
-- **Đối với Giáo viên Tiếng Anh:** Kết thúc ca dạy, giáo viên không có số liệu định lượng: không đo được tỷ lệ thời gian nói của giáo viên so với học viên ($\text{TTT}$ vs $\text{STT}$), hàng chục câu trả lời và đặt câu của học viên trong hộp chat bị trôi mất, không thống kê được lỗi ngữ pháp chuyển di ngôn ngữ (*L1 Transfer*) nào đang là điểm yếu lớn nhất của cả lớp để điều chỉnh giáo án buổi sau.
+### 1.1. Bối cảnh Thực tế trong Đào tạo Luyện thi Trực tuyến
+Bản ghi một buổi học luyện thi trực tuyến dài khoảng 60 phút là nguồn ôn tập tốt nhưng khó khai thác:
+- **Đối với học viên:** muốn xem lại đoạn giáo viên chữa một câu trắc nghiệm (TOEIC Part 5/6/7) thì phải tua video thủ công; không biết câu đó thuộc chủ điểm ngữ pháp nào đã giảng trong buổi; không có danh sách từ vựng của bài theo bậc CEFR kèm giọng đọc của giáo viên.
+- **Đối với giáo viên:** sau buổi học không có số liệu về tỉ lệ thời gian nói của giáo viên so với học viên ($\text{TTT}$ vs $\text{STT}$); câu trả lời trong chat trôi mất; không thống kê được lỗi chuyển di L1 nào phổ biến nhất trong lớp.
 
 ### 1.2. Tuyên ngôn Giá trị (Value Proposition)
-**EduSync** là nền tảng NLP đa phương thức chuyển hóa video buổi học luyện thi TOEIC/IELTS thành:
-1. **Sổ tay Học tập Tương tác cho Học viên (Interactive TOEIC/IELTS Study Notebook):** Giảm thời gian ôn bài từ 60 phút xuống 10 phút trọng tâm thông qua tính năng bấm vào câu hỏi/từ vựng/ngữ pháp để tua video tức thì đến đúng giây giáo viên giải thích; tích hợp liên kết 2 chiều giữa Bài tập $\leftrightarrow$ Lý thuyết gốc, thẻ flashcard âm thanh 1.5s và thanh tìm kiếm toàn bài Omnibox.
-2. **Bảng điều khiển Sư phạm Tự động cho Giáo viên (Teacher Pedagogical Dashboard):** Tự động đo lường thời lượng nói (TTT/STT), thống kê bản đồ lỗi ngữ pháp học viên theo chuẩn quốc tế **ERRANT**, chỉ ra chủ điểm ngữ pháp yếu nhất của lớp (*Weakest Concept*) và đề xuất kế hoạch hành động 3 bước cho buổi dạy tiếp theo (*Next-Lesson Action Plan*).
+**EduSync** chuyển video buổi học thành:
+1. **Sổ tay học tập tương tác cho học viên:** bấm vào câu hỏi / từ vựng / chủ điểm để tua video tới đoạn giáo viên giải thích; liên kết hai chiều Bài tập ↔ Lý thuyết; thẻ từ vựng có clip phát âm; ô tìm kiếm toàn bài. Việc tiết kiệm thời gian ôn bài là **mục tiêu, chưa được đo** bằng nghiên cứu người dùng.
+2. **Báo cáo sau buổi học cho giáo viên:** TTT/STT (khi bản ghi tách được người nói), phân bố lỗi của lớp theo nhóm lỗi và loại ERRANT, chủ điểm có nhiều lỗi nhất (*weakest concept*) và gợi ý cho buổi sau bằng câu mẫu điền từ dữ liệu (không dùng LLM).
 
 ---
 
@@ -37,72 +39,73 @@ Trong các khóa luyện thi TOEIC và IELTS trực tuyến (Zoom / Google Meet 
 
 ```mermaid
 flowchart LR
-    Student["Học viên TOEIC/IELTS (Learner)"] --> |"Ôn câu sai, Xem lý thuyết gốc, Nghe từ vựng CEFR"| System["Hệ thống EduSync"]
-    Teacher["Giáo viên Anh ngữ (Instructor)"] --> |"Xem TTT/STT, Bản đồ lỗi ERRANT, Action Plan"| System
-    Admin["Quản lý Học vụ (Academic Admin)"] --> |"Giám sát chất lượng giảng dạy định lượng"| System
-    System --> |"Bóc tách NLP đa phương thức"| VideoAudio["Video Đề thi, Audio Việt-Anh, Chat Zoom"]
+    Student["Học viên luyện thi (Learner)"] --> |"Ôn câu sai, xem lý thuyết gốc, nghe từ vựng CEFR"| System["Hệ thống EduSync"]
+    Teacher["Giáo viên tiếng Anh (Instructor)"] --> |"Xem TTT/STT, phân bố lỗi, gợi ý buổi sau"| System
+    Admin["Quản lý học vụ (Academic Admin)"] --> |"Theo dõi chất lượng giảng dạy"| System
+    System --> |"Xử lý NLP đa phương thức"| VideoAudio["Video màn hình đề, audio Việt-Anh, chat Zoom"]
 ```
 
-| Tác nhân (Actor) | Trách nhiệm & Nhu cầu Cốt lõi trong Lớp TOEIC/IELTS | Giá trị Nhận được từ EduSync |
+| Tác nhân (Actor) | Trách nhiệm & Nhu cầu Cốt lõi | Giá trị Nhận được từ EduSync |
 | :--- | :--- | :--- |
-| **Học viên (TOEIC/IELTS Learner)** | • Cần xem lại đúng đoạn giáo viên chữa câu trắc nghiệm mình làm sai.<br>• Cần ôn lại công thức ngữ pháp gốc của câu hỏi đó.<br>• Cần học từ vựng học thuật theo mục tiêu band điểm (B1–C2) và nghe phát âm chuẩn.<br>• Cần biết lỗi ngữ pháp khi mình gõ câu trả lời trong chat. | • Click câu hỏi nhảy video tức thời ($\Delta t \le 1.8\text{s}$).<br>• Badge liên kết 2 chiều giữa Câu hỏi $\leftrightarrow$ Lý thuyết gốc.<br>• Thẻ từ vựng CEFR kèm Audio clip 1.5s giọng thật của giáo viên.<br>• Phản hồi sửa lỗi GEC kèm giải thích tiếng Việt dễ hiểu. |
-| **Giáo viên (ESL Instructor)** | • Cần kiểm soát tỷ lệ nói giữa giáo viên và học viên (TTT vs STT).<br>• Cần nắm được lỗi ngữ pháp phổ biến nhất của lớp trong hộp chat.<br>• Cần biết chủ điểm ngữ pháp nào học viên hay sai nhất để ôn lại buổi sau. | • Đồng hồ đo TTT/STT tự động từ luồng âm thanh.<br>• Bản đồ nhiệt lỗi ngữ pháp chuẩn quốc tế ERRANT.<br>• Cảnh báo *Weakest Concept* và Kế hoạch 3 bước cho buổi học kế tiếp. |
-| **Hệ thống (EduSync NLP Engine)** | • Xử lý đa phương thức (Audio Việt–Anh, Video màn hình đề thi, OCR, Chat text).<br>- Thực thi căn chỉnh đơn điệu, nhúng vector ngữ nghĩa, phân loại CEFR và GEC. | • Cung cấp giao diện Web Demo SPA mượt mà, phản hồi dưới 100ms, hoạt động hoàn toàn offline khi cần. |
+| **Học viên** | • Xem lại đúng đoạn giáo viên chữa câu mình làm sai.<br>• Ôn lại chủ điểm ngữ pháp của câu đó.<br>• Học từ vựng theo bậc CEFR, nghe phát âm.<br>• Biết lỗi ngữ pháp khi gõ câu trả lời trong chat. | • Bấm câu hỏi để tua video tới mốc chữa (trên bài kiểm tra U5: 80,0% mốc lệch ≤10 s so với nhãn nháp).<br>• Badge liên kết Câu hỏi ↔ Lý thuyết.<br>• Thẻ từ vựng CEFR kèm clip `.wav` 0,7–2,2 s cắt từ giọng giáo viên.<br>• Câu sửa kèm giải thích tiếng Việt cho 6 nhóm lỗi. |
+| **Giáo viên** | • Kiểm soát tỉ lệ nói giáo viên/học viên.<br>• Nắm lỗi phổ biến của lớp trong chat.<br>• Biết chủ điểm nào cần ôn lại. | • TTT/STT khi có bản ghi tách kênh hoặc pyannote; bản ghi một người nói hiển thị "chưa đo".<br>• Phân bố lỗi theo nhóm + loại ERRANT.<br>• *Weakest concept* và gợi ý buổi sau (câu mẫu ghi rõ bằng chứng). |
+| **Hệ thống (EduSync NLP Engine)** | • Xử lý audio Việt–Anh, video màn hình đề, OCR, chat.<br>• Căn chỉnh đơn điệu, nhúng vector, phân bậc CEFR, phát hiện lỗi. | • Web demo SPA tĩnh (`demo/index.html`); các bước có phương án dự phòng khi không có mạng/API. Độ trễ giao diện **chưa đo**. |
 
 ---
 
 ## 3. Yêu cầu Chức năng (Functional Requirements - FR)
 
-### 3.1. Phân hệ FR1: Căn chỉnh Đa phương thức & Định vị Câu hỏi (Multimodal Alignment)
-- **FR1.1 (Code-Switching Audio Transcription):** Hệ thống phải phiên mã toàn bộ âm thanh bài giảng trộn mã Việt–Anh thành văn bản (`transcript.json`) có gắn mốc thời gian bắt đầu (`start`), kết thúc (`end`) và nhãn ngôn ngữ (`vi`, `en`, `mixed`) bằng mô hình Whisper kết hợp **OCR Screen Hints Contextual Prompting**.
-- **FR1.2 (Screen OCR & Exercise Extraction):** Hệ thống phải tự động nhận diện chuyển cảnh màn hình bài giảng, khử khung hình trùng lặp, và trích xuất đầy đủ đề bài câu hỏi luyện thi TOEIC/IELTS (`screens.json`, `exercises.json`).
-- **FR1.3 (Monotonic Sequence Alignment):** Hệ thống phải căn chỉnh đơn điệu giữa lời giảng giáo viên và từng câu hỏi bài tập ($Q_1 \dots Q_N$), đảm bảo 100% câu hỏi được gán đúng mốc thời gian xuất hiện trong video với ràng buộc nhân quả $t_{k+1} > t_k$.
-- **FR1.4 (Click-to-Seek Video Playback):** Khi người dùng bấm vào bất kỳ câu hỏi, phân đoạn lời giảng, từ vựng hay tin nhắn chat, trình phát video phải nhảy ngay lập tức đến mốc thời gian tương ứng.
+### 3.1. Phân hệ FR1: Căn chỉnh Đa phương thức & Định vị Câu hỏi
+- **FR1.1 (Phiên âm lời giảng trộn mã):** phiên âm toàn bộ audio thành `transcript.json` gồm `start`, `end`, `text` và nhãn `lang` (`vi`, `en`, `mixed`, theo mật độ chữ có dấu) bằng faster-whisper `large-v3-turbo` đa ngữ. Gợi ý từ màn hình (OCR → `hotwords`) là **tùy chọn**; bản `transcript.json` đang dùng không có gợi ý. *Trạng thái:* đã cài đặt; **WER chưa đo** (bản tham chiếu chưa sửa tay).
+- **FR1.2 (Trích màn hình & câu hỏi):** phát hiện chuyển màn hình (pixel diff), OCR tiếng Việt + Anh, trích câu hỏi (số câu, đề bài, lựa chọn A–D) vào `screens.json`, `exercises.json`. *Trạng thái:* U4 trích được 34 bản ghi (2 bản ghi là đoạn văn, không phải câu hỏi), U5 trích được 35; độ chính xác trích xuất chưa được đo riêng.
+- **FR1.3 (Căn chỉnh đơn điệu):** mỗi câu hỏi có đúng một mốc bắt đầu chữa, các mốc không đảo thứ tự ($t_{k+1} \ge t_k$, chặt với câu khớp được lời giảng). *Mục tiêu đo bằng* `eval/eval_alignment.py`: tỉ lệ câu lệch ≤10 s / ≤30 s so với nhãn. *Trạng thái:* U5 (kiểm tra độc lập) 80,0% / 88,6%, sai số TB 8,1 s, 0 lần đảo thứ tự; U4 (phát triển) 68,8% / 84,4%; nhãn là bản nháp AI.
+- **FR1.4 (Click-to-seek):** bấm vào câu hỏi, đoạn lời giảng, từ vựng, chủ điểm hoặc tin nhắn chat thì video nhảy tới mốc tương ứng. *Trạng thái:* có trong demo; kiểm tra thủ công, độ trễ chưa đo.
 
 ---
 
-### 3.2. Phân hệ FR2: Liên kết Câu hỏi với Chủ điểm Ngữ pháp bằng Nhúng Vector Ngữ nghĩa (Question-to-Concept Linking via Dense Semantic Embeddings)
-> **Yêu cầu Kỹ thuật NLP Trọng tâm:** Tự động liên kết mỗi câu hỏi bài tập TOEIC/IELTS (chỉ chứa câu tình huống cụ thể) với chủ điểm ngữ pháp nền tảng tương ứng trong tài liệu bài giảng thông qua **Không gian Nhúng Vector Ngữ nghĩa (Dense Semantic Embeddings)**.
+### 3.2. Phân hệ FR2: Liên kết Câu hỏi với Chủ điểm Ngữ pháp (Question-to-Concept Linking)
+> **Yêu cầu NLP trọng tâm:** gắn mỗi câu hỏi với chủ điểm ngữ pháp mà nó luyện tập, hoặc "none" nếu là câu từ vựng/đọc hiểu, kể cả khi câu hỏi và tên chủ điểm không có từ chung.
 
-1. **Xây dựng Không gian Nhúng (Embedding Space):**
-   - Sử dụng mô hình Bi-Encoder Pre-trained `sentence-transformers/all-MiniLM-L6-v2` (chiều vector $d=384$) hoặc `BAAI/bge-base-en-v1.5` ($d=768$) chạy cục bộ trên CPU / Apple Silicon MPS.
-2. **Biểu diễn Vector Câu hỏi ($\vec{q}_k$) & Chủ điểm Ngữ pháp ($\vec{g}_j$):**
-   - Chuỗi câu hỏi: $\text{Text}(Q_k) = \text{Stem}_k \parallel \text{Options}_k \parallel \text{TeacherSpeechContext}_k \implies \vec{q}_k \in \mathbb{R}^{384}, \|\vec{q}_k\|_2 = 1$.
-   - Chuỗi ngữ pháp: $\text{Text}(GP_j) = \text{Title}_j \parallel \text{Formula}_j \parallel \text{Explanation}_j \parallel \text{Keywords}_j \implies \vec{g}_j \in \mathbb{R}^{384}, \|\vec{g}_j\|_2 = 1$.
-3. **Tính toán Ma trận Tương đồng Cosine & Phân ngưỡng:**
-   $$\text{Sim}(Q_k, GP_j) = \cos(\vec{q}_k, \vec{g}_j) = \vec{q}_k \cdot \vec{g}_j, \quad \hat{g}_k = \arg\max_{j \in [1, M]} \text{Sim}(Q_k, GP_j)$$
-   Gắn nhãn độ tin cậy (`HIGH`, `MEDIUM`, `LOW`) và tạo liên kết điều hướng 2 chiều trên giao diện: **⏱ Xem Chữa bài** $\leftrightarrow$ **📖 Xem Lý thuyết Gốc**.
-
----
-
-### 3.3. Phân hệ FR3: Phân loại Từ vựng CEFR (TOEIC/IELTS) & Cắt Audio Phát âm Mẫu
-- **FR3.1 (Morphological Lemmatization):** Chuẩn hóa hình thái học 2 lớp (quy tắc biến cách `-s/-es/-ed/-ing` và bảng động từ bất quy tắc) kèm bộ lọc từ đồng âm Việt–Anh (`VI_HOMOPHONES`).
-- **FR3.2 (CEFR Lexical Profiling):** Đối chiếu với ngân hàng từ điển **CEFR-J và Octanove (8.845 từ)** để phân tầng độ khó thành 6 cấp độ **A1, A2, B1, B2, C1, C2** (giúp học viên lọc nhanh từ vựng mục tiêu TOEIC 600–800+ hoặc IELTS Band 6.5–8.0+).
-- **FR3.3 (Bilingual Meaning Mining & 1.5s Audio Slicing):** Tự động trích xuất nghĩa tiếng Việt do giáo viên giải thích trong bài và cắt file âm thanh 1.5 giây (`vocab_audio/*.mp3`) chứa đúng giọng đọc mẫu của giáo viên.
+1. **Mô hình nhúng:** bi-encoder đa ngữ `intfloat/multilingual-e5-small` (384 chiều, chuẩn hoá $L_2$, tiền tố `query:`/`passage:`), chạy cục bộ. Không có `sentence-transformers` thì dùng TF-IDF.
+2. **Ba văn bản đầu vào:**
+   - Câu hỏi: $\text{Text}(Q_k) = \text{Stem}_k \parallel \text{Options}_k$.
+   - Lời giảng: $\text{Text}(Sp_k)$ = lời cô nói từ mốc chữa câu $k$ (trong `exercise_alignment.json`) đến câu kế tiếp, tối đa 90 s.
+   - Chủ điểm: $\text{Text}(GP_j) = \text{Title}_j \parallel \text{Formula}_j \parallel \text{Examples}_j \parallel \text{Explanation}_j$ (không có từ khoá viết tay).
+3. **Điểm & ngưỡng:**
+   $$\text{score}(k,j) = \tfrac12\big(\vec{q}_k \cdot \vec{g}_j + \vec{sp}_k \cdot \vec{g}_j\big), \quad \hat{g}_k = \arg\max_j \text{score}(k,j) \text{ nếu } \max_j \text{score}(k,j) \ge 0{,}835, \text{ ngược lại none}$$
+   Độ tin cậy: `HIGH` (được gắn, hơn chủ điểm thứ hai ≥0,01), `MEDIUM` (được gắn, sát nhau), `LOW` (không gắn). Giao diện tạo liên kết hai chiều: **⏱ Xem chữa bài** ↔ **📖 Xem lý thuyết**.
+4. *Trạng thái* (`eval/eval_concepts.py`, 34 câu U4): độ chính xác 91,2% (leave-one-out), đầu ra với ngưỡng cố định: 91,2% / link precision 90,0% / link recall 75,0%. Mô hình và ngưỡng chọn trên chính tập này nên kết quả lạc quan; **chưa có tập kiểm tra độc lập**.
 
 ---
 
-### 3.4. Phân hệ FR4: Chẩn đoán Lỗi Ngữ pháp GEC trong Chat & Báo cáo Sư phạm
-- **FR4.1 (Chat Parsing & FERPA Anonymization):** Đọc log chat Zoom/Meet (`chat.txt`), tự động bóc tách người gửi và mã hóa ẩn danh một chiều thành $S_1, S_2, \dots, S_N$.
-- **FR4.2 (ERRANT GEC Diagnostic Engine):** Chẩn đoán tự động 6 nhóm lỗi ngữ pháp chuyển di ngôn ngữ (L1 Transfer) của học viên Việt Nam theo chuẩn quốc tế **ERRANT** (`U:VERB:BE`, `R:ADJ:PARTICIPLE`, `R:VERB:FORM`, `U:PREP`, `R:VERB:SVA`, `M:VERB:AUX`), sinh câu sửa tối thiểu (`<del>/<ins>`) và lời giải thích sư phạm bằng tiếng Việt.
-- **FR4.3 (Teacher Talk Time vs. Student Talk Time):** Thống kê định lượng tỷ lệ thời gian nói của giáo viên (TTT) và học viên (STT).
-- **FR4.4 (Post-Class Pedagogical Report):** Tổng hợp báo cáo `teacher_report.json` gồm bản đồ phân bố lỗi sai (Error Heatmap), chủ điểm yếu nhất của lớp (*Weakest Concept*) và đề xuất kế hoạch hành động 3 bước cho buổi dạy kế tiếp (*Next-Lesson Action Plan*).
+### 3.3. Phân hệ FR3: Phân bậc Từ vựng CEFR & Clip Phát âm
+- **FR3.1 (Lemmatization):** chuẩn hoá hình thái 2 lớp (bảng bất quy tắc + bỏ hậu tố `-s/-es/-ies/-ed/-ied/-ing`, chỉ chấp nhận khi từ gốc có trong từ điển) và loại danh sách âm tiết tiếng Việt trùng mặt chữ tiếng Anh (`VI_HOMOPHONES`).
+- **FR3.2 (Phân bậc CEFR):** tra từ điển **CEFR-J + Octanove (8.845 mục)** để gán A1–C2. Hệ thống không quy đổi sang điểm thi; nếu cần tham khảo, ngưỡng CEFR của ETS cho TOEIC L&R là A1 120, A2 225, B1 550, B2 785, C1 945.
+- **FR3.3 (Nghĩa tiếng Việt & clip phát âm):** khai phá nghĩa tiếng Việt từ lời giảng bằng mẫu ("X là / nghĩa là …") và cắt clip `vocab_audio/<lemma>.wav` 0,7–2,2 s theo ranh giới đoạn ASR chứa từ (transcript không có timestamp từng từ). *Trạng thái* (U4): 80 từ, 52 từ có nghĩa, 79 clip; **chất lượng chưa được đánh giá**.
 
 ---
 
-### 3.5. Phân hệ FR5: Tra cứu Đa chiều Toàn bài (Omnibox Search)
-- **FR5.1:** Thanh tìm kiếm Omnibox (`Cmd+K` / `Ctrl+K`) cho phép tra cứu tức thì trên cả 5 nguồn dữ liệu: Lời giảng song ngữ, Đề bài câu hỏi TOEIC/IELTS, Từ vựng CEFR, Tin nhắn chat học viên và Chủ điểm ngữ pháp.
+### 3.4. Phân hệ FR4: Lỗi Người học trong Chat & Báo cáo Sư phạm
+- **FR4.1 (Đọc chat & ẩn danh hoá):** đọc log chat Zoom/Meet (`chat.txt`), thay tên người gửi bằng $S_1, S_2, \dots, S_N$ (giáo viên = T), nhận số câu ("câu 4") và đáp án ("em chọn C"), gắn tin nhắn với câu gần nhất có số đó theo mốc đã căn chỉnh (số câu bắt đầu lại ở mỗi phần). Chỉ tên người gửi được ẩn danh hoá; tên nằm trong nội dung tin nhắn không được xoá.
+- **FR4.2 (Phát hiện lỗi bằng luật + loại ERRANT):** phát hiện 6 nhóm lỗi chuyển di L1 — BE_VERB, PARTICIPLE, CAUSATIVE, MODAL_TO, SVA, WH_DO — sinh câu sửa và giải thích tiếng Việt. Mỗi lỗi kèm loại ERRANT; loại mặc định đã kiểm chứng bằng errant 3.0.2: `U:VERB:TENSE`, `R:VERB:FORM`, `R:VERB:FORM`, `U:VERB:FORM`, `R:VERB:SVA`, `M:VERB:TENSE`. *Trạng thái* (`eval/eval_gec.py`, 70 câu độc lập, nhãn nháp): precision 100%, recall 72,7%, F1 84,2%.
+- **FR4.3 (TTT/STT):** tính tỉ lệ thời gian nói khi `diarize.py` có nguồn `tracks` (mỗi người một file audio) hoặc `pyannote`; với bản ghi một người nói phải hiển thị "chưa đo", không hiển thị 100%/0%. *Trạng thái:* logic có test với dữ liệu giả; trên bài ECE (một người nói) **chưa đo được**.
+- **FR4.4 (Báo cáo sau buổi học):** `teacher_report.json` gồm phân bố lỗi theo nhóm, *weakest concept* (chủ điểm có nhiều tin nhắn có lỗi nhất trên các câu được liên kết với nó, `None` nếu không có bằng chứng) và gợi ý cho buổi sau bằng **câu mẫu** điền từ dữ liệu. Trên U4 chat là dữ liệu mô phỏng.
+
+---
+
+### 3.5. Phân hệ FR5: Tìm kiếm Toàn bài
+- **FR5.1:** ô tìm kiếm trong demo tra cùng lúc 5 nguồn: lời giảng, đề bài câu hỏi, từ vựng, tin nhắn chat và chủ điểm ngữ pháp; bấm kết quả để tua video. Phím tắt `Cmd+K` / `Ctrl+K` **chưa cài đặt**; độ trễ tìm kiếm chưa đo.
 
 ---
 
 ## 4. Yêu cầu Phi chức năng (Non-Functional Requirements - NFR)
 
-| Mã NFR | Hạng mục Chất lượng | Chỉ số Cam kết (SLA / KPI) |
-| :-: | :--- | :--- |
-| **NFR1** | **Hiệu năng & Độ trễ (Latency)** | • Nhúng vector & tính Cosine Similarity cho 34 câu hỏi hoàn thành dưới **50ms**.<br>• Phản hồi Click-to-seek video dưới **100ms**; tìm kiếm Omnibox dưới **30ms**. |
-| **NFR2** | **Độ chính xác NLP (Accuracy)** | • Recall bóc tách và căn chỉnh thời gian câu hỏi đạt **100% (34/34 câu)**.<br>• Độ chính xác bắt lỗi GEC trên tập kiểm thử đạt **100% (6/6 lỗi ERRANT)**. |
-| **NFR3** | **Bảo mật & Quyền riêng tư (Privacy)** | • **0% rò rỉ PII:** Không xuất hiện tên thật học viên trong JSON hay trên giao diện web.<br>• API Key được cô lập trong `.env` (nằm trong `.gitignore`). |
-| **NFR4** | **Tính Sẵn sàng & Kiểm thử (Reliability)** | • Có cơ chế **Graceful Fallback** chạy hoàn toàn offline khi không có mạng/API.<br>• Đạt **100% Pass Rate (45/45 Unit Tests)** trên bộ kiểm thử `pytest`. |
+| Mã NFR | Hạng mục Chất lượng | Chỉ số mục tiêu | Trạng thái hiện tại (theo docs/10) |
+| :-: | :--- | :--- | :--- |
+| **NFR1** | **Hiệu năng & Độ trễ** | • Nhúng + tính điểm cho 34 câu < 50 ms.<br>• Click-to-seek < 100 ms; tìm kiếm < 30 ms. | **Chưa đo** (cả ba chỉ số). |
+| **NFR2** | **Độ chính xác NLP** | • Căn chỉnh câu hỏi: mọi câu có mốc, không đảo thứ tự, và tốt hơn các baseline trên bài kiểm tra độc lập.<br>• Phát hiện lỗi: không báo nhầm câu đúng, recall cao hơn v1 trên tập độc lập.<br>• Liên kết chủ điểm: tốt hơn baseline trên tập kiểm tra độc lập.<br>• ASR: có WER đo trên clip tham chiếu đã sửa tay. | • Căn chỉnh U5: 80,0% (±10 s), 88,6% (±30 s), 0 đảo thứ tự (baseline tốt nhất 71,4% / 80,0%).<br>• Phát hiện lỗi: precision 100%, recall 72,7% (v1: 20,5%), 70 câu.<br>• Liên kết chủ điểm: 91,2% trên tập phát triển; **chưa có tập kiểm tra độc lập**.<br>• WER: **chưa đo**.<br>Mọi nhãn là bản nháp AI (`verified: false`). |
+| **NFR3** | **Quyền riêng tư** | • Không có tên thật người gửi trong JSON đầu ra và trên giao diện (ẩn danh hoá S1…SN).<br>• API key chỉ nằm trong `.env` (có trong `.gitignore`).<br>• Không đưa video, audio, chat thô và nội dung đề bài lên git. | • Ẩn danh hoá tên người gửi có test đơn vị; tên trong nội dung tin nhắn chưa được xử lý.<br>• `.env`, video/audio và nội dung trích từ bài ECE nằm trong `.gitignore`; riêng `chat.txt` mô phỏng của U4 được đưa lên git. |
+| **NFR4** | **Tính sẵn sàng & Kiểm thử** | • Có phương án dự phòng chạy offline (TF-IDF, taxonomy chủ điểm, chế độ một người nói).<br>• Toàn bộ `pytest` pass; test không ghi vào `lessons/`. | • Đã có các phương án dự phòng.<br>• **71/71 test pass**, test dùng `tmp_path`. |
 
 ---
 
@@ -111,34 +114,41 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Pipeline as Pipeline Runner (pipeline.py)
-    participant Ex as exercises.json (Đề bài TOEIC/IELTS)
-    participant GP as grammar_points.json (Lý thuyết Ngữ pháp)
-    participant Emb as Sentence-Transformers (all-MiniLM-L6-v2)
+    participant Pipeline as concept_link.py
+    participant Ex as exercises.json
+    participant Al as exercise_alignment.json + transcript.json
+    participant GP as grammar_points.json
+    participant Emb as multilingual-e5-small
     participant Out as exercise_concept_links.json
-    participant UI as Web Demo SPA (Học viên & Giáo viên)
+    participant UI as Web Demo SPA
 
-    Pipeline->>Ex: Đọc danh sách câu hỏi bài tập (Stem + Options)
-    Pipeline->>GP: Đọc danh sách chủ điểm ngữ pháp (Title + Formula + Explanation)
-    Pipeline->>Emb: Mã hóa câu hỏi -> Ma trận Q [N x 384] (L2-normalized)
-    Pipeline->>Emb: Mã hóa ngữ pháp -> Ma trận G [M x 384] (L2-normalized)
-    Pipeline->>Pipeline: Nhân ma trận tương đồng Cosine: S = Q * G^T
-    Pipeline->>Pipeline: Tìm argmax_j S[k, j] và phân tầng độ tin cậy (HIGH/MEDIUM/LOW)
-    Pipeline->>Out: Xuất đồ thị liên kết 2 chiều (Chữa bài <-> Lý thuyết gốc)
-    UI->>Out: Nạp dữ liệu hiển thị Badge Ngữ pháp & Thống kê Điểm nghẽn lớp học
+    Pipeline->>Ex: Đọc câu hỏi (stem + options)
+    Pipeline->>Al: Lấy lời giảng từ mốc chữa câu k đến câu k+1 (tối đa 90 s)
+    Pipeline->>GP: Đọc chủ điểm (title + formula + examples + explanation)
+    Pipeline->>Emb: Mã hoá câu hỏi -> Q [N x 384], lời giảng -> Sp [N x 384] (query:)
+    Pipeline->>Emb: Mã hoá chủ điểm -> G [M x 384] (passage:)
+    Pipeline->>Pipeline: S = (Q G^T + Sp G^T) / 2
+    Pipeline->>Pipeline: argmax_j S[k, j], gắn nếu >= 0,835 (ngược lại none), độ tin cậy HIGH/MEDIUM/LOW
+    Pipeline->>Out: Ghi liên kết hai chiều (mốc chữa bài <-> mốc lý thuyết)
+    UI->>Out: Hiển thị badge chủ điểm
 ```
 
 ---
 
 ## 6. Ma trận Kiểm thử Chấp thuận (Acceptance Test Matrix)
 
-| Mã TC | Nội dung Kiểm thử | Dữ liệu Đầu vào | Kết quả Kỳ vọng | Trạng thái |
+Nhãn chuẩn dùng trong các phép đo dưới đây đều là bản nháp do AI gán (`verified: false`); kết quả cần chạy lại sau khi nhóm kiểm tra nhãn. Tái tạo toàn bộ: `python eval/run_all.py`.
+
+| Mã TC | Nội dung Kiểm thử | Cách kiểm tra | Tiêu chí chấp thuận | Kết quả hiện tại |
 | :-: | :--- | :--- | :--- | :---: |
-| **TC-01** | Bóc tách đề bài trắc nghiệm TOEIC/IELTS | `screens.json` | 34 câu hỏi (Stem + Options A/B/C/D) | **PASS (100%)** |
-| **TC-02** | Căn chỉnh đơn điệu thời gian chữa bài | `exercises.json`, `transcript.json` | 34 mốc `start/end` thỏa $t_{k+1} > t_k$ | **PASS (34/34)** |
-| **TC-03** | Nhúng Dense Embeddings & Chuẩn hóa $L_2$ | `sentence-transformers` | Vector 384 chiều, $\|\vec{v}\|_2 = 1.0$, $< 50\text{ms}$ | **PASS (4.2ms/câu)** |
-| **TC-04** | Liên kết Câu hỏi ↔ Chủ điểm Ngữ pháp | Cosine Similarity Matrix | Câu phân từ `-ing/-ed` khớp đúng chủ điểm Participles | **PASS** |
-| **TC-05** | Chẩn đoán lỗi ngữ pháp học viên (GEC) | `chat.txt` (17 tin nhắn) | Bắt đúng 6/6 lỗi L1 Transfer theo mã ERRANT | **PASS (6/6)** |
-| **TC-06** | Ẩn danh danh tính học viên chuẩn FERPA | Tên thật học viên trong Zoom | Mã hóa thành `S1`..`S5`, 0% lộ tên thật | **PASS (100%)** |
-| **TC-07** | Phân tích tỷ lệ nói TTT/STT & Action Plan | `speakers.json`, `chat_feedback.json` | Xuất báo cáo `teacher_report.json` đủ 3 bước cải tiến | **PASS** |
-| **TC-08** | Điều hướng tương tác Click-to-Seek 2 chiều | Thao tác trên Web Demo | Video tua tức thì đến giây chữa bài hoặc lý thuyết gốc | **PASS (< 50ms)** |
+| **TC-01** | Trích câu hỏi trắc nghiệm từ màn hình | `exercises.py`; `tests/test_exercises.py` (parser) | Mỗi câu có số, đề bài, lựa chọn A–D | U4: 34 bản ghi (2 là đoạn văn); U5: 35. Độ chính xác trích xuất chưa đo |
+| **TC-02** | Căn chỉnh câu hỏi ↔ lời giảng | `eval/eval_alignment.py` (dev U4, test U5) | Trên test U5: tốt hơn các baseline (thời điểm màn hình, regex "câu N" đầu tiên, v1) và 0 đảo thứ tự | **Đạt (nhãn nháp):** 80,0% / 88,6% / 8,1 s / 0 đảo thứ tự (baseline tốt nhất: 71,4% / 80,0% / 21,3 s / 2) |
+| **TC-03** | Mã hoá câu hỏi & chủ điểm | `tests/test_concept_link.py` | Chạy được trên bản sao U4, có fallback TF-IDF | Pass. Độ trễ < 50 ms: **chưa đo** |
+| **TC-04** | Liên kết câu hỏi ↔ chủ điểm | `eval/eval_concepts.py` (34 câu U4) | Hơn baseline "luôn none" (73,5%) và TF-IDF (82,4%) | 91,2% (leave-one-out). Lạc quan: chọn trên chính tập này, chưa có tập test |
+| **TC-05** | Mốc thời gian phần lý thuyết | `eval/eval_concepts.py --theory <grammar_points.json>` (4 chủ điểm U4) | Mỗi chủ điểm lệch ≤30 s (cùng ngưỡng với căn chỉnh câu hỏi) | Đạt: 2,3–20,0 s, trung bình 11,2 s (v1: 882,5 s) |
+| **TC-06** | Phát hiện lỗi người học | `eval/eval_gec.py` (70 câu độc lập) | Không báo nhầm câu đúng; F1 cao hơn v1 (khớp nguyên văn) | **Đạt (nhãn nháp):** P 100%, R 72,7%, F1 84,2% (v1: 90,0% / 20,5% / 33,3%) |
+| **TC-07** | Loại lỗi ERRANT đúng chuẩn | `eval/errant_check.py` (errant 3.0.2) | Loại mặc định trùng loại errant gán cho cặp câu mẫu | Đạt; kết quả ở `eval/results/errant_check.txt` |
+| **TC-08** | Ẩn danh hoá tên người gửi | `tests/test_feedback.py::test_anonymize_student_names` | Tên người gửi → `S1`..`SN` | Pass (chỉ tên người gửi) |
+| **TC-09** | TTT/STT & báo cáo giáo viên | `tests/test_teacher_analytics.py` | Đo được với `tracks`; "chưa đo" với bản ghi một người nói; không bịa *weakest concept* | Pass. Trên bài ECE: TTT/STT **chưa đo** (một người nói) |
+| **TC-10** | WER của ASR | `eval/wer.py` trên 5 clip `gold/asr/` | Có WER cho từng cấu hình ASR | **Chưa chạy được**: bản tham chiếu chưa sửa tay |
+| **TC-11** | Click-to-seek trên giao diện | Kiểm tra thủ công trên demo | Video tua tới mốc chữa bài hoặc lý thuyết | Đạt (thủ công). Độ trễ chưa đo |

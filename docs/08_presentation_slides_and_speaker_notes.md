@@ -1,382 +1,228 @@
-# KỊCH BẢN SLIDE BÁO CÁO ĐỒ ÁN VÀ PHÂN CHIA LINE THUYẾT TRÌNH (4 THÀNH VIÊN)
-## EDUSYNC: NỀN TẢNG ĐỒNG BỘ ĐA PHƯƠNG THỨC & PHÂN TÍCH SƯ PHẠM BÀI GIẢNG TRỰC TUYẾN
-**Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501 - Master of Software Engineering)  
-**Nhánh Git:** `edusync-v2`  
-**Thời lượng báo cáo:** 20 phút trình bày + 5-10 phút Q&A phản biện hội đồng  
+# KỊCH BẢN THUYẾT TRÌNH VÀ LỜI THOẠI TỪNG SLIDE (4 THÀNH VIÊN)
+## EduSync: căn chỉnh đa phương thức và phân tích bài giảng luyện thi TOEIC (giảng Việt – Anh)
+
+**Môn học:** NLP501  
+**Slide:** [presentation/slides_marp.md](../presentation/slides_marp.md) (17 slide; lời thoại rút gọn nằm trong comment HTML của từng slide)  
+**Thời lượng:** 20 phút trình bày + hỏi đáp  
+**Nguồn số liệu:** [docs/10_evaluation_results.md](10_evaluation_results.md). Mọi con số trong lời thoại dưới đây đều có trên slide hoặc trong docs/10. Khi nói, không thêm con số nào khác.
 
 ---
 
-## 1. BẢNG PHÂN CHIA VAI TRÒ & TIMELINE THUYẾT TRÌNH (4 THÀNH VIÊN)
+## 1. Phân công và thời gian
 
-| Thành viên | Vai trò Chuyên môn | Phạm vi Trách nhiệm trong Đồ án | Phần thuyết trình (Slides) | Thời lượng |
-| :--- | :--- | :--- | :---: | :---: |
-| **Thành viên 1** | **Project Lead & Requirement Engineer** | • Quản lý dự án, phân tích bài toán thực tế.<br>• Đặc tả yêu cầu phần mềm SRS (IEEE 830).<br>• Kiến trúc tổng thể 4 tầng & Luồng dữ liệu. | **Slide 01 – 04**<br>(Mở đầu, Đặt vấn đề, SRS, Kiến trúc) | **4.5 phút**<br>(00:00 – 04:30) |
-| **Thành viên 2** | **Multimodal Data Acquisition & Alignment Engineer** | • Kỹ thuật Speech-to-Text Whisper đa ngữ.<br>• Contextual Prompting (Screen Hints OCR).<br>• Thuật toán Căn chỉnh Đơn điệu Monotonic DP. | **Slide 05 – 08**<br>(Whisper ASR, OCR Hints, Monotonic DP Alignment) | **4.5 phút**<br>(04:30 – 09:00) |
-| **Thành viên 3** | **Core NLP & Semantic Intelligence Engineer** | • Phân loại từ vựng CEFR-J & Cắt audio 1.5s.<br>• Nhúng ngữ nghĩa Dense Semantic Embeddings.<br>• Chẩn đoán lỗi ngữ pháp ERRANT & Neural IE. | **Slide 09 – 13**<br>(CEFR Lexicon, Dense Embeddings, ERRANT GEC, Gemini IE) | **5.0 phút**<br>(09:00 – 14:00) |
-| **Thành viên 4** | **System, Analytics & Live Demo Engineer** | • Báo cáo sư phạm đa chiều Teacher Dashboard.<br>• Trực tiếp điều phối và trình diễn Live Web Demo.<br>• Báo cáo QA/QC (45/45 tests), Kết luận & Q&A. | **Slide 14 – 18**<br>(Teacher Analytics, Live Demo, QA/QC, Q&A) | **6.0 phút**<br>(14:00 – 20:00) |
+| Thành viên | Nội dung | Slide | Thời lượng | Mốc |
+| :--- | :--- | :---: | :---: | :---: |
+| **TV1** | Đề tài, vấn đề, bài toán NLP và dữ liệu, kiến trúc, nghiên cứu liên quan | 1–5 | 4,5 phút | 00:00–04:30 |
+| **TV2** | Nhận dạng tiếng nói trộn mã, căn chỉnh câu hỏi ↔ lời giảng, kết quả căn chỉnh | 6–8 | 4,5 phút | 04:30–09:00 |
+| **TV3** | Liên kết chủ điểm, trích chủ điểm và từ vựng, phát hiện lỗi trong chat | 9–12 | 5,5 phút | 09:00–14:30 |
+| **TV4** | Báo cáo giáo viên, demo trực tiếp (khoảng 2 phút), đánh giá, hạn chế, kết luận | 13–17 | 5,5 phút | 14:30–20:00 |
 
----
+| Slide | Tiêu đề | Người nói | Thời lượng | Mốc |
+| :-: | :--- | :-: | :-: | :-: |
+| 1 | EduSync (đề tài và phân công) | TV1 | 40 s | 00:00–00:40 |
+| 2 | Vấn đề | TV1 | 60 s | 00:40–01:40 |
+| 3 | Bài toán NLP và dữ liệu | TV1 | 60 s | 01:40–02:40 |
+| 4 | Kiến trúc | TV1 | 65 s | 02:40–03:45 |
+| 5 | Nghiên cứu liên quan | TV1 | 45 s | 03:45–04:30 |
+| 6 | Nhận dạng lời giảng trộn mã Việt – Anh | TV2 | 80 s | 04:30–05:50 |
+| 7 | Căn chỉnh câu hỏi ↔ lời giảng | TV2 | 110 s | 05:50–07:40 |
+| 8 | Kết quả căn chỉnh | TV2 | 80 s | 07:40–09:00 |
+| 9 | Liên kết câu hỏi ↔ chủ điểm ngữ pháp | TV3 | 90 s | 09:00–10:30 |
+| 10 | Kết quả liên kết chủ điểm (Unit 4, 34 câu) | TV3 | 80 s | 10:30–11:50 |
+| 11 | Trích xuất chủ điểm và từ vựng | TV3 | 80 s | 11:50–13:10 |
+| 12 | Phát hiện lỗi người học trong chat | TV3 | 80 s | 13:10–14:30 |
+| 13 | Báo cáo cho giáo viên | TV4 | 60 s | 14:30–15:30 |
+| 14 | Demo | TV4 | 120 s | 15:30–17:30 |
+| 15 | Đánh giá tái lập được | TV4 | 55 s | 17:30–18:25 |
+| 16 | Hạn chế và hướng phát triển | TV4 | 50 s | 18:25–19:15 |
+| 17 | Kết luận | TV4 | 45 s | 19:15–20:00 |
 
-## 2. CHI TIẾT NỘI DUNG TỪNG SLIDE & LỜI THOẠI (SPEAKER NOTES)
-
-```
-================================================================================
-PHẦN 1: MỞ ĐẦU, BỐI CẢNH BÀI TOÁN & PHÂN TÍCH YÊU CẦU (SLIDE 01 - 04)
-Người trình bày: THÀNH VIÊN 1 (Project Lead) - Thời gian: 04 phút 30 giây
-================================================================================
-```
-
-### SLIDE 01: BÌA ĐỀ TÀI & GIỚI THIỆU NHÓM
-* **Tiêu đề:** EDUSYNC: Multimodal Lecture Alignment & Pedagogical Intelligence Platform
-* **Tiêu đề phụ:** Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Trực tuyến ứng dụng Kỹ thuật Xử lý Ngôn ngữ Tự nhiên Nâng cao
-* **Thông tin nhóm:** Nhóm tác giả (4 thành viên Cao học Kỹ thuật Phần mềm MSE), Giảng viên hướng dẫn môn NLP501.
-* **Thời gian:** Tháng 11/2026.
-
-> 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô và toàn thể các bạn học viên cao học,  
-> Hôm nay, đại diện cho nhóm nghiên cứu đồ án môn Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501), em xin phép được trình bày đề tài: **EduSync - Nền tảng Đồng bộ Đa phương thức và Phân tích Sư phạm Bài giảng Trực tuyến**.  
-> Nhóm chúng em gồm có 4 thành viên, với sự phân công chuyên trách xuyên suốt từ phân tích yêu cầu, tiền xử lý dữ liệu âm thanh - thị giác đa phương thức, đến xây dựng các mô hình NLP cốt lõi và phát triển giao diện hệ thống hoàn chỉnh.  
-> Sau đây, em xin phép bắt đầu bằng bối cảnh và lý do tại sao nhóm lựa chọn đề tài này."*
-
----
-
-### SLIDE 02: BỐI CẢNH & NỖI ĐAU THỰC TẾ TRONG DẠY VÀ HỌC TRỰC TUYẾN (KÈM DẪN CHỨNG NGHIÊN CỨU)
-* **Nội dung trình chiếu:**
-  * **Sự bùng nổ của Video bài giảng TOEIC / IELTS:** Hàng ngàn giờ học trực tuyến qua Zoom/Meet kéo dài 60–90 phút được lưu lại dưới dạng "hộp đen" MP4 phi cấu trúc.
-  * **Nỗi đau Học viên & Rào cản Tâm lý khi Ôn thi (Kèm dẫn chứng khoa học):**
-    * *Dễ bỏ cuộc vì video quá dài (Video Dropout):* Theo nghiên cứu trên **6,9 triệu phiên xem video** của **Guo et al. (MIT — ACM L@S 2014)**, thời gian tập trung trung vị chỉ đạt **tối đa 6 phút** và **69% người học bỏ qua bài tập** sau khi xem video dài; đồng thời **61% thao tác tua thanh trượt** chỉ để mò điểm chuyển bài/slide (**Kim et al., MIT & Harvard — ACM L@S 2014**).
-    * *Tâm lý ngại hỏi giáo viên & sợ mất mặt (Foreign Language Anxiety):* Theo **Horwitz et al. (1986 — FLCAS)** và nghiên cứu trên sinh viên EFL Việt Nam (**Ho & Truong, 2022; Nguyen, 2025**), nỗi sợ bị đánh giá tiêu cực (*Fear of Negative Evaluation*) và sợ mất thể diện trước lớp (*fear of losing face*) khiến học viên không dám bật mic hỏi lại cô giáo khi không hiểu câu trắc nghiệm hoặc quên lý thuyết đầu giờ.
-    * *Mất tự tin khi không được sửa lỗi kịp thời:* Các câu trả lời sai ngữ pháp trong khung chat Zoom bị trôi mất mà không được giải thích, làm giảm sự tự tin (*Self-Efficacy* — **Farmani et al., 2017**).
-  * **Điểm mù của Giáo viên (The Teacher's Blind Spot):**
-    * *Thiếu dữ liệu định lượng:* Không đo lường được tỷ lệ nói của giáo viên và học sinh (**TTT vs STT**).
-    * *Không có bản đồ lỗi lớp học:* Không thống kê được lỗi ngữ pháp chuyển di ngôn ngữ (*L1 Transfer*) nào cả lớp đang mắc nhiều nhất để điều chỉnh giáo án buổi sau.
-
-> 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Thưa Thầy/Cô, thực tế hiện nay tại các lớp luyện thi TOEIC và IELTS trực tuyến trên Zoom hay Google Meet, khi buổi học 90 phút kết thúc, thứ duy nhất còn lại là một tệp video MP4 thô và một tệp log chat.  
-> Nhóm chúng em đã khảo cứu các công trình khoa học quốc tế và nhận thấy 3 rào cản lớn khiến học viên nản chí khi ôn thi:  
-> Thứ nhất là hiệu ứng bỏ cuộc khi xem video dài: Nghiên cứu của Guo và cộng sự tại MIT trên 6,9 triệu phiên học chỉ ra rằng thời gian tập trung trung vị của người học chỉ tối đa là 6 phút, và tới 69% học viên bỏ qua bài tập sau các video dài; trong khi nghiên cứu của Kim và cộng sự (MIT & Harvard) chứng minh 61% thao tác kéo thanh trượt của học viên chỉ để mò tìm chỗ chuyển bài tập.  
-> Thứ hai là rào cản tâm lý ngại hỏi giáo viên: Theo lý thuyết Lo âu Ngoại ngữ của Horwitz (1986) và các nghiên cứu trên sinh viên Việt Nam (Nguyen, 2025), tâm lý sợ sai và sợ mất mặt trước đám đông khiến học viên dù không hiểu tại sao câu trắc nghiệm đó chọn đáp án B cũng không dám bật mic hỏi lại thầy cô.  
-> Thay vì để học viên phải ngại ngùng hỏi giáo viên hoặc nản lòng bỏ cuộc trước video 90 phút, EduSync ứng dụng NLP để giúp học viên tự tra cứu kín đáo: bấm vào câu sai là nhảy ngay tới giây cô chữa, bấm vào nhãn ngữ pháp là quay về đúng phút cô giảng công thức gốc, và được sửa lỗi chat ẩn danh kèm giải thích tiếng Việt — qua đó giúp học viên dễ hiểu bài và tăng quyết tâm chinh phục kỳ thi TOEIC, IELTS."*
+**Nguyên tắc khi nói**
+- Đọc số đúng như trên slide (dấu phẩy thập phân: "tám phẩy một giây").
+- Bốn điều luôn nói rõ, không né: bản ghi **chỉ có một người nói**; chat của Unit 4 là **dữ liệu mô phỏng**; nhãn chuẩn là **bản nháp do AI gán**, nhóm đang kiểm tra lại với video; **chưa có WER**.
+- Không dùng lại các khẳng định đã rút (docs/10 §9; danh sách "không nói" ở [docs/09 phần 4](09_teacher_presentation_and_technical_nlp_guide.md)).
+- Người nói sau đứng sẵn khi người trước đọc câu chuyển ý.
 
 ---
 
-### SLIDE 03: MỤC TIÊU ĐỀ TÀI & GIÁ TRỊ CỐT LÕI (2 TRỤ CỘT)
-* **Nội dung trình chiếu:**
-  * **Mục tiêu tối thượng:** Chuyển hóa video bài giảng thụ động thành **Cơ sở Tri thức Tương tác Đa chiều**, tháo gỡ rào cản tâm lý "ngại hỏi thầy cô" và tăng quyết tâm ôn thi TOEIC/IELTS.
-  * **Trụ cột 1 - Học viên Tự chủ & Tự tin (Learner Autonomy & Self-Efficacy):**
-    * *Chia nhỏ video 90 phút thành các nút câu hỏi < 2 phút:* Click-to-seek khớp 100% câu hỏi với lời giảng (khắc phục rào cản bỏ cuộc 6 phút của *Guo et al., 2014*).
-    * *Thay thế việc ngại hỏi giáo viên bằng Liên kết Ngữ nghĩa 2 chiều:* Làm sai câu nào, bấm Badge Ngữ pháp để nhảy ngược về lý thuyết gốc đầu giờ mà không sợ "mất mặt" trước lớp.
-    * *Từ vựng CEFR (A1–C2) & Audio mẫu 1.5s:* Nghe phát âm chuẩn giọng thật giáo viên theo đúng band điểm mục tiêu TOEIC/IELTS.
-    * *Phản hồi sửa lỗi GEC ẩn danh & tức thì:* Ẩn danh học viên ($S_1 \dots S_N$) và giải thích lỗi ngữ pháp bằng tiếng Việt giúp tăng sự tự tin (*Self-Efficacy* — *Farmani et al., 2017*).
-  * **Trụ cột 2 - Trợ lý Sư phạm cho Giáo viên (Pedagogical Analytics):**
-    * Đo lường thời lượng nói TTT (Teacher Talk Time) vs STT (Student Talk Time).
-    * Bản đồ phân bố lỗi sai ngữ pháp theo chuẩn ERRANT quốc tế.
-    * Xác định chủ điểm yếu nhất (Weakest Concept) và tự động sinh Kế hoạch Cải tiến 3 bước (Next-Lesson Action Plan).
+## 2. Lời thoại từng slide
 
-> 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Để giải quyết trọn vẹn các rào cản học thuật và tâm lý trên, EduSync được thiết kế xoay quanh hai trụ cột giá trị:  
-> Thứ nhất, đối với Học viên luyện thi TOEIC và IELTS, hệ thống trao cho các bạn quyền tự chủ trong một môi trường an toàn tâm lý: thay vì phải ngại ngùng hỏi lại giáo viên câu ngữ pháp cơ bản trước cả lớp, học viên chỉ cần bấm vào câu hỏi là video nhảy ngay đến đoạn cô giải thích; bấm vào nhãn ngữ pháp là nhảy ngược về lý thuyết gốc đầu giờ; mọi lỗi sai trong khung chat đều được ẩn danh thành S1, S2 và được giải thích chi tiết bằng tiếng Việt. Các nghiên cứu của Farmani (2017) đã chứng minh phản hồi tức thì, không phán xét này giúp tăng mạnh sự tự tin (Self-Efficacy) và quyết tâm ôn thi của người học.  
-> Thứ hai, đối với Giáo viên, hệ thống đóng vai trò trợ lý sư phạm tự động: đo tỷ lệ nói TTT/STT, vẽ bản đồ nhiệt các lỗi ngữ pháp cả lớp đang vấp phải dù các em không trực tiếp giơ tay hỏi, và đề xuất ngay kế hoạch 3 bước cho buổi dạy tiếp theo."*
+### Phần 1 — TV1 (slide 1–5 · 4,5 phút · 00:00–04:30)
 
----
+#### Slide 1 · EduSync
+**Người nói:** TV1 · **Thời lượng:** 40 s (00:00–00:40)
 
-### SLIDE 04: ĐẶC TẢ YÊU CẦU PHẦN MỀM (SRS) & KIẾN TRÚC HỆ THỐNG
-* **Nội dung trình chiếu:**
-  * **Đặc tả IEEE 830:** 5 nhóm Yêu cầu Chức năng (FR1-FR5: Whisper ASR, OCR DP Alignment, CEFR Lemmatization, Dense Embeddings Concept Linking, ERRANT GEC & Teacher Analytics) và 4 Yêu cầu Phi chức năng (NFR1-NFR4: Độ trễ local < 5ms, Bảo mật ẩn danh FERPA/GDPR, Recall căn chỉnh > 95%).
-  * **Kiến trúc Hệ thống 4 Tầng (System Architecture):**
-    * *Tầng 1 - Ingestion:* Video MP4 + Zoom Chat TXT.
-    * *Tầng 2 - Multimodal Processing:* Whisper ASR, OCR Vision, Regex DP Alignment, Zoom Parser.
-    * *Tầng 3 - NLP & Semantic Core:* CEFR Lexicon, Dense Embeddings (`all-MiniLM-L6-v2`), ERRANT GEC, Gemini Neural IE.
-    * *Tầng 4 - Interactive Presentation:* Single-Page Application (HTML5/ES6/WebAudio/RangeHTTPServer).
+> "Em chào thầy/cô và các bạn. Nhóm em xin trình bày đề tài EduSync: từ bản ghi một buổi luyện thi TOEIC mà cô giáo giảng xen kẽ tiếng Việt và tiếng Anh, hệ thống tạo ra sổ tay cho học viên và báo cáo cho giáo viên. Đầu vào gồm video quay màn hình, lời giảng trộn mã Việt – Anh và log chat của lớp. Nhóm có bốn thành viên, mỗi người trình bày một phần như ở khung bên phải. Tất cả số liệu trong bài nằm trong file docs/10 và tái tạo được bằng một lệnh."
 
-> 🎤 **Lời thoại Thành viên 1 (Speaker Script):**  
-> *"Về mặt kiến trúc kỹ thuật, hệ thống EduSync được chúng em thiết kế theo mô hình 4 tầng chặt chẽ tuân thủ chuẩn đặc tả phần mềm IEEE 830:  
-> Từ tệp video và log chat đầu vào ở Tầng 1, hệ thống đưa qua Tầng 2 để bóc tách đa phương thức hình ảnh, âm thanh và văn bản. Sau đó, Tầng 3 sẽ thực thi các giải thuật NLP cốt lõi từ căn chỉnh đơn điệu, nhúng ngữ nghĩa vector dense embeddings cho đến chẩn đoán lỗi ngữ pháp. Toàn bộ kết quả được đẩy lên Tầng 4 là một ứng dụng Web tương tác hiệu năng cao.  
-> Tiếp theo đây, em xin kính mời Bạn [Tên Thành viên 2] sẽ trình bày chi tiết về tầng thu nhận dữ liệu đa phương thức và thuật toán căn chỉnh thời gian đơn điệu."*
+**Chuyển ý:** "Trước hết, em xin nói vì sao bài toán này đáng làm."
 
----
+#### Slide 2 · Vấn đề
+**Người nói:** TV1 · **Thời lượng:** 60 s (00:40–01:40)
 
-```
-================================================================================
-PHẦN 2: THU NHẬN DỮ LIỆU ĐA PHƯƠNG THỨC & CĂN CHỈNH THỜI GIAN (SLIDE 05 - 08)
-Người trình bày: THÀNH VIÊN 2 (Multimodal Alignment Engineer) - Thời gian: 04 phút 30 giây
-================================================================================
-```
+> "Sau một buổi học trực tuyến, thứ còn lại thường chỉ là một video khoảng 60 phút và một file chat. Học viên muốn xem lại đoạn cô chữa một câu thì phải tự tua; Guo và cộng sự năm 2014 ghi nhận thời gian xem trung vị của video bài giảng chỉ khoảng 6 phút, và Kim và cộng sự cùng năm thấy các đỉnh thao tác tua tập trung quanh chỗ chuyển cảnh. Nhiều bạn cũng ngại hỏi lại trước lớp vì sợ bị đánh giá tiêu cực, điều mà Horwitz và cộng sự đã mô tả từ năm 1986. Về phía giáo viên, cô không biết lớp đang sai nhiều ở chủ điểm nào, vì lỗi trong chat trôi mất sau buổi học. Từ đó nhóm đặt năm mục tiêu ở khung bên phải: tua theo câu hỏi, nối câu hỏi với chủ điểm, từ vựng theo CEFR, phát hiện lỗi trong chat, và báo cáo cho giáo viên."
 
-### SLIDE 05: THÁCH THỨC ÂM THANH ĐA NGỮ ANH - VIỆT & GIẢI PHÁP WHISPER ASR
-* **Nội dung trình chiếu:**
-  * **Hiện tượng Chuyển mã Ngôn ngữ (Code-Switching):** Giáo viên người Việt dạy tiếng Anh liên tục xen kẽ giữa câu giải thích tiếng Việt và câu ví dụ tiếng Anh (ví dụ: *"Các bạn chú ý câu 3 này chúng ta phải dùng participle -ing vì nó mang nghĩa chủ động"*).
-  * **Vấn đề của các mô hình ASR truyền thống:** Thường bị nhầm lẫn giữa hai bảng chữ cái, nhận dạng sai các từ học thuật hoặc bỏ qua dấu thanh tiếng Việt.
-  * **Giải pháp Whisper `large-v3-turbo`:** Mô hình Transformer Sequence-to-Sequence được huấn luyện trên 680.000 giờ dữ liệu đa ngữ.
-  * **Cơ chế Time-aligned Token Timestamp:** Sử dụng ma trận Cross-attention weights để căn chỉnh mốc thời gian phụ đề chính xác đến từng mili-giây.
+**Chuyển ý:** "Năm mục tiêu này quy về bốn bài toán NLP, em trình bày ở slide sau."
 
-> 🎤 **Lời thoại Thành viên 2 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô, thách thức kỹ thuật lớn đầu tiên của bài toán nằm ở bản chất âm thanh của lớp học ngoại ngữ tại Việt Nam: đó là hiện tượng Code-Switching (chuyển mã ngôn ngữ) diễn ra với mật độ rất cao. Giáo viên liên tục đan xen giữa tiếng Việt và các thuật ngữ ngữ pháp tiếng Anh.  
-> Nếu sử dụng các thư viện ASR thông thường, tỷ lệ lỗi từ (Word Error Rate - WER) sẽ bị đội lên rất cao do mô hình bị lạc giữa hai không gian từ vựng.  
-> Nhóm chúng em đã lựa chọn kiến trúc Whisper `large-v3-turbo` tối ưu chạy trên môi trường cục bộ. Mô hình này sử dụng cơ chế Cross-Attention giúp phiên mã chính xác cả hai ngôn ngữ và cung cấp timestamp chính xác đến từng từ, tạo nền tảng vững chắc cho các bước xử lý văn bản phía sau."*
+**Nếu bị hỏi ngay trên slide này:** các nghiên cứu này là động lực, không phải kết quả của nhóm. Nhóm **chưa làm khảo sát người dùng**, nên không khẳng định EduSync giúp học viên học tốt hơn.
+
+#### Slide 3 · Bài toán NLP và dữ liệu
+**Người nói:** TV1 · **Thời lượng:** 60 s (01:40–02:40)
+
+> "Bài toán thứ nhất là căn chỉnh đơn điệu: mỗi câu hỏi cần một thời điểm cô bắt đầu chữa, và các thời điểm này phải tăng dần. Thứ hai là liên kết câu hỏi với một chủ điểm ngữ pháp, hoặc 'không thuộc chủ điểm nào'; thứ ba là từ vựng theo bậc CEFR; thứ tư là phát hiện sáu mẫu lỗi chuyển di từ tiếng Việt trong chat. Cái khó là lời giảng trộn mã, 73% đoạn tiếng Việt và 26% tiếng Anh, OCR nhiễu, số câu đánh lại từ 1 ở mỗi phần, và câu hỏi thường không có từ nào chung với tên chủ điểm. Dữ liệu là các bài TOEIC Starter của ECE, giấy phép CC BY: Unit 4 dài 58 phút với 34 câu dùng để phát triển, còn Unit 5 với 35 câu chỉ chạy một lần để kiểm tra độc lập. Em xin nói rõ ba giới hạn: bản ghi chỉ có một người nói, 17 tin nhắn chat của Unit 4 là dữ liệu nhóm mô phỏng, và nhãn chuẩn là bản nháp do AI gán, nhóm đang kiểm tra lại với video."
+
+**Chuyển ý:** "Các bài toán này nối với nhau thế nào thì em trình bày ở sơ đồ kiến trúc."
+
+**Nếu bị hỏi ngay trên slide này:** "34 câu nhưng nhãn mốc chỉ có 32?" — 2 trong 34 bản ghi trích từ OCR là đoạn văn, không phải câu hỏi (docs/10 §1–2). "CS224N dùng làm gì?" — chỉ để kiểm tra hồi quy pipeline v1 căn chỉnh slide.
+
+#### Slide 4 · Kiến trúc
+**Người nói:** TV1 · **Thời lượng:** 65 s (02:40–03:45)
+
+> "Hệ thống có ba luồng vào: video màn hình, lời giảng Việt – Anh và log chat. Video được tách thành các màn hình và chạy OCR, rồi bóc ra câu hỏi với các lựa chọn A đến D; lời giảng đi qua Whisper và được gán nhãn tiếng Việt hay tiếng Anh; còn chat được ẩn danh tên thành S1 đến SN và trích ra đáp án học viên chọn. Điều em muốn thầy/cô chú ý là bốn chỗ các luồng kết hợp với nhau, đánh số từ 1 đến 4. Số 1, chữ OCR trên màn hình làm gợi ý cho ASR, hiện mới là thử nghiệm; số 2, thời điểm màn hình cộng lời giảng dùng để căn chỉnh câu hỏi; số 3, lời cô giảng khi chữa một câu giúp xác định câu đó thuộc chủ điểm nào; số 4, lỗi trong chat đi qua câu hỏi để tìm ra chủ điểm yếu trong báo cáo. Đầu ra cuối cùng là sổ tay học viên trên web demo và báo cáo cho giáo viên."
+
+**Chuyển ý:** "Trước khi vào chi tiết, em điểm qua các công trình liên quan."
+
+**Nếu bị hỏi ngay trên slide này:** "Bài chỉ có một người nói thì phân vai người nói để làm gì?" — `diarize.py` hỗ trợ ghi âm tách kênh từng người (Zoom) hoặc pyannote; với bài ECE nó rơi về chế độ một người nói, nên báo cáo ghi TTT/STT "chưa đo".
+
+#### Slide 5 · Nghiên cứu liên quan
+**Người nói:** TV1 · **Thời lượng:** 45 s (03:45–04:30)
+
+> "Gần nhất với nhóm là MaViLS của Anderer và cộng sự năm 2024, căn chỉnh video bài giảng với slide bằng ASR, OCR, đặc trưng hình ảnh và quy hoạch động. Khác biệt của nhóm là không có file slide gốc, và cần căn chỉnh tới từng câu hỏi trắc nghiệm chứ không phải từng slide. Về nhận dạng tiếng nói, nhóm dùng Whisper và tham khảo Peng và cộng sự về việc dùng prompt để điều khiển Whisper; về liên kết chủ điểm, nhóm dùng bi-encoder, cụ thể là E5 đa ngữ. Với lỗi người học, nhóm dùng ERRANT của Bryant, Felice và Briscoe ở ACL 2017 để gán loại lỗi, còn từ vựng tra theo CEFR-J và Octanove."
+
+**Chuyển ý:** "Em xin mời TV2 trình bày phần nhận dạng tiếng nói và căn chỉnh câu hỏi."
 
 ---
 
-### SLIDE 06: GIẢM ẢO GIÁC ASR BẰNG BƠM NGỮ CẢNH OCR (SCREEN HINTS CONTEXTUAL PROMPTING)
-* **Nội dung trình chiếu:**
-  * **Điểm đột phá:** Tận dụng thông tin thị giác từ màn hình slide chia sẻ để hỗ trợ cho kênh âm thanh.
-  * **Quy trình thực hiện:**
-    1. Trích xuất các màn hình trình chiếu (keyframe) và chạy Apple Vision OCR để lấy danh sách từ vựng trên slide.
-    2. Lọc bỏ stop words, ký tự rác và các từ tiếng Việt không liên quan.
-    3. Định dạng thành chuỗi `Screen Hints` gồm các thuật ngữ trọng tâm (ví dụ: *"participle, adjective, passive, modifier"*).
-    4. Bơm chuỗi này vào tham số `initial_prompt` của Whisper trước khi giải mã âm thanh.
-  * **Kết quả thực nghiệm:** Tỷ lệ lỗi nhận dạng tên riêng và thuật ngữ tiếng Anh giảm đáng kể từ 18.4% xuống còn 9.2%, triệt tiêu hoàn toàn hiện tượng ảo giác (hallucination).
+### Phần 2 — TV2 (slide 6–8 · 4,5 phút · 04:30–09:00)
 
-> 🎤 **Lời thoại Thành viên 2 (Speaker Script):**  
-> *"Tuy nhiên, ngay cả mô hình Whisper lớn nhất cũng gặp khó khăn khi giáo viên phát âm lướt hoặc micro bị nhiễu âm. Để khắc phục điều này, nhóm đã áp dụng một kỹ thuật tiên tiến được lấy cảm hứng từ bài báo khoa học MaViLS (Multimodal Video Lecture Segmentation): đó là **Contextual Prompting qua Screen Hints**.  
-> Cụ thể, trước khi phiên mã một đoạn âm thanh, chúng em chạy OCR trên khung hình video tương ứng để lấy ra danh sách các từ vựng xuất hiện trên màn hình bài giảng. Danh sách này được nạp vào `initial_prompt` của Whisper đóng vai trò như một ngữ cảnh gợi ý (context bias).  
-> Nhờ vậy, khi giáo viên nói đến một từ vựng chuyên ngành có trên slide, bộ giải mã của Whisper sẽ ưu tiên chọn token đó, giúp giảm tỷ lệ nhận diện sai thuật ngữ xuống gần một nửa và loại bỏ hoàn toàn các câu ảo giác vô nghĩa."*
+#### Slide 6 · Nhận dạng lời giảng trộn mã Việt – Anh
+**Người nói:** TV2 · **Thời lượng:** 80 s (04:30–05:50)
 
----
+> "Em dùng faster-whisper bản large-v3-turbo ở chế độ đa ngữ, chạy trên máy cá nhân. Mỗi đoạn được gán nhãn ngôn ngữ theo mật độ chữ có dấu: trên 0,3 là tiếng Việt, bằng 0 là tiếng Anh, còn lại là trộn. Nhóm có thử một ý tưởng đa phương thức: lấy từ tiếng Anh trên màn hình đang chiếu, qua OCR, đưa vào tham số hotwords của Whisper. Em xin nói thẳng là nhóm chưa có WER, vì năm clip tham chiếu, tổng cộng 10 phút, vẫn là bản nháp chưa sửa tay. Chỉ số gián tiếp ở bảng bên phải cho thấy gợi ý có tác dụng hai chiều: tỉ lệ từ trên màn hình được nói ra tăng từ 48 lên 52 phần trăm so với đối chứng, nhưng số đoạn lặp tăng từ 3 lên 20 đến 27, là dấu hiệu ảo giác. Vì vậy pipeline hiện vẫn dùng bản không gợi ý."
 
-### SLIDE 07: TRÍCH XUẤT MÀN HÌNH & THUẬT TOÁN CĂN CHỈNH ĐƠN ĐIỆU (MONOTONIC DP ALIGNMENT)
-* **Nội dung trình chiếu:**
-  * **Mục tiêu:** Xác định chính xác giây bắt đầu ($t_{start}$) và giây kết thúc ($t_{end}$) của từng câu hỏi trong số 34 câu hỏi bài tập trên video.
-  * **Thách thức:** Giáo viên có thể nhắc lại số câu nhiều lần (ví dụ: *"hôm trước câu 1 ta làm rồi, hôm nay làm lại câu 1..."*), hoặc lời giảng có độ trễ so với lúc chuyển slide.
-  * **Thuật toán Quy hoạch động Đơn điệu (Monotonic DP):**
-    * Sử dụng Regex kèm Negative Lookbehind (`(?<!page\s)\b(?:number|câu)\s*(\d+)\b`) để bóc tách khẩu lệnh chuyển câu của giáo viên.
-    * Đặt ràng buộc toán học đơn điệu nghiêm ngặt: Mốc thời gian chữa câu thứ $k+1$ bắt buộc phải diễn ra sau câu thứ $k$ ($t_{k+1} > t_k$).
-    * Thêm vùng đệm động (Dynamic Search Window) 120 giây giữa các câu hỏi để loại bỏ các mốc thời gian giả.
+**Chuyển ý:** "Có lời giảng rồi, bài toán chính của em là tìm lúc cô bắt đầu chữa từng câu."
 
-> 🎤 **Lời thoại Thành viên 2 (Speaker Script):**  
-> *"Sau khi có văn bản lời giảng và đề bài từ slide, bài toán tiếp theo là: Làm sao biết chính xác từ phút thứ mấy đến phút thứ mấy giáo viên đang chữa câu hỏi số 1, số 2, hay số 34?  
-> Nếu chỉ dùng tìm kiếm từ khóa đơn thuần, hệ thống sẽ thất bại ngay lập tức vì giáo viên thường xuyên nói những câu như 'Xem lại câu 2 đi' khi đang chữa câu 5, gây ra hiện tượng nhảy ngược thời gian.  
-> Nhóm em đã giải quyết bài toán này bằng **Thuật toán Quy hoạch động Đơn điệu (Monotonic DP Alignment)**. Thuật toán áp dụng một ràng buộc đơn điệu nghiêm ngặt: thời điểm bắt đầu chữa câu hỏi sau luôn luôn phải lớn hơn câu hỏi trước ($t_{k+1} > t_k$), kết hợp với một cửa sổ trượt 120 giây.  
-> Điều này đảm bảo timeline của buổi học luôn xuôi chiều tự nhiên và không bao giờ bị nhảy lộn xộn."*
+**Nếu bị hỏi ngay trên slide này:** "Proxy đo gì?" — tỉ lệ từ tiếng Anh có trên một màn hình mà transcript ghi là cô nói trong lúc màn hình đó hiện; gợi ý làm proxy tăng một phần chỉ vì Whisper chép lại từ gợi ý, nên không thay được WER. "hotwords khác initial_prompt?" — `initial_prompt` ở đây là prompt cố định của bài (lesson.json); `hotwords` thay đổi theo từng màn hình. Cả hai đều là token văn bản đặt trước phần giải mã trong ngữ cảnh của decoder.
+
+#### Slide 7 · Căn chỉnh câu hỏi ↔ lời giảng
+**Người nói:** TV2 · **Thời lượng:** 110 s (05:50–07:40)
+
+> "Mỗi cặp câu hỏi k và đoạn lời giảng j có một điểm: 25 điểm nếu đoạn đó có khẩu lệnh như 'câu số N' hay 'câu thứ tư', cộng 2 điểm cho mỗi từ chung với câu hỏi, cộng 3 điểm nếu màn hình của câu đó đang chiếu. Regex loại các trường hợp 'text', 'page', 'part' hay 'trang N', vì đó không phải số câu. Thay đổi quan trọng nhất là xác minh khẩu lệnh: 'câu N' chỉ được đủ 25 điểm nếu trong 60 giây sau đó cô nói ít nhất một từ của chính câu hỏi, nếu không thì chỉ được 2 điểm. Khung bên phải là tình huống thật ở Unit 4: màn hình chiếu Exercise B nhưng cô chữa Exercise A trong sách trước và nói 'câu số 1' ở 03:09; bản cũ gán câu B1 vào đây và lệch 216 giây, còn bản mới thấy khẩu lệnh không được xác minh nên bỏ qua nó và chọn 07:05, nằm trong đoạn cô chữa câu B1, chỉ trễ 21 giây so với nhãn. Bộ giải mã là quy hoạch động đơn điệu theo công thức D[k][j], tối ưu toàn cục và cho phép bỏ qua câu; sau đó mốc được lùi về các đoạn ngay trước có chung từ với câu hỏi, vì cô thường đọc đề trước rồi mới nói số câu."
+
+**Chuyển ý:** "Em chuyển sang kết quả đo trên bài kiểm tra độc lập."
+
+**Nếu bị hỏi ngay trên slide này:** "Câu không tìm được khẩu lệnh thì sao?" — câu không khớp lấy thời điểm màn hình xuất hiện nhưng bị kẹp giữa hai câu kề nhau, nên không đảo thứ tự. "Các trọng số 25/2/3 lấy đâu ra?" — chỉnh tay trên Unit 4 (dev), giữ nguyên khi chạy Unit 5.
+
+#### Slide 8 · Kết quả căn chỉnh
+**Người nói:** TV2 · **Thời lượng:** 80 s (07:40–09:00)
+
+> "Thuật toán được chỉnh trên Unit 4, rồi chỉ chạy một lần trên Unit 5 để kiểm tra. Trên Unit 5, tỉ lệ câu có mốc lệch không quá 10 giây tăng từ 57 lên 80 phần trăm so với bản cũ, sai số trung bình giảm từ 28,5 xuống 8,1 giây, và không còn câu nào bị đảo thứ tự. Để so sánh, nếu chỉ lấy thời điểm màn hình xuất hiện thì đạt 49 phần trăm. Em cũng nói rõ: trên cả hai bài, DP chọn giống hệt greedy, nên phần cải thiện đến từ cách tính điểm, bước lùi mốc và cách xử lý câu không khớp, chứ không phải từ bản thân DP. Lỗi còn lại chủ yếu nằm ở các chỗ trống trong đoạn văn Part 6 và Part 7, nơi cô đọc liền cả đoạn nên rất khó nói câu bắt đầu lúc nào."
+
+**Chuyển ý:** "Em xin mời TV3 trình bày phần liên kết câu hỏi với chủ điểm ngữ pháp."
+
+**Nếu bị hỏi ngay trên slide này:** "Trên Unit 4, regex lấy 'câu N' đầu tiên đạt 71,9% ở ±10 s, cao hơn bản hiện tại (68,8%)?" — đúng, nhóm báo cáo nguyên văn; nhưng regex kém hơn ở ±30 s, sai số trung bình 28,1 s so với 10,0 s, và trên Unit 5 chỉ đạt 71,4% với 2 lần đảo thứ tự. "Nhãn ai gán?" — xem docs/09, Q1.
 
 ---
 
-### SLIDE 08: KẾT QUẢ ĐỊNH LƯỢNG CĂN CHỈNH BÀI TẬP (34/34 CÂU HỎI - 100% RECALL)
-* **Nội dung trình chiếu:**
-  * **Kết quả thực nghiệm trên bài giảng ECE TOEIC Starter Unit 4 (63 phút video):**
-    * Tổng số bài tập trên slide: 34 câu hỏi trắc nghiệm (Part 5 & Part 6).
-    * Tổng số câu hỏi căn chỉnh thành công: **34 / 34 câu (Recall: 100%, Precision: 97.1%)**.
-    * Sai số thời gian trung bình (Mean Boundary Error): **$\Delta t \le 1.8$ giây** so với mốc gán nhãn thủ công (Ground Truth).
-    * Không có bất kỳ câu hỏi nào bị rỗng nội dung đề bài (0 empty stems).
-  * **Sản phẩm đầu ra:** Tệp `exercise_alignment.json` chứa cấu trúc chuẩn hóa gồm `id`, `number`, `stem`, `options`, `start`, `end`, và `trigger_text`.
+### Phần 3 — TV3 (slide 9–12 · 5,5 phút · 09:00–14:30)
 
-> 🎤 **Lời thoại Thành viên 2 (Speaker Script):**  
-> *"Nhờ thuật toán Monotonic DP, trên bộ dữ liệu thực tế bài giảng TOEIC dài 63 phút với 34 câu hỏi trắc nghiệm, hệ thống của nhóm đã đạt độ phủ **Recall tuyệt đối 100%**, tức là tìm ra chính xác toàn bộ 34/34 câu hỏi mà giáo viên chữa trong bài.  
-> Sai số mốc thời gian trung bình chỉ là 1.8 giây — một con số hoàn toàn lý tưởng cho trải nghiệm người dùng học tập, vì khi học sinh bấm vào câu hỏi, video sẽ bắt đầu ngay trước lúc giáo viên cất lời chữa bài khoảng 1-2 giây.  
-> Tiếp theo, để biến các câu hỏi bài tập này thành tri thức ngữ nghĩa và liên kết với lý thuyết, em xin kính mời Bạn [Tên Thành viên 3] trình bày phần Kỹ thuật NLP cốt lõi."*
+#### Slide 9 · Liên kết câu hỏi ↔ chủ điểm ngữ pháp
+**Người nói:** TV3 · **Thời lượng:** 90 s (09:00–10:30)
 
----
+> "Câu 'The movie was very ___' với các lựa chọn move, moving, moved thuộc chủ điểm 'Participles as Adjectives', nhưng hai bên không có từ nào chung. Bản cũ dùng all-MiniLM-L6-v2, một mô hình chỉ hiểu tiếng Anh, trong khi phần giải thích chủ điểm viết bằng tiếng Việt; để bù, bản cũ ghép thêm từ khóa viết tay, mà trong đó có cả từ đáp án như central, luxury, shined, tức là rò rỉ nhãn. Khi bỏ bộ từ khóa đó, độ chính xác tụt từ 76,5 xuống 61,8 phần trăm. Bản hiện tại dùng multilingual-e5-small, và điểm của một cặp câu hỏi – chủ điểm là trung bình của hai cosine: giữa câu hỏi với chủ điểm, và giữa lời cô giảng trong lúc chữa câu đó với chủ điểm. Lời giảng chính là điểm kết hợp số 3: khi chữa, cô nói những câu như 'chọn động từ thêm ing hay thêm ed để làm tính từ', hay 'công thức nhờ vả'. Nếu điểm cao nhất đạt từ 0,835 trở lên thì gắn chủ điểm, ngược lại không gắn, vì nhiều câu chỉ là câu từ vựng hoặc đọc hiểu."
 
-```
-================================================================================
-PHẦN 3: KỸ THUẬT NLP CỐT LÕI & NHÚNG NGỮ NGHĨA VECTOR (SLIDE 09 - 13)
-Người trình bày: THÀNH VIÊN 3 (Core NLP Engineer) - Thời gian: 05 phút 00 giây
-================================================================================
-```
+**Chuyển ý:** "Kết quả của cách làm này ở slide tiếp theo."
 
-### SLIDE 09: PHÂN LOẠI TỪ VỰNG CEFR-J & CẮT AUDIO PHÁT ÂM 1.5S
-* **Nội dung trình chiếu:**
-  * **Mục tiêu:** Giúp học sinh học từ vựng có hệ thống theo chuẩn khung tham chiếu Châu Âu (CEFR).
-  * **Quy trình NLP:**
-    1. *Lemmatization & Phân tích hình thái:* Chuẩn hóa danh từ số nhiều, động từ bất quy tắc về dạng nguyên thể (lemma).
-    2. *Đối chiếu Từ điển CEFR-J:* Khớp từ vựng với cơ sở dữ liệu 8.845 từ vựng học thuật chuẩn hóa từ cấp độ A1 đến C2.
-    3. *Lọc Homophone Tiếng Việt:* Sử dụng danh sách cấm `VI_HOMOPHONES` (loại bỏ các từ trùng âm như *'an', 'may', 'can'* khi dịch lời nói tiếng Việt).
-    4. *Cắt Audio Clip Tự động:* Tự động dùng `ffmpeg` trích xuất đoạn âm thanh 1.5 giây đúng vị trí giáo viên phát âm từ vựng trong video.
-  * **Kết quả:** Trích xuất 79 từ vựng trọng tâm (A1: 28, A2: 19, B1: 18, B2: 12, C1: 2) kèm 79 file audio `.mp3`.
+**Nếu bị hỏi ngay trên slide này:** "Lời giảng lấy đoạn nào?" — từ mốc bắt đầu chữa câu đó (lấy từ kết quả căn chỉnh) đến mốc của câu kế tiếp, có giới hạn độ dài (`SPEECH_MAX_S` trong `concept_link.py`). Không có mô hình thì dùng TF-IDF trên câu hỏi + lời giảng.
 
-> 🎤 **Lời thoại Thành viên 3 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô, bước sang tầng xử lý NLP ngữ nghĩa, tính năng đầu tiên nhóm xây dựng là **Bộ trích xuất và phân loại từ vựng CEFR**.  
-> Thông thường, các ứng dụng khác chỉ liệt kê từ mới và lấy phát âm từ giọng đọc robot text-to-speech. Nhưng EduSync làm khác biệt hoàn toàn:  
-> Sau khi lemmatize và đối chiếu với từ điển chuẩn CEFR-J gồm gần 9.000 từ để phân loại từ A1 đến C1, hệ thống của nhóm sẽ định vị chính xác vị trí timestamp của từ đó trong lời giảng và tự động cắt ra một đoạn audio 1.5 giây.  
-> Khi học sinh bấm vào biểu tượng loa, các em được nghe chính ngữ điệu và phát âm chuẩn của giáo viên trong lớp học, giúp việc ghi nhớ từ vựng trực quan và chân thực hơn rất nhiều."*
+#### Slide 10 · Kết quả liên kết chủ điểm (Unit 4, 34 câu)
+**Người nói:** TV3 · **Thời lượng:** 80 s (10:30–11:50)
 
----
+> "Trước hết cần so với một mốc đơn giản: 22 trên 34 câu là câu từ vựng hoặc đọc hiểu, nên cách 'luôn không gắn' đã đạt 73,5 phần trăm, và bản cũ chỉ hơn mốc này 3 điểm. Biểu đồ bên trái so sánh các phương pháp; bản hiện tại, e5 đa ngữ cộng lời giảng, đạt 91,2 phần trăm. Bảng bên phải là đầu ra thực tế trong demo: độ chính xác tăng từ 58,8 lên 91,2 phần trăm, và trong demo cũ khoảng 61 phần trăm badge gắn sai, còn bản mới chỉ 1 trên 10 badge sai. Đổi lại, recall, tức tỉ lệ câu có chủ điểm được gắn đúng, là 75 phần trăm, nghĩa là vẫn có câu bị bỏ sót. Hạn chế lớn nhất em phải nói rõ: mô hình và ngưỡng được chọn trên chính 34 câu này, nên con số có thể lạc quan, và chưa có tập kiểm tra độc lập cho bài toán này."
 
-### SLIDE 10: VẤN ĐỀ CỦA KEYWORD MATCHING & GIẢI PHÁP DENSE EMBEDDINGS
-* **Nội dung trình chiếu:**
-  * **Bài toán:** Học sinh làm câu trắc nghiệm: *"The seminar was very [interest/interesting/interested]"* $\rightarrow$ Câu hỏi này thuộc chủ điểm ngữ pháp nào?
-  * **Sự thất bại của Khớp Từ khóa (Lexical / Keyword Matching):**
-    * Đề bài không hề chứa từ *"Participle"* hay *"Tính từ phân từ"*.
-    * Tìm kiếm từ khóa trả về độ tương đồng bằng 0 ($Score = 0$).
-  * **Giải pháp Nhúng Ngữ nghĩa (Dense Semantic Embeddings):**
-    * Chuyển đổi toàn bộ câu hỏi và nội dung các chủ điểm lý thuyết thành các vector mật độ cao (dense vectors) trong không gian ngữ nghĩa liên tục $\mathbb{R}^d$.
-    * Các từ vựng đồng nghĩa, có liên quan về mặt khái niệm ngữ pháp (*interest, excited, bored* và *participle, adjective*) sẽ nằm gần nhau trong không gian vector.
+**Chuyển ý:** "Ngoài liên kết câu hỏi, hệ thống còn trích chủ điểm và từ vựng từ bài giảng."
 
-> 🎤 **Lời thoại Thành viên 3 (Speaker Script):**  
-> *"Tiếp theo là bài toán liên kết câu hỏi với lý thuyết ngữ pháp — một trong những điểm nhấn quan trọng nhất của đề tài mà Thầy/Cô đã định hướng cho nhóm.  
-> Nếu chúng ta dùng phương pháp so khớp từ khóa truyền thống (như BM25 hay TF-IDF), thuật toán sẽ hoàn toàn bất lực. Ví dụ một câu hỏi bài tập yêu cầu điền từ 'interesting', trong toàn bộ câu hỏi không hề xuất hiện chữ 'participle' hay 'phân từ'. Khớp từ khóa sẽ cho kết quả bằng 0.  
-> Để giải quyết triệt để vấn đề này, nhóm chúng em đã áp dụng phương pháp **Nhúng Vector Ngữ nghĩa (Dense Semantic Embeddings)**. Chúng em chuyển đổi cả câu hỏi và các đoạn lý thuyết vào một không gian vector đa chiều, nơi mà các khái niệm có quan hệ ngữ nghĩa sẽ tự động hội tụ về gần nhau."*
+**Nếu bị hỏi ngay trên slide này:** "Ngưỡng 0,835 có overfit không?" — có nguy cơ; trong biểu đồ, ngưỡng được chọn leave-one-out (mỗi câu chấm bằng ngưỡng tối ưu trên 33 câu còn lại), nhưng việc chọn mô hình thì làm trên cùng 34 câu; điểm hai nhóm sát nhau (0,81–0,86) nên sang bài mới phải hiệu chỉnh lại (docs/09, Q7).
+
+#### Slide 11 · Trích xuất chủ điểm và từ vựng
+**Người nói:** TV3 · **Thời lượng:** 80 s (11:50–13:10)
+
+> "Bốn chủ điểm ngữ pháp được Gemini trích ra ở chế độ JSON, gồm tiêu đề, công thức và lời giải thích; nhưng Gemini chỉ thấy khoảng 30 đoạn lời giảng lấy mẫu, nên mốc thời gian nó trả về thực chất là đoán. Ví dụ phần bị động cô giảng ở 13:16, Gemini lại trả về 55:02, lệch gần 42 phút. Nhóm neo lại mỗi chủ điểm vào cửa sổ lời giảng giống nó nhất theo e5, nhờ đó sai số trung bình giảm từ 882,5 giây xuống 11,2 giây; khi không có mạng thì dùng bảng chủ điểm TOEIC và tìm từ khóa trong lời giảng. Về từ vựng, vocab.py lemma hóa hai lớp, tra từ điển CEFR-J và Octanove 8.845 mục, lọc những từ trùng mặt chữ Việt – Anh như 'hay', 'con', và lấy nghĩa tiếng Việt theo mẫu 'X là, nghĩa là' trong lời giảng. Unit 4 có 80 từ, 52 từ có nghĩa tiếng Việt và 79 clip audio giọng cô; em lưu ý là độ đúng của nghĩa và audio chưa được đánh giá."
+
+**Chuyển ý:** "Phần cuối của em là phát hiện lỗi người học trong chat."
+
+**Nếu bị hỏi ngay trên slide này:** "JSON mode có phải structured output với schema chặt không?" — không; chỉ đặt `responseMimeType=application/json` rồi kiểm tra các trường sau khi parse. "Clip audio cắt thế nào?" — theo ranh giới đoạn ASR có chứa từ (ưu tiên đoạn chỉ có một từ), vì transcript không có timestamp từng từ. "Lọc trùng mặt chữ làm thế nào?" — `hay`, `con`, `cho`, `ra`, `nam`, `sau`… nằm trong danh sách cố định `VI_HOMOPHONES` (41 âm tiết), còn `an`, `can` bị loại qua danh sách stopword tiếng Anh. Bộ lọc không xét ngữ cảnh, và `may` hiện **chưa** được lọc.
+
+#### Slide 12 · Phát hiện lỗi người học trong chat
+**Người nói:** TV3 · **Thời lượng:** 80 s (13:10–14:30)
+
+> "Module feedback.py dùng luật cho sáu mẫu lỗi chuyển di từ tiếng Việt: thừa 'be' như 'I am agree', nhầm đuôi -ing và -ed, cấu trúc nhờ vả, 'should to', hòa hợp chủ vị, và thiếu trợ động từ 'do' trong câu hỏi. Mỗi lỗi kèm câu sửa, giải thích tiếng Việt và một loại lỗi ERRANT; các loại trong bảng đã được kiểm chứng bằng thư viện errant 3.0.2 chính thức, ví dụ 'should to increase' là U:VERB:FORM. Bản cũ khớp nguyên văn từng câu chat, nên tỉ lệ 6 trên 6 trước đây không có ý nghĩa. Bản mới được đo trên 70 câu viết độc lập, không xem luật: precision 100 phần trăm, recall 72,7 phần trăm, F1 84,2. Đây không phải mô hình GEC tổng quát, lỗi ngoài sáu nhóm sẽ bị bỏ qua, và trước khi chốt nhóm đã xem tập 70 câu một lần để sửa 3 lỗi cài đặt."
+
+**Chuyển ý:** "Em xin mời TV4 trình bày báo cáo cho giáo viên và demo."
+
+**Nếu bị hỏi ngay trên slide này:** "'I am confusing → confused' sao lại R:VERB:FORM?" — R:VERB:FORM là nhãn mặc định của nhóm -ing/-ed (lấy từ cặp "The movie was moved → moving"); với riêng cặp "confusing → confused", errant 3.0.2 cho R:MORPH. Nếu máy có cài `errant`, `feedback.py` để errant tự gán nhãn từng lỗi. "Precision 100% có đáng tin?" — tập chỉ 70 câu, nhãn cũng là bản nháp; nhưng 10 câu có lỗi ngoài phạm vi không bị báo nhầm câu nào.
 
 ---
 
-### SLIDE 11: KHÔNG GIAN VECTOR `all-MiniLM-L6-v2` & COSINE SIMILARITY
-* **Nội dung trình chiếu:**
-  * **Mô hình Nhúng:** `sentence-transformers/all-MiniLM-L6-v2` (kích thước vector $d=384$, được huấn luyện trên 1 tỷ cặp câu).
-  * **Biểu diễn Toán học:**
-    * Vector câu hỏi: $\mathbf{u} = \text{Embed}(\text{Question Stem} \oplus \text{Options}) \in \mathbb{R}^{384}$
-    * Vector chủ điểm lý thuyết: $\mathbf{v}_j = \text{Embed}(\text{Title}_j \oplus \text{Formula}_j \oplus \text{Explanation}_j) \in \mathbb{R}^{384}$
-    * Độ tương đồng Cosine:
-      $$\text{Sim}(\mathbf{u}, \mathbf{v}_j) = \frac{\mathbf{u} \cdot \mathbf{v}_j}{\|\mathbf{u}\|_2 \|\mathbf{v}_j\|_2} = \frac{\sum_{i=1}^{384} u_i v_{j,i}}{\sqrt{\sum_{i=1}^{384} u_i^2} \sqrt{\sum_{i=1}^{384} v_{j,i}^2}}$$
-  * **Quyết định Ghép cặp:** $\hat{j} = \arg\max_j \text{Sim}(\mathbf{u}, \mathbf{v}_j)$ với ngưỡng tự tin (Confidence Thresholding): HIGH ($\ge 0.25$), MEDIUM ($[0.15, 0.25)$), LOW ($< 0.15$).
-  * **Hiệu năng:** Tốc độ suy luận chỉ 4.2ms/câu trên chip Apple Silicon Metal, hoàn toàn offline.
+### Phần 4 — TV4 (slide 13–17 · 5,5 phút · 14:30–20:00)
 
-> 🎤 **Lời thoại Thành viên 3 (Speaker Script):**  
-> *"Cụ thể về mặt kỹ thuật, nhóm sử dụng mô hình pre-trained `all-MiniLM-L6-v2`. Mỗi câu hỏi và mỗi chủ điểm ngữ pháp được mã hóa thành một vector 384 chiều.  
-> Sau đó, chúng em tính toán độ tương đồng Cosine giữa vector câu hỏi và 4 vector chủ điểm lý thuyết trong bài giảng. Chủ điểm nào đạt độ tương đồng cực đại và vượt qua ngưỡng tin cậy sẽ được ghép cặp với câu hỏi đó.  
-> Kết quả chạy thực nghiệm cho thấy thời gian nhúng chỉ mất 4.2 mili-giây cho mỗi câu hỏi trên chip Mac M-series, và hệ thống đã gán nhãn thành công các câu hỏi về phân từ, câu bị động và vị trí tính từ với độ chính xác rất cao, tạo nên tệp `exercise_concept_links.json` phục vụ trực tiếp cho giao diện web."*
+#### Slide 13 · Báo cáo cho giáo viên
+**Người nói:** TV4 · **Thời lượng:** 60 s (14:30–15:30)
 
----
+> "Báo cáo cho giáo viên giờ chỉ hiển thị những gì tính được từ dữ liệu. Thứ nhất là phân bố lỗi trong chat theo sáu nhóm. Thứ hai là chủ điểm yếu nhất: hệ thống đi từ lỗi trong chat, qua câu hỏi mà tin nhắn đó trả lời, tới chủ điểm của câu hỏi; ở Unit 4 kết quả là Participles, với 2 tin nhắn ở câu 4 và câu 6. Thứ ba là gợi ý cho buổi sau, là câu mẫu điền từ dữ liệu, không dùng LLM, và mỗi dòng đều nêu căn cứ. Còn tỉ lệ thời gian nói TTT/STT, vì bản ghi chỉ có một người nói nên hệ thống ghi 'chưa đo' thay vì báo 100/0 như bản cũ; muốn đo được thì cần ghi âm tách kênh từng người trên Zoom hoặc dùng pyannote."
 
-### SLIDE 12: CHẨN ĐOÁN LỖI NGỮ PHÁP GEC CHUẨN ERRANT TỪ ZOOM CHAT
-* **Nội dung trình chiếu:**
-  * **Nguồn dữ liệu:** Tệp log Zoom chat `chat.txt` của học sinh tương tác trong giờ học.
-  * **Thuật toán Phân loại Lỗi Sư phạm (ERRANT Taxonomy):**
-    * Bắt 6 nhóm lỗi chuyển di ngôn ngữ (L1 Transfer) kinh điển của học viên Việt Nam:
-      1. `U:VERB:BE`: Thừa động từ 'to be' do ảnh hưởng tiếng Việt (*"I am agree with A"* $\rightarrow$ *"I agree with A"*).
-      2. `R:ADJ:PARTICIPLE`: Nhầm lẫn đuôi -ing và -ed (*"I am confusing"* $\rightarrow$ *"I am confused"*).
-      3. `M:VERB:AUX`: Thiếu trợ động từ đảo ngữ (*"Why we use..."* $\rightarrow$ *"Why do we use..."*).
-      4. `R:VERB:FORM`: Sai dạng phân từ trong cấu trúc nhờ vả causative (*"have it clean"* $\rightarrow$ *"have it cleaned"*).
-      5. `U:PREP`: Thừa giới từ sau động từ khiếm khuyết (*"should to increase"* $\rightarrow$ *"should increase"*).
-      6. `R:VERB:SVA`: Lỗi hòa hợp chủ vị ngôi thứ ba số ít (*"it make me cry"* $\rightarrow$ *"it makes me cry"*).
-  * **Đầu ra:** Câu sửa tối thiểu (`<ins>`, `<del>`) và lời giải thích quy tắc sư phạm hoàn toàn bằng tiếng Việt.
+**Chuyển ý:** "Bây giờ em xin demo trực tiếp."
 
-> 🎤 **Lời thoại Thành viên 3 (Speaker Script):**  
-> *"Song song với bài tập, một mỏ dữ liệu quý giá khác mà trước nay thường bị bỏ quên chính là khung chat của học sinh.  
-> Nhóm chúng em đã xây dựng module **GEC Feedback** tuân thủ theo bảng phân loại lỗi quốc tế ERRANT của Đại học Cambridge. Chúng em tập trung nhận diện 6 mẫu lỗi L1 Transfer phổ biến nhất của người Việt khi học tiếng Anh, ví dụ như lỗi thừa động từ 'to be' khi nói 'I am agree', hay lỗi nhầm lẫn tai hại giữa tính từ đuôi -ing và -ed.  
-> Hệ thống không chỉ đưa ra câu sửa chuẩn mà còn cung cấp lời giải thích sư phạm chi tiết bằng tiếng Việt, giúp học sinh nhận thức rõ nguyên nhân mình sai và cách khắc phục."*
+**Nếu bị hỏi ngay trên slide này:** "Chat là mô phỏng thì chủ điểm yếu nhất có ý nghĩa không?" — không, ở đây chỉ minh họa luồng chat → lỗi → câu hỏi → chủ điểm; cần chat của lớp thật mới kết luận được.
 
----
+#### Slide 14 · Demo
+**Người nói:** TV4 · **Thời lượng:** 120 s (15:30–17:30), phần lớn là demo trực tiếp
 
-### SLIDE 13: TRÍCH XUẤT THÔNG TIN CẤU TRÚC (BILINGUAL IE) VỚI GEMINI API
-* **Nội dung trình chiếu:**
-  * **Mục tiêu:** Bóc tách 4 chủ điểm ngữ pháp trọng tâm (Grammar Points) từ bản phiên mã thô của bài giảng.
-  * **Kiến trúc Hybrid Neural Information Extraction:**
-    * *Đường dẫn chính (Primary Path):* Gọi Gemini 3.5 Flash-Lite API với Prompt cấu trúc JSON Schema nghiêm ngặt, trích xuất: Tiêu đề ngữ pháp, Công thức, Giải thích tiếng Việt, Ví dụ minh họa, Timestamp bắt đầu giảng, và Mẹo làm bài thi TOEIC.
-    * *Đường dẫn Dự phòng (Fallback Path):* Bộ phân tích dựa trên luật (Rule-based Regex Heuristics) tự động kích hoạt nếu mất kết nối mạng hoặc hết hạn mức API, đảm bảo tính liên tục 100% của hệ thống.
-  * **Sản phẩm đầu ra:** Tệp `grammar_points.json` và `vocab_deep.json` làm lõi tri thức cho bài giảng.
+*(Chuyển sang trình duyệt đã mở sẵn sổ tay Unit 4.)*
 
-> 🎤 **Lời thoại Thành viên 3 (Speaker Script):**  
-> *"Để trích xuất được các chủ điểm ngữ pháp này một cách tự động từ văn bản lời giảng, nhóm đã áp dụng mô hình **Hybrid Neural Information Extraction**.  
-> Chúng em sử dụng Gemini 3.5 Flash-Lite với cơ chế Structured Outputs để ép kiểu dữ liệu trả về đúng schema JSON gồm công thức toán học ngữ pháp, ví dụ song ngữ và mốc thời gian giảng bài.  
-> Đặc biệt, để đảm bảo tính sẵn sàng cao của phần mềm trong môi trường production, nhóm đã lập trình sẵn một cơ chế Fallback bằng luật. Nếu không có kết nối Internet hoặc API bị gián đoạn, hệ thống vẫn tự động trích xuất được bộ khung lý thuyết cơ bản mà không làm crash ứng dụng.  
-> Sau đây, em xin kính mời Bạn [Tên Thành viên 4] sẽ trình bày về Báo cáo Sư phạm Teacher Dashboard và trực tiếp điều phối phiên Live Demo sản phẩm."*
+> "Đây là sổ tay học viên của Unit 4: bên trái là video với transcript chạy theo, bên phải là danh sách câu hỏi kèm badge chủ điểm. Em bấm thẻ Question 4, câu 'The movie was very…', video tua đến 15:05, lúc cô nói 'Câu số 4'; câu này có badge Participles as Adjectives, em bấm 'Lý thuyết' thì video tua về 00:44, đoạn cô giảng phân từ ở đầu giờ. Sang tab Vocab, em lọc theo bậc CEFR và bấm nghe audio giọng cô đọc từ. Ở tab Chat & GEC, mỗi tin nhắn có lỗi hiện phần sai, câu sửa và lời giải thích tiếng Việt, tên học viên đã được ẩn danh thành S1, S2. Cuối cùng là tab Analytics, mở thẳng được bằng tham số ?tab=tab-stats, chính là báo cáo em vừa trình bày."
+
+**Chuyển ý:** "Sau phần demo, em trình bày cách nhóm bảo đảm các con số tái lập được."
+
+**Chuẩn bị:** chạy `python demo/prepare.py --lesson lessons/ece-toeic-starter-u4` rồi `cd demo && python -m RangeHTTPServer 8000` trước giờ trình bày; mở sẵn video quay dự phòng. Nếu demo lỗi, chuyển ngay sang video dự phòng, không sửa trực tiếp trước hội đồng. Chỉ thao tác những gì có trên slide. Có 4 thẻ "Question 4": chọn thẻ có đề *movie*. Không lấy làm ví dụ: Question 1 đầu bài (mốc lệch 21 s), Question 5 *shoes* (không khớp được lời giảng) và Question 13 (badge gắn sai).
+
+#### Slide 15 · Đánh giá tái lập được
+**Người nói:** TV4 · **Thời lượng:** 55 s (17:30–18:25)
+
+> "Mọi con số trong bài đều tạo lại được bằng một lệnh, python eval/run_all.py, và baseline v1 được chạy lại từ commit 73d9a62 chứ không chép số cũ. Căn chỉnh được chỉnh trên Unit 4 và kiểm tra trên Unit 5; pipeline cũ vẫn qua kiểm tra hồi quy trên CS224N với 9 trên 10 mốc chuyển slide, sai số trung bình 0,6 giây; và pytest chạy đạt 71 trên 71 test, không test nào ghi vào dữ liệu bài học. Bảng bên phải là các bộ nhãn chuẩn: mốc chữa câu của 32 câu Unit 4 và 35 câu Unit 5, mốc lý thuyết của 4 chủ điểm, chủ điểm của 34 câu, 70 câu chat viết độc lập trong đó 54 câu có lỗi và 16 câu đúng, và 5 clip ASR chưa sửa. Tất cả đều là bản nháp do AI gán mà không xem output của hệ thống, và nhóm đang đối chiếu lại với video trước khi bảo vệ."
+
+**Chuyển ý:** "Từ đó, nhóm tự nêu các hạn chế."
+
+**Nếu bị hỏi ngay trên slide này:** "AI gán nhãn thì sao tin được?" — đó là bản nháp, `verified: false`; người gán không xem output hệ thống. Sau khi nhóm sửa nhãn, chạy lại `eval/run_all.py`; nếu số thay đổi thì cập nhật docs/10 trước, rồi đến slide.
+
+#### Slide 16 · Hạn chế và hướng phát triển
+**Người nói:** TV4 · **Thời lượng:** 50 s (18:25–19:15)
+
+> "Dữ liệu còn nhỏ: chỉ hai bài có nhãn, một giáo viên, một người nói; nhãn chuẩn chưa được người kiểm tra hết, và chat là dữ liệu mô phỏng. Nhóm chưa đo WER, nên chưa chứng minh được gợi ý từ màn hình có ích; ngưỡng liên kết chủ điểm chọn trên tập phát triển; và bộ phát hiện lỗi chỉ dựa trên luật cho sáu mẫu. Việc đầu tiên nhóm sẽ làm là sửa tay năm clip để có WER thật cho ba cấu hình, và thu bản ghi lớp học thật có tách kênh từng người cùng chat thật để đo TTT/STT. Sau đó là gán nhãn chủ điểm cho Unit 5 làm tập kiểm tra độc lập, thử mô hình sửa câu seq2seq hoặc LLM rồi dùng errant để gán loại lỗi, và mở rộng sang bài giảng IELTS."
+
+**Chuyển ý:** "Em xin tóm tắt lại."
+
+#### Slide 17 · Kết luận
+**Người nói:** TV4 · **Thời lượng:** 45 s (19:15–20:00)
+
+> "Nhóm có ba đóng góp chính, mỗi đóng góp đi kèm số liệu đo được. Một là căn chỉnh câu hỏi với lời giảng, có xác minh khẩu lệnh theo ngữ cảnh: 80 phần trăm câu đúng trong 10 giây trên bài kiểm tra độc lập, so với 57 phần trăm của bản cũ. Hai là dùng lời giảng làm tín hiệu liên kết chủ điểm với e5 đa ngữ: 91,2 phần trăm trên 34 câu, so với 58,8 phần trăm, mà không cần từ khóa viết tay. Ba là đánh giá tái lập được, và những gì chưa đo được thì ghi rõ là chưa đo. Em cảm ơn thầy/cô và các bạn đã lắng nghe, nhóm em xin sẵn sàng trả lời câu hỏi."
 
 ---
 
-```
-================================================================================
-PHẦN 4: BÁO CÁO SƯ PHẠM, LIVE DEMO & ĐÁNH GIÁ CHẤT LƯỢNG (SLIDE 14 - 18)
-Người trình bày: THÀNH VIÊN 4 (System & Live Demo Engineer) - Thời gian: 06 phút 00 giây
-================================================================================
-```
+## 3. Phân công trả lời hỏi đáp
 
-### SLIDE 14: BÁO CÁO SƯ PHẠM ĐA CHIỀU (TEACHER DASHBOARD)
-* **Nội dung trình chiếu:**
-  * **Dữ liệu tổng hợp:** Được tính toán tự động từ `speakers.json`, `chat_feedback.json` và `exercise_concept_links.json`.
-  * **4 Khối chỉ số Sư phạm thông minh:**
-    1. *Tỷ lệ thời lượng nói (TTT vs STT):* Đo lường chính xác thời lượng giáo viên nói (TTT: 100%) so với học sinh nói (STT: 0%), đưa ra khuyến nghị tăng cường gọi học sinh bật mic phát biểu ở các bài đọc dài.
-    2. *Bản đồ phân bố lỗi sai (Error Distribution):* Biểu đồ trực quan chỉ rõ học sinh sai nhiều nhất ở lỗi `R:ADJ:PARTICIPLE` (28.6%) và `M:VERB:AUX` (14.3%).
-    3. *Chủ điểm yếu nhất lớp (Weakest Concept Alert):* Cảnh báo đỏ chủ điểm *"Tính từ bổ nghĩa danh từ"* với 4 lượt sai tập trung.
-    4. *Kế hoạch hành động 3 bước (Next-Lesson Action Plan):*
-       - Khởi động 5 phút đầu giờ bằng 3 câu trắc nghiệm phân biệt đuôi `-ing` và `-ed`.
-       - Nhắc lại công thức sai khiến Causative `have/get + O + V3/ed`.
-       - Điều chỉnh nhịp độ, dành 3-5 phút cho học sinh tự tìm từ khóa trong Part 6.
+Câu trả lời chi tiết ở [docs/09, phần 3](09_teacher_presentation_and_technical_nlp_guide.md). Người trả lời chính nói trước; người khác chỉ bổ sung khi được mời.
 
-> 🎤 **Lời thoại Thành viên 4 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô, toàn bộ các kết quả phân tích NLP từ giọng nói, văn bản và chat ở các bước trước không chỉ phục vụ cho học sinh ôn bài, mà còn hội tụ lại tại **Bảng điều khiển Sư phạm Teacher Dashboard**.  
-> Đây chính là giải pháp giúp giáo viên giải quyết trọn vẹn bài toán quản lý lớp học:  
-> Thay vì phải đọc lại từng dòng log chat, giáo viên chỉ cần nhìn vào Dashboard là thấy ngay: Hôm nay lớp học của mình có mức độ tương tác ra sao; học sinh đang vấp phải lỗi ngữ pháp nào nhiều nhất; và đặc biệt hệ thống tự động sinh ra một **Kế hoạch hành động 3 bước** cho buổi học ngày mai, hướng dẫn giáo viên nên warm-up bài gì và cần nhắc lại công thức nào.  
-> Để Thầy/Cô có cái nhìn trực quan nhất, ngay sau đây em xin phép được trình chiếu Live Demo sản phẩm đang chạy thực tế trên máy chủ cục bộ."*
+| Chủ đề câu hỏi | Trả lời chính | Câu trong docs/09 |
+| :--- | :-: | :-: |
+| Cách đo 80%, ai gán nhãn; regex "câu N" so với bản hiện tại; DP và greedy | TV2 | Q1–Q3 |
+| WER, gợi ý từ màn hình; lỗi lan truyền từ ASR/OCR | TV2 | Q4–Q5 |
+| Embedding so với TF-IDF/BM25; ngưỡng 0,835; ERRANT | TV3 | Q6–Q8 |
+| Chat thật hay giả, ẩn danh hoá | TV1 | Q9 |
+| Tại sao không dùng LLM cho tất cả | TV1 | Q10 |
+| Báo cáo giáo viên, TTT/STT | TV4 | Q11 |
+| Mở rộng sang IELTS | TV4 | Q12 |
 
----
-
-### SLIDE 15: TRÌNH DIỄN SẢN PHẨM THỰC TẾ (LIVE DEMO SHOWCASE)
-* **Nội dung trình chiếu & Thao tác Demo (Kịch bản 5 bước tại `http://localhost:8000/`):**
-  * **Bước 1 - Đồng bộ Đa phương thức:** Bấm vào câu hỏi bất kỳ trên Tab **Exercises** $\rightarrow$ Video tua mượt mà đến đúng giây giáo viên chữa bài; phụ đề chạy đồng bộ từng từ.
-  * **Bước 2 - Liên kết Khái niệm 2 chiều:** Bấm vào **Badge màu tím** `🏷️ [Tên chủ điểm]` hoặc nút `📖 Lý thuyết (MM:SS) ➔` $\rightarrow$ Video nhảy ngược về phút thứ 08:13 lúc giáo viên giảng lý thuyết, giao diện tự động mở Tab **Grammar** và highlight viền xanh thẻ lý thuyết.
-  * **Bước 3 - Từ vựng CEFR & Audio Clip:** Sang Tab **Vocabulary**, lọc cấp độ B1, bấm nút loa 🔊 $\rightarrow$ Phát đoạn audio 1.5s giọng nói thật của giáo viên.
-  * **Bước 4 - Chẩn đoán Chat GEC:** Sang Tab **Chat & Feedback**, lọc `⚠️ Có lỗi sai` $\rightarrow$ Thấy câu chat của học sinh, mã lỗi `R:ADJ:PARTICIPLE`, câu sửa và giải thích tiếng Việt.
-  * **Bước 5 - Teacher Dashboard & Omnibox:** Mở Tab **📊 Analytics** xem thanh TTT/STT và Kế hoạch bài học sau; bấm `Cmd+K` gõ *"participle"* để tìm kiếm tức thì trên toàn bài giảng.
-
-> 🎤 **Lời thoại Thành viên 4 (Speaker Script):**  
-> *(Thành viên 4 chuyển màn hình sang trình duyệt mở trang web `http://localhost:8000/` và thao tác trực tiếp)*  
-> *"Thưa Thầy/Cô, đây là giao diện Web Demo thực tế của EduSync.  
-> Đầu tiên, ở Tab Exercises bên tay phải, khi em bấm vào Câu hỏi số 1, video ngay lập tức tua đến giây thứ 181 khi giáo viên bắt đầu đọc đề. Các Thầy/Cô có thể thấy một Badge màu tím hiển thị chủ điểm ngữ pháp được gắn nhãn tự động bởi mô hình Dense Embeddings.  
-> Khi em bấm vào nút 'Lý thuyết (08:13)', video lập tức tua ngược về phút thứ 8 lúc cô giáo bắt đầu giảng công thức, đồng thời hệ thống tự chuyển sang Tab Grammar và highlight đúng thẻ lý thuyết này!  
-> Tiếp theo, tại Tab Vocabulary, khi lọc các từ cấp độ B1 và bấm vào biểu tượng loa cạnh từ 'distribute', chúng ta nghe thấy chính xác đoạn phát âm 1.5 giây giọng cô giáo vừa giảng trong bài.  
-> Chuyển sang Tab Chat, hệ thống đã ẩn danh tên học sinh thành S1, S2 theo chuẩn FERPA và gắn nhãn các lỗi sai ngữ pháp bằng mô hình ERRANT.  
-> Và cuối cùng, tại Tab Analytics, giáo viên có một bảng tổng hợp đầy đủ từ biểu đồ tương tác, phân bố lỗi sai đến kế hoạch hành động 3 bước cho buổi sau.  
-> Mọi tính năng đều hoạt động với độ trễ dưới 5ms ngay trên trình duyệt mà không cần tải lại trang."*
-
----
-
-### SLIDE 16: KẾT QUẢ ĐẢM BẢO CHẤT LƯỢNG (QA/QC PLAN & 45/45 TESTS PASS)
-* **Nội dung trình chiếu:**
-  * **Phương pháp luận Kiểm thử:** Áp dụng mô hình Test-Driven Development (TDD) với độ bao phủ toàn diện.
-  * **Bảng tổng kết 45 Unit Tests trong Repository:**
-    * `test_wer.py` (5 tests): Kiểm tra độ chính xác thuật toán Levenshtein WER, đo lường tỷ lệ lỗi từ.
-    * `test_text_lang.py` (3 tests): Kiểm tra khả năng nhận diện tiếng Việt, tiếng Anh và ngôn ngữ hỗn hợp.
-    * `test_screen_hints.py` (4 tests): Kiểm tra bóc tách từ vựng OCR và khử stop words.
-    * `test_exercises.py` (4 tests): Kiểm tra bóc tách câu hỏi, khử trùng lặp và thuật toán Monotonic DP.
-    * `test_vocab.py` (8 tests): Kiểm tra Lemmatization, từ điển CEFR, trích xuất nghĩa tiếng Việt và lọc homophone.
-    * `test_feedback.py` (10 tests): Kiểm tra parser Zoom chat, ẩn danh FERPA và bắt 6 lỗi ERRANT.
-    * `test_neural_ie.py` (4 tests): Kiểm tra schema JSON, format thời gian và cơ chế Rule Fallback.
-    * `test_concept_link.py` (2 tests): Kiểm tra nhúng Dense Embeddings và tính Cosine Similarity.
-    * `test_teacher_analytics.py` (2 tests): Kiểm tra tính toán TTT/STT, phân bố lỗi và sinh Action Plan.
-    * `test_diarize.py` (3 tests): Kiểm tra phân vai giáo viên và học sinh.
-  * **Tỷ lệ vượt qua:** **45 / 45 bài test PASSED (100%)** với thời gian chạy chỉ trong 7.5 giây.
-
-> 🎤 **Lời thoại Thành viên 4 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô, để đạt được độ tin cậy cao như trong bài demo vừa rồi, nhóm em đã áp dụng quy trình kiểm chuẩn phần mềm cực kỳ nghiêm ngặt.  
-> Toàn bộ pipeline hệ thống được bao phủ bởi 45 bài Unit Tests tự động bằng framework Pytest.  
-> Các bài test này kiểm tra từ tính đúng đắn toán học của thuật toán Levenshtein WER, độ chính xác của bộ lemmatize hình thái, thuật toán quy hoạch động đơn điệu, cho đến độ bền vững của mô hình nhúng vector và cơ chế fallback khi gọi API.  
-> Toàn bộ 45/45 bài test hiện đều đạt trạng thái PASSED 100% trên nhánh `edusync-v2` của dự án."*
-
----
-
-### SLIDE 17: ĐÓNG GÓP HỌC THUẬT, HẠN CHẾ & HƯỚNG PHÁT TRIỂN
-* **Nội dung trình chiếu:**
-  * **Đóng góp Học thuật & Thực tiễn:**
-    * Hiện thực hóa thành công mô hình học tập đa phương thức (Multimodal Learning) kết hợp âm thanh, thị giác và văn bản.
-    * Đưa nghiên cứu NLP lý thuyết (Dense Embeddings, ERRANT, Contextual Prompting) vào giải quyết trực tiếp nỗi đau trong giáo dục số.
-    * Xây dựng bộ tài liệu chuẩn mực IEEE/ACM trong thư mục `docs/` (từ SRS, SDD, Literature Review đến Hướng dẫn sử dụng).
-  * **Hạn chế Hiện tại:**
-    * Mô hình Whisper và Apple Vision OCR hiện tối ưu tốt nhất trên hệ điều hành macOS (Metal Performance Shaders).
-    * Bộ dữ liệu thử nghiệm tập trung chủ yếu vào dạng bài trắc nghiệm TOEIC (Part 5 & Part 6).
-  * **Hướng phát triển Tương lai:**
-    * Mở rộng hỗ trợ các dạng bài tập tự luận, bài đọc hiểu dài (Part 7) và kỹ năng Nói (IELTS Speaking).
-    * Triển khai mô hình nhúng đa ngôn ngữ kích thước lớn hơn (như `bge-m3`) và tích hợp cơ sở dữ liệu vector Milvus/Qdrant cho hệ thống cấp trường học.
-
-> 🎤 **Lời thoại Thành viên 4 (Speaker Script):**  
-> *"Nhìn lại toàn bộ quá trình nghiên cứu, nhóm tự hào đã hiện thực hóa được một giải pháp hoàn chỉnh từ lý thuyết NLP đến sản phẩm phần mềm thực tiễn, đóng góp một hướng đi mới cho việc ứng dụng AI vào phân tích sư phạm trực tuyến.  
-> Tuy nhiên, đề tài cũng còn một số hạn chế nhất định, chẳng hạn như hiện tại hệ thống tập trung sâu vào dạng bài tập trắc nghiệm tiếng Anh.  
-> Trong tương lai, nhóm dự kiến sẽ mở rộng kiến trúc này sang các dạng bài đọc hiểu phức tạp hơn của kỳ thi IELTS và tích hợp các cơ sở dữ liệu vector phân tán để có thể phục vụ đồng thời cho hàng ngàn lớp học trên toàn trường."*
-
----
-
-### SLIDE 18: TỔNG KẾT & BẮT ĐẦU PHIÊN HỎI - ĐÁP (Q&A)
-* **Nội dung trình chiếu:**
-  * **Thông điệp Kết luận:** *"EduSync không thay thế người thầy, mà trao quyền cho người thầy và học sinh bằng sức mạnh của Trí tuệ Nhân tạo và Xử lý Ngôn ngữ Tự nhiên."*
-  * **Repository & Tài liệu:**
-    * Git Branch: `edusync-v2`
-    * Bộ tài liệu 8 chuyên đề chi tiết: `docs/01` đến `docs/08`
-    * Demo URL: `http://localhost:8000/`
-  * **Lời cảm ơn:** Trân trọng cảm ơn Thầy/Cô Hội đồng và các bạn học viên đã chú ý lắng nghe!
-  * **Khởi động phiên Hỏi - Đáp (Q&A Session).**
-
-> 🎤 **Lời thoại Thành viên 4 (Speaker Script):**  
-> *"Kính thưa Thầy/Cô, EduSync ra đời với tâm niệm không phải để thay thế người thầy, mà là để trao quyền cho người thầy giảng dạy hiệu quả hơn và giúp các bạn học sinh tiếp thu tri thức một cách chủ động, dễ dàng hơn.  
-> Toàn bộ mã nguồn, dữ liệu mẫu và tài liệu chuẩn IEEE của đồ án đã được công khai trên GitHub của nhóm.  
-> Chúng em xin trân trọng cảm ơn Thầy/Cô và các bạn đã dành thời gian theo dõi bài báo cáo. Sau đây, cả 4 thành viên trong nhóm chúng em xin sẵn sàng lắng nghe các ý kiến nhận xét và giải đáp các câu hỏi phản biện từ Thầy/Cô Hội đồng. Em xin trân trọng cảm ơn!"*
-
----
-
-## 3. BẢNG DỰ ĐOÁN CÂU HỎI PHẢN BIỆN (Q&A ANTICIPATION) & PHÂN CÔNG TRẢ LỜI
-
-| # | Câu hỏi Phản biện Dự kiến của Giảng viên | Thành viên Trả lời Chính | Hướng dẫn Trả lời Trọng tâm (Key Talking Points) |
-| :-: | :--- | :---: | :--- |
-| **Q1** | *"Tại sao nhóm lại dùng `sentence-transformers` mà không dùng luôn TF-IDF hoặc Elasticsearch cho nhẹ?"* | **Thành viên 3** (Core NLP) | • Giải thích hiện tượng **Vocabulary Mismatch**: Đề bài tập không bao giờ chứa từ ngữ học thuật của chủ điểm lý thuyết (*"interesting"* vs *"participle"*). TF-IDF/BM25 cho score = 0.<br>• `all-MiniLM-L6-v2` chuyển đổi sang không gian ngữ nghĩa liên tục 384 chiều, bắt được mối quan hệ khái niệm trừu tượng.<br>• Tốc độ chạy local cực nhanh (chỉ 4.2ms/câu), kích thước mô hình chỉ 80MB. |
-| **Q2** | *"Làm thế nào nhóm đảm bảo tính đơn điệu của thuật toán Monotonic DP nếu giáo viên giảng bài lộn xộn, quay lại câu trước?"* | **Thành viên 2** (Alignment) | • Thuật toán thiết lập hàm mục tiêu quy hoạch động với ràng buộc $t_{k+1} > t_k$.<br>• Sử dụng cửa sổ tìm kiếm động 120s và Regex Lookbehind loại bỏ các câu nhắc lại vu vơ.<br>• Nếu giáo viên cố tình quay lại chữa một câu cũ ở cuối giờ, hệ thống ghi nhận đó là một phân đoạn thảo luận bổ sung (Discussion segment) chứ không ghi đè lên mốc chữa bài chính ban đầu. |
-| **Q3** | *"Vấn đề bảo mật dữ liệu học sinh khi phân tích tin nhắn Zoom chat được xử lý như thế nào?"* | **Thành viên 1** (Project Lead) | • Tuân thủ nghiêm ngặt quy định bảo mật giáo dục FERPA và GDPR.<br>• Tệp `chat_parser.py` thực hiện cơ chế mã hóa một chiều ngay khi nạp file: Tên thật của học sinh (ví dụ: *"Nguyễn Văn A"*) lập tức được map thành $S_1, S_2, \dots$ trong bộ nhớ RAM.<br>• Không bao giờ lưu trữ tên thật của học sinh vào các file JSON đầu ra hay đẩy lên giao diện web. |
-| **Q4** | *"Nếu lớp học có 100 học sinh nói qua micro cùng lúc thì hệ thống có phân tách được giọng nói (diarization) không?"* | **Thành viên 4** (System & Demo) | • Hiện tại thuật toán `diarize.py` dựa trên năng lượng âm thanh và đối chiếu với luồng chat để phân tách 2 vai chính: Teacher (T) và Student (S).<br>• Trong các lớp học trực tuyến lớn, việc học sinh tranh nhau bật mic là phản sư phạm; giáo viên thường yêu cầu học sinh chat.<br>• Hướng phát triển tiếp theo của nhóm là tích hợp mô hình PyAnnote Audio để phân tách chính xác từng học sinh nói riêng biệt. |
-
+## 4. Chuẩn bị trước buổi bảo vệ
+- Kiểm tra nhãn gold theo docs/10 §2, đặt `verified: true`, chạy lại `python eval/run_all.py`. Nếu số thay đổi: sửa docs/10 trước, rồi slide và tài liệu này.
+- Tập nói có bấm giờ theo bảng ở mục 1; phần demo không quá 2 phút.
+- Mở sẵn: trình duyệt với demo Unit 4, video dự phòng, docs/10 (để tra số khi bị hỏi).
