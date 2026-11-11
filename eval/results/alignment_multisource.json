@@ -1,0 +1,954 @@
+{
+  "lessons": [
+    {
+      "lesson": "toeic-enny-part4",
+      "platform": "Youtube",
+      "channel": "Enny TOEIC",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 3,
+      "n_extracted": 3,
+      "extraction": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "found": 3
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0
+        },
+        "v1": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 356.4,
+          "mean_abs_err_s": 286.7
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 0.667,
+          "acc_30s": 0.667,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 34.8,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 3,
+          "predicted": 3,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 356.4,
+          "mean_abs_err_s": 286.7,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-focusrc1-part7",
+      "platform": "Youtube",
+      "channel": "learning and entertainment",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 7,
+      "n_extracted": 5,
+      "extraction": {
+        "recall": 0.714,
+        "precision": 1.0,
+        "found": 5
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 7,
+          "predicted": 5,
+          "acc_10s": 0.571,
+          "acc_30s": 0.571,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 221.7
+        },
+        "v1": {
+          "n": 7,
+          "predicted": 5,
+          "acc_10s": 0.571,
+          "acc_30s": 0.571,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 221.7
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 7,
+          "predicted": 7,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 7,
+          "predicted": 7,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 7,
+          "predicted": 7,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 7,
+          "predicted": 7,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-khoann-part1-3",
+      "platform": "Youtube",
+      "channel": "[Khoa NN] Nguyen Trung Hieu",
+      "language": "en",
+      "genre": "practice",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 11,
+      "n_extracted": 5,
+      "extraction": {
+        "recall": 0.273,
+        "precision": 0.6,
+        "found": 3
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 11,
+          "predicted": 3,
+          "acc_10s": 0.091,
+          "acc_30s": 0.182,
+          "median_abs_err_s": 12.7,
+          "mean_abs_err_s": 16.6
+        },
+        "v1": {
+          "n": 11,
+          "predicted": 3,
+          "acc_10s": 0.091,
+          "acc_30s": 0.182,
+          "median_abs_err_s": 23.7,
+          "mean_abs_err_s": 22.4
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 11,
+          "predicted": 11,
+          "acc_10s": 0.455,
+          "acc_30s": 0.455,
+          "median_abs_err_s": 216.4,
+          "mean_abs_err_s": 135.6,
+          "order_inversions": 1
+        },
+        "greedy+refine": {
+          "n": 11,
+          "predicted": 11,
+          "acc_10s": 0.545,
+          "acc_30s": 0.636,
+          "median_abs_err_s": 7.0,
+          "mean_abs_err_s": 21.4,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 11,
+          "predicted": 11,
+          "acc_10s": 0.545,
+          "acc_30s": 0.636,
+          "median_abs_err_s": 7.0,
+          "mean_abs_err_s": 21.4,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 11,
+          "predicted": 11,
+          "acc_10s": 0.636,
+          "acc_30s": 0.636,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 19.1,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-khoann-part2",
+      "platform": "Youtube",
+      "channel": "[Khoa NN] Nguyen Trung Hieu",
+      "language": "en",
+      "genre": "practice",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 12,
+      "n_extracted": 2,
+      "extraction": {
+        "recall": 0.167,
+        "precision": 1.0,
+        "found": 2
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 12,
+          "predicted": 2,
+          "acc_10s": 0.083,
+          "acc_30s": 0.083,
+          "median_abs_err_s": 168.4,
+          "mean_abs_err_s": 168.4
+        },
+        "v1": {
+          "n": 12,
+          "predicted": 2,
+          "acc_10s": 0.083,
+          "acc_30s": 0.083,
+          "median_abs_err_s": 172.9,
+          "mean_abs_err_s": 172.9
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 12,
+          "predicted": 12,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.0,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 12,
+          "predicted": 12,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.8,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 12,
+          "predicted": 12,
+          "acc_10s": 1.0,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.8,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 12,
+          "predicted": 12,
+          "acc_10s": 0.667,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 7.7,
+          "mean_abs_err_s": 7.3,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-magicofenglish-en",
+      "platform": "Youtube",
+      "channel": "TheMagicOfEnglish",
+      "language": "en",
+      "genre": "practice",
+      "split": "extra (not a Vietnamese source; kept out of the main multi-source results)",
+      "gold_verified": false,
+      "n_gold": 22,
+      "n_extracted": 16,
+      "extraction": {
+        "recall": 0.545,
+        "precision": 0.75,
+        "found": 12
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 22,
+          "predicted": 12,
+          "acc_10s": 0.364,
+          "acc_30s": 0.455,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.9
+        },
+        "v1": {
+          "n": 22,
+          "predicted": 12,
+          "acc_10s": 0.318,
+          "acc_30s": 0.409,
+          "median_abs_err_s": 7.2,
+          "mean_abs_err_s": 22.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 22,
+          "predicted": 22,
+          "acc_10s": 0.273,
+          "acc_30s": 0.273,
+          "median_abs_err_s": 208.3,
+          "mean_abs_err_s": 264.3,
+          "order_inversions": 3
+        },
+        "greedy+refine": {
+          "n": 22,
+          "predicted": 22,
+          "acc_10s": 0.636,
+          "acc_30s": 0.727,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 39.1,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 22,
+          "predicted": 22,
+          "acc_10s": 0.955,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 0.5,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 22,
+          "predicted": 22,
+          "acc_10s": 0.045,
+          "acc_30s": 0.136,
+          "median_abs_err_s": 246.9,
+          "mean_abs_err_s": 257.5,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-maiphuong-part2-2014",
+      "platform": "Youtube",
+      "channel": "TOEIC Cô Mai Phương",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 2,
+      "n_extracted": 3,
+      "extraction": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "found": 0
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 2,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        },
+        "v1": {
+          "n": 2,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 2,
+          "predicted": 2,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 250.7,
+          "mean_abs_err_s": 250.7,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 2,
+          "predicted": 2,
+          "acc_10s": 0.0,
+          "acc_30s": 0.5,
+          "median_abs_err_s": 63.2,
+          "mean_abs_err_s": 63.2,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 2,
+          "predicted": 2,
+          "acc_10s": 0.0,
+          "acc_30s": 0.5,
+          "median_abs_err_s": 63.2,
+          "mean_abs_err_s": 63.2,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 2,
+          "predicted": 2,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 250.7,
+          "mean_abs_err_s": 250.7,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-maiphuong-part4",
+      "platform": "Youtube",
+      "channel": "Cô Vũ Mai Phương Official",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 18,
+      "n_extracted": 22,
+      "extraction": {
+        "recall": 0.944,
+        "precision": 0.773,
+        "found": 17
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 18,
+          "predicted": 17,
+          "acc_10s": 0.278,
+          "acc_30s": 0.278,
+          "median_abs_err_s": 148.3,
+          "mean_abs_err_s": 202.4
+        },
+        "v1": {
+          "n": 18,
+          "predicted": 17,
+          "acc_10s": 0.222,
+          "acc_30s": 0.222,
+          "median_abs_err_s": 148.3,
+          "mean_abs_err_s": 202.4
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 18,
+          "predicted": 18,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 971.2,
+          "mean_abs_err_s": 1126.0,
+          "order_inversions": 6
+        },
+        "greedy+refine": {
+          "n": 18,
+          "predicted": 18,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 751.7,
+          "mean_abs_err_s": 828.1,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 18,
+          "predicted": 18,
+          "acc_10s": 0.389,
+          "acc_30s": 0.444,
+          "median_abs_err_s": 88.5,
+          "mean_abs_err_s": 133.9,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 18,
+          "predicted": 18,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 971.4,
+          "mean_abs_err_s": 1061.1,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-morite2-ja",
+      "platform": "Youtube",
+      "channel": "Morite2 English Channel",
+      "language": "ja",
+      "genre": "lecture",
+      "split": "extra (not a Vietnamese source; kept out of the main multi-source results)",
+      "gold_verified": false,
+      "n_gold": 1,
+      "n_extracted": 1,
+      "extraction": {
+        "recall": 1.0,
+        "precision": 1.0,
+        "found": 1
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 49.0,
+          "mean_abs_err_s": 49.0
+        },
+        "v1": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 49.0,
+          "mean_abs_err_s": 49.0
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 84.0,
+          "mean_abs_err_s": 84.0,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 84.0,
+          "mean_abs_err_s": 84.0,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 84.0,
+          "mean_abs_err_s": 84.0,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 1,
+          "predicted": 1,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 84.0,
+          "mean_abs_err_s": 84.0,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-tranlong-part2",
+      "platform": "Youtube",
+      "channel": "Trần Long",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 10,
+      "n_extracted": 2,
+      "extraction": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "found": 0
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 10,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        },
+        "v1": {
+          "n": 10,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 10,
+          "predicted": 10,
+          "acc_10s": 0.2,
+          "acc_30s": 0.2,
+          "median_abs_err_s": 321.3,
+          "mean_abs_err_s": 267.7,
+          "order_inversions": 1
+        },
+        "greedy+refine": {
+          "n": 10,
+          "predicted": 10,
+          "acc_10s": 0.1,
+          "acc_30s": 0.2,
+          "median_abs_err_s": 140.1,
+          "mean_abs_err_s": 163.6,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 10,
+          "predicted": 10,
+          "acc_10s": 0.9,
+          "acc_30s": 0.9,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 6.1,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 10,
+          "predicted": 10,
+          "acc_10s": 0.9,
+          "acc_30s": 1.0,
+          "median_abs_err_s": 2.0,
+          "mean_abs_err_s": 4.9,
+          "order_inversions": 0
+        }
+      }
+    },
+    {
+      "lesson": "toeic-ungdung-lientu",
+      "platform": "Youtube",
+      "channel": "TOEIC ứng dụng",
+      "language": "vi",
+      "genre": "lecture",
+      "split": "test-multisource",
+      "gold_verified": false,
+      "n_gold": 5,
+      "n_extracted": 0,
+      "extraction": {
+        "recall": 0.0,
+        "precision": null,
+        "found": 0
+      },
+      "end_to_end": {
+        "dp+refine": {
+          "n": 5,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        },
+        "v1": {
+          "n": 5,
+          "predicted": 0,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": null,
+          "mean_abs_err_s": null
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 5,
+          "predicted": 5,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 892.4,
+          "mean_abs_err_s": 888.7,
+          "order_inversions": 0
+        },
+        "greedy+refine": {
+          "n": 5,
+          "predicted": 5,
+          "acc_10s": 0.0,
+          "acc_30s": 0.2,
+          "median_abs_err_s": 43.5,
+          "mean_abs_err_s": 39.8,
+          "order_inversions": 0
+        },
+        "dp+refine": {
+          "n": 5,
+          "predicted": 5,
+          "acc_10s": 0.0,
+          "acc_30s": 0.0,
+          "median_abs_err_s": 704.6,
+          "mean_abs_err_s": 665.2,
+          "order_inversions": 0
+        },
+        "v1": {
+          "n": 5,
+          "predicted": 5,
+          "acc_10s": 0.0,
+          "acc_30s": 0.2,
+          "median_abs_err_s": 43.5,
+          "mean_abs_err_s": 115.6,
+          "order_inversions": 0
+        }
+      }
+    }
+  ],
+  "pooled": {
+    "all": {
+      "lessons": 8,
+      "n_gold": 68,
+      "extraction_recall": 0.441,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 68,
+          "predicted": 30,
+          "acc_10s": 0.206,
+          "acc_30s": 0.221,
+          "median_abs_err_s": 25.0,
+          "mean_abs_err_s": 164.5
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 30,
+          "acc_10s": 0.147,
+          "acc_30s": 0.162,
+          "median_abs_err_s": 102.7,
+          "mean_abs_err_s": 194.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.412,
+          "acc_30s": 0.412,
+          "median_abs_err_s": 219.7,
+          "mean_abs_err_s": 433.6
+        },
+        "greedy+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.426,
+          "acc_30s": 0.485,
+          "median_abs_err_s": 36.0,
+          "mean_abs_err_s": 251.7
+        },
+        "dp+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.647,
+          "acc_30s": 0.691,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 90.7
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.456,
+          "acc_30s": 0.544,
+          "median_abs_err_s": 14.8,
+          "mean_abs_err_s": 314.5
+        }
+      }
+    },
+    "lecture": {
+      "lessons": 6,
+      "n_gold": 45,
+      "extraction_recall": 0.556,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 45,
+          "predicted": 25,
+          "acc_10s": 0.267,
+          "acc_30s": 0.267,
+          "median_abs_err_s": 80.1,
+          "mean_abs_err_s": 182.0
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 25,
+          "acc_10s": 0.178,
+          "acc_30s": 0.178,
+          "median_abs_err_s": 112.3,
+          "mean_abs_err_s": 216.4
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.244,
+          "median_abs_err_s": 389.9,
+          "mean_abs_err_s": 622.1
+        },
+        "greedy+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.311,
+          "median_abs_err_s": 114.9,
+          "mean_abs_err_s": 374.8
+        },
+        "dp+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.578,
+          "acc_30s": 0.622,
+          "median_abs_err_s": 3.2,
+          "mean_abs_err_s": 131.6
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.356,
+          "acc_30s": 0.4,
+          "median_abs_err_s": 111.4,
+          "mean_abs_err_s": 468.6
+        }
+      }
+    },
+    "practice": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.217,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 12.7,
+          "mean_abs_err_s": 77.4
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 23.7,
+          "mean_abs_err_s": 82.6
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.739,
+          "acc_30s": 0.739,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 64.9
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.652,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 7.0,
+          "mean_abs_err_s": 12.9
+        }
+      }
+    },
+    "extra": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.565,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.348,
+          "acc_30s": 0.435,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 13.8
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.304,
+          "acc_30s": 0.391,
+          "median_abs_err_s": 7.4,
+          "mean_abs_err_s": 24.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.261,
+          "acc_30s": 0.261,
+          "median_abs_err_s": 154.2,
+          "mean_abs_err_s": 256.5
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.609,
+          "acc_30s": 0.696,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 41.0
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.913,
+          "acc_30s": 0.957,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 4.1
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.043,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 219.3,
+          "mean_abs_err_s": 249.9
+        }
+      }
+    }
+  }
+}

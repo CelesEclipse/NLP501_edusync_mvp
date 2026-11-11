@@ -103,8 +103,38 @@ elif has_screens:
         os.symlink(os.path.relpath(src_vocab_audio, DEMO), D("vocab_audio"))
         print("vocab_audio/ ->", src_vocab_audio)
 
+def ensure_video_has_audio(video_path, audio_path):
+    if not os.path.exists(video_path) or not os.path.exists(audio_path):
+        return
+    try:
+        import av
+        with av.open(video_path) as c:
+            if any(s.type == "audio" for s in c.streams):
+                return
+    except Exception:
+        pass
+    ffmpeg_exe = None
+    try:
+        import imageio_ffmpeg
+        ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        ffmpeg_exe = shutil.which("ffmpeg")
+    if not ffmpeg_exe:
+        return
+    tmp_out = video_path + ".mux_tmp.mp4"
+    import subprocess
+    cmd = [ffmpeg_exe, "-y", "-i", video_path, "-i", audio_path, "-c", "copy", "-movflags", "+faststart", tmp_out]
+    res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if res.returncode == 0 and os.path.exists(tmp_out):
+        os.replace(tmp_out, video_path)
+        print(f"[prepare] Merged audio stream from {os.path.basename(audio_path)} into {os.path.basename(video_path)}")
+
+
 # 4. Link video
 video = L("video.mp4")
+audio_source = L("audio.m4a") if os.path.exists(L("audio.m4a")) else (L("audio.wav") if os.path.exists(L("audio.wav")) else None)
+if audio_source:
+    ensure_video_has_audio(video, audio_source)
 if os.path.lexists(D("lecture.mp4")) and not os.path.islink(D("lecture.mp4")):
     print("demo/lecture.mp4 is a real file; leaving it as it is")
 elif os.path.exists(video):

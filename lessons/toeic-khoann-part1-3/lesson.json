@@ -1,0 +1,25 @@
+{
+ "id": "toeic-khoann-part1-3",
+ "title": "Lesson 4: Listening Part1 and 3",
+ "source": "https://www.youtube.com/watch?v=IbeLW4hChws",
+ "platform": "Youtube",
+ "channel": "[Khoa NN] Nguyen Trung Hieu",
+ "channel_url": "https://www.youtube.com/channel/UCeRjXqS9DdwbVEcmywmSmDQ",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Lesson 4: Listening Part1 and 3\" by [Khoa NN] Nguyen Trung Hieu (https://www.youtube.com/watch?v=IbeLW4hChws), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20200426",
+ "duration": 478,
+ "language": {
+  "instruction": "en",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "TOEIC Listening Part 1 và Part 3. Thầy giảng bằng tiếng Việt và đọc câu tiếng Anh: Questions 1 through 3, conversation, statement."
+ }
+}

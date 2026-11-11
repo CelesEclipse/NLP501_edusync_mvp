@@ -1,0 +1,25 @@
+{
+ "id": "toeic-maiphuong-part2-2014",
+ "title": "Ôn luyện Toeic. Cô Mai Phương. Part II Bài 1.1",
+ "source": "https://www.youtube.com/watch?v=komS6u142fE",
+ "platform": "Youtube",
+ "channel": "TOEIC Cô Mai Phương",
+ "channel_url": "https://www.youtube.com/channel/UCz8OqKPzxJvHMTda70HBmMw",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Ôn luyện Toeic. Cô Mai Phương. Part II Bài 1.1\" by TOEIC Cô Mai Phương (https://www.youtube.com/watch?v=komS6u142fE), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20141029",
+ "duration": 1366,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Ôn luyện TOEIC Part 2 Question Response. Cô giảng bằng tiếng Việt và đọc câu tiếng Anh: Where did you meet him? Wh-question, Yes/No question, câu 11."
+ }
+}

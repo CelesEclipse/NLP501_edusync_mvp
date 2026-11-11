@@ -1,0 +1,25 @@
+{
+ "id": "toeic-tranlong-part2",
+ "title": "Bẫy cần tránh trong TOEIC Part 2",
+ "source": "https://www.youtube.com/watch?v=z5sa5BdhDJE",
+ "platform": "Youtube",
+ "channel": "Trần Long",
+ "channel_url": "https://www.youtube.com/channel/UCNLTJmmpSLC62mhKaVJJ1RQ",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Bẫy cần tránh trong TOEIC Part 2\" by Trần Long (https://www.youtube.com/watch?v=z5sa5BdhDJE), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20160901",
+ "duration": 566,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Bẫy cần tránh trong TOEIC Part 2. Cô giảng bằng tiếng Việt và đọc câu tiếng Anh: Question, Why are you changing your auto insurance company? bẫy 1, bẫy 2."
+ }
+}

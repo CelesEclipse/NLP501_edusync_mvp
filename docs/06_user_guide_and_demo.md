@@ -1,10 +1,10 @@
 # SỔ TAY HƯỚNG DẪN SỬ DỤNG & KỊCH BẢN TRÌNH DIỄN WEB DEMO
-## DÀNH CHO HỌC VIÊN LUYỆN THI TOEIC, GIÁO VIÊN & HỘI ĐỒNG CHẤM ĐỒ ÁN
+## DÀNH CHO HỌC VIÊN LUYỆN THI TOEIC & HỘI ĐỒNG CHẤM ĐỒ ÁN
 **Dự án:** EduSync — Đồng bộ Đa phương thức & Phân tích Sư phạm Bài giảng Luyện thi Tiếng Anh  
 **Địa chỉ Web Demo:** `http://localhost:8000/` (bài ECE TOEIC Starter Unit 4, 58 phút)  
 **Số liệu:** mọi con số lấy từ [`10_evaluation_results.md`](10_evaluation_results.md)
 
-> **Cần nói rõ khi demo:** bài giảng chỉ có **một người nói** (giáo viên) nên TTT/STT hiển thị "chưa đo"; **log chat (17 tin nhắn, 5 học viên) là dữ liệu mô phỏng** do nhóm soạn để minh họa luồng chat → sửa lỗi → báo cáo, vì video YouTube không có chat.
+> **Cần nói rõ khi demo:** bài giảng chỉ có **một người nói** (giáo viên); **log chat (17 tin nhắn, 5 học viên) là dữ liệu mô phỏng** do nhóm soạn để minh họa luồng chat → phát hiện lỗi & phản hồi sửa lỗi, vì video YouTube không có chat.
 
 ---
 
@@ -15,7 +15,7 @@
 > 2. **Badge chủ điểm → lý thuyết (20s):** ngay trên thẻ đó, chỉ vào **badge màu tím** `🏷️ Participles as Adjectives (-ing vs. -ed Participles)` (do `concept_link.py` gán bằng `multilingual-e5-small` + lời giảng) và bấm **`📖 Lý thuyết (00:44) ➔`** → video tua về `00:44` và chuyển sang **Tab 📖 Grammar** ở đúng thẻ chủ điểm. Nói rõ: chỉ **10/34 câu** có badge; các câu còn lại là câu từ vựng / đọc hiểu, hệ thống cố ý không gắn.
 > 3. **Tab 📚 Vocab (15s):** bấm bộ lọc **`B1`** (18 từ) hoặc gõ *depression* vào ô tìm từ vựng, bấm **`🔊 Nghe giọng cô`** → nghe clip giọng cô cắt từ bài giảng, kèm nghĩa tiếng Việt khai thác từ lời giảng (*"Sự suy thoái."*).
 > 4. **Tab 💬 Chat & GEC (20s):** bấm bộ lọc **`⚠️ GEC Feedback (6)`** → 6 tin nhắn có lỗi (7 lỗi), tên học viên đã ẩn danh hoá thành `S1..S5`. Chỉ vào tin của S3 *"Câu 4 I think movie was moved because it make me cry."*: phần gạch `<del>` / sửa `<ins>`, loại lỗi ERRANT `R:VERB:FORM` (nhóm PARTICIPLE) và `R:VERB:SVA` (nhóm SVA), giải thích tiếng Việt.
-> 5. **Tab 📊 Analytics (20s):** (có thể mở thẳng bằng `http://localhost:8000/?tab=tab-stats`) → TTT/STT hiện **"chưa đo (1 người nói)"**, *Questions matched to speech* **33/34**, 32 màn hình, phân bố lỗi theo 6 nhóm (kèm loại ERRANT), **chủ điểm yếu nhất** (*Participles as Adjectives*, 2 tin nhắn có lỗi ở câu 4 và 6) và **gợi ý cho buổi sau** — các câu mẫu điền từ dữ liệu, không dùng LLM. Nếu còn thời gian, gõ *shoes* vào ô **🔍 Search the lecture** để tìm đồng thời trong lời giảng, bài tập, từ vựng, chat và chủ điểm.
+> 5. **Ô tìm kiếm 🔍 Search the lecture (15s):** gõ *shoes* để tìm tức thời đồng thời trong lời giảng, bài tập, từ vựng, chat và chủ điểm ngữ pháp.
 
 ---
 
@@ -32,7 +32,7 @@ cd demo && ../.venv/bin/python -m RangeHTTPServer 8000
 ```
 Sau đó mở trình duyệt tại: **[http://localhost:8000/](http://localhost:8000/)**
 
-**Mở thẳng một tab** (tiện khi trình bày và chụp màn hình): thêm `?tab=<id>` (hoặc `#<id>`) vào URL, ví dụ `http://localhost:8000/?tab=tab-stats`. Các id: `tab-exercises`, `tab-grammar`, `tab-vocab`, `tab-chat`, `tab-screens`, `tab-stats`.
+**Mở thẳng một tab** (tiện khi trình bày và chụp màn hình): thêm `?tab=<id>` (hoặc `#<id>`) vào URL, ví dụ `http://localhost:8000/?tab=tab-exercises`. Các id: `tab-exercises`, `tab-grammar`, `tab-vocab`, `tab-chat`, `tab-screens`.
 
 **Phím tắt video** (khi con trỏ không ở ô nhập liệu): `Space` phát/dừng, `←` / `→` lùi/tiến 5 giây.
 
@@ -75,20 +75,3 @@ flowchart LR
 
 ---
 
-## 3. Hướng dẫn Dành cho Giáo viên (Tab 📊 Analytics)
-
-### 3.1. Tỷ lệ nói của giáo viên và học viên (TTT / STT)
-- TTT/STT chỉ được đo khi `diarize.py` tách được nhiều người nói: bản ghi tách kênh từng người (Zoom *"record a separate audio file for each participant"*, dùng Silero VAD) hoặc pyannote 3.1 trên bản ghi có nhiều người nói.
-- Bài ECE TOEIC chỉ có một người nói, nên demo hiển thị **"chưa đo (1 người nói)"** thay vì 100%/0%, kèm đánh giá giải thích lý do.
-- Hai dòng thống kê kèm theo: *Questions matched to speech* **33/34** (số câu khớp được với lời giảng — độ phủ, không phải độ chính xác) và *Total Screens / Slides* **32**.
-
-### 3.2. Phân bố lỗi & chủ điểm yếu nhất
-- **Phân bố lỗi** theo 6 nhóm của `feedback.py`, mỗi nhóm kèm loại lỗi ERRANT mặc định đã kiểm chứng bằng errant 3.0.2: BE_VERB `U:VERB:TENSE`, PARTICIPLE `R:VERB:FORM`, CAUSATIVE `R:VERB:FORM`, MODAL_TO `U:VERB:FORM`, SVA `R:VERB:SVA`, WH_DO `M:VERB:TENSE`. Với chat mô phỏng của Unit 4: 7 lỗi trong 6 tin nhắn (PARTICIPLE 2, mỗi nhóm còn lại 1) — con số minh họa, không dùng để đo chất lượng.
-- **Chủ điểm yếu nhất:** chủ điểm có nhiều tin nhắn chat có lỗi nhất ở các câu thuộc chủ điểm đó (nối qua `exercise_id` và `exercise_concept_links.json`). Ở Unit 4: *Participles as Adjectives* (2 tin nhắn có lỗi ở câu 4 và 6, tổng cộng 3 lỗi). Không có bằng chứng thì hộp này không hiện.
-
-### 3.3. Gợi ý cho buổi học sau
-- `teacher_analytics.py` sinh **các câu mẫu điền từ dữ liệu** (không dùng LLM), mỗi câu nêu bằng chứng của nó. Ở Unit 4 có 4 gợi ý:
-  1. Ôn cặp tính từ -ing / -ed bằng 3 câu trắc nghiệm đầu giờ (2 lỗi trong chat).
-  2. Luyện đặt câu hỏi Wh- có trợ động từ (1 lỗi trong chat).
-  3. Ôn lại chủ điểm *Participles as Adjectives* (đoạn lý thuyết ở 00:44; các câu có lỗi: 4, 6).
-  4. Buổi sau ghi âm tách kênh từng người để đo được tỷ lệ nói giáo viên / học viên.

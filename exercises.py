@@ -3,6 +3,11 @@ Supports both Part 5 (isolated sentences) and Part 6 (reading passages with in-t
 Usage: python exercises.py --lesson lessons/<id> [--out exercises.json]"""
 import argparse, difflib, json, os, re, sys
 
+# a line that starts a question: "<label> N" (label = question / number / câu [hỏi] [số] / q) or a bare "N." / "N)".
+# N has up to 3 digits because real TOEIC tests number Part 5-7 as 101-200 (the ECE book restarts at 1).
+QUESTION_LINE = re.compile(
+    r"^(?:(?:question|number|câu(?:\s+hỏi)?(?:\s+số)?|q)\s*(\d{1,3})\b[\.\):]?|(\d{1,3})[\.\)])\s*(.*)", re.I)
+
 
 def extract_stem_and_options(raw_text):
     """Split raw question block into stem and option dictionary."""
@@ -86,14 +91,15 @@ def parse_screen_text(screen):
         l = line.strip()
         if not l:
             continue
-        # Check if line begins with a question number e.g. "1.", "2.", "15."
-        m = re.match(r"^(\d{1,2})[\.\)]\s*(.*)", l)
+        # Check if line begins with a question number: "1.", "15)", TOEIC's 101-200 ("147."), or a labelled
+        # number ("Number 7", "Question 2:", "Câu 12", "Q3") as on practice-test slides
+        m = QUESTION_LINE.match(l)
         if m and (len(l) > 2):
             if cur_q:
                 candidates.append(cur_q)
             cur_q = {
-                "num": int(m.group(1)),
-                "lines": [m.group(2)] if m.group(2) else [],
+                "num": int(m.group(1) or m.group(2)),
+                "lines": [m.group(3)] if m.group(3) else [],
                 "screen": screen["id"],
                 "start": screen["start"],
                 "end": screen["end"]

@@ -1,0 +1,25 @@
+{
+ "id": "toeic-maiphuong-part4",
+ "title": "TOEIC PART 4 - SHOPPING & ENTERTAINMENT - NEW FORMAT | CÔ MAI PHƯƠNG",
+ "source": "https://www.youtube.com/watch?v=N1opKUJhP5A",
+ "platform": "Youtube",
+ "channel": "Cô Vũ Mai Phương Official",
+ "channel_url": "https://www.youtube.com/channel/UC747JODOhQNNjDh2ol3qs_Q",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"TOEIC PART 4 - SHOPPING & ENTERTAINMENT - NEW FORMAT | CÔ MAI PHƯƠNG\" by Cô Vũ Mai Phương Official (https://www.youtube.com/watch?v=N1opKUJhP5A), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20191128",
+ "duration": 3555,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Luyện thi TOEIC Part 4 Short Talks. Cô giảng bằng tiếng Việt và đọc bài nghe tiếng Anh: question, speaker, telephone message, announcement, advertisement, shopping, entertainment."
+ }
+}

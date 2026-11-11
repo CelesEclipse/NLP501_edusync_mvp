@@ -8,6 +8,7 @@ matplotlib
 opencv-python-headless
 yt-dlp
 rangehttpserver
+imageio-ffmpeg  # provides bundled ffmpeg binary for audio/video muxing
 ocrmac  # macOS only: OCR for extract_screens.py
 # optional: exact ERRANT typing in feedback.py and eval/errant_check.py
 #   pip install errant && python -m spacy download en_core_web_sm

@@ -103,10 +103,14 @@ if __name__ == "__main__":
     open(os.path.join(RES, "asr_proxy_dev.txt"), "w").write(txt)
     print(txt)
 
-    # 5. multi-source test set: lessons from other teachers/channels/languages with gold/questions_gold.json
-    out = os.path.join(RES, "alignment_multisource.json")
-    print(sh("eval/eval_multisource.py", "--json", out))
-    summary["alignment_multisource"] = json.load(open(out))["pooled"]
+    # 5. multi-source test set: Vietnamese TOEIC videos from other teachers/channels (gold/questions_gold.json).
+    #    "frozen" = question lists extracted before any change made with this set in view (results/frozen/, kept
+    #    locally like the lessons' other outputs); the second run uses the current exercises.json.
+    for name, extra in (("alignment_multisource_frozen", ["--exercises", "results/frozen/exercises.json"]),
+                        ("alignment_multisource", [])):
+        out = os.path.join(RES, f"{name}.json")
+        print(sh("eval/eval_multisource.py", "--json", out, *extra))
+        summary[name] = json.load(open(out))["pooled"]
 
     json.dump(summary, open(os.path.join(RES, "summary.json"), "w"), indent=2, ensure_ascii=False)
     print("wrote eval/results/summary.json")

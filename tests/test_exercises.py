@@ -100,3 +100,28 @@ def test_unmatched_fallback_keeps_order():
     transcript = [_seg(40.0, "x"), _seg(60.0, "y")]
     times = start_times(exercises, transcript, {0: 0, 2: 1})   # q2 unmatched, its screen start (5) < q1 (40)
     assert times == sorted(times) and times[1] == 40.0
+
+
+from exercises import parse_screen_text
+
+
+def test_toeic_part7_numbers_are_extracted():
+    """Real TOEIC tests number Part 5-7 as 101-200; the multi-source test set showed 0/7 found with 1-2 digits only."""
+    screen = {"id": 3, "start": 10.0, "end": 60.0,
+              "text": "147. What type of event is the invitation for?\n(A) A community food fair\n(B) An annual banquet\n"
+                      "148. What is true about Ricardo's Corner?\n(A) It operates multiple stores.\n(B) It will not sell goods"}
+    assert [q["number"] for q in parse_screen_text(screen)] == [147, 148]
+
+
+def test_labelled_question_numbers_are_extracted():
+    screen = {"id": 1, "start": 0.0, "end": 30.0,
+              "text": "Number 7 Can I help you?\nA. Yes, it is.\nB. No, he doesn't mind.\n"
+                      "Question 8: Where is the meeting?\n(A) Room 2\n(B) At noon"}
+    qs = parse_screen_text(screen)
+    assert [q["number"] for q in qs] == [7, 8]
+    assert qs[0]["stem"].startswith("Can I help you")
+
+
+def test_years_and_quantities_are_not_question_numbers():
+    screen = {"id": 1, "start": 0.0, "end": 30.0, "text": "2016, Test 1 review\n200 customers will get a discount"}
+    assert parse_screen_text(screen) == []

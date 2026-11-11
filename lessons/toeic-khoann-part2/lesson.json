@@ -1,0 +1,25 @@
+{
+ "id": "toeic-khoann-part2",
+ "title": "Toeic Listening:   Question and Response",
+ "source": "https://www.youtube.com/watch?v=hxOP1njGPyM",
+ "platform": "Youtube",
+ "channel": "[Khoa NN] Nguyen Trung Hieu",
+ "channel_url": "https://www.youtube.com/channel/UCeRjXqS9DdwbVEcmywmSmDQ",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Toeic Listening:   Question and Response\" by [Khoa NN] Nguyen Trung Hieu (https://www.youtube.com/watch?v=hxOP1njGPyM), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20200415",
+ "duration": 579,
+ "language": {
+  "instruction": "en",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "TOEIC Listening Part 2: Question and Response. Thầy giảng bằng tiếng Việt và đọc câu tiếng Anh. Number 7. Can I help you?"
+ }
+}

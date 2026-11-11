@@ -3,7 +3,7 @@
 **Môn học:** Xử lý Ngôn ngữ Tự nhiên Nâng cao (NLP501 - Master of Software Engineering)  
 **Tài liệu chuyên biệt:** Cẩm nang bảo vệ đồ án trước Giảng viên / Hội đồng chấm thi  
 **Cập nhật:** 10/11/2026  
-**Đi kèm:** slide [presentation/slides_marp.md](../presentation/slides_marp.md) (17 slide), lời thoại [docs/08](08_presentation_slides_and_speaker_notes.md), số liệu [docs/10_evaluation_results.md](10_evaluation_results.md) (nguồn duy nhất, tái tạo bằng `python eval/run_all.py`)
+**Đi kèm:** slide [presentation/slides_marp.md](../presentation/slides_marp.md) (18 slide), lời thoại [docs/08](08_presentation_slides_and_speaker_notes.md), số liệu [docs/10_evaluation_results.md](10_evaluation_results.md) (nguồn duy nhất, tái tạo bằng `python eval/run_all.py`)
 
 ---
 
@@ -14,15 +14,15 @@
 | Bước | Slide | Thông điệp cần đọng lại |
 | :--- | :-: | :--- |
 | 1. Vấn đề | 1–2 | Sau buổi học chỉ còn một video khoảng 60 phút và một file chat. Học viên phải tua thủ công, ngại hỏi lại; giáo viên không biết lớp sai ở đâu. |
-| 2. Bài toán NLP và dữ liệu | 3 | Bốn bài toán con: căn chỉnh đơn điệu, liên kết câu hỏi ↔ chủ điểm, từ vựng CEFR, lỗi người học. Dữ liệu tách bạch: Unit 4 để phát triển, Unit 5 để kiểm tra độc lập. Ba giới hạn được nói ngay từ đầu. |
+| 2. Bài toán NLP và dữ liệu | 3 | Bốn bài toán con: căn chỉnh đơn điệu, liên kết câu hỏi ↔ chủ điểm, từ vựng CEFR, lỗi người học. Dữ liệu tách bạch: Unit 4 để phát triển, Unit 5 để kiểm tra độc lập, 8 video của 6 kênh khác để kiểm tra tổng quát hóa. Ba giới hạn được nói ngay từ đầu. |
 | 3. Kiến trúc | 4–5 | Phần "đa phương thức" nằm ở bốn điểm kết hợp ①–④, không chỉ ở việc có nhiều đầu vào. Khác MaViLS: không có slide gốc, căn chỉnh tới từng câu hỏi. |
-| 4. Phương pháp + kết quả | 6–12 | Kết quả nào cũng đặt cạnh baseline (v1 chạy lại từ commit `73d9a62`, và baseline đơn giản như "thời điểm màn hình", "luôn không gắn"). Cái gì chưa đo thì nói là chưa đo (WER). |
-| 5. Sản phẩm | 13–14 | Báo cáo giáo viên chỉ hiển thị số tính được từ dữ liệu; demo tua theo câu hỏi và theo chủ điểm. |
-| 6. Tái lập và hạn chế | 15–16 | Một lệnh tạo lại mọi số liệu; nhãn chuẩn là bản nháp; danh sách hạn chế do nhóm tự nêu. |
-| 7. Kết luận | 17 | Ba đóng góp, mỗi đóng góp có một con số. |
+| 4. Phương pháp + kết quả | 6–13 | Kết quả nào cũng đặt cạnh baseline (v1 chạy lại từ commit `73d9a62`, và baseline đơn giản như "thời điểm màn hình", "luôn không gắn"). Kết quả căn chỉnh trên U5 (cùng nguồn) luôn đi kèm kết quả trên video của giáo viên khác (slide 9). Cái gì chưa đo thì nói là chưa đo (WER). |
+| 5. Sản phẩm | 14–16 | Demo sổ tay học viên tua theo câu hỏi và theo chủ điểm; hạn chế và kết luận. |
+| 6. Tái lập và hạn chế | 16–17 | Một lệnh tạo lại mọi số liệu; nhãn chuẩn là bản nháp; danh sách hạn chế do nhóm tự nêu. |
+| 7. Kết luận | 18 | Ba đóng góp, mỗi đóng góp có một con số. |
 
-### 1.1. Ba thông điệp chính (trùng với slide 17)
-1. **Căn chỉnh câu hỏi ↔ lời giảng có xác minh khẩu lệnh theo ngữ cảnh:** 80,0% câu có mốc lệch ≤10 s trên bài kiểm tra độc lập Unit 5 (v1: 57,1%), sai số trung bình 8,1 s, 0 lần đảo thứ tự.
+### 1.1. Ba thông điệp chính (trùng với slide 18)
+1. **Căn chỉnh câu hỏi ↔ lời giảng có xác minh khẩu lệnh theo ngữ cảnh:** 80,0% câu có mốc lệch ≤10 s trên bài kiểm tra độc lập Unit 5 (v1: 57,1%), sai số trung bình 8,1 s, 0 lần đảo thứ tự. Unit 5 cùng nguồn với tập phát triển; trên video của 6 kênh khác, hệ thống đóng băng chỉ đúng 17,8%, chủ yếu do bước trích câu từ màn hình (Q13).
 2. **Lời giảng làm tín hiệu liên kết chủ điểm** với `multilingual-e5-small`: độ chính xác 91,2% trên 34 câu Unit 4 (đầu ra demo v1: 58,8%), không dùng từ khóa viết tay. Có thể lạc quan vì chọn trên chính tập này.
 3. **Đánh giá tái lập được:** nhãn, script, baseline chạy lại từ commit cũ; số nào chưa đo được thì ghi "chưa đo".
 
@@ -31,6 +31,7 @@
 - Log chat Unit 4 (17 tin nhắn, 5 học viên) là **dữ liệu mô phỏng** do nhóm soạn; video YouTube không có chat.
 - Mọi nhãn chuẩn là **bản nháp do AI (Claude) gán**, đọc transcript, không xem output hệ thống, `verified: false`. Trước khi bảo vệ nhóm phải đối chiếu với video (docs/10 §2), đặt `verified: true` và chạy lại `eval/run_all.py`.
 - **Chưa có WER**: 5 clip tham chiếu chưa sửa tay; chỉ có chỉ số gián tiếp.
+- 80,0% căn chỉnh là trên bài **cùng nguồn** (U4 và U5 cùng giáo viên, cùng sách); trên video của giáo viên khác chỉ 17,8% (Q13). Không trình bày 80% như độ chính xác chung.
 - Ngưỡng và mô hình liên kết chủ điểm được chọn trên chính 34 câu Unit 4; chưa có tập kiểm tra độc lập cho bài toán này.
 - Toàn bộ dữ liệu và kết quả là **TOEIC**; IELTS chỉ là hướng phát triển.
 
@@ -56,14 +57,13 @@ Bảng dưới mô tả đúng những gì mã nguồn đang làm. Cột cuối 
 | STT | Điểm áp dụng | Phân ngành NLP | File mã nguồn | Mô hình / thuật toán | Đánh giá (docs/10) |
 | :-: | :--- | :--- | :--- | :--- | :--- |
 | **1** | **ASR lời giảng trộn mã, gán nhãn ngôn ngữ, thử gợi ý từ màn hình** | Speech recognition, language ID, contextual biasing | `transcribe.py` | `faster-whisper` `large-v3-turbo` đa ngữ; nhãn `vi`/`en`/`mixed` theo mật độ chữ có dấu (>0,3 / 0 / còn lại); tuỳ chọn `hotwords` = từ hoặc dòng OCR của màn hình đang chiếu | **Chưa có WER.** Proxy "từ trên màn hình được nói ra": 47% (không gợi ý), 48% (đối chứng), 52% (gợi ý); đoạn lặp 6 / 3 / 20–27 → pipeline chưa bật gợi ý |
-| **2** | **Tách màn hình, OCR và bóc câu hỏi** | OCR + trích xuất thông tin bằng luật | `extract_screens.py`, `exercises.py` | Phát hiện chuyển màn hình bằng sai khác điểm ảnh; Apple Vision OCR (vi + en); regex tách đề và lựa chọn A–D | Chưa đánh giá riêng. U4: 32 màn hình, 34 bản ghi (2 là đoạn văn, không phải câu hỏi); U5: 35 câu |
+| **2** | **Tách màn hình, OCR và bóc câu hỏi** | OCR + trích xuất thông tin bằng luật | `extract_screens.py`, `exercises.py` | Phát hiện chuyển màn hình bằng sai khác điểm ảnh; Apple Vision OCR (vi + en); regex tách đề và lựa chọn A–D | OCR chưa đánh giá riêng. U4: 32 màn hình, 34 bản ghi (2 là đoạn văn, không phải câu hỏi); U5: 35 câu. Video của 6 kênh khác (6 bài giảng, 45 câu): tìm được 44,4% số câu (đóng băng), 55,6% sau khi sửa |
 | **3** | **Căn chỉnh câu hỏi ↔ lời giảng** | Căn chỉnh chuỗi theo thời gian, trích khẩu lệnh bằng regex | `exercise_align.py` | s = 25·trigger (chỉ 2 nếu không xác minh được) + 2·số từ chung + 3·đang chiếu; DP đơn điệu cho phép bỏ câu; lùi mốc về đầu đoạn chữa; câu không khớp kẹp giữa hai câu kề | Test U5: ±10 s **80,0%** (v1 57,1%), ±30 s 88,6%, sai số TB 8,1 s, 0 đảo thứ tự. Dev U4: 68,8% / 84,4% / 10,0 s |
 | **4** | **Liên kết câu hỏi ↔ chủ điểm ngữ pháp** | Biểu diễn câu, truy hồi ngữ nghĩa đa ngữ | `concept_link.py` | Bi-encoder `intfloat/multilingual-e5-small` (384 chiều, chuẩn hóa L2, tiền tố `query:`/`passage:`); score = ½[cos(câu hỏi, c) + cos(lời giảng khi chữa, c)]; gắn nếu ≥ 0,835; dự phòng TF-IDF | 34 câu U4: **91,2%** (luôn none 73,5%, TF-IDF 82,4%, v1 76,5%); demo: P 90,0%, R 75,0%, 10 badge. Chọn trên chính tập này |
 | **5** | **Trích chủ điểm ngữ pháp + neo mốc lý thuyết** | IE bằng LLM + grounding bằng embedding | `neural_ie.py` | Gemini `gemini-3.5-flash-lite` ở JSON mode (kiểm tra trường sau khi parse); dự phòng: bảng chủ điểm TOEIC chung + cụm từ gợi ý trong lời giảng; neo mốc bằng e5 trên cửa sổ 6 đoạn | Sai số mốc TB **11,2 s** trên 4 chủ điểm (Gemini một mình: 882,5 s) |
 | **6** | **Từ vựng theo CEFR** | Hình thái học, từ điển học, trích quan hệ song ngữ | `vocab.py` | Lemmatizer 2 lớp (bảng bất quy tắc + cắt hậu tố có tra từ điển); CEFR-J + Octanove 8.845 mục; lọc `VI_HOMOPHONES`; nghĩa theo mẫu "X là / nghĩa là"; clip `.wav` theo ranh giới đoạn ASR | Chỉ thống kê: 80 từ (A1 26, A2 26, B1 18, B2 9, C1 1), 52 có nghĩa tiếng Việt, 79 clip 0,7–2,2 s. **Chưa đánh giá chất lượng** |
 | **7** | **Phát hiện lỗi người học trong chat + ẩn danh hoá** | Phân tích ngôn ngữ người học, gán loại lỗi GEC | `chat_parser.py`, `feedback.py` | Ẩn danh hoá S1…SN; trích đáp án ("em chọn C"); 6 luật L1 (BE_VERB, PARTICIPLE, CAUSATIVE, MODAL_TO, SVA, WH_DO); loại lỗi ERRANT mặc định kiểm chứng bằng errant 3.0.2, nếu cài `errant` thì errant tự gán | 70 câu độc lập: P **100%**, R **72,7%**, F1 **84,2%** (v1: P 90,0%, R 20,5%); sửa đúng nguyên câu 65,9% |
 
-Ngoài 7 điểm trên, `diarize.py` (tách kênh từng người bằng Silero VAD / pyannote 3.1 / rơi về một người nói) và `teacher_analytics.py` (tổng hợp báo cáo, không dùng LLM) là phần tổng hợp, không phải mô hình NLP.
 
 ---
 
@@ -82,7 +82,7 @@ Ngoài 7 điểm trên, `diarize.py` (tách kênh từng người bằng Silero 
 
 #### Điểm NLP 2: Tách màn hình, OCR và bóc câu hỏi
 - **Cách làm:** lấy mẫu khung hình; màn hình mới bắt đầu khi khung hình ổn định khác màn hình hiện tại ở đủ nhiều điểm ảnh (bỏ qua thay đổi nhỏ như con trỏ, tô sáng). OCR bằng Apple Vision (tiếng Việt + tiếng Anh). `exercises.py` dùng regex tách số câu, đề và lựa chọn A–D cho Part 5 (câu rời) và Part 6 (chỗ trống trong đoạn văn).
-- **Điều phải nói rõ:** bước này chưa có đánh giá riêng. Lỗi đã biết: ở Unit 4 có 2 trong 34 bản ghi là đoạn văn bị tách nhầm thành câu hỏi; nhãn căn chỉnh vì thế chỉ có 32 câu.
+- **Điều phải nói rõ:** độ chính xác OCR chưa đo riêng. Trên video của giáo viên khác, bước trích câu chỉ tìm được 44,4% số câu ở 6 bài giảng (55,6% sau khi sửa để nhận số câu 3 chữ số), vì nó giả định đề in sẵn có số "N." (Q13). Lỗi đã biết: ở Unit 4 có 2 trong 34 bản ghi là đoạn văn bị tách nhầm thành câu hỏi; nhãn căn chỉnh vì thế chỉ có 32 câu.
 
 #### Điểm NLP 3: Căn chỉnh câu hỏi ↔ lời giảng bằng quy hoạch động đơn điệu
 - **Vấn đề:** cần mốc cô **bắt đầu chữa** từng câu trong 2.606 đoạn lời giảng của Unit 4. Tìm "câu N" đơn thuần sai vì: số câu lặp lại giữa các phần; "text 1", "part 5", "trang 3" không phải số câu; ở Unit 4 cô chữa Exercise A trong sách ("câu số 1") khi màn hình đang chiếu Exercise B.
@@ -138,13 +138,13 @@ Ngoài 7 điểm trên, `diarize.py` (tách kênh từng người bằng Silero 
 
 ---
 
-## PHẦN 3: BỘ 12 CÂU HỎI PHẢN BIỆN CỦA GIẢNG VIÊN & CÁCH TRẢ LỜI
+## PHẦN 3: BỘ 13 CÂU HỎI PHẢN BIỆN CỦA GIẢNG VIÊN & CÁCH TRẢ LỜI
 
 Trả lời ngắn, có số, nói thẳng giới hạn. Người trả lời chính ghi trong ngoặc (phân công ở [docs/08, mục 3](08_presentation_slides_and_speaker_notes.md)).
 
 #### Q1. "Số 80% đo thế nào, ai gán nhãn?" (TV2)
 - 80,0% là tỉ lệ câu của **Unit 5** (35 câu, bài kiểm tra độc lập) mà mốc hệ thống dự đoán lệch **không quá 10 s** so với nhãn "lúc cô bắt đầu chữa câu đó". Cùng bảng: ±30 s 88,6%, sai số tuyệt đối trung bình 8,1 s, 0 lần đảo thứ tự.
-- Thuật toán được chỉnh trên Unit 4 và chỉ chạy **một lần** trên Unit 5 sau khi chốt.
+- Thuật toán được chỉnh trên Unit 4 và chỉ chạy **một lần** trên Unit 5 sau khi chốt. Nhưng U5 cùng giáo viên, cùng sách với U4; trên video của giáo viên khác chỉ đúng 17,8% (Q13).
 - Nhãn do **AI (Claude) gán bản nháp**: đọc transcript theo cùng một hướng dẫn, **không xem output hệ thống**, đang ở trạng thái `verified: false`. Nhóm đang mở video ở các mốc trong `alignment_gold.json` để sửa, rồi chạy lại `eval/run_all.py`; nếu số thay đổi, nhóm sẽ cập nhật.
 - Hai giới hạn nên tự nói: nhãn dựa trên mốc của transcript nên sai lệch thời gian của chính ASR không bị tính; và với chỗ trống trong đoạn văn (Part 6/7) "lúc bắt đầu câu" vốn không rõ (nhãn ghi mốc thay thế lệch 5–40 s).
 
@@ -157,7 +157,8 @@ Trả lời ngắn, có số, nói thẳng giới hạn. Người trả lời ch
 - **Greedy:** đi từ trái sang phải, mỗi câu lấy đoạn có điểm cao nhất sau mốc của câu trước. Nếu một câu "chiếm" một đoạn muộn có điểm cao, các câu sau bị đẩy ra sau đó và có thể mất mốc đúng.
 - **DP:** tối đa **tổng điểm toàn bài** dưới ràng buộc mốc tăng dần, và được phép bỏ qua câu. Ví dụ trong `tests/test_exercises.py`: câu 1 có khẩu lệnh mạnh ở t = 50 s nhưng thật ra được bàn ở t = 10 s, câu 2 được chữa ở t = 30 s; greedy lấy câu 1 ở 50 s và mất câu 2, còn DP chọn câu 1 ở 10 s và câu 2 ở 30 s.
 - **Trên Unit 4 và Unit 5, DP chọn giống hệt greedy** (docs/10 §3), nên phần cải thiện đến từ hàm điểm (xác minh khẩu lệnh, bỏ stopword), bước lùi mốc và cách xử lý câu không khớp. Nhiều khả năng là vì sau khi khẩu lệnh không xác minh bị hạ còn 2 điểm và ứng viên bị giới hạn quanh thời điểm màn hình, không còn xung đột nào để greedy mắc bẫy.
-- Nhóm vẫn giữ DP vì nó cho lời giải tối ưu đúng với định nghĩa bài toán, chi phí thêm không đáng kể, và an toàn hơn ở bài có xung đột. Nhóm không nhận DP là nguồn cải thiện.
+- Nhóm vẫn giữ DP vì nó cho lời giải tối ưu đúng với định nghĩa bài toán, chi phí thêm không đáng kể, và an toàn hơn ở bài có xung đột. Nhóm không nhận DP là nguồn cải thiện trên U4/U5.
+- Trên video của giáo viên khác (Q13) thì khác: khi cho trước danh sách câu đúng và lấy cả video làm cửa sổ tìm, DP đúng 57,8%, so với greedy 24,4%, regex 24,4% và v1 35,6%. Khi cửa sổ tìm là cả video, ràng buộc thứ tự toàn cục mới phát huy tác dụng (docs/10 §3b).
 
 #### Q4. "Vì sao chưa có WER? Gợi ý từ màn hình có tác dụng không?" (TV2)
 - WER cần bản chép tham chiếu do người sửa. 5 clip × 2 phút trong `gold/asr/` hiện chỉ là bản nháp từ ASR (`corrected: false`); tính WER lúc này là so ASR với ASR, vô nghĩa. Script `eval/wer.py` đã có và có test; chỉ thiếu bản chép đã sửa.
@@ -194,7 +195,7 @@ Trả lời ngắn, có số, nói thẳng giới hạn. Người trả lời ch
 - errant có thể cho loại lân cận với cặp câu khác: R:MORPH cho *confusing → confused*, R:OTHER cho *don't → doesn't*. Nếu máy có cài `errant`, `feedback.py` dùng loại do errant gán cho từng lỗi.
 
 #### Q9. "Chat là thật hay giả? Dữ liệu học viên được bảo vệ thế nào?" (TV1)
-- **Giả lập.** Bài giảng ECE trên YouTube không có chat; 17 tin nhắn của 5 học viên ở Unit 4 do nhóm soạn để minh họa luồng chat → lỗi → câu hỏi → báo cáo. Kết quả 7 lỗi trong 6 tin nhắn trên chat này **không dùng để đo chất lượng**, vì chat được soạn kèm lỗi mẫu.
+- **Giả lập.** Bài giảng ECE trên YouTube không có chat; 17 tin nhắn của 5 học viên ở Unit 4 do nhóm soạn để minh họa luồng chat → lỗi → câu sửa & giải thích tiếng Việt. Kết quả 7 lỗi trong 6 tin nhắn trên chat này **không dùng để đo chất lượng**, vì chat được soạn kèm lỗi mẫu.
 - Chất lượng phát hiện lỗi được đo trên tập 70 câu riêng, viết độc lập với luật (cũng là bản nháp do AI viết, `verified: false`).
 - Tên học viên được **ẩn danh hoá** thành S1…SN trước khi phân tích. Đây là pseudonymization, không phải "tuân thủ FERPA" (FERPA là luật Mỹ về hồ sơ học vụ; nhóm không đánh giá tuân thủ pháp lý).
 - Bước tiếp theo: thu chat của lớp thật, có sự đồng ý của học viên.
@@ -205,14 +206,7 @@ Trả lời ngắn, có số, nói thẳng giới hạn. Người trả lời ch
 - **Tái lập và chạy cục bộ:** `eval/run_all.py` cho cùng kết quả mỗi lần chạy, không cần API; chat học viên không phải gửi ra ngoài.
 - Nhóm **có dùng LLM** ở chỗ hợp lý: tóm tắt chủ điểm (tiêu đề, công thức, giải thích). Hướng tiếp theo cũng dùng mô hình sinh (seq2seq / LLM) để sửa câu rồi errant để gán loại. Nhóm chưa so sánh trực tiếp với một hệ thống thuần LLM, nên không khẳng định về chi phí hay tốc độ.
 
-#### Q11. "Báo cáo giáo viên tính thế nào? Sao không có TTT/STT?" (TV4)
-- **TTT/STT** chỉ tính khi tách được người nói: ghi âm tách kênh từng người (Zoom; dùng Silero VAD trên từng kênh) hoặc pyannote 3.1. Bản ghi ECE chỉ có giáo viên nói, nên báo cáo ghi **"chưa đo"** thay vì 100%/0% như bản cũ.
-- **Phân bố lỗi:** đếm lỗi trong chat theo 6 nhóm.
-- **Chủ điểm yếu nhất:** lỗi trong chat → câu hỏi mà tin nhắn trả lời (`exercise_id`) → chủ điểm của câu đó; chọn chủ điểm có nhiều tin nhắn có lỗi nhất, không có bằng chứng thì để trống. Unit 4: Participles (2 tin nhắn, câu 4 và 6), nhưng chat là mô phỏng nên chỉ minh họa.
-- **Gợi ý buổi sau:** câu mẫu điền từ dữ liệu, không dùng LLM, mỗi dòng nêu căn cứ.
-- Demo cũ có giá trị viết cứng "tỷ lệ căn chỉnh 95,6%"; nay hiển thị số câu khớp được với lời giảng (33/34). Đây là độ phủ, không phải độ chính xác.
-
-#### Q12. "Mở rộng sang IELTS thế nào?" (TV4, TV1 bổ sung)
+#### Q11. "Mở rộng sang IELTS thế nào?" (TV4, TV1 bổ sung)
 - Hiện **chưa có dữ liệu IELTS, chưa chạy thử, chưa có kết quả**; mọi số liệu là TOEIC.
 - Cần thay đổi:
   1. **Bóc câu hỏi:** `exercises.py` đang giả định lựa chọn A–D; IELTS Reading/Listening có gap-fill, matching, True/False/Not Given → cần parser mới và nhãn mới.
@@ -220,6 +214,13 @@ Trả lời ngắn, có số, nói thẳng giới hạn. Người trả lời ch
   3. **Từ vựng:** trọng tâm B2–C2; tham chiếu Cambridge: B1 ≈ IELTS 4.0–5.0, B2 ≈ 5.5–6.5, C1 ≈ 7.0–8.0, C2 ≈ 8.5+.
   4. **Lỗi người học:** bài viết Writing có nhiều loại lỗi hơn 6 mẫu → cần mô hình GEC tổng quát + errant; luật hiện tại chỉ là một phần.
   5. **Speaking:** cần bản ghi nhiều người nói và tách người nói để đo thời lượng nói của học viên.
+
+#### Q12. "Hệ thống có chạy được với video của giáo viên khác không?" (TV2)
+- **Kém hơn nhiều, và nhóm nói thẳng.** U4 và U5 cùng một giáo viên, một cuốn sách, một cách trình bày, nên 80,0% trên U5 chỉ cho biết hệ thống chạy tốt trên bài cùng nguồn. Nhóm kiểm tra thêm trên 8 video TOEIC tiếng Việt của 6 kênh YouTube khác ECE (CC BY, 3 giờ 9 phút, 68 câu có nhãn: 6 bài giảng với 45 câu, 2 video luyện tập với 23 câu). Ngoài YouTube, nhóm không tìm được video bài giảng TOEIC tiếng Việt nào vừa có giấy phép mở vừa tải được (đã tìm trên Vimeo, Internet Archive, Dailymotion, PeerTube, Wikimedia Commons và các kho MOOC/OER).
+- **Hệ thống đóng băng** (trước mọi thay đổi dựa trên bộ này), trên 6 bài giảng: trích câu từ màn hình tìm được 44,4% số câu; đầu-cuối đúng ±10 s **17,8%** (v1: 8,9%). Hai video luyện tập: 8,7%.
+- **Lỗi chủ yếu ở bước trích câu, không phải ở bộ căn chỉnh:** khi cho trước danh sách câu đúng, DP đúng 57,8% trên bài giảng và 78,3% trên luyện tập. `exercises.py` giả định đề in sẵn trên slide với số "N."; giả định này sai với bảng viết tay, bảng cuộn, câu chỉ có tranh hoặc audio, và ví dụ không đánh số. Bộ căn chỉnh cũng thất bại khi giáo viên chỉ nói "câu này" thay vì đọc số câu, hoặc đọc câu hỏi tiếng Anh trước khi màn hình của câu hiện ra.
+- **Sau khi xem bộ này**, nhóm sửa `exercises.py` để nhận số câu 1–3 chữ số (TOEIC đánh số 101–200) và nhãn "Number / Question / Câu N"; `exercises.json` của U4/U5 không đổi. Trích câu lên 55,6%, đầu-cuối lên 26,7%, nhưng số này **không còn là kiểm tra độc lập**; số độc lập là 17,8%. Không chỉnh trọng số hay cửa sổ căn chỉnh theo bộ này.
+- Nhãn là danh sách câu giáo viên thực sự chữa và mốc bắt đầu, do AI gán từ transcript, OCR và khung hình video, không mở output hệ thống, `verified: false`. Chi tiết từng bài ở docs/10 §3b.
 
 ---
 
@@ -230,12 +231,11 @@ Các con số và nhãn cũ đã rút được liệt kê kèm lý do ở docs/1
 | Chủ đề | Nói như sau |
 | :--- | :--- |
 | ASR | Chưa có WER; gợi ý từ màn hình làm tăng đoạn lặp, chưa bật |
-| Căn chỉnh | ±10 s: 68,8% (U4, dev), 80,0% (U5, test); sai số TB 10,0 s / 8,1 s. "33/34 câu khớp" là độ phủ, không phải độ chính xác |
+| Căn chỉnh | ±10 s: 68,8% (U4, dev), 80,0% (U5, test cùng nguồn); sai số TB 10,0 s / 8,1 s; video của 6 kênh khác: 17,8% (đóng băng). Không nói 80% là độ chính xác chung. "33/34 câu khớp" là độ phủ, không phải độ chính xác |
 | Liên kết chủ điểm | `multilingual-e5-small` + lời giảng (MiniLM chỉ còn là baseline v1); 91,2% trên 34 câu, có thể lạc quan; chưa đo tốc độ |
 | Lỗi trong chat | P 100%, R 72,7% trên 70 câu độc lập; loại lỗi kiểm chứng bằng errant 3.0.2; ERRANT là ACL 2017 |
-| Báo cáo giáo viên | TTT/STT "chưa đo" (một người nói); gợi ý là câu mẫu điền từ dữ liệu, không dùng LLM |
 | Dữ liệu học viên | Ẩn danh hoá tên thành S1…SN; không nói "chuẩn" pháp lý nào |
 | Gemini | JSON mode, kiểm tra trường sau khi parse; không phải JSON schema chặt |
-| Quy mô | Video 58 phút; 80 từ / 52 nghĩa / 79 clip `.wav`; 4.454 dòng Python; 71/71 test |
+| Quy mô | Video 58 phút; 80 từ / 52 nghĩa / 79 clip `.wav`; 4.559 dòng Python; 75/75 test |
 | Whisper | Nếu nhắc dữ liệu huấn luyện: `large-v3` khoảng 1 triệu giờ nhãn yếu + 4 triệu giờ nhãn giả (680.000 giờ là của Whisper v1/v2), như docs/02 §3.1; token gợi ý nằm trong ngữ cảnh self-attention của decoder, cross-attention nhìn vào audio |
 | IELTS | Chỉ là hướng phát triển; không có kết quả nào trên IELTS |

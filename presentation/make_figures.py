@@ -64,4 +64,32 @@ style(ax)
 ax.set_xlabel("Độ chính xác trên 34 câu (gồm nhãn 'không gắn'), ngưỡng chọn leave-one-out", fontsize=12)
 fig.tight_layout()
 fig.savefig(os.path.join(OUT, "concept_linking.png"))
+
+# 3. multi-source test set (other Vietnamese teachers): end-to-end vs same-source U5, and the aligner alone (oracle)
+F, A = S["alignment_multisource_frozen"]["lecture"], S["alignment_multisource"]["lecture"]
+n = F["n_gold"]
+left = [("Unit 5\ncùng nguồn ECE", S["alignment_test"]["dp+refine"]["acc_10s"], MUTED),
+        ("6 video khác\nđóng băng", F["end_to_end"]["dp+refine"]["acc_10s"], NEW),
+        ("6 video khác\nsau sửa", A["end_to_end"]["dp+refine"]["acc_10s"], NEW)]
+right = [("Regex\n\"câu N\"", F["oracle"]["trigger_first"]["acc_10s"], MUTED),
+         ("Greedy", F["oracle"]["greedy+refine"]["acc_10s"], MUTED),
+         ("v1", F["oracle"]["v1"]["acc_10s"], OLD),
+         ("DP\n(hiện tại)", F["oracle"]["dp+refine"]["acc_10s"], NEW)]
+fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.6), dpi=200, gridspec_kw={"width_ratios": [1, 1.25]})
+for ax, bars, title in ((axes[0], left, "Đầu-cuối (trích câu + căn chỉnh)"),
+                        (axes[1], right, f"Chỉ căn chỉnh, cho trước {n} câu đúng")):
+    for i, (lab, v, c) in enumerate(bars):
+        ax.bar(i, v * 100, 0.62, color=c)
+        ax.text(i, v * 100 + 2, f"{v * 100:.0f}%", ha="center", color=INK if c != MUTED else INK2, fontsize=13,
+                fontweight="bold" if c == NEW else "normal")
+    ax.set_xticks(range(len(bars)), [b[0] for b in bars], fontsize=12)
+    ax.set_ylim(0, 100)
+    ax.set_yticks([0, 25, 50, 75, 100], ["0", "25", "50", "75", "100%"])
+    ax.yaxis.grid(True, color=GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.set_title(title, fontsize=13, color=INK, loc="left")
+    style(ax)
+fig.supylabel("Mốc lệch ≤ 10 s", fontsize=12, color=INK2)
+fig.tight_layout()
+fig.savefig(os.path.join(OUT, "multisource_alignment.png"))
 print("figures ->", OUT)

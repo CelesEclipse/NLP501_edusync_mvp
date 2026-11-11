@@ -308,5 +308,465 @@
       "fn": 35
     }
   },
-  "asr_proxy_u4": "transcript                    segs    en repeats  logprob  on-screen recall\nresults/asr_none.json         2606   26%       6      nan      463/976 = 47%\nresults/asr_chunks.json        545   11%       3   -0.147      470/976 = 48%\nresults/asr_words.json         484   12%      20   -0.334      509/976 = 52%\nresults/asr_lines.json         559   15%      27   -0.462      509/976 = 52%\n"
+  "asr_proxy_u4": "transcript                    segs    en repeats  logprob  on-screen recall\nresults/asr_none.json         2606   26%       6      nan      463/976 = 47%\nresults/asr_chunks.json        545   11%       3   -0.147      470/976 = 48%\nresults/asr_words.json         484   12%      20   -0.334      509/976 = 52%\nresults/asr_lines.json         559   15%      27   -0.462      509/976 = 52%\n",
+  "alignment_multisource_frozen": {
+    "all": {
+      "lessons": 8,
+      "n_gold": 68,
+      "extraction_recall": 0.368,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 68,
+          "predicted": 25,
+          "acc_10s": 0.147,
+          "acc_30s": 0.162,
+          "median_abs_err_s": 80.1,
+          "mean_abs_err_s": 153.1
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 25,
+          "acc_10s": 0.088,
+          "acc_30s": 0.103,
+          "median_abs_err_s": 112.3,
+          "mean_abs_err_s": 188.5
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.412,
+          "acc_30s": 0.412,
+          "median_abs_err_s": 219.7,
+          "mean_abs_err_s": 433.6
+        },
+        "greedy+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.426,
+          "acc_30s": 0.485,
+          "median_abs_err_s": 36.0,
+          "mean_abs_err_s": 251.7
+        },
+        "dp+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.647,
+          "acc_30s": 0.691,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 90.7
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.456,
+          "acc_30s": 0.544,
+          "median_abs_err_s": 14.8,
+          "mean_abs_err_s": 314.5
+        }
+      }
+    },
+    "lecture": {
+      "lessons": 6,
+      "n_gold": 45,
+      "extraction_recall": 0.444,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 45,
+          "predicted": 20,
+          "acc_10s": 0.178,
+          "acc_30s": 0.178,
+          "median_abs_err_s": 91.7,
+          "mean_abs_err_s": 172.0
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 20,
+          "acc_10s": 0.089,
+          "acc_30s": 0.089,
+          "median_abs_err_s": 159.6,
+          "mean_abs_err_s": 215.0
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.244,
+          "median_abs_err_s": 389.9,
+          "mean_abs_err_s": 622.1
+        },
+        "greedy+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.311,
+          "median_abs_err_s": 114.9,
+          "mean_abs_err_s": 374.8
+        },
+        "dp+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.578,
+          "acc_30s": 0.622,
+          "median_abs_err_s": 3.2,
+          "mean_abs_err_s": 131.6
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.356,
+          "acc_30s": 0.4,
+          "median_abs_err_s": 111.4,
+          "mean_abs_err_s": 468.6
+        }
+      }
+    },
+    "practice": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.217,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 12.7,
+          "mean_abs_err_s": 77.4
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 23.7,
+          "mean_abs_err_s": 82.6
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.739,
+          "acc_30s": 0.739,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 64.9
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.652,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 7.0,
+          "mean_abs_err_s": 12.9
+        }
+      }
+    },
+    "extra": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.565,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.348,
+          "acc_30s": 0.435,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 13.8
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.304,
+          "acc_30s": 0.391,
+          "median_abs_err_s": 7.4,
+          "mean_abs_err_s": 24.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.261,
+          "acc_30s": 0.261,
+          "median_abs_err_s": 154.2,
+          "mean_abs_err_s": 256.5
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.609,
+          "acc_30s": 0.696,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 41.0
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.913,
+          "acc_30s": 0.957,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 4.1
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.043,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 219.3,
+          "mean_abs_err_s": 249.9
+        }
+      }
+    }
+  },
+  "alignment_multisource": {
+    "all": {
+      "lessons": 8,
+      "n_gold": 68,
+      "extraction_recall": 0.441,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 68,
+          "predicted": 30,
+          "acc_10s": 0.206,
+          "acc_30s": 0.221,
+          "median_abs_err_s": 25.0,
+          "mean_abs_err_s": 164.5
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 30,
+          "acc_10s": 0.147,
+          "acc_30s": 0.162,
+          "median_abs_err_s": 102.7,
+          "mean_abs_err_s": 194.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.412,
+          "acc_30s": 0.412,
+          "median_abs_err_s": 219.7,
+          "mean_abs_err_s": 433.6
+        },
+        "greedy+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.426,
+          "acc_30s": 0.485,
+          "median_abs_err_s": 36.0,
+          "mean_abs_err_s": 251.7
+        },
+        "dp+refine": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.647,
+          "acc_30s": 0.691,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 90.7
+        },
+        "v1": {
+          "n": 68,
+          "predicted": 68,
+          "acc_10s": 0.456,
+          "acc_30s": 0.544,
+          "median_abs_err_s": 14.8,
+          "mean_abs_err_s": 314.5
+        }
+      }
+    },
+    "lecture": {
+      "lessons": 6,
+      "n_gold": 45,
+      "extraction_recall": 0.556,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 45,
+          "predicted": 25,
+          "acc_10s": 0.267,
+          "acc_30s": 0.267,
+          "median_abs_err_s": 80.1,
+          "mean_abs_err_s": 182.0
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 25,
+          "acc_10s": 0.178,
+          "acc_30s": 0.178,
+          "median_abs_err_s": 112.3,
+          "mean_abs_err_s": 216.4
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.244,
+          "median_abs_err_s": 389.9,
+          "mean_abs_err_s": 622.1
+        },
+        "greedy+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.244,
+          "acc_30s": 0.311,
+          "median_abs_err_s": 114.9,
+          "mean_abs_err_s": 374.8
+        },
+        "dp+refine": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.578,
+          "acc_30s": 0.622,
+          "median_abs_err_s": 3.2,
+          "mean_abs_err_s": 131.6
+        },
+        "v1": {
+          "n": 45,
+          "predicted": 45,
+          "acc_10s": 0.356,
+          "acc_30s": 0.4,
+          "median_abs_err_s": 111.4,
+          "mean_abs_err_s": 468.6
+        }
+      }
+    },
+    "practice": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.217,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 12.7,
+          "mean_abs_err_s": 77.4
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 5,
+          "acc_10s": 0.087,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 23.7,
+          "mean_abs_err_s": 82.6
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.739,
+          "acc_30s": 0.739,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 64.9
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.783,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 10.7
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.652,
+          "acc_30s": 0.826,
+          "median_abs_err_s": 7.0,
+          "mean_abs_err_s": 12.9
+        }
+      }
+    },
+    "extra": {
+      "lessons": 2,
+      "n_gold": 23,
+      "extraction_recall": 0.565,
+      "end_to_end": {
+        "dp+refine": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.348,
+          "acc_30s": 0.435,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 13.8
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 13,
+          "acc_10s": 0.304,
+          "acc_30s": 0.391,
+          "median_abs_err_s": 7.4,
+          "mean_abs_err_s": 24.1
+        }
+      },
+      "oracle": {
+        "trigger_first": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.261,
+          "acc_30s": 0.261,
+          "median_abs_err_s": 154.2,
+          "mean_abs_err_s": 256.5
+        },
+        "greedy+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.609,
+          "acc_30s": 0.696,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 41.0
+        },
+        "dp+refine": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.913,
+          "acc_30s": 0.957,
+          "median_abs_err_s": 0.0,
+          "mean_abs_err_s": 4.1
+        },
+        "v1": {
+          "n": 23,
+          "predicted": 23,
+          "acc_10s": 0.043,
+          "acc_30s": 0.13,
+          "median_abs_err_s": 219.3,
+          "mean_abs_err_s": 249.9
+        }
+      }
+    }
+  }
 }

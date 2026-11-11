@@ -1,0 +1,25 @@
+{
+ "id": "toeic-morite2-ja",
+ "title": "TOEIC Part 5対策 Lesson１【動詞の語法】チェックテスト１−１",
+ "source": "https://www.youtube.com/watch?v=hLS-_MAjP0Q",
+ "platform": "Youtube",
+ "channel": "Morite2 English Channel",
+ "channel_url": "https://www.youtube.com/channel/UC_U7pKOVK-0hGr7bDmy2mng",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"TOEIC Part 5対策 Lesson１【動詞の語法】チェックテスト１−１\" by Morite2 English Channel (https://www.youtube.com/watch?v=hLS-_MAjP0Q), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20190501",
+ "duration": 325,
+ "language": {
+  "instruction": "ja",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "TOEICパート5対策 チェックテスト。動詞の語法: talk to, listen to, think of, ask for."
+ }
+}

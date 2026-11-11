@@ -55,13 +55,11 @@ flowchart TD
     subgraph T2["TẦNG 2: ASR TRỘN MÃ & CĂN CHỈNH THỜI GIAN"]
         ScreenHints["Gợi ý từ màn hình (tùy chọn, hotwords)"]
         Whisper["faster-whisper large-v3-turbo (transcript.json)"]
-        Diarize["Tách người nói: tracks / pyannote / một người nói (diarize.py)"]
         ExerciseParser["Trích câu hỏi A–D từ OCR (exercises.py)"]
         MonotonicDP["Căn chỉnh DP đơn điệu + lùi mốc (exercise_align.py)"]
         OCR -.-> ScreenHints
         ScreenHints -.->|hotwords, không dùng cho transcript hiện tại| Whisper
         Video --> Whisper
-        Video --> Diarize
         OCR --> ExerciseParser
         Whisper --> MonotonicDP
         ExerciseParser --> MonotonicDP
@@ -87,18 +85,13 @@ flowchart TD
         ChatParse --> GEC
     end
 
-    subgraph T4["TẦNG 4: BÁO CÁO GIÁO VIÊN & GIAO DIỆN"]
-        TeacherAnalytics["Báo cáo giáo viên (teacher_analytics.py)"]
+    subgraph T4["TẦNG 4: SỔ TAY HỌC VIÊN TƯƠNG TÁC"]
         WebDemo["SPA demo (demo/index.html)"]
-        Diarize -->|speakers.json| TeacherAnalytics
-        GEC -->|chat_feedback.json| TeacherAnalytics
-        DenseEmb -->|exercise_concept_links.json| TeacherAnalytics
-        Grounding -->|grammar_points.json| TeacherAnalytics
         MonotonicDP --> WebDemo
         DenseEmb --> WebDemo
+        Grounding --> WebDemo
         LexicalProfiler --> WebDemo
         GEC --> WebDemo
-        TeacherAnalytics --> WebDemo
     end
 ```
 
@@ -214,7 +207,7 @@ Ngoài WER tổng, script tính độ chính xác trên các từ tham chiếu l
 | Nhóm EduSync | Ví dụ → sửa | Loại ERRANT mặc định |
 |---|---|---|
 | BE_VERB | *I am agree* → *I agree* | `U:VERB:TENSE` |
-| PARTICIPLE | *I am confusing* → *I am confused* | `R:VERB:FORM` |
+| PARTICIPLE | *The movie was moved* → *The movie was moving* | `R:VERB:FORM` |
 | CAUSATIVE | *have my car repair* → *have my car repaired* | `R:VERB:FORM` |
 | MODAL_TO | *should to increase* → *should increase* | `U:VERB:FORM` |
 | SVA | *it make me cry* → *it makes me cry* | `R:VERB:SVA` |
@@ -247,7 +240,7 @@ Ghi chú: ERRANT cũng là công cụ chấm của *The BEA-2019 Shared Task on 
 
 | Điểm mạnh (Strengths) | Điểm yếu & Thách thức (Weaknesses) |
 | :--- | :--- |
-| • **Đánh giá tái tạo được:** `python eval/run_all.py` sinh lại mọi con số, có baseline và so sánh với v1 (commit 73d9a62).<br>• **Có tập kiểm tra độc lập cho căn chỉnh:** thuật toán chỉnh trên U4, chạy một lần trên U5: 80,0% (±10 s), 88,6% (±30 s), 0 lần đảo thứ tự.<br>• **Dùng tín hiệu đa phương thức có đo được lợi ích:** thêm lời giảng của cô nâng liên kết chủ điểm từ 85,3% lên 91,2%; neo mốc lý thuyết giảm sai số từ 882,5 s xuống 11,2 s.<br>• **Báo cáo không bịa số:** TTT/STT hiện "chưa đo" khi chỉ có một người nói; gợi ý cho buổi sau là câu mẫu ghi rõ bằng chứng.<br>• **Chạy được offline:** TF-IDF, taxonomy chủ điểm và chế độ một người nói thay thế khi thiếu mô hình/API.<br>• **71/71 test** pass, test không ghi vào `lessons/`. | • **Đánh giá nhỏ:** 2 bài (34 + 35 câu), 4 chủ điểm, 70 câu GEC; một kênh, **một giáo viên**.<br>• **Nhãn chuẩn là bản nháp do AI gán**, chưa được nhóm kiểm tra (`verified: false`).<br>• **Chưa đo WER**; gợi ý từ màn hình chưa kết luận được.<br>• **Ngưỡng liên kết chủ điểm chọn trên tập phát triển**, chưa có tập kiểm tra độc lập; ví dụ do Gemini viết có thể trùng câu hỏi.<br>• **Chat là dữ liệu mô phỏng**; bộ phát hiện lỗi là **luật** cho 6 nhóm, recall 72,7%.<br>• **Một người nói** nên chưa đo được TTT/STT trên dữ liệu thật.<br>• Nghĩa tiếng Việt và danh sách từ vựng chưa được đánh giá; nhãn ngôn ngữ là heuristic chưa kiểm chứng.<br>• OCR dùng Apple Vision (chỉ chạy trên macOS); xử lý sau buổi học, chưa chạy thời gian thực. |
+| • **Đánh giá tái tạo được:** `python eval/run_all.py` sinh lại mọi con số, có baseline và so sánh với v1 (commit 73d9a62).<br>• **Có tập kiểm tra độc lập cho căn chỉnh:** thuật toán chỉnh trên U4, chạy một lần trên U5: 80,0% (±10 s), 88,6% (±30 s), 0 lần đảo thứ tự.<br>• **Có kiểm tra tổng quát hóa sang giáo viên khác** (`eval/eval_multisource.py`, docs/10 §3b): 8 video TOEIC tiếng Việt của 6 kênh YouTube (CC BY), 68 câu. Hệ thống đóng băng chỉ đúng 17,8% (±10 s) trên 6 bài giảng, so với 80,0% trên U5 cùng nguồn; khi cho trước danh sách câu đúng, DP đúng 57,8% (greedy 24,4%), nên lỗi chính nằm ở bước trích câu từ màn hình.<br>• **Dùng tín hiệu đa phương thức có đo được lợi ích:** thêm lời giảng của cô nâng liên kết chủ điểm từ 85,3% lên 91,2%; neo mốc lý thuyết giảm sai số từ 882,5 s xuống 11,2 s.<br>• **Chạy được offline:** TF-IDF, taxonomy chủ điểm và chế độ một người nói thay thế khi thiếu mô hình/API.<br>• **75/75 test** pass, test không ghi vào `lessons/`. | • **Đánh giá nhỏ:** 2 bài (34 + 35 câu), 4 chủ điểm, 70 câu GEC; thuật toán chỉnh trên **một giáo viên**, trên video của kênh khác căn chỉnh chỉ đúng 17,8%.<br>• **Nhãn chuẩn là bản nháp do AI gán**, chưa được nhóm kiểm tra (`verified: false`).<br>• **Chưa đo WER**; gợi ý từ màn hình chưa kết luận được.<br>• **Ngưỡng liên kết chủ điểm chọn trên tập phát triển**, chưa có tập kiểm tra độc lập; ví dụ do Gemini viết có thể trùng câu hỏi.<br>• **Chat là dữ liệu mô phỏng**; bộ phát hiện lỗi là **luật** cho 6 nhóm, recall 72,7%.<br>• Nghĩa tiếng Việt và danh sách từ vựng chưa được đánh giá; nhãn ngôn ngữ là heuristic chưa kiểm chứng.<br>• OCR dùng Apple Vision (chỉ chạy trên macOS); xử lý sau buổi học, chưa chạy thời gian thực. |
 
 ### Hướng Mở rộng (chưa thực hiện):
 1. **Hoàn thiện đánh giá:** nhóm kiểm tra lại mọi nhãn nháp, sửa tay 5 clip ASR để có WER, thêm bài kiểm tra độc lập cho liên kết chủ điểm, thu chat thật (có đồng ý) và bản ghi tách kênh từng người để đo TTT/STT.

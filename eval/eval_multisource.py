@@ -10,9 +10,12 @@ That lets the test also count questions the system never found. Three measuremen
   oracle     : the aligner alone. It gets the gold question list (number + stem + options) and the whole
                video as its search window, so extraction errors and screen timing play no part.
 "v1" is exercise_align.py at the baseline commit (run_all.BASELINE_COMMIT), applied to the same inputs.
-Results are pooled (micro-averaged over questions) for all lessons, lectures (a teacher explains; split by
-Vietnamese vs other instruction languages) and practice videos (recorded test audio / narrated quiz, no teacher).
-Usage: python eval/eval_multisource.py [lessons/<id> ...] [--json out.json]"""
+Results are pooled (micro-averaged over questions) over the main set (Vietnamese sources), its lectures (a teacher
+explains) and its practice videos (recorded test audio, no teacher). Lessons whose gold split starts with "extra"
+(non-Vietnamese teachers, kept for reference) are pooled separately and left out of the main numbers.
+--exercises results/frozen/exercises.json scores the question lists extracted before any change was made with
+this test set in view (the "frozen" run), so they can be compared with the current exercises.py.
+Usage: python eval/eval_multisource.py [lessons/<id> ...] [--json out.json] [--exercises results/frozen/exercises.json]"""
 import argparse, difflib, glob, importlib.util, json, os, statistics, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,11 +34,18 @@ def text_of(q):
 MIN_SIM = 0.4  # stem+options similarity a same-numbered pair needs (true pairs seen: 0.40-1.00; a Part 2 item vs a Part 3 OCR duplicate: 0.38)
 
 
+def similarity(g, ex):
+    """Best of stem-vs-stem and (stem + options)-vs-(stem + options) difflib ratios: OCR often loses the options
+    (or the stem), and comparing a bare stem with stem + options would understate a correct pair."""
+    r = lambda a, b: difflib.SequenceMatcher(None, a.lower(), b.lower()).ratio()
+    return max(r(g.get("stem") or "", ex.get("stem") or ""), r(text_of(g), text_of(ex)))
+
+
 def match_extracted(gold, exercises):
     """gold question id -> extracted exercise index (or None). Pairs need the same number; the most similar pairs
-    (stem + options, difflib ratio) are taken first, each side at most once, and only from MIN_SIM up. Numbering
+    (see similarity) are taken first, each side at most once, and only from MIN_SIM up. Numbering
     restarts per part in many videos, so the number alone would pair e.g. Part 1 Q1 with Part 3 Q1."""
-    pairs = sorted(((difflib.SequenceMatcher(None, text_of(g).lower(), text_of(ex).lower()).ratio(), gi, ei)
+    pairs = sorted(((similarity(g, ex), gi, ei)
                     for gi, g in enumerate(gold) for ei, ex in enumerate(exercises) if ex["number"] == g["number"]),
                    reverse=True)
     out, used_g, used_e = {g["id"]: None for g in gold}, set(), set()
@@ -81,17 +91,17 @@ def summarise(err, n_total, inversions=None):
     return r
 
 
-def evaluate(lesson, v1):
+def evaluate(lesson, v1, exercises_file="exercises.json"):
     L = lambda f: os.path.join(lesson, f)
     doc = json.load(open(L("gold/questions_gold.json")))
     gold = [q for q in doc["questions"] if q.get("start") is not None]
     transcript = json.load(open(L("transcript.json")))
-    exercises = json.load(open(L("exercises.json"))) if os.path.exists(L("exercises.json")) else []
+    exercises = json.load(open(L(exercises_file))) if os.path.exists(L(exercises_file)) else []
     meta = json.load(open(L("lesson.json")))
     g_start = [q["start"] for q in gold]
     res = {"lesson": os.path.basename(lesson.rstrip("/")), "platform": meta.get("platform"),
            "channel": meta.get("channel"), "language": meta["language"]["instruction"],
-           "genre": doc.get("genre"), "gold_verified": doc.get("verified", False), "n_gold": len(gold),
+           "genre": doc.get("genre"), "split": doc.get("split"), "gold_verified": doc.get("verified", False), "n_gold": len(gold),
            "n_extracted": len(exercises)}
 
     # extraction
@@ -132,11 +142,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("lessons", nargs="*")
     ap.add_argument("--json")
+    ap.add_argument("--exercises", default="exercises.json",
+                    help="extracted-question file inside each lesson, e.g. results/frozen/exercises.json")
     a = ap.parse_args()
     lessons = a.lessons or sorted(os.path.dirname(os.path.dirname(p))
                                   for p in glob.glob(os.path.join(ROOT, "lessons/*/gold/questions_gold.json")))
     v1 = run_all.module_from_git("exercise_align.py", "exercise_align_v1")
-    results = [evaluate(l, v1) for l in lessons]
+    results = [evaluate(l, v1, a.exercises) for l in lessons]
     if any(not r["gold_verified"] for r in results):
         print("note: gold/questions_gold.json are drafts (verified=false) — check them against the videos before citing")
 
@@ -151,10 +163,10 @@ if __name__ == "__main__":
               f"{o['dp+refine']['median_abs_err_s']:6.1f}s")
 
     pooled = {}
-    lec = [r for r in results if r["genre"] == "lecture"]
-    for name, rs in (("all", results), ("lecture", lec), ("lecture_vi", [r for r in lec if r["language"] == "vi"]),
-                     ("lecture_other", [r for r in lec if r["language"] != "vi"]),
-                     ("practice", [r for r in results if r["genre"] == "practice"])):
+    main = [r for r in results if not str(r["split"]).startswith("extra")]
+    for name, rs in (("all", main), ("lecture", [r for r in main if r["genre"] == "lecture"]),
+                     ("practice", [r for r in main if r["genre"] == "practice"]),
+                     ("extra", [r for r in results if str(r["split"]).startswith("extra")])):
         if not rs:
             continue
         found = sum(r["extraction"]["found"] for r in rs)

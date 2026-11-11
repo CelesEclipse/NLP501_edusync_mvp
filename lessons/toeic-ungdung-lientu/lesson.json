@@ -1,0 +1,25 @@
+{
+ "id": "toeic-ungdung-lientu",
+ "title": "Ngữ pháp tiếng Anh - Bài 7 Liên từ",
+ "source": "https://www.youtube.com/watch?v=mz0TUQumJIs",
+ "platform": "Youtube",
+ "channel": "TOEIC ứng dụng",
+ "channel_url": "https://www.youtube.com/channel/UCpdH56oRCntZ2lHzFKtNl3A",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Ngữ pháp tiếng Anh - Bài 7 Liên từ\" by TOEIC ứng dụng (https://www.youtube.com/watch?v=mz0TUQumJIs), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20170208",
+ "duration": 1260,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Ngữ pháp TOEIC Part 5: liên từ. Thầy giảng bằng tiếng Việt và đọc câu tiếng Anh: conjunction, because, although, unless, provided that, so that, either or, neither nor, ETS Test 1 câu 120."
+ }
+}

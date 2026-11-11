@@ -1,0 +1,25 @@
+{
+ "id": "toeic-magicofenglish-en",
+ "title": "Anti-TOEIC, TOEIC exercises for Upper Elementary/ LowerIntermediate Level Students of English",
+ "source": "https://www.youtube.com/watch?v=KKz4giF15E8",
+ "platform": "Youtube",
+ "channel": "TheMagicOfEnglish",
+ "channel_url": "https://www.youtube.com/channel/UCJLfB19USP5KzUmt62Xf3qQ",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Anti-TOEIC, TOEIC exercises for Upper Elementary/ LowerIntermediate Level Students of English\" by TheMagicOfEnglish (https://www.youtube.com/watch?v=KKz4giF15E8), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20240706",
+ "duration": 831,
+ "language": {
+  "instruction": "en",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "TOEIC exercises for beginners on Work and Study. Question 1. What are the man and woman looking at? A, B, C or D."
+ }
+}

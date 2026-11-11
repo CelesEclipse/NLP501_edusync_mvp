@@ -151,6 +151,5 @@ Bản hiện tại không có từ khóa viết tay; test `tests/test_concept_li
 
 ## 7. Giá trị trên Web Demo (`demo/index.html`)
 
-Kết quả trong `exercise_concept_links.json` được dùng ở hai chỗ:
-1. **Học viên — điều hướng lý thuyết ↔ thực hành:** trên tab **📝 Exercises**, chỉ những câu được gắn chủ điểm (độ tin cậy `HIGH`/`MEDIUM`, **10/34 câu** ở Unit 4) mới có **badge màu tím** (ví dụ `🏷️ Participles as Adjectives (-ing vs. -ed Participles)`) và nút **`📖 Lý thuyết (00:44) ➔`**. Bấm vào thì video tua về đoạn cô giảng chủ điểm và mở tab **📖 Grammar** ở đúng thẻ. Các câu "none" không có badge — đó là thiết kế, không phải lỗi. Mốc lý thuyết của 4 chủ điểm là 00:44 / 15:38 / 13:18 / 07:35 (sai số TB 11,2 s so với nhãn nháp).
-2. **Giáo viên — chủ điểm yếu nhất:** `teacher_analytics.py` đếm, theo `exercise_id`, số tin nhắn chat có lỗi được phát hiện ở các câu thuộc mỗi chủ điểm và báo chủ điểm có nhiều nhất; không có bằng chứng thì không báo. Với chat mô phỏng của Unit 4, đó là `gp_1` (2 tin nhắn có lỗi, ở câu 4 và 6).
+Kết quả trong `exercise_concept_links.json` được dùng trực tiếp cho:
+- **Điều hướng lý thuyết ↔ thực hành cho học viên:** trên tab **📝 Exercises**, chỉ những câu được gắn chủ điểm (độ tin cậy `HIGH`/`MEDIUM`, **10/34 câu** ở Unit 4) mới có **badge màu tím** (ví dụ `🏷️ Participles as Adjectives (-ing vs. -ed Participles)`) và nút **`📖 Lý thuyết (00:44) ➔`**. Bấm vào thì video tua về đoạn cô giảng chủ điểm và mở tab **📖 Grammar** ở đúng thẻ. Các câu "none" không có badge — đó là thiết kế, không phải lỗi. Mốc lý thuyết của 4 chủ điểm là 00:44 / 15:38 / 13:18 / 07:35 (sai số TB 11,2 s so với nhãn nháp).

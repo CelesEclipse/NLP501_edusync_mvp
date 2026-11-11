@@ -17,7 +17,7 @@
 >   2. **FR2 — Liên kết câu hỏi ↔ chủ điểm ngữ pháp:** bi-encoder đa ngữ `multilingual-e5-small`, kết hợp câu hỏi với lời giảng trong đoạn chữa.
 >   3. **FR3 — Hồ sơ từ vựng CEFR & clip phát âm:** phân bậc A1–C2 (CEFR-J/Octanove, 8.845 mục), nghĩa tiếng Việt khai thác từ lời giảng, clip `.wav` 0,7–2,2 s giọng giáo viên.
 >   4. **FR4 — Lỗi người học & quyền riêng tư:** ẩn danh hoá tên người gửi ($S_1 \dots S_N$) và phát hiện 6 nhóm lỗi chuyển di L1 bằng luật, mỗi lỗi kèm loại lỗi **ERRANT**.
->   5. **FR5 — Báo cáo giáo viên & tìm kiếm:** TTT/STT (khi có bản ghi nhiều người nói), phân bố lỗi, chủ điểm yếu nhất, gợi ý cho buổi sau bằng câu mẫu; ô tìm kiếm trên toàn bài.
+>   5. **FR5 — Tìm kiếm toàn diện:** ô tìm kiếm tức thời trên toàn bộ bài giảng (lời giảng, bài tập, từ vựng, chat và chủ điểm ngữ pháp).
 
 ---
 
@@ -26,12 +26,10 @@
 ### 1.1. Bối cảnh Thực tế trong Đào tạo Luyện thi Trực tuyến
 Bản ghi một buổi học luyện thi trực tuyến dài khoảng 60 phút là nguồn ôn tập tốt nhưng khó khai thác:
 - **Đối với học viên:** muốn xem lại đoạn giáo viên chữa một câu trắc nghiệm (TOEIC Part 5/6/7) thì phải tua video thủ công; không biết câu đó thuộc chủ điểm ngữ pháp nào đã giảng trong buổi; không có danh sách từ vựng của bài theo bậc CEFR kèm giọng đọc của giáo viên.
-- **Đối với giáo viên:** sau buổi học không có số liệu về tỉ lệ thời gian nói của giáo viên so với học viên ($\text{TTT}$ vs $\text{STT}$); câu trả lời trong chat trôi mất; không thống kê được lỗi chuyển di L1 nào phổ biến nhất trong lớp.
 
 ### 1.2. Tuyên ngôn Giá trị (Value Proposition)
 **EduSync** chuyển video buổi học thành:
 1. **Sổ tay học tập tương tác cho học viên:** bấm vào câu hỏi / từ vựng / chủ điểm để tua video tới đoạn giáo viên giải thích; liên kết hai chiều Bài tập ↔ Lý thuyết; thẻ từ vựng có clip phát âm; ô tìm kiếm toàn bài. Việc tiết kiệm thời gian ôn bài là **mục tiêu, chưa được đo** bằng nghiên cứu người dùng.
-2. **Báo cáo sau buổi học cho giáo viên:** TTT/STT (khi bản ghi tách được người nói), phân bố lỗi của lớp theo nhóm lỗi và loại ERRANT, chủ điểm có nhiều lỗi nhất (*weakest concept*) và gợi ý cho buổi sau bằng câu mẫu điền từ dữ liệu (không dùng LLM).
 
 ---
 
@@ -40,7 +38,6 @@ Bản ghi một buổi học luyện thi trực tuyến dài khoảng 60 phút l
 ```mermaid
 flowchart LR
     Student["Học viên luyện thi (Learner)"] --> |"Ôn câu sai, xem lý thuyết gốc, nghe từ vựng CEFR"| System["Hệ thống EduSync"]
-    Teacher["Giáo viên tiếng Anh (Instructor)"] --> |"Xem TTT/STT, phân bố lỗi, gợi ý buổi sau"| System
     Admin["Quản lý học vụ (Academic Admin)"] --> |"Theo dõi chất lượng giảng dạy"| System
     System --> |"Xử lý NLP đa phương thức"| VideoAudio["Video màn hình đề, audio Việt-Anh, chat Zoom"]
 ```
@@ -48,7 +45,6 @@ flowchart LR
 | Tác nhân (Actor) | Trách nhiệm & Nhu cầu Cốt lõi | Giá trị Nhận được từ EduSync |
 | :--- | :--- | :--- |
 | **Học viên** | • Xem lại đúng đoạn giáo viên chữa câu mình làm sai.<br>• Ôn lại chủ điểm ngữ pháp của câu đó.<br>• Học từ vựng theo bậc CEFR, nghe phát âm.<br>• Biết lỗi ngữ pháp khi gõ câu trả lời trong chat. | • Bấm câu hỏi để tua video tới mốc chữa (trên bài kiểm tra U5: 80,0% mốc lệch ≤10 s so với nhãn nháp).<br>• Badge liên kết Câu hỏi ↔ Lý thuyết.<br>• Thẻ từ vựng CEFR kèm clip `.wav` 0,7–2,2 s cắt từ giọng giáo viên.<br>• Câu sửa kèm giải thích tiếng Việt cho 6 nhóm lỗi. |
-| **Giáo viên** | • Kiểm soát tỉ lệ nói giáo viên/học viên.<br>• Nắm lỗi phổ biến của lớp trong chat.<br>• Biết chủ điểm nào cần ôn lại. | • TTT/STT khi có bản ghi tách kênh hoặc pyannote; bản ghi một người nói hiển thị "chưa đo".<br>• Phân bố lỗi theo nhóm + loại ERRANT.<br>• *Weakest concept* và gợi ý buổi sau (câu mẫu ghi rõ bằng chứng). |
 | **Hệ thống (EduSync NLP Engine)** | • Xử lý audio Việt–Anh, video màn hình đề, OCR, chat.<br>• Căn chỉnh đơn điệu, nhúng vector, phân bậc CEFR, phát hiện lỗi. | • Web demo SPA tĩnh (`demo/index.html`); các bước có phương án dự phòng khi không có mạng/API. Độ trễ giao diện **chưa đo**. |
 
 ---
@@ -88,12 +84,6 @@ flowchart LR
 ### 3.4. Phân hệ FR4: Lỗi Người học trong Chat & Báo cáo Sư phạm
 - **FR4.1 (Đọc chat & ẩn danh hoá):** đọc log chat Zoom/Meet (`chat.txt`), thay tên người gửi bằng $S_1, S_2, \dots, S_N$ (giáo viên = T), nhận số câu ("câu 4") và đáp án ("em chọn C"), gắn tin nhắn với câu gần nhất có số đó theo mốc đã căn chỉnh (số câu bắt đầu lại ở mỗi phần). Chỉ tên người gửi được ẩn danh hoá; tên nằm trong nội dung tin nhắn không được xoá.
 - **FR4.2 (Phát hiện lỗi bằng luật + loại ERRANT):** phát hiện 6 nhóm lỗi chuyển di L1 — BE_VERB, PARTICIPLE, CAUSATIVE, MODAL_TO, SVA, WH_DO — sinh câu sửa và giải thích tiếng Việt. Mỗi lỗi kèm loại ERRANT; loại mặc định đã kiểm chứng bằng errant 3.0.2: `U:VERB:TENSE`, `R:VERB:FORM`, `R:VERB:FORM`, `U:VERB:FORM`, `R:VERB:SVA`, `M:VERB:TENSE`. *Trạng thái* (`eval/eval_gec.py`, 70 câu độc lập, nhãn nháp): precision 100%, recall 72,7%, F1 84,2%.
-- **FR4.3 (TTT/STT):** tính tỉ lệ thời gian nói khi `diarize.py` có nguồn `tracks` (mỗi người một file audio) hoặc `pyannote`; với bản ghi một người nói phải hiển thị "chưa đo", không hiển thị 100%/0%. *Trạng thái:* logic có test với dữ liệu giả; trên bài ECE (một người nói) **chưa đo được**.
-- **FR4.4 (Báo cáo sau buổi học):** `teacher_report.json` gồm phân bố lỗi theo nhóm, *weakest concept* (chủ điểm có nhiều tin nhắn có lỗi nhất trên các câu được liên kết với nó, `None` nếu không có bằng chứng) và gợi ý cho buổi sau bằng **câu mẫu** điền từ dữ liệu. Trên U4 chat là dữ liệu mô phỏng.
-
----
-
-### 3.5. Phân hệ FR5: Tìm kiếm Toàn bài
 - **FR5.1:** ô tìm kiếm trong demo tra cùng lúc 5 nguồn: lời giảng, đề bài câu hỏi, từ vựng, tin nhắn chat và chủ điểm ngữ pháp; bấm kết quả để tua video. Phím tắt `Cmd+K` / `Ctrl+K` **chưa cài đặt**; độ trễ tìm kiếm chưa đo.
 
 ---
@@ -105,7 +95,7 @@ flowchart LR
 | **NFR1** | **Hiệu năng & Độ trễ** | • Nhúng + tính điểm cho 34 câu < 50 ms.<br>• Click-to-seek < 100 ms; tìm kiếm < 30 ms. | **Chưa đo** (cả ba chỉ số). |
 | **NFR2** | **Độ chính xác NLP** | • Căn chỉnh câu hỏi: mọi câu có mốc, không đảo thứ tự, và tốt hơn các baseline trên bài kiểm tra độc lập.<br>• Phát hiện lỗi: không báo nhầm câu đúng, recall cao hơn v1 trên tập độc lập.<br>• Liên kết chủ điểm: tốt hơn baseline trên tập kiểm tra độc lập.<br>• ASR: có WER đo trên clip tham chiếu đã sửa tay. | • Căn chỉnh U5: 80,0% (±10 s), 88,6% (±30 s), 0 đảo thứ tự (baseline tốt nhất 71,4% / 80,0%).<br>• Phát hiện lỗi: precision 100%, recall 72,7% (v1: 20,5%), 70 câu.<br>• Liên kết chủ điểm: 91,2% trên tập phát triển; **chưa có tập kiểm tra độc lập**.<br>• WER: **chưa đo**.<br>Mọi nhãn là bản nháp AI (`verified: false`). |
 | **NFR3** | **Quyền riêng tư** | • Không có tên thật người gửi trong JSON đầu ra và trên giao diện (ẩn danh hoá S1…SN).<br>• API key chỉ nằm trong `.env` (có trong `.gitignore`).<br>• Không đưa video, audio, chat thô và nội dung đề bài lên git. | • Ẩn danh hoá tên người gửi có test đơn vị; tên trong nội dung tin nhắn chưa được xử lý.<br>• `.env`, video/audio và nội dung trích từ bài ECE nằm trong `.gitignore`; riêng `chat.txt` mô phỏng của U4 được đưa lên git. |
-| **NFR4** | **Tính sẵn sàng & Kiểm thử** | • Có phương án dự phòng chạy offline (TF-IDF, taxonomy chủ điểm, chế độ một người nói).<br>• Toàn bộ `pytest` pass; test không ghi vào `lessons/`. | • Đã có các phương án dự phòng.<br>• **71/71 test pass**, test dùng `tmp_path`. |
+| **NFR4** | **Tính sẵn sàng & Kiểm thử** | • Có phương án dự phòng chạy offline (TF-IDF, taxonomy chủ điểm, chế độ một người nói).<br>• Toàn bộ `pytest` pass; test không ghi vào `lessons/`. | • Đã có các phương án dự phòng.<br>• **75/75 test pass**, test dùng `tmp_path`. |
 
 ---
 
@@ -149,6 +139,5 @@ Nhãn chuẩn dùng trong các phép đo dưới đây đều là bản nháp do
 | **TC-06** | Phát hiện lỗi người học | `eval/eval_gec.py` (70 câu độc lập) | Không báo nhầm câu đúng; F1 cao hơn v1 (khớp nguyên văn) | **Đạt (nhãn nháp):** P 100%, R 72,7%, F1 84,2% (v1: 90,0% / 20,5% / 33,3%) |
 | **TC-07** | Loại lỗi ERRANT đúng chuẩn | `eval/errant_check.py` (errant 3.0.2) | Loại mặc định trùng loại errant gán cho cặp câu mẫu | Đạt; kết quả ở `eval/results/errant_check.txt` |
 | **TC-08** | Ẩn danh hoá tên người gửi | `tests/test_feedback.py::test_anonymize_student_names` | Tên người gửi → `S1`..`SN` | Pass (chỉ tên người gửi) |
-| **TC-09** | TTT/STT & báo cáo giáo viên | `tests/test_teacher_analytics.py` | Đo được với `tracks`; "chưa đo" với bản ghi một người nói; không bịa *weakest concept* | Pass. Trên bài ECE: TTT/STT **chưa đo** (một người nói) |
 | **TC-10** | WER của ASR | `eval/wer.py` trên 5 clip `gold/asr/` | Có WER cho từng cấu hình ASR | **Chưa chạy được**: bản tham chiếu chưa sửa tay |
 | **TC-11** | Click-to-seek trên giao diện | Kiểm tra thủ công trên demo | Video tua tới mốc chữa bài hoặc lý thuyết | Đạt (thủ công). Độ trễ chưa đo |

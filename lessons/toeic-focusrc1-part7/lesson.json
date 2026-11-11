@@ -1,0 +1,25 @@
+{
+ "id": "toeic-focusrc1-part7",
+ "title": "Sách FOCUS RC 1 Test 01 Câu 147 đến 153",
+ "source": "https://www.youtube.com/watch?v=m3PWj6P85VY",
+ "platform": "Youtube",
+ "channel": "learning and entertainment",
+ "channel_url": "https://www.youtube.com/channel/UCQB09qtqrhgdiFeF4Cvoeug",
+ "license": "Creative Commons Attribution license (reuse allowed)",
+ "attribution": "\"Sách FOCUS RC 1 Test 01 Câu 147 đến 153\" by learning and entertainment (https://www.youtube.com/watch?v=m3PWj6P85VY), Creative Commons Attribution license (reuse allowed)",
+ "upload_date": "20220713",
+ "duration": 2780,
+ "language": {
+  "instruction": "vi",
+  "target": "en"
+ },
+ "files": {
+  "video": "video.mp4",
+  "audio": "audio.m4a"
+ },
+ "asr": {
+  "model": "large-v3-turbo",
+  "multilingual": true,
+  "prompt": "Luyện thi TOEIC Part 7 Reading Comprehension, sách FOCUS RC. Cô giảng bằng tiếng Việt và đọc câu tiếng Anh: câu 147, notice, invitation, purpose, according to, gymnasium, members."
+ }
+}

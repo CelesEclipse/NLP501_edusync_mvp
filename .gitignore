@@ -42,4 +42,6 @@ lessons/*/.source.json
 # experiment transcripts and labels stay local until the team decides
 lessons/ece-*/*
 !lessons/ece-*/lesson.json
+lessons/toeic-*/*
+!lessons/toeic-*/lesson.json
 !lessons/ece-toeic-starter-u4/chat.txt

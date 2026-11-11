@@ -38,7 +38,7 @@ Gợi ý được truyền qua tham số `hotwords` của faster-whisper (không
 
 1. **`lesson.json`:** metadata buổi học (tiêu đề, nguồn, giấy phép, thời lượng, ngôn ngữ giảng `vi`, ngôn ngữ mục tiêu `en`, cấu hình ASR: mô hình, prompt cố định, đa ngữ).
 2. **`screens.json` & `exercises.json`:** các màn hình đã khử trùng lặp kèm văn bản OCR; các câu hỏi (số câu, đề bài, lựa chọn A–D, cửa sổ màn hình).
-3. **`transcript.json`:** các đoạn lời giảng với `start`, `end`, `text`, `lang` (`vi` / `en` / `mixed`) và `speaker` (do `diarize.py` thêm; bài ECE chỉ có `T`). Không có timestamp từng từ.
+3. **`transcript.json`:** các đoạn lời giảng với `start`, `end`, `text`, `lang` (`vi` / `en` / `mixed`). Không có timestamp từng từ.
 4. **`exercise_alignment.json` & `exercise_concept_links.json`:** mốc chữa từng câu hỏi (DP đơn điệu, kèm `matched`) và liên kết tới chủ điểm ngữ pháp (`multilingual-e5-small` + lời giảng).
 5. **`vocab.json` & `vocab_audio/*.wav`:** U4 có 80 từ phân bậc CEFR (A1 26, A2 26, B1 18, B2 9, C1 1), 52 từ có nghĩa tiếng Việt khai thác từ lời giảng (chưa kiểm tra độ đúng) và 79 clip `.wav` 0,7–2,2 s cắt theo ranh giới đoạn ASR.
-6. **`chat_feedback.json` & `teacher_report.json`:** lỗi phát hiện trong chat đã ẩn danh hoá ($S_1 \dots S_N$), mỗi lỗi kèm loại ERRANT, và báo cáo cho giáo viên (TTT/STT "chưa đo" với bản ghi một người nói).
+6. **`chat_feedback.json`:** lỗi phát hiện trong chat đã ẩn danh hoá ($S_1 \dots S_N$), mỗi lỗi kèm loại ERRANT, câu sửa chuẩn xác và giải thích tiếng Việt.
